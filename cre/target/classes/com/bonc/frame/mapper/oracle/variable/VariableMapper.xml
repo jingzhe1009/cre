@@ -1,0 +1,1568 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bonc.frame.dao.variable.VariableMapper">
+    <resultMap id="BaseResultMap" type="com.bonc.frame.entity.variable.Variable">
+        <id column="VARIABLE_ID" jdbcType="VARCHAR" property="variableId"/>
+        <result column="ENTITY_ID" jdbcType="VARCHAR" property="entityId"/>
+        <result column="FOLDER_ID" jdbcType="VARCHAR" property="folderId"/>
+        <result column="VARIABLE_ALIAS" jdbcType="VARCHAR" property="variableAlias"/>
+        <result column="VARIABLE_CODE" jdbcType="VARCHAR" property="variableCode"/>
+        <result column="TYPE_ID" jdbcType="VARCHAR" property="typeId"/>
+        <result column="KIND_ID" jdbcType="VARCHAR" property="kindId"/>
+        <result column="VARIABLE_FROM" jdbcType="VARCHAR" property="variableFrom"/>
+        <result column="IS_DICT" jdbcType="VARCHAR" property="isDict"/>
+        <result column="DEFAULT_VALUE" jdbcType="VARCHAR" property="defaultValue"/>
+        <result column="DEFAULT_VALUE_TYPE" jdbcType="VARCHAR" property="defaultValueType"/>
+        <result column="VARIABLE_REMARKS" jdbcType="VARCHAR" property="variableRemarks"/>
+        <result column="CREATE_PERSON" jdbcType="VARCHAR" property="createPerson"/>
+        <result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate"/>
+        <result column="UPDATE_PERSON" jdbcType="VARCHAR" property="updatePerson"/>
+        <result column="UPDATE_DATE" jdbcType="TIMESTAMP" property="updateDate"/>
+        <result column="IS_PUBLIC" jdbcType="VARCHAR" property="isPublic"/>
+        <result column="VARIABLE_GROUP_ID" jdbcType="VARCHAR" property="variableGroupId"/>
+    </resultMap>
+
+    <resultMap extends="BaseResultMap" id="BaseResultMapExt" type="com.bonc.frame.entity.variable.VariableExt">
+        <result column="TYPE_VALUE" jdbcType="VARCHAR" property="typeValue"/>
+        <result column="KIND_VALUE" jdbcType="VARCHAR" property="kindValue"/>
+        <result column="ENTITY_VARIABLE_ALIAS" jdbcType="VARCHAR" property="entityVariableAlias"/>
+    </resultMap>
+
+    <resultMap extends="BaseResultMap" id="BaseResultMapGroupExt"
+               type="com.bonc.frame.entity.commonresource.VariableGroupExt">
+        <result column="TYPE_VALUE" jdbcType="VARCHAR" property="typeValue"/>
+        <result column="KIND_VALUE" jdbcType="VARCHAR" property="kindValue"/>
+        <result column="VARIABLE_GROUP_NAME" jdbcType="VARCHAR" property="variableGroupName"/>
+    </resultMap>
+
+    <resultMap extends="BaseResultMap" id="VariableRuleMap"
+               type="com.bonc.frame.entity.variable.Variable">
+        <collection property="ruleDetailList" columnPrefix="R_" ofType="com.bonc.frame.entity.rule.RuleDetail">
+            <id column="RULE_ID" property="ruleId" jdbcType="VARCHAR"/>
+            <result column="RULE_NAME" property="ruleName" jdbcType="VARCHAR"/>
+        </collection>
+    </resultMap>
+
+
+    <sql id="Base_Column_List">
+        VARIABLE_ID, ENTITY_ID,FOLDER_ID, VARIABLE_ALIAS, VARIABLE_CODE, TYPE_ID, KIND_ID, VARIABLE_FROM,
+    IS_DICT, DEFAULT_VALUE, DEFAULT_VALUE_TYPE, VARIABLE_REMARKS, CREATE_PERSON, CREATE_DATE,
+    UPDATE_PERSON, UPDATE_DATE, IS_PUBLIC, VARIABLE_GROUP_ID
+    </sql>
+
+    <sql id="Base_Column_Lista">
+        a.VARIABLE_ID, a.ENTITY_ID, a.FOLDER_ID, a.VARIABLE_ALIAS, a.VARIABLE_CODE, a.TYPE_ID, a.KIND_ID, a.VARIABLE_FROM,
+    a.
+    IS_DICT, a.DEFAULT_VALUE, a.DEFAULT_VALUE_TYPE, a.VARIABLE_REMARKS, a.CREATE_PERSON, a.CREATE_DATE, a.
+    UPDATE_PERSON, a.UPDATE_DATE, a.IS_PUBLIC, a.VARIABLE_GROUP_ID
+    </sql>
+
+    <!-- 查看指定变量及被引用的规则 -->
+    <select id="variableRule" parameterType="java.lang.String" resultMap="VariableRuleMap">
+        select a.VARIABLE_ID, a.VARIABLE_ALIAS, c.RULE_NAME AS "R_RULE_NAME", c.RULE_ID AS "R_RULE_ID"
+        from CRE_VARIABLE a
+                 LEFT JOIN CRE_VARIABLE_RULE b on a.VARIABLE_ID = b.VARIABLE_ID
+                 LEFT JOIN CRE_RULE_DETAIL c on b.RULE_ID = c.RULE_ID
+        WHERE a.VARIABLE_ID = #{variableId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from CRE_VARIABLE
+        where VARIABLE_ID = #{variableId,jdbcType=VARCHAR}
+    </select>
+    <select id="selectVariableByPrimaryKeyBatch" resultMap="BaseResultMap"
+            parameterType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from CRE_VARIABLE
+        where VARIABLE_ID IN (
+        <foreach collection="variableIdList" item="item" index="index" separator=",">
+            #{item,jdbcType=VARCHAR}
+        </foreach>
+        )
+    </select>
+    <select id="selectVariableByCodeList" parameterType="map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from CRE_VARIABLE
+        where 1=1
+        <if test="folderId != null and '' != folderId">
+            and FOLDER_ID=#{folderId,jdbcType=VARCHAR}
+        </if>
+        <if test="isPlulic != null and '' != isPlulic">
+            and IS_PUBLIC=#{isPlulic,jdbcType=VARCHAR}
+        </if>
+        <if test="variableCode != null and '' != variableCode">
+            and VARIABLE_CODE=#{variableCode,jdbcType=VARCHAR}
+        </if>
+        <if test="variableId != null and '' != variableId">
+            and VARIABLE_ID=#{variableId,jdbcType=VARCHAR}
+        </if>
+        <if test="variableAlias != null and '' != variableAlias">
+            and VARIABLE_ALIAS=#{variableAlias,jdbcType=VARCHAR}
+        </if>
+        <if test="entityId != null and '' != entityId">
+            and ENTITY_ID=#{entityId,jdbcType=VARCHAR}
+        </if>
+        <if test="variableCodeList != null ">
+            AND VARIABLE_CODE IN
+            <foreach collection="variableCodeList" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="type != null ">
+            AND TYPE_ID IN
+            <foreach collection="type" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="variableIdList != null ">
+            AND VARIABLE_ID IN
+            <foreach collection="variableIdList" item="item" index="index" open="(" separator="," close=")">
+                #{item,jdbcType=VARCHAR}
+            </foreach>
+        </if>
+    </select>
+
+    <select id="selectByFolder" parameterType="java.lang.String" resultMap="BaseResultMapExt">
+        select
+        <include refid="Base_Column_Lista"/>, c.TYPE_VALUE, b.KIND_VALUE
+        from CRE_VARIABLE a, CRE_VARIABLE_TYPE c,CRE_VARIABLE_KIND b
+        where a.TYPE_ID = c.TYPE_ID and a.KIND_ID = b.KIND_ID
+        and a.VARIABLE_ID not in
+        (select VARIABLE_ID from CRE_VARIABLE_ENTITY_RELATION)
+        and a.FOLDER_ID = #{folderId,jdbcType=VARCHAR}
+        and a.KIND_ID=#{kindId,jdbcType=VARCHAR}
+        and a.VARIABLE_ALIAS like CONCAT(CONCAT('%',#{variableAlias,jdbcType=VARCHAR}),'%')
+        order by a.CREATE_DATE
+    </select>
+
+    <!-- 根据场景id查询参数 -->
+    <select id="selectVariablesByFolderId" parameterType="java.lang.String" resultMap="BaseResultMapExt">
+        select
+        <include refid="Base_Column_Lista"/>, c.TYPE_VALUE, b.KIND_VALUE
+        from CRE_VARIABLE a, CRE_VARIABLE_TYPE c,CRE_VARIABLE_KIND b
+        where a.TYPE_ID = c.TYPE_ID and a.KIND_ID = b.KIND_ID
+        and a.VARIABLE_ID not in
+        (select VARIABLE_ID from CRE_VARIABLE_ENTITY_RELATION)
+        and a.FOLDER_ID = #{folderId,jdbcType=VARCHAR}
+        <if test="kindId != null and '' != kindId">
+            and a.KIND_ID=#{kindId,jdbcType=VARCHAR}
+        </if>
+        <if test="typeId != null and '' != typeId">
+            and a.TYPE_ID=#{typeId,jdbcType=VARCHAR}
+        </if>
+        <if test="variableAlias != null and '' != variableAlias">
+            <bind name="pattern1" value="'%' + _parameter.variableAlias + '%'"/>
+            and a.VARIABLE_ALIAS like #{pattern1}
+        </if>
+        order by a.CREATE_DATE
+    </select>
+
+    <!-- 扁平化 根据场景id查询参数 -->
+    <select id="selectFlatVariablesByFolderId" parameterType="java.lang.String" resultMap="BaseResultMapExt">
+        select
+        <include refid="Base_Column_Lista"/>, c.TYPE_VALUE, b.KIND_VALUE
+        from CRE_VARIABLE a, CRE_VARIABLE_TYPE c,CRE_VARIABLE_KIND b
+        where a.TYPE_ID = c.TYPE_ID and a.KIND_ID = b.KIND_ID
+        AND a.ENTITY_ID IS NULL
+        AND a.TYPE_ID != '3'
+        and a.FOLDER_ID = #{folderId,jdbcType=VARCHAR}
+        <if test="kindId != null and '' != kindId">
+            and a.KIND_ID=#{kindId,jdbcType=VARCHAR}
+        </if>
+        <if test="typeId != null and '' != typeId">
+            and a.TYPE_ID=#{typeId,jdbcType=VARCHAR}
+        </if>
+        <if test="variableAlias != null and '' != variableAlias">
+            <bind name="pattern1" value="'%' + _parameter.variableAlias + '%'"/>
+            and a.VARIABLE_ALIAS like #{pattern1}
+        </if>
+        order by a.CREATE_DATE
+    </select>
+
+    <select id="selectCountAliasOrCode" parameterType="java.lang.String" resultType="int">
+        select count(*) "count"
+        from CRE_VARIABLE a,
+             CRE_VARIABLE_TYPE c,
+             CRE_VARIABLE_KIND b
+        where a.TYPE_ID = c.TYPE_ID and a.KIND_ID = b.KIND_ID
+            and a.VARIABLE_ID not in
+                (select VARIABLE_ID from CRE_VARIABLE_ENTITY_RELATION)
+            and a.FOLDER_ID = #{folderId,jdbcType=VARCHAR}
+            and a.IS_PUBLIC != '1'
+            and a.KIND_ID = #{kindId,jdbcType=VARCHAR}
+            and (a.VARIABLE_ALIAS = #{variableAlias,jdbcType=VARCHAR})
+           or VARIABLE_CODE = #{variableCode,jdbcType=VARCHAR})
+    </select>
+
+    <!-- 变量名判重统计 -->
+    <select id="countAliasOrCode" parameterType="java.util.Map" resultType="int">
+        select count(*) "count"
+        from CRE_VARIABLE a
+        where 1 = 1
+        <if test="folderId != null">
+            and a.FOLDER_ID = #{folderId,jdbcType=VARCHAR}
+        </if>
+        <if test="variableId != null">
+            and a.VARIABLE_ID != #{variableId,jdbcType=VARCHAR}
+        </if>
+        and (
+        a.VARIABLE_ALIAS = #{variableAlias,jdbcType=VARCHAR} or
+        a.VARIABLE_CODE = #{variableCode,jdbcType=VARCHAR}
+        )
+    </select>
+
+    <!--
+       检验场景下参数名称的唯一性
+           1.场景内参数不重复
+           2.不能与公共参数重复
+           3.不能与指标重复
+    -->
+    <select id="countNameInFolder" parameterType="java.util.Map" resultType="int">
+        SELECT SUM("count") FROM (
+        SELECT COUNT(*) AS "count" FROM CRE_VARIABLE WHERE
+        VARIABLE_ALIAS = #{variableAlias,jdbcType=VARCHAR}
+        AND FOLDER_ID = #{folderId,jdbcType=VARCHAR}
+        <if test="variableId != null">
+            AND VARIABLE_ID != #{variableId,jdbcType=VARCHAR}
+        </if>
+        UNION ALL
+        SELECT COUNT(*) AS "count" FROM CRE_VARIABLE WHERE
+        VARIABLE_ALIAS = #{variableAlias,jdbcType=VARCHAR}
+        AND IS_PUBLIC = '1'
+        UNION ALL
+        SELECT COUNT(*) AS "count" FROM CRE_KPI_DEFINITION WHERE
+        KPI_NAME = #{variableAlias,jdbcType=VARCHAR}
+        )
+    </select>
+
+    <!--
+       检验场景下参数编码的唯一性
+           1.场景内参数不重复
+           2.不能与公共参数重复
+           3.不能与指标重复
+    -->
+    <select id="countCodeInFolder" parameterType="java.util.Map" resultType="int">
+        SELECT SUM("count") FROM (
+        SELECT COUNT(*) AS "count" FROM CRE_VARIABLE WHERE
+        VARIABLE_CODE = #{variableCode,jdbcType=VARCHAR}
+        AND FOLDER_ID = #{folderId,jdbcType=VARCHAR}
+        <if test="variableId != null">
+            AND VARIABLE_ID != #{variableId,jdbcType=VARCHAR}
+        </if>
+        UNION ALL
+        SELECT COUNT(*) AS "count" FROM CRE_VARIABLE WHERE
+        VARIABLE_CODE = #{variableCode,jdbcType=VARCHAR}
+        AND IS_PUBLIC = '1'
+        UNION ALL
+        SELECT COUNT(*) AS "count" FROM CRE_KPI_DEFINITION WHERE
+        KPI_CODE = #{variableCode,jdbcType=VARCHAR}
+        )
+    </select>
+
+    <!--
+          检验公共参数名称的唯一性
+              1.不能与公共参数重复
+              2.不能与任何私有参数重复
+              3.不能与指标重复
+       -->
+    <select id="countNameInPublic" parameterType="java.util.Map" resultType="int">
+        SELECT SUM("count") FROM (
+        SELECT COUNT(*) AS "count" FROM CRE_VARIABLE WHERE
+        VARIABLE_ALIAS = #{variableAlias,jdbcType=VARCHAR}
+        <if test="variableId != null">
+            AND VARIABLE_ID != #{variableId,jdbcType=VARCHAR}
+        </if>
+        UNION ALL
+        SELECT COUNT(*) AS "count" FROM CRE_KPI_DEFINITION WHERE
+        KPI_NAME = #{variableAlias,jdbcType=VARCHAR}
+        )
+    </select>
+
+    <!--
+          检验公共参数编码的唯一性
+              1.不能与公共参数重复
+              2.不能与任何私有参数重复
+              3.不能与指标重复
+       -->
+    <select id="countCodeInPublic" parameterType="java.util.Map" resultType="int">
+        SELECT SUM("count") FROM (
+        SELECT COUNT(*) AS "count" FROM CRE_VARIABLE WHERE
+        VARIABLE_CODE = #{variableCode,jdbcType=VARCHAR}
+        <if test="variableId != null">
+            AND VARIABLE_ID != #{variableId,jdbcType=VARCHAR}
+        </if>
+        UNION ALL
+        SELECT COUNT(*) AS "count" FROM CRE_KPI_DEFINITION WHERE
+        KPI_CODE = #{variableCode,jdbcType=VARCHAR}
+        )
+    </select>
+
+    <select id="selectVariableType" resultType="map">
+        SELECT TYPE_ID "key", TYPE_VALUE "text"
+        FROM CRE_VARIABLE_TYPE
+        ORDER BY TYPE_ID
+    </select>
+
+    <select id="selectEntityType" resultType="map" parameterType="string">
+        SELECT B.VARIABLE_CODE AS "key", B.VARIABLE_ALIAS AS "text"
+        FROM CRE_VARIABLE_ENTITY A
+                 LEFT JOIN CRE_VARIABLE B
+                           ON A.ENTITY_ID = B.ENTITY_ID
+        WHERE A.ENTITY_PID IS NULL
+          AND B.FOLDER_ID = #{folderId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectVariableEntityRelation" parameterType="java.lang.String" resultMap="BaseResultMapExt">
+        SELECT
+        T .*, D .KIND_VALUE
+        FROM (
+        select
+        <include refid="Base_Column_Lista"/>,c.TYPE_VALUE,b.ENTITY_VARIABLE_ALIAS
+        from cre_variable a, CRE_VARIABLE_ENTITY_RELATION b,CRE_VARIABLE_TYPE c
+        where a.VARIABLE_ID = b.VARIABLE_ID and a.TYPE_ID = c.TYPE_ID
+        and b.ENTITY_ID=#{entityId,jdbcType=VARCHAR} ) T
+        LEFT JOIN CRE_VARIABLE_KIND D ON T .KIND_ID = D .KIND_ID
+    </select>
+
+    <!-- 根据文件夹ID查询所有的变量 -->
+    <select id="selectByFolderId" parameterType="map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from CRE_VARIABLE
+        where FOLDER_ID = #{folderId,jdbcType=VARCHAR}
+        <if test="kindIds != null">
+            AND KIND_ID in
+            <foreach item="item" collection="kindIds" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        order by VARIABLE_ALIAS
+    </select>
+    <!-- 根据接口id查询 返回值变量 -->
+    <select id="selectResultVariableByApiId" parameterType="map"
+            resultType="com.bonc.frame.entity.variable.VariableTreeNode">
+        SELECT
+        b.VARIABLE_ID as "variableId",
+        b.ENTITY_ID as "entityId",
+        b.FOLDER_ID as "folderId",
+        b.VARIABLE_ALIAS as "variableAlias",
+        b.VARIABLE_CODE as "variableCode",
+        b.TYPE_ID as "typeId",
+        b.KIND_ID as "kindId",
+        b.VARIABLE_FROM as "variableFrom",
+        b.IS_DICT as "isDict",
+        b.DEFAULT_VALUE as "defaultValue",
+        b.DEFAULT_VALUE_TYPE as "defaultValueType",
+        b.VARIABLE_REMARKS as "variableRemarks",
+        b.CREATE_PERSON as "createPerson",
+        b.CREATE_DATE as "createDate",
+        b.UPDATE_PERSON as "updatePerson",
+        b.UPDATE_DATE as "updateDate",
+        b.IS_PUBLIC as "isPublic",
+        b.VARIABLE_GROUP_ID as "variableGroupId"
+        FROM CRE_VARIABLE_API a INNER JOIN CRE_VARIABLE b ON a.VARIABLE_ID=b.VARIABLE_ID
+        WHERE 1=1
+        <if test="apiVariableType != null">
+            AND API_VARIABLE_TYPE = #{apiVariableType,jdbcType=VARCHAR}
+        </if>
+        <if test="apiId != null">
+            AND API_ID = #{apiId,jdbcType=VARCHAR}
+        </if>
+        <if test="kindId != null and '' != kindId">
+            and KIND_ID=#{kindId,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <select id="selectVariableTreeNodeByVariableProperty" parameterType="map"
+            resultType="com.bonc.frame.entity.variable.VariableTreeNode">
+        SELECT
+        a.VARIABLE_ID as "variableId",
+        a.ENTITY_ID as "entityId",
+        a.FOLDER_ID as "folderId",
+        a.VARIABLE_ALIAS as "variableAlias",
+        a.VARIABLE_CODE as "variableCode",
+        a.TYPE_ID as "typeId",
+        a.KIND_ID as "kindId",
+        a.VARIABLE_FROM as "variableFrom",
+        a.IS_DICT as "isDict",
+        a.DEFAULT_VALUE as "defaultValue",
+        a.DEFAULT_VALUE_TYPE as "defaultValueType",
+        a.VARIABLE_REMARKS as "variableRemarks",
+        a.CREATE_PERSON as "createPerson",
+        a.CREATE_DATE as "createDate",
+        a.UPDATE_PERSON as "updatePerson",
+        a.UPDATE_DATE as "updateDate",
+        a.IS_PUBLIC as "isPublic",
+        a.VARIABLE_GROUP_ID as "variableGroupId",
+        b.ENTITY_ID AS "parentEntityId",
+        b.ENTITY_VARIABLE_ALIAS AS "aliasCode"
+        FROM
+        CRE_VARIABLE a LEFT JOIN CRE_VARIABLE_ENTITY_RELATION b ON a.VARIABLE_ID = b.VARIABLE_ID
+        WHERE 1=1
+        <if test="variableId != null">
+            AND a.VARIABLE_ID = #{variableId,jdbcType=VARCHAR}
+        </if>
+        <if test="variableIdList != null">
+            AND a.VARIABLE_ID in
+            <foreach item="item" collection="variableIdList" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="entityId != null">
+            AND a.ENTITY_ID = #{entityId,jdbcType=VARCHAR}
+        </if>
+        <if test="variableCode != null">
+            AND a.VARIABLE_CODE = #{variableCode,jdbcType=VARCHAR}
+        </if>
+        <if test="variableAlias != null">
+            AND a.VARIABLE_ALIAS = #{variableAlias,jdbcType=VARCHAR}
+        </if>
+        <if test="typeId != null">
+            AND a.TYPE_ID = #{typeId,jdbcType=VARCHAR}
+        </if>
+        <if test="isPublic != null">
+            AND a.IS_PUBLIC = #{isPublic,jdbcType=VARCHAR}
+        </if>
+        <if test="folderId != null">
+            AND a.FOLDER_ID = #{folderId,jdbcType=VARCHAR}
+        </if>
+        <if test="variableGroupId != null">
+            AND a.VARIABLE_GROUP_ID = #{variableGroupId,jdbcType=VARCHAR}
+        </if>
+        <if test="kindId != null and '' != kindId">
+            and a.KIND_ID = #{kindId,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <!-- 获取实体类型变量及其所有子变量,以及子变量的父实体Id -->
+    <select id="selectNestedVariable" parameterType="map" resultType="com.bonc.frame.entity.variable.VariableTreeNode">
+        SELECT
+        a.VARIABLE_ID AS "variableId",
+        a.ENTITY_ID AS "entityId",
+        a.FOLDER_ID AS "folderId",
+        a.VARIABLE_ALIAS AS "variableAlias",
+        a.VARIABLE_CODE AS "variableCode",
+        a.TYPE_ID AS "typeId",
+        a.KIND_ID AS "kindId",
+        a.VARIABLE_FROM AS "variableFrom",
+        a.IS_DICT AS "isDict",
+        a.DEFAULT_VALUE AS "defaultValue",
+        a.DEFAULT_VALUE_TYPE AS "defaultValueType",
+        a.VARIABLE_REMARKS AS "variableRemarks",
+        a.CREATE_PERSON AS "createPerson",
+        a.CREATE_DATE AS "createDate",
+        a.UPDATE_PERSON AS "updatePerson",
+        a.UPDATE_DATE AS "updateDate",
+        a.IS_PUBLIC AS "isPublic",
+        a.VARIABLE_GROUP_ID AS "variableGroupId",
+        b.ENTITY_ID AS "parentEntityId",
+        b.ENTITY_VARIABLE_ALIAS AS "aliasCode"
+        FROM
+        CRE_VARIABLE a LEFT JOIN CRE_VARIABLE_ENTITY_RELATION b ON a.VARIABLE_ID = b.VARIABLE_ID
+        WHERE
+        <if test="kindId != null and '' != kindId">
+            and a.KIND_ID=#{kindId,jdbcType=VARCHAR}
+        </if>
+        a.VARIABLE_ID = #{variableId,jdbcType=VARCHAR}
+        OR a.VARIABLE_ID IN (
+        SELECT
+        VARIABLE_ID
+        FROM
+        CRE_VARIABLE_ENTITY_RELATION
+        WHERE
+        ENTITY_ID IN (
+        SELECT ENTITY_ID FROM CRE_VARIABLE_ENTITY
+        START WITH ENTITY_ID = #{entityId , jdbcType=VARCHAR}
+        CONNECT BY PRIOR ENTITY_ID = ENTITY_PID
+        )
+        )
+
+    </select>
+    <!-- 获取实体类型变量及其所有子变量,以及子变量的父实体Id -->
+    <select id="selectDirectNestedVariableWithOwn" parameterType="map"
+            resultType="com.bonc.frame.entity.variable.VariableTreeNode">
+        SELECT
+        a.VARIABLE_ID AS "variableId",
+        a.ENTITY_ID AS "entityId",
+        a.FOLDER_ID AS "folderId",
+        a.VARIABLE_ALIAS AS "variableAlias",
+        a.VARIABLE_CODE AS "variableCode",
+        a.TYPE_ID AS "typeId",
+        a.KIND_ID AS "kindId",
+        a.VARIABLE_FROM AS "variableFrom",
+        a.IS_DICT AS "isDict",
+        a.DEFAULT_VALUE AS "defaultValue",
+        a.DEFAULT_VALUE_TYPE AS "defaultValueType",
+        a.VARIABLE_REMARKS AS "variableRemarks",
+        a.CREATE_PERSON AS "createPerson",
+        a.CREATE_DATE AS "createDate",
+        a.UPDATE_PERSON AS "updatePerson",
+        a.UPDATE_DATE AS "updateDate",
+        a.IS_PUBLIC AS "isPublic",
+        a.VARIABLE_GROUP_ID AS "variableGroupId",
+        b.ENTITY_ID AS "parentEntityId",
+        b.ENTITY_VARIABLE_ALIAS AS "aliasCode"
+        FROM
+        CRE_VARIABLE a LEFT JOIN CRE_VARIABLE_ENTITY_RELATION b ON a.VARIABLE_ID = b.VARIABLE_ID
+        WHERE
+        <if test="kindId != null and '' != kindId">
+            and a.KIND_ID=#{kindId,jdbcType=VARCHAR}
+        </if>
+        a.VARIABLE_ID = #{variableId,jdbcType=VARCHAR}
+        OR a.VARIABLE_ID IN (
+        SELECT
+        VARIABLE_ID
+        FROM
+        CRE_VARIABLE_ENTITY_RELATION
+        WHERE
+        ENTITY_ID = #{entityId , jdbcType=VARCHAR}
+        )
+
+    </select>
+
+    <!-- 查询所有的没有参数组的公共变量 -->
+    <select id="selectPubByVariableGroupIdIsNull" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from CRE_VARIABLE
+        where VARIABLE_GROUP_ID IS NULL
+        AND IS_PUBLIC = '1'
+        order by VARIABLE_ALIAS
+    </select>
+
+    <!-- 根据文件夹ID查询所有实体 -->
+    <select id="selectEntityByFolderId" parameterType="map" resultType="map">
+        SELECT A.ENTITY_ID as "entityId",A.ENTITY_PID as "entityPid"
+        FROM CRE_VARIABLE_ENTITY A ,
+        (
+        SELECT B.ENTITY_ID AS ENTITY_ID FROM CRE_VARIABLE B
+        WHERE B.FOLDER_ID = #{folderId,jdbcType=VARCHAR}
+        AND B.ENTITY_ID IS NOT NULL
+        <if test="kindIds != null">
+            AND B.KIND_ID in
+            <foreach item="item" collection="kindIds" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        ) T
+        WHERE A.ENTITY_ID = T.ENTITY_ID
+    </select>
+
+    <!-- 根据参数组ID查询所有实体 -->
+    <select id="selectEntityByVariableGroupId" parameterType="java.lang.String" resultType="map">
+        SELECT A.ENTITY_ID as "entityId", A.ENTITY_PID as "entityPid"
+        FROM CRE_VARIABLE_ENTITY A,
+             (
+                 SELECT B.ENTITY_ID AS ENTITY_ID
+                 FROM CRE_VARIABLE B
+                 WHERE B.VARIABLE_GROUP_ID = #{variableGroupId,jdbcType=VARCHAR}
+                   AND B.ENTITY_ID IS NOT NULL
+             ) T
+        WHERE A.ENTITY_ID = T.ENTITY_ID
+    </select>
+
+    <!-- 根据参数组ID查询所有实体 -->
+    <select id="selectEntityByVariableGroupId2" parameterType="java.lang.String" resultType="map">
+        SELECT A.ENTITY_ID as "entityId", A.ENTITY_PID as "entityPid", T.VARIABLE_ID
+        FROM CRE_VARIABLE_ENTITY A,
+             (
+                 SELECT B.ENTITY_ID AS ENTITY_ID, B.VARIABLE_ID AS VARIABLE_ID
+                 FROM CRE_VARIABLE B
+                 WHERE B.VARIABLE_GROUP_ID = #{variableGroupId,jdbcType=VARCHAR}
+                   AND B.ENTITY_ID IS NOT NULL
+             ) T
+        WHERE A.ENTITY_ID = T.ENTITY_ID
+    </select>
+
+    <!-- 查询所有的没有参数组的公共实体 -->
+    <select id="selectPubEntityByVariableGroupIdIsNull" resultType="map">
+        SELECT A.ENTITY_ID as "entityId", A.ENTITY_PID as "entityPid"
+        FROM CRE_VARIABLE_ENTITY A,
+             (
+                 SELECT B.ENTITY_ID AS ENTITY_ID
+                 FROM CRE_VARIABLE B
+                 WHERE B.VARIABLE_GROUP_ID IS NULL
+                   AND B.IS_PUBLIC = '1'
+                   AND B.ENTITY_ID IS NOT NULL
+             ) T
+        WHERE A.ENTITY_ID = T.ENTITY_ID
+    </select>
+
+    <!-- 查询所有的没有参数组的公共实体 -->
+    <select id="selectPubEntityByVariableGroupIdIsNull2" resultType="map">
+        SELECT A.ENTITY_ID as "entityId", A.ENTITY_PID as "entityPid", T.VARIABLE_ID
+        FROM CRE_VARIABLE_ENTITY A,
+             (
+                 SELECT B.ENTITY_ID AS ENTITY_ID, B.VARIABLE_ID AS VARIABLE_ID
+                 FROM CRE_VARIABLE B
+                 WHERE B.VARIABLE_GROUP_ID IS NULL
+                   AND B.IS_PUBLIC = '1'
+                   AND B.ENTITY_ID IS NOT NULL
+             ) T
+        WHERE A.ENTITY_ID = T.ENTITY_ID
+    </select>
+
+    <!-- 根据文件夹ID查询实体变量关系 -->
+    <select id="selectEntityRefByFolderId" parameterType="map" resultType="map">
+        SELECT A.ENTITY_ID as "entityId",A.VARIABLE_ID as "variableId",A.ENTITY_VARIABLE_ALIAS as "alias"
+        FROM CRE_VARIABLE_ENTITY_RELATION A ,
+        (
+        SELECT B.VARIABLE_ID AS VARIABLE_ID FROM CRE_VARIABLE B
+        WHERE B.FOLDER_ID = #{folderId,jdbcType=VARCHAR}
+        <if test="kindIds != null">
+            AND B.KIND_ID in
+            <foreach item="item" collection="kindIds" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        ) T
+        WHERE A.VARIABLE_ID = T.VARIABLE_ID
+    </select>
+
+    <!-- 根据参数组ID查询实体变量关系 -->
+    <select id="selectEntityRefByVariableGroupId" parameterType="java.lang.String" resultType="map">
+        SELECT A.ENTITY_ID as "entityId", A.VARIABLE_ID as "variableId", A.ENTITY_VARIABLE_ALIAS as "alias"
+        FROM CRE_VARIABLE_ENTITY_RELATION A,
+             (
+                 SELECT B.VARIABLE_ID AS VARIABLE_ID
+                 FROM CRE_VARIABLE B
+                 WHERE B.VARIABLE_GROUP_ID = #{variableGroupId,jdbcType=VARCHAR}
+             ) T
+        WHERE A.VARIABLE_ID = T.VARIABLE_ID
+    </select>
+
+    <!-- 查询所有的没有参数组的公共实体变量关系 -->
+    <select id="selectPubEntityRefByVariableGroupIdIsNull" resultType="map">
+        SELECT A.ENTITY_ID as "entityId", A.VARIABLE_ID as "variableId", A.ENTITY_VARIABLE_ALIAS as "alias"
+        FROM CRE_VARIABLE_ENTITY_RELATION A,
+             (
+                 SELECT B.VARIABLE_ID AS VARIABLE_ID
+                 FROM CRE_VARIABLE B
+                 WHERE B.VARIABLE_GROUP_ID IS NULL
+                   AND B.IS_PUBLIC = '1'
+             ) T
+        WHERE A.VARIABLE_ID = T.VARIABLE_ID
+    </select>
+
+    <!-- 根据规则Id获取变量列表 -->
+    <select id="getVariableByRuleId" parameterType="map" resultType="map">
+        SELECT
+        A.VARIABLE_ALIAS AS "variableAlias",A.VARIABLE_CODE AS "variableCode",
+        B.ENTITY_VARIABLE_ALIAS AS "aliasCode",
+        A.TYPE_ID AS "typeId"
+        FROM CRE_VARIABLE A LEFT JOIN CRE_VARIABLE_ENTITY_RELATION B
+        ON A.VARIABLE_ID = B.VARIABLE_ID
+        WHERE A.FOLDER_ID = #{folderId,jdbcType=VARCHAR}
+        <if test="kindId != null and '' != kindId">
+            and A.KIND_ID=#{kindId,jdbcType=VARCHAR}
+        </if>
+        AND A.ENTITY_ID IS NULL
+        <if test="variableIdList != null and variableIdList.size()>0">
+            AND A.VARIABLE_ID IN
+            <foreach collection="variableIdList" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+
+    <!-- 根据文件夹ID获取所有的基础类型变量 -->
+    <select id="getBaseVariable" parameterType="map" resultType="map">
+        SELECT DISTINCT A.VARIABLE_ALIAS AS "text",
+                        A.VARIABLE_CODE  AS "key"
+        FROM CRE_VARIABLE A
+                 LEFT JOIN CRE_VARIABLE_ENTITY_RELATION B
+                           ON A.VARIABLE_ID != B.VARIABLE_ID
+        WHERE A.FOLDER_ID = #{folderId,jdbcType=VARCHAR}
+          AND A.ENTITY_ID IS NULL
+          AND A.KIND_ID != 'K4'
+          AND A.VARIABLE_ID NOT IN (
+            SELECT VARIABLE_ID
+            FROM CRE_VARIABLE_ENTITY_RELATION
+        )
+    </select>
+
+    <!-- 根据变量id统计引用次数 -->
+    <select id="countUsedByVariableId" parameterType="java.lang.String" resultType="int">
+        SELECT SUM("count") AS "count"
+        FROM (
+                 SELECT count(VARIABLE_ID) AS "count"
+                 from CRE_VARIABLE_API
+                 WHERE VARIABLE_ID = #{variableId,jdbcType=VARCHAR}
+                 UNION ALL
+                 SELECT count(VARIABLE_ID) AS "count"
+                 from CRE_VARIABLE_RULE
+                 WHERE VARIABLE_ID = #{variableId,jdbcType=VARCHAR}
+                 UNION ALL
+                 SELECT count(VARIABLE_ID) AS "count"
+                 from CRE_VARIABLE_RULE_SET
+                 WHERE VARIABLE_ID =
+                       #{variableId,jdbcType=VARCHAR}
+                 UNION ALL
+                 SELECT count(VARIABLE_ID) AS "count"
+                 from CRE_KPI_FETCH_LIMITERS
+                 WHERE VARIABLE_ID =
+                       #{variableId,jdbcType=VARCHAR}
+             )
+    </select>
+
+    <!-- 判断实体的所有子变量是否被接口、模型、规则库引用 -->
+    <select id="countEntityUsedByVariableId" parameterType="java.lang.String" resultType="int">
+        SELECT SUM("count") AS "count"
+        FROM (
+                 SELECT count(VARIABLE_ID) AS "count"
+                 from CRE_VARIABLE_API
+                 WHERE VARIABLE_ID IN (
+                     select VARIABLE_ID
+                     from CRE_VARIABLE_ENTITY_RELATION
+                     WHERE ENTITY_ID IN (
+                         select ENTITY_ID
+                         from CRE_VARIABLE_ENTITY start with ENTITY_ID=#{entityId,jdbcType=VARCHAR}
+                             connect by prior ENTITY_ID = ENTITY_PID
+                     )
+                 )
+                 UNION ALL
+                 SELECT count(VARIABLE_ID) AS "count"
+                 from CRE_VARIABLE_RULE
+                 WHERE VARIABLE_ID IN (
+                     select VARIABLE_ID
+                     from CRE_VARIABLE_ENTITY_RELATION
+                     WHERE ENTITY_ID IN (
+                         select ENTITY_ID
+                         from CRE_VARIABLE_ENTITY start with ENTITY_ID=#{entityId,jdbcType=VARCHAR}
+                             connect by prior ENTITY_ID = ENTITY_PID
+                     )
+                 )
+                 UNION ALL
+                 SELECT count(VARIABLE_ID) AS "count"
+                 from CRE_VARIABLE_RULE_SET
+                 WHERE VARIABLE_ID IN (
+                     select VARIABLE_ID
+                     from CRE_VARIABLE_ENTITY_RELATION
+                     WHERE ENTITY_ID IN (
+                         select ENTITY_ID
+                         from CRE_VARIABLE_ENTITY start with ENTITY_ID=#{entityId,jdbcType=VARCHAR}
+                             connect by prior ENTITY_ID = ENTITY_PID
+                     )
+                 )
+                 UNION ALL
+                 SELECT count(VARIABLE_ID) AS "count"
+                 from CRE_KPI_FETCH_LIMITERS
+                 WHERE VARIABLE_ID IN (
+                     select VARIABLE_ID
+                     from CRE_VARIABLE_ENTITY_RELATION
+                     WHERE ENTITY_ID IN (
+                         select ENTITY_ID
+                         from CRE_VARIABLE_ENTITY start with ENTITY_ID=#{entityId,jdbcType=VARCHAR}
+                             connect by prior ENTITY_ID = ENTITY_PID
+                     )
+                 )
+             )
+    </select>
+
+    <!-- 获取实体类型变量及其所有子变量 -->
+    <select id="getNestedVariable" parameterType="java.util.Map" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM CRE_VARIABLE WHERE VARIABLE_ID = #{variableId,jdbcType=VARCHAR}
+        OR VARIABLE_ID in (
+        SELECT VARIABLE_ID
+        FROM CRE_VARIABLE_ENTITY_RELATION
+        WHERE ENTITY_ID IN (
+        SELECT ENTITY_ID
+        FROM CRE_VARIABLE_ENTITY
+        START WITH ENTITY_ID = #{entityId,jdbcType=VARCHAR}
+        CONNECT BY PRIOR ENTITY_ID = ENTITY_PID
+        )
+        )
+    </select>
+
+    <select id="getNestedVariableIds" parameterType="string" resultType="string">
+        SELECT VARIABLE_ID
+        FROM CRE_VARIABLE_ENTITY_RELATION
+        WHERE ENTITY_ID IN (
+            SELECT ENTITY_ID
+            FROM CRE_VARIABLE_ENTITY START WITH ENTITY_ID = #{entityId,jdbcType=VARCHAR}
+                CONNECT BY PRIOR ENTITY_ID = ENTITY_PID
+        )
+    </select>
+
+    <select id="getNestedVariableIdsByEntityIds" parameterType="java.util.List" resultType="string">
+        SELECT
+        VARIABLE_ID
+        FROM
+        CRE_VARIABLE_ENTITY_RELATION
+        WHERE
+        ENTITY_ID IN (
+        SELECT
+        ENTITY_ID
+        FROM
+        CRE_VARIABLE_ENTITY START WITH ENTITY_ID IN (
+        <foreach collection="list" item="item" index="index" separator=",">
+            #{item,jdbcType=VARCHAR}
+        </foreach>
+        )
+        CONNECT BY PRIOR ENTITY_ID = ENTITY_PID
+        )
+    </select>
+
+    <!-- 是否存在私有变量 -->
+    <select id="checkExitsPrivateVariable" resultType="int" parameterType="java.util.Map">
+        SELECT count(1) FROM CRE_VARIABLE
+        WHERE IS_PUBLIC = '0'
+        <if test="folderId != null">
+            AND FOLDER_ID = #{folderId, jdbcType=VARCHAR}
+        </if>
+        AND VARIABLE_ID IN
+        <foreach collection="variableIdList" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <insert id="insert" parameterType="com.bonc.frame.entity.variable.Variable">
+        insert into cre_variable (VARIABLE_ID, ENTITY_ID, VARIABLE_ALIAS,
+                                  VARIABLE_CODE, TYPE_ID, KIND_ID,
+                                  VARIABLE_FROM, IS_DICT, DEFAULT_VALUE,
+                                  DEFAULT_VALUE_TYPE, VARIABLE_REMARKS, CREATE_PERSON,
+                                  CREATE_DATE, UPDATE_PERSON, UPDATE_DATE)
+        values (#{variableId,jdbcType=VARCHAR}, #{entityId,jdbcType=VARCHAR}, #{variableAlias,jdbcType=VARCHAR},
+                #{variableCode,jdbcType=VARCHAR}, #{typeId,jdbcType=VARCHAR}, #{kindId,jdbcType=VARCHAR},
+                #{variableFrom,jdbcType=VARCHAR}, #{isDict,jdbcType=VARCHAR}, #{defaultValue,jdbcType=VARCHAR},
+                #{defaultValueType,jdbcType=VARCHAR}, #{variableRemarks,jdbcType=VARCHAR},
+                #{createPerson,jdbcType=VARCHAR},
+                #{createDate,jdbcType=TIMESTAMP}, #{updatePerson,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP})
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.bonc.frame.entity.variable.Variable">
+        insert into cre_variable
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="variableId != null">
+                VARIABLE_ID,
+            </if>
+            <if test="entityId != null">
+                ENTITY_ID,
+            </if>
+            <if test="isPublic != null">
+                IS_PUBLIC,
+            </if>
+            <if test="folderId != null">
+                FOLDER_ID,
+            </if>
+            <if test="variableGroupId != null">
+                VARIABLE_GROUP_ID,
+            </if>
+            <if test="variableAlias != null">
+                VARIABLE_ALIAS,
+            </if>
+            <if test="variableCode != null">
+                VARIABLE_CODE,
+            </if>
+            <if test="typeId != null">
+                TYPE_ID,
+            </if>
+            <if test="kindId != null">
+                KIND_ID,
+            </if>
+            <if test="variableFrom != null">
+                VARIABLE_FROM,
+            </if>
+            <if test="isDict != null">
+                IS_DICT,
+            </if>
+            <if test="defaultValue != null">
+                DEFAULT_VALUE,
+            </if>
+            <if test="defaultValueType != null">
+                DEFAULT_VALUE_TYPE,
+            </if>
+            <if test="variableRemarks != null">
+                VARIABLE_REMARKS,
+            </if>
+            <if test="createPerson != null">
+                CREATE_PERSON,
+            </if>
+            <if test="createDate != null">
+                CREATE_DATE,
+            </if>
+            <if test="updatePerson != null">
+                UPDATE_PERSON,
+            </if>
+            <if test="updateDate != null">
+                UPDATE_DATE,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="variableId != null">
+                #{variableId,jdbcType=VARCHAR},
+            </if>
+            <if test="entityId != null">
+                #{entityId,jdbcType=VARCHAR},
+            </if>
+            <if test="isPublic != null">
+                #{isPublic,jdbcType=VARCHAR},
+            </if>
+            <if test="folderId != null">
+                #{folderId,jdbcType=VARCHAR},
+            </if>
+            <if test="variableGroupId != null">
+                #{variableGroupId,jdbcType=VARCHAR},
+            </if>
+            <if test="variableAlias != null">
+                #{variableAlias,jdbcType=VARCHAR},
+            </if>
+            <if test="variableCode != null">
+                #{variableCode,jdbcType=VARCHAR},
+            </if>
+            <if test="typeId != null">
+                #{typeId,jdbcType=VARCHAR},
+            </if>
+            <if test="kindId != null">
+                #{kindId,jdbcType=VARCHAR},
+            </if>
+            <if test="variableFrom != null">
+                #{variableFrom,jdbcType=VARCHAR},
+            </if>
+            <if test="isDict != null">
+                #{isDict,jdbcType=VARCHAR},
+            </if>
+            <if test="defaultValue != null">
+                #{defaultValue,jdbcType=VARCHAR},
+            </if>
+            <if test="defaultValueType != null">
+                #{defaultValueType,jdbcType=VARCHAR},
+            </if>
+            <if test="variableRemarks != null">
+                #{variableRemarks,jdbcType=VARCHAR},
+            </if>
+            <if test="createPerson != null">
+                #{createPerson,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatePerson != null">
+                #{updatePerson,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null">
+                #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.bonc.frame.entity.variable.Variable">
+        update cre_variable
+        <set>
+            <if test="entityId != null">
+                ENTITY_ID = #{entityId,jdbcType=VARCHAR},
+            </if>
+            <if test="variableAlias != null">
+                VARIABLE_ALIAS = #{variableAlias,jdbcType=VARCHAR},
+            </if>
+            <if test="folderId != null">
+                FOLDER_ID = #{folderId,jdbcType=VARCHAR},
+            </if>
+            <if test="variableCode != null">
+                VARIABLE_CODE = #{variableCode,jdbcType=VARCHAR},
+            </if>
+            <if test="typeId != null">
+                TYPE_ID = #{typeId,jdbcType=VARCHAR},
+            </if>
+            <if test="kindId != null">
+                KIND_ID = #{kindId,jdbcType=VARCHAR},
+            </if>
+            <if test="variableFrom != null">
+                VARIABLE_FROM = #{variableFrom,jdbcType=VARCHAR},
+            </if>
+            <if test="isDict != null">
+                IS_DICT = #{isDict,jdbcType=VARCHAR},
+            </if>
+            <if test="defaultValue != null">
+                DEFAULT_VALUE = #{defaultValue,jdbcType=VARCHAR},
+            </if>
+            <if test="defaultValueType != null">
+                DEFAULT_VALUE_TYPE = #{defaultValueType,jdbcType=VARCHAR},
+            </if>
+            <if test="variableRemarks != null">
+                VARIABLE_REMARKS = #{variableRemarks,jdbcType=VARCHAR},
+            </if>
+            <if test="updatePerson != null">
+                UPDATE_PERSON = #{updatePerson,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null">
+                UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="variableGroupId != null">
+                VARIABLE_GROUP_ID = #{variableGroupId,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where VARIABLE_ID = #{variableId,jdbcType=VARCHAR}
+    </update>
+
+    <!-- 将私有变量变为公有变量 -->
+    <update id="upgrade" parameterType="com.bonc.frame.entity.variable.Variable">
+        UPDATE CRE_VARIABLE
+        <set>
+            IS_PUBLIC = '1',
+            FOLDER_ID = NULL,
+            UPDATE_PERSON = #{updatePerson,jdbcType=VARCHAR},
+            UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP},
+            VARIABLE_GROUP_ID = #{variableGroupId,jdbcType=VARCHAR}
+        </set>
+        WHERE VARIABLE_ID = #{variableId,jdbcType=VARCHAR}
+        <if test="entityId != null">
+            OR VARIABLE_ID in (
+            SELECT VARIABLE_ID
+            FROM CRE_VARIABLE_ENTITY_RELATION
+            WHERE ENTITY_ID IN (
+            SELECT ENTITY_ID
+            FROM CRE_VARIABLE_ENTITY
+            START WITH ENTITY_ID = #{entityId,jdbcType=VARCHAR}
+            CONNECT BY PRIOR ENTITY_ID = ENTITY_PID
+            )
+            )
+        </if>
+    </update>
+
+    <!-- 删除变量及子变量 -->
+    <delete id="deleteByPrimaryKey" parameterType="com.bonc.frame.entity.variable.Variable">
+        delete from cre_variable
+        where VARIABLE_ID = #{variableId,jdbcType=VARCHAR}
+        <if test="entityId != null">
+            or VARIABLE_ID in (select VARIABLE_ID from CRE_VARIABLE_ENTITY_RELATION where ENTITY_ID in(
+            select ENTITY_ID from CRE_VARIABLE_ENTITY
+            start with ENTITY_ID=#{entityId,jdbcType=VARCHAR}
+            connect by prior ENTITY_ID = ENTITY_PID))
+        </if>
+    </delete>
+
+    <!-- 修改嵌套参数种类 -->
+    <update id="updateNestedVariablesKind" parameterType="com.bonc.frame.entity.variable.Variable">
+        UPDATE cre_variable
+        SET KIND_ID = #{kindId,jdbcType=VARCHAR}
+        where VARIABLE_ID = #{variableId,jdbcType=VARCHAR}
+           or VARIABLE_ID in (select VARIABLE_ID
+                              from CRE_VARIABLE_ENTITY_RELATION
+                              where ENTITY_ID in (
+                                  select ENTITY_ID
+                                  from CRE_VARIABLE_ENTITY start with ENTITY_ID=#{entityId,jdbcType=VARCHAR}
+                                      connect by prior ENTITY_ID = ENTITY_PID))
+    </update>
+
+
+    <!-- 根据文件夹ID删除所有实体 -->
+    <delete id="deleteEntityByFolderId" parameterType="string">
+        DELETE
+        FROM CRE_VARIABLE_ENTITY
+        WHERE ENTITY_ID IN (
+            SELECT entity_id
+            FROM CRE_VARIABLE
+            WHERE FOLDER_ID = #{folderId,jdbcType=VARCHAR}
+              AND ENTITY_ID IS NOT NULL)
+    </delete>
+
+    <!-- 根据文件夹ID删除实体变量关系 -->
+    <delete id="deleteEntityRefByFolderId" parameterType="string">
+        DELETE
+        FROM CRE_VARIABLE_ENTITY_RELATION
+        WHERE ENTITY_ID IN (
+            SELECT entity_id
+            FROM CRE_VARIABLE
+            WHERE FOLDER_ID = #{folderId,jdbcType=VARCHAR}
+              AND ENTITY_ID IS NOT NULL)
+    </delete>
+
+    <!-- 根据文件夹ID删除所有的变量 -->
+    <delete id="deleteByFolderId" parameterType="string">
+        delete
+        from CRE_VARIABLE
+        where FOLDER_ID = #{folderId,jdbcType=VARCHAR}
+    </delete>
+
+    <!-- 根据文件夹ID删除所有变量（多条SQL）
+    <delete id="deleteVairableByFolderId" parameterType="string">
+      DELETE FROM CRE_VARIABLE_ENTITY WHERE ENTITY_ID IN(
+         SELECT entity_id FROM CRE_VARIABLE
+         WHERE FOLDER_ID = #{folderId,jdbcType=VARCHAR}
+         AND ENTITY_ID IS NOT NULL);
+      DELETE FROM CRE_VARIABLE_ENTITY_RELATION WHERE ENTITY_ID IN(
+         SELECT entity_id FROM CRE_VARIABLE
+         WHERE FOLDER_ID = #{folderId,jdbcType=VARCHAR}
+         AND ENTITY_ID IS NOT NULL);
+      delete from CRE_VARIABLE where FOLDER_ID = #{folderId,jdbcType=VARCHAR};
+    </delete>-->
+
+
+    <!--                   公共参数                   -->
+
+    <!-- 查询 参数名、创建时间、参数组 -->
+    <select id="pubSelectVariables" parameterType="map" resultMap="BaseResultMapGroupExt">
+        SELECT
+        T .*, c.VARIABLE_GROUP_NAME
+        FROM
+        (
+        SELECT
+        <include refid="Base_Column_Lista"/>, b.TYPE_VALUE,f.KIND_VALUE
+        FROM
+        CRE_VARIABLE A,
+        CRE_VARIABLE_TYPE b,
+        CRE_VARIABLE_KIND f
+        WHERE
+        A .TYPE_ID = b.TYPE_ID AND A.KIND_ID = f.KIND_ID
+        ) T
+        LEFT JOIN CRE_PUB_VARIABLE_GROUP c
+        ON T .VARIABLE_GROUP_ID = c.VARIABLE_GROUP_ID
+        WHERE T.IS_PUBLIC = '1'
+        and T.VARIABLE_ID not in
+        (select VARIABLE_ID from CRE_VARIABLE_ENTITY_RELATION)
+        <if test="variableAlias != null and '' != variableAlias">
+            <bind name="pattern1" value="'%' + _parameter.variableAlias + '%'"/>
+            and T.VARIABLE_ALIAS like #{pattern1}
+        </if>
+        <if test="variableGroupName != null and '' != variableGroupName">
+            <bind name="pattern2" value="'%' + _parameter.variableGroupName + '%'"/>
+            and c.VARIABLE_GROUP_NAME like #{pattern2}
+        </if>
+        <if test="typeId != null and '' != typeId">
+            and T.TYPE_ID = #{typeId,jdbcType=VARCHAR}
+        </if>
+        <if test="kindId != null and '' != typeId">
+            and T.KIND_ID = #{kindId,jdbcType=VARCHAR}
+        </if>
+        <if test="startDate != null and '' != startDate">
+            and T.CREATE_DATE &gt;= to_date(#{startDate,jdbcType=TIMESTAMP} ,'yyyy-mm-dd hh24:mi:ss')
+        </if>
+        <if test="endDate != null and '' != endDate">
+            and T.CREATE_DATE &lt;= to_date(#{endDate,jdbcType=TIMESTAMP} ,'yyyy-mm-dd hh24:mi:ss')
+        </if>
+        order by T.VARIABLE_ALIAS
+    </select>
+
+    <!-- 查询所有非实体类型的参数，包括嵌套的基本类型参数 -->
+    <select id="pubSelectFlatVariables" parameterType="map" resultMap="BaseResultMapGroupExt">
+        SELECT
+        T .*, c.VARIABLE_GROUP_NAME
+        FROM
+        (
+        SELECT
+        <include refid="Base_Column_Lista"/>, b.TYPE_VALUE,f.KIND_VALUE
+        FROM
+        CRE_VARIABLE A
+        LEFT JOIN CRE_VARIABLE_TYPE b ON A .TYPE_ID = b.TYPE_ID
+        LEFT JOIN CRE_VARIABLE_KIND f ON A .KIND_ID = f.KIND_ID
+        WHERE
+        A.ENTITY_ID IS NULL
+        AND A.TYPE_ID != '3'
+        ) T
+        LEFT JOIN CRE_PUB_VARIABLE_GROUP c
+        ON T .VARIABLE_GROUP_ID = c.VARIABLE_GROUP_ID
+        WHERE T.IS_PUBLIC = '1'
+        <if test="variableAlias != null and '' != variableAlias">
+            <bind name="pattern1" value="'%' + _parameter.variableAlias + '%'"/>
+            and T.VARIABLE_ALIAS like #{pattern1}
+        </if>
+        <if test="variableGroupName != null and '' != variableGroupName">
+            <bind name="pattern2" value="'%' + _parameter.variableGroupName + '%'"/>
+            and c.VARIABLE_GROUP_NAME like #{pattern2}
+        </if>
+        <if test="typeId != null and '' != typeId">
+            and T.TYPE_ID = #{typeId,jdbcType=VARCHAR}
+        </if>
+        <if test="kindId != null and '' != kindId">
+            and T.KIND_ID = #{kindId,jdbcType=VARCHAR}
+        </if>
+        <if test="startDate != null and '' != startDate">
+            and T.CREATE_DATE &gt;= to_date(#{startDate,jdbcType=TIMESTAMP} ,'yyyy-mm-dd hh24:mi:ss')
+        </if>
+        <if test="endDate != null and '' != endDate">
+            and T.CREATE_DATE &lt;= to_date(#{endDate,jdbcType=TIMESTAMP} ,'yyyy-mm-dd hh24:mi:ss')
+        </if>
+        order by T.VARIABLE_ALIAS
+    </select>
+
+    <!-- 查询 参数名、创建时间、参数组 -->
+    <select id="pagedPubVariableResources" parameterType="map"
+            resultType="com.bonc.frame.entity.auth.resource.PubVariableResource">
+        SELECT
+        T .VARIABLE_ID as "variableId",
+        T .ENTITY_ID as "entityId",
+        T .VARIABLE_ALIAS as "variableAlias",
+        T .VARIABLE_CODE as "variableCode",
+        T .TYPE_ID as "typeId",
+        T .TYPE_VALUE as "typeValue",
+        T .TYPE_DESC as "typeDesc",
+        T .KIND_ID as "kindId",
+        T .VARIABLE_REMARKS as "variableRemarks",
+        T .CREATE_DATE as "createDate",
+        T .UPDATE_DATE as "updateDate",
+        T .VARIABLE_GROUP_ID as "varaibleGroupId",
+        c.VARIABLE_GROUP_NAME as "variableGroupName"
+        FROM
+        (
+        SELECT
+        a.VARIABLE_ID, a.ENTITY_ID,a.VARIABLE_ALIAS,
+        a.VARIABLE_CODE, a.TYPE_ID, a.KIND_ID,a.VARIABLE_REMARKS,
+        a.CREATE_DATE, a.UPDATE_DATE, a.VARIABLE_GROUP_ID,
+        b.TYPE_VALUE, b.TYPE_DESC, a.IS_PUBLIC
+        FROM
+        CRE_VARIABLE A,
+        CRE_VARIABLE_TYPE b
+        WHERE
+        A .TYPE_ID = b.TYPE_ID
+        ) T
+        LEFT JOIN CRE_PUB_VARIABLE_GROUP c
+        ON T .VARIABLE_GROUP_ID = c.VARIABLE_GROUP_ID
+        WHERE T.IS_PUBLIC = '1'
+        and T.VARIABLE_ID not in
+        (select VARIABLE_ID from CRE_VARIABLE_ENTITY_RELATION)
+        <if test="variableAlias != null and '' != variableAlias">
+            <bind name="pattern1" value="'%' + _parameter.variableAlias + '%'"/>
+            and T.VARIABLE_ALIAS like #{pattern1}
+        </if>
+        <if test="variableGroupName != null and '' != variableGroupName">
+            <bind name="pattern2" value="'%' + _parameter.variableGroupName + '%'"/>
+            and c.VARIABLE_GROUP_NAME like #{pattern2}
+        </if>
+        <if test="typeId != null and '' != typeId">
+            and T.TYPE_ID = #{typeId,jdbcType=VARCHAR}
+        </if>
+        <if test="startDate != null and '' != startDate">
+            and T.CREATE_DATE &gt;= to_date(#{startDate,jdbcType=TIMESTAMP} ,'yyyy-mm-dd hh24:mi:ss')
+        </if>
+        <if test="endDate != null and '' != endDate">
+            and T.CREATE_DATE &lt;= to_date(#{endDate,jdbcType=TIMESTAMP} ,'yyyy-mm-dd hh24:mi:ss')
+        </if>
+        order by T.CREATE_DATE DESC
+    </select>
+
+    <!-- 获取指定参数组id的所有变量 -->
+    <select id="pubSelectVariablesByGroupId" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from CRE_VARIABLE
+        where VARIABLE_GROUP_ID = #{variableGroupId,jdbcType=VARCHAR}
+    </select>
+
+    <!-- 获取模型引用的所有非实体参数 包括接口引用的参数 试算使用 -->
+    <select id="getVariableMapWithoutKpiByRuleId" parameterType="map" resultType="map">
+        SELECT A.VARIABLE_ALIAS        AS "variableAlias",
+               A.VARIABLE_CODE         AS "variableCode",
+               A.VARIABLE_REMARKS      AS "variableRemarks",
+               B.ENTITY_VARIABLE_ALIAS AS "aliasCode",
+               A.TYPE_ID               AS "typeId",
+               C.VARIABLE_RANGE        AS "variableRange"
+        FROM CRE_VARIABLE A
+                 LEFT JOIN CRE_VARIABLE_ENTITY_RELATION B
+                           ON A.VARIABLE_ID = B.VARIABLE_ID
+                 INNER JOIN (
+            SELECT VARIABLE_ID, VARIABLE_RANGE
+            FROM CRE_VARIABLE_RULE
+            WHERE RULE_ID = #{ruleId,jdbcType=VARCHAR}
+            UNION
+            SELECT a.VARIABLE_ID, NULL as VARIABLE_RANGE
+            FROM CRE_VARIABLE_API a
+                     INNER JOIN CRE_API_RULE b ON a.API_ID = b.API_ID
+            WHERE a.API_VARIABLE_TYPE = '1'
+              AND b.RULE_ID = #{ruleId,jdbcType=VARCHAR}
+        ) C ON A.VARIABLE_ID = C.VARIABLE_ID
+        WHERE A.ENTITY_ID IS NULL
+          AND A.TYPE_ID != '3'
+          AND A.KIND_ID = #{kindId,jdbcType=VARCHAR}
+    </select>
+
+    <!-- 获取模型引用的所有非实体公共参数 包括接口引用的参数 试算使用 -->
+    <select id="getPubVariableMapWithoutKpiByRuleId" parameterType="java.lang.String" resultType="map">
+        SELECT A.VARIABLE_ALIAS        AS "variableAlias",
+               A.VARIABLE_CODE         AS "variableCode",
+               A.VARIABLE_REMARKS      AS "variableRemarks",
+               B.ENTITY_VARIABLE_ALIAS AS "aliasCode",
+               A.TYPE_ID               AS "typeId"
+        FROM CRE_VARIABLE A
+                 LEFT JOIN CRE_VARIABLE_ENTITY_RELATION B
+                           ON A.VARIABLE_ID = B.VARIABLE_ID
+        WHERE A.IS_PUBLIC = '1'
+          AND A.ENTITY_ID IS NULL
+          AND A.TYPE_ID != '3'
+          AND A.KIND_ID = 'K1'
+          AND A.VARIABLE_ID IN (
+            SELECT VARIABLE_ID
+            FROM CRE_VARIABLE_RULE
+            WHERE RULE_ID = #{ruleId,jdbcType=VARCHAR}
+            UNION
+            SELECT a.VARIABLE_ID
+            FROM CRE_VARIABLE_API a
+                     LEFT JOIN CRE_API_RULE b ON a.API_ID = b.API_ID
+            WHERE a.API_VARIABLE_TYPE = '1'
+              AND b.RULE_ID = #{ruleId,jdbcType=VARCHAR}
+        )
+    </select>
+
+    <!-- 获取模型引用的所有非实体公共参数 包括接口、指标引用的参数 -->
+    <select id="getPubVariableMapByRuleId" parameterType="java.lang.String" resultType="map">
+        SELECT A.VARIABLE_ALIAS        AS "variableAlias",
+               A.VARIABLE_CODE         AS "variableCode",
+               A.VARIABLE_REMARKS      AS "variableRemarks",
+               B.ENTITY_VARIABLE_ALIAS AS "aliasCode",
+               A.TYPE_ID               AS "typeId"
+        FROM CRE_VARIABLE A
+                 LEFT JOIN CRE_VARIABLE_ENTITY_RELATION B
+                           ON A.VARIABLE_ID = B.VARIABLE_ID
+        WHERE A.IS_PUBLIC = '1'
+          AND A.ENTITY_ID IS NULL
+          AND A.TYPE_ID != '3'
+          AND A.KIND_ID = 'K1'
+          AND A.VARIABLE_ID IN (
+            SELECT VARIABLE_ID
+            FROM CRE_VARIABLE_RULE
+            WHERE RULE_ID = #{ruleId,jdbcType=VARCHAR}
+            UNION
+            SELECT a.VARIABLE_ID
+            FROM CRE_VARIABLE_API a
+                     LEFT JOIN CRE_API_RULE b ON a.API_ID = b.API_ID
+            WHERE a.API_VARIABLE_TYPE = '1'
+              AND b.RULE_ID = #{ruleId,jdbcType=VARCHAR}
+            UNION
+            SELECT c.VARIABLE_ID
+            FROM CRE_KPI_FETCH_LIMITERS c
+                     LEFT JOIN CRE_KPI_RULE d ON c.KPI_ID = d.KPI_ID
+            WHERE d.RULE_ID = #{ruleId,jdbcType=VARCHAR}
+        )
+    </select>
+
+
+    <!-- 获取模型引用的所有输入非实体参数 包括接口、指标引用的参数 测试使用 -->
+    <select id="getVariableMapByRuleId" parameterType="map" resultType="map">
+        SELECT
+        A.VARIABLE_ALIAS AS "variableAlias",A.VARIABLE_CODE AS "variableCode",A.VARIABLE_REMARKS AS "variableRemarks",
+        B.ENTITY_VARIABLE_ALIAS AS "aliasCode",
+        A.TYPE_ID AS "typeId", A.KIND_ID AS "kindId", A.VARIABLE_ID AS "variableId",A.DEFAULT_VALUE AS "defaultValue"
+        FROM CRE_VARIABLE A LEFT JOIN CRE_VARIABLE_ENTITY_RELATION B
+        ON A.VARIABLE_ID = B.VARIABLE_ID
+        WHERE
+        A.ENTITY_ID IS NULL
+        AND A.TYPE_ID != '3'
+        <if test="isPublic != null and ''!= isPublic">
+            AND A.IS_PUBLIC = #{isPublic,jdbcType=VARCHAR}
+        </if>
+        <if test="kindId != null and ''!= kindId">
+            AND A.KIND_ID = #{kindId,jdbcType=VARCHAR}
+        </if>
+        <if test="ruleId != null or ruleName != null ">
+            AND A .VARIABLE_ID IN (
+            SELECT VARIABLE_ID FROM CRE_VARIABLE_RULE
+            WHERE 1=1
+            <if test="ruleId != null and ''!= ruleId">
+                AND RULE_ID = #{ruleId,jdbcType=VARCHAR}
+            </if>
+            <if test="ruleName != null and ''!= ruleName">
+                AND RULE_ID IN (
+                select RULE_ID from CRE_RULE_DETAIL WHERE IS_DEL = '0' AND IS_HEADER = '0'
+                AND RULE_NAME =#{ruleName,jdbcType=VARCHAR}
+                UNION ALL
+                select RULE_ID from CRE_RULE_DETAIL_DRAFT WHERE IS_DEL = '0' AND IS_HEADER = '0'
+                AND RULE_NAME = #{ruleName,jdbcType=VARCHAR})
+            </if>
+            UNION
+            SELECT a.VARIABLE_ID FROM CRE_VARIABLE_API a
+            LEFT JOIN CRE_API_RULE b ON a.API_ID = b.API_ID
+            WHERE 1=1
+            <if test="ruleId != null and ''!= ruleId">
+                AND b.RULE_ID = #{ruleId,jdbcType=VARCHAR}
+            </if>
+            <if test="ruleName != null and ''!= ruleName">
+                AND b.RULE_ID IN (
+                select RULE_ID from CRE_RULE_DETAIL WHERE IS_DEL = '0' AND IS_HEADER = '0'
+                AND RULE_NAME =#{ruleName,jdbcType=VARCHAR}
+                UNION ALL
+                select RULE_ID from CRE_RULE_DETAIL_DRAFT WHERE IS_DEL = '0' AND IS_HEADER = '0'
+                AND RULE_NAME = #{ruleName,jdbcType=VARCHAR})
+            </if>
+            <if test="kindId == 'K1'.toString()">
+                AND a.API_VARIABLE_TYPE = '1'
+            </if>
+            UNION
+            SELECT c.VARIABLE_ID FROM CRE_KPI_FETCH_LIMITERS c
+            LEFT JOIN CRE_KPI_RULE d ON c.KPI_ID = d.KPI_ID
+            WHERE 1=1
+            <if test="ruleId != null and ''!= ruleId">
+                AND d.RULE_ID = #{ruleId,jdbcType=VARCHAR}
+            </if>
+            <if test="ruleName != null and ''!= ruleName">
+                AND d.RULE_ID IN (
+                select RULE_ID from CRE_RULE_DETAIL WHERE IS_DEL = '0' AND IS_HEADER = '0'
+                AND RULE_NAME =#{ruleName,jdbcType=VARCHAR}
+                UNION ALL
+                select RULE_ID from CRE_RULE_DETAIL_DRAFT WHERE IS_DEL = '0' AND IS_HEADER = '0'
+                AND RULE_NAME = #{ruleName,jdbcType=VARCHAR})
+            </if>
+            )
+        </if>
+    </select>
+
+    <!-- 获取模型引用的所有输出非实体参数  测试使用 -->
+    <select id="getOutVariableMapByRuleId" parameterType="java.lang.String" resultType="map">
+        SELECT A.VARIABLE_ALIAS        AS "variableAlias",
+               A.VARIABLE_CODE         AS "variableCode",
+               A.VARIABLE_REMARKS      AS "variableRemarks",
+               B.ENTITY_VARIABLE_ALIAS AS "aliasCode",
+               A.TYPE_ID               AS "typeId",
+               A.KIND_ID               AS "kindId",
+               A.VARIABLE_ID           AS "variableId",
+               C.VARIABLE_RANGE        AS "variableRange"
+        FROM CRE_VARIABLE A
+                 LEFT JOIN CRE_VARIABLE_ENTITY_RELATION B
+                           ON A.VARIABLE_ID = B.VARIABLE_ID
+                 INNER JOIN (
+            SELECT VARIABLE_ID, VARIABLE_RANGE
+            FROM CRE_VARIABLE_RULE
+            WHERE RULE_ID = #{ruleId,jdbcType=VARCHAR}
+        ) C ON A.VARIABLE_ID = C.VARIABLE_ID
+        WHERE A.ENTITY_ID IS NULL
+          AND A.TYPE_ID != '3'
+          AND A.KIND_ID = 'K2'
+    </select>
+
+    <!-- 获取模型引用的所有公共参数 -->
+    <select id="getPubVariableByRuleId" parameterType="java.lang.String" resultMap="BaseResultMapExt">
+        SELECT
+        <include refid="Base_Column_Lista"/>, B.ENTITY_VARIABLE_ALIAS
+        FROM CRE_VARIABLE A
+        LEFT JOIN CRE_VARIABLE_ENTITY_RELATION B
+        ON A.VARIABLE_ID = B.VARIABLE_ID
+        WHERE A.IS_PUBLIC = '1'
+        AND A .VARIABLE_ID IN (
+        SELECT VARIABLE_ID FROM CRE_VARIABLE_RULE
+        WHERE RULE_ID = #{ruleId,jdbcType=VARCHAR}
+        )
+    </select>
+
+    <!-- 获取场景下模型引用的所有公共参数 -->
+    <select id="getPubVariableByFolderId" parameterType="java.lang.String" resultMap="BaseResultMapExt">
+        SELECT
+        <include refid="Base_Column_Lista"/>, B.ENTITY_VARIABLE_ALIAS
+        FROM CRE_VARIABLE A
+        LEFT JOIN CRE_VARIABLE_ENTITY_RELATION B
+        ON A.VARIABLE_ID = B.VARIABLE_ID
+        WHERE A.IS_PUBLIC = '1'
+        AND A .VARIABLE_ID IN (
+        SELECT VARIABLE_ID FROM CRE_VARIABLE_RULE
+        WHERE RULE_ID IN (
+        SELECT RULE_ID FROM CRE_RULE_DETAIL
+        WHERE FOLDER_ID = #{folderId,jdbcType=VARCHAR})
+        )
+    </select>
+
+    <!-- 创建公共参数 -->
+    <insert id="pubInsert" parameterType="com.bonc.frame.entity.variable.Variable">
+        insert into cre_variable
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="variableId != null">
+                VARIABLE_ID,
+            </if>
+            <if test="entityId != null">
+                ENTITY_ID,
+            </if>
+            <if test="variableAlias != null">
+                VARIABLE_ALIAS,
+            </if>
+            <if test="variableCode != null">
+                VARIABLE_CODE,
+            </if>
+            <if test="typeId != null">
+                TYPE_ID,
+            </if>
+            <if test="variableFrom != null">
+                VARIABLE_FROM,
+            </if>
+            <if test="isDict != null">
+                IS_DICT,
+            </if>
+            <if test="defaultValue != null">
+                DEFAULT_VALUE,
+            </if>
+            <if test="defaultValueType != null">
+                DEFAULT_VALUE_TYPE,
+            </if>
+            <if test="variableRemarks != null">
+                VARIABLE_REMARKS,
+            </if>
+            <if test="createPerson != null">
+                CREATE_PERSON,
+            </if>
+            <if test="createDate != null">
+                CREATE_DATE,
+            </if>
+            <if test="updatePerson != null">
+                UPDATE_PERSON,
+            </if>
+            <if test="updateDate != null">
+                UPDATE_DATE,
+            </if>
+            <if test="isPublic != null">
+                IS_PUBLIC,
+            </if>
+            <if test="variableGroupId != null">
+                VARIABLE_GROUP_ID,
+            </if>
+            <if test="kindId != null">
+                KIND_ID,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="variableId != null">
+                #{variableId,jdbcType=VARCHAR},
+            </if>
+            <if test="entityId != null">
+                #{entityId,jdbcType=VARCHAR},
+            </if>
+            <if test="variableAlias != null">
+                #{variableAlias,jdbcType=VARCHAR},
+            </if>
+            <if test="variableCode != null">
+                #{variableCode,jdbcType=VARCHAR},
+            </if>
+            <if test="typeId != null">
+                #{typeId,jdbcType=VARCHAR},
+            </if>
+            <if test="variableFrom != null">
+                #{variableFrom,jdbcType=VARCHAR},
+            </if>
+            <if test="isDict != null">
+                #{isDict,jdbcType=VARCHAR},
+            </if>
+            <if test="defaultValue != null">
+                #{defaultValue,jdbcType=VARCHAR},
+            </if>
+            <if test="defaultValueType != null">
+                #{defaultValueType,jdbcType=VARCHAR},
+            </if>
+            <if test="variableRemarks != null">
+                #{variableRemarks,jdbcType=VARCHAR},
+            </if>
+            <if test="createPerson != null">
+                #{createPerson,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatePerson != null">
+                #{updatePerson,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null">
+                #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isPublic != null">
+                #{isPublic,jdbcType=VARCHAR},
+            </if>
+            <if test="variableGroupId != null">
+                #{variableGroupId,jdbcType=VARCHAR},
+            </if>
+            <if test="kindId != null">
+                #{kindId,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+</mapper>

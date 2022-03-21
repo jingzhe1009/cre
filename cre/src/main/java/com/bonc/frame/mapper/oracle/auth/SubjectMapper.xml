@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bonc.frame.mapper.auth.SubjectMapper">
+
+    <resultMap id="BaseResultMap" type="com.bonc.frame.entity.auth.Subject">
+        <id column="SUBJECT_ID" property="subjectId" jdbcType="VARCHAR"/>
+        <result column="SUBJECT_OBJECT_ID" property="subjectObjectId" jdbcType="VARCHAR"/>
+        <result column="SUBJECT_TYPE_ID" property="subjectTypeId" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        SUBJECT_ID, SUBJECT_OBJECT_ID, SUBJECT_TYPE_ID
+    </sql>
+
+    <select id="selectBySubjectObjectId" parameterType="java.util.Map" resultType="java.lang.String">
+        SELECT SUBJECT_ID FROM CRE_AUTH_SUBJECT WHERE
+        SUBJECT_OBJECT_ID = #{subjectObjectId ,jdbcType=VARCHAR}
+        AND SUBJECT_TYPE_ID = #{subjectTypeId, jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectSubjectsByUserId" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT s.SUBJECT_ID FROM CRE_AUTH_SUBJECT s WHERE s.SUBJECT_TYPE_ID = '0'
+        AND s.SUBJECT_OBJECT_ID = #{subjectObjectId ,jdbcType=VARCHAR}
+        UNION ALL
+        SELECT t1.SUBJECT_ID FROM (
+              SELECT s.SUBJECT_ID, s.SUBJECT_OBJECT_ID FROM CRE_AUTH_SUBJECT s WHERE s.SUBJECT_TYPE_ID = '1'
+            ) t1
+        RIGHT JOIN
+        (SELECT a.ROLE_ID FROM CRE_AUTH_USER_ROLE a
+          WHERE a.USER_ID = #{subjectObjectId ,jdbcType=VARCHAR}
+        ) t2 ON t1.SUBJECT_OBJECT_ID = t2.ROLE_ID
+         WHERE t1.SUBJECT_ID IS NOT NULL
+    </select>
+
+    <insert id="insert" parameterType="com.bonc.frame.entity.auth.Subject">
+        insert into CRE_AUTH_SUBJECT
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="subjectId != null">
+                SUBJECT_ID,
+            </if>
+            <if test="subjectObjectId != null">
+                SUBJECT_OBJECT_ID,
+            </if>
+            <if test="subjectTypeId != null">
+                SUBJECT_TYPE_ID,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="subjectId != null">
+                #{subjectId,jdbcType=VARCHAR},
+            </if>
+            <if test="subjectObjectId != null">
+                #{subjectObjectId,jdbcType=VARCHAR},
+            </if>
+            <if test="subjectTypeId != null">
+                #{subjectTypeId,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        DELETE FROM CRE_AUTH_SUBJECT WHERE SUBJECT_ID = #{subjectId ,jdbcType=VARCHAR}
+    </delete>
+
+    <delete id="deleteBySubjectObjectId" parameterType="java.util.Map">
+        DELETE FROM CRE_AUTH_SUBJECT WHERE
+        SUBJECT_OBJECT_ID = #{subjectObjectId ,jdbcType=VARCHAR}
+        AND SUBJECT_TYPE_ID = #{subjectTypeId, jdbcType=VARCHAR}
+    </delete>
+
+</mapper>

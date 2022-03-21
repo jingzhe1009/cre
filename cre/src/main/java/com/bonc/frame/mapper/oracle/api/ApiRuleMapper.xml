@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bonc.frame.mapper.api.ApiRuleMapper">
+    <resultMap id="BaseResultMap" type="com.bonc.frame.entity.api.ApiRule">
+        <result column="API_ID" property="apiId" jdbcType="VARCHAR"/>
+        <result column="RULE_ID" property="ruleId" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        RULE_ID, API_ID
+    </sql>
+
+    <select id="countByApiId" parameterType="java.lang.String" resultType="int">
+        select count(*) as "count" from CRE_API_RULE
+        where API_ID = #{apiId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectByApiId" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"></include>
+        FROM CRE_API_RULE
+        WHERE API_ID = #{apiId,jdbcType=VARCHAR}
+    </select>
+
+    <!-- 获取模型引用的所有接口 -->
+    <select id="selectApiIdsByRuleId" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT API_ID FROM CRE_API_RULE WHERE RULE_ID = #{ruleId,jdbcType=VARCHAR}
+    </select>
+
+    <insert id="insertSelective" parameterType="com.bonc.frame.entity.api.ApiRule">
+        insert into CRE_API_RULE
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="ruleId != null">
+                RULE_ID,
+            </if>
+            <if test="apiId != null">
+                API_ID,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="ruleId != null">
+                #{ruleId,jdbcType=VARCHAR},
+            </if>
+            <if test="apiId != null">
+                #{apiId,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <!-- 批量添加 -->
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into CRE_API_RULE (
+        API_ID, RULE_ID
+        ) select A.* from (
+        <foreach collection="list" item="item" index="index" separator="UNION ALL">
+            select
+            #{item.apiId,jdbcType=VARCHAR},
+            #{item.ruleId,jdbcType=VARCHAR}
+            from dual
+        </foreach>) A
+    </insert>
+
+    <update id="updateApiId" parameterType="java.util.Map">
+        update CRE_API_RULE
+        SET
+          API_ID = #{apiId,jdbcType=VARCHAR}
+        where API_ID = #{oldVariableId,jdbcType=VARCHAR}
+        AND RULE_ID = #{ruleId,jdbcType=VARCHAR}
+    </update>
+
+    <delete id="deleteByApiId" parameterType="java.lang.String">
+        delete from CRE_API_RULE
+        where API_ID = #{apiId,jdbcType=VARCHAR}
+    </delete>
+
+    <delete id="deleteByRuleId" parameterType="java.lang.String">
+        delete from CRE_API_RULE
+        where RULE_ID = #{ruleId,jdbcType=VARCHAR}
+    </delete>
+
+    <delete id="deleteByApiIdRuleId" parameterType="java.util.Map">
+        delete from CRE_API_RULE
+        where API_ID = #{apiId,jdbcType=VARCHAR} AND RULE_ID = #{ruleId,jdbcType=VARCHAR}
+    </delete>
+
+    <!-- apiId、ruleId的批量删除 -->
+    <delete id="deleteBatchByRuleIdApiId" parameterType="java.util.List">
+        delete from CRE_API_RULE
+        where (
+        <foreach collection="list" item="item" index="index" separator=" ) or (">
+            API_ID = #{item.apiId,jdbcType=VARCHAR} AND RULE_ID = #{item.ruleId,jdbcType=VARCHAR}
+        </foreach>
+        )
+    </delete>
+
+</mapper>

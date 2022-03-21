@@ -1,0 +1,420 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bonc.frame.dao.metadata.MetaDataTableMapper">
+    <resultMap id="BaseResultMap" type="com.bonc.frame.entity.metadata.MetaDataTable">
+        <id column="TABLE_ID" property="tableId" jdbcType="VARCHAR"/>
+        <result column="PACKAGE_ID" property="packageId" jdbcType="VARCHAR"/>
+        <result column="DB_ID" property="dbId" jdbcType="VARCHAR"/>
+        <result column="TABLE_CODE" property="tableCode" jdbcType="VARCHAR"/>
+        <result column="TABLE_NAME" property="tableName" jdbcType="VARCHAR"/>
+        <result column="TABLE_TYPE" property="tableType" jdbcType="VARCHAR"/>
+        <result column="TABLE_KIND" property="tableKind" jdbcType="VARCHAR"/>
+        <result column="IS_TEMP" property="isTemp" jdbcType="VARCHAR"/>
+        <result column="IS_PUBLIC" property="isPublic" jdbcType="VARCHAR"/>
+        <result column="CDT_CONFIG" property="cdtConfig" jdbcType="TIMESTAMP"/>
+        <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="CREATE_PERSON" property="createPerson" jdbcType="VARCHAR"/>
+        <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP"/>
+        <result column="UPDATE_PERSON" property="updatePerson" jdbcType="VARCHAR"/>
+        <result column="SCAN_ID" property="scanId" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.bonc.frame.entity.metadata.MetaDataTable">
+        <result column="CDT_CONFIG" jdbcType="LONGVARCHAR" property="cdtConfig"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    TABLE_ID, PACKAGE_ID, DB_ID, TABLE_CODE, TABLE_NAME, TABLE_TYPE,TABLE_KIND, IS_TEMP, IS_PUBLIC,
+    CREATE_DATE, CREATE_PERSON, UPDATE_DATE, UPDATE_PERSON, SCAN_ID
+  </sql>
+    <sql id="Blob_Column_List">
+    CDT_CONFIG
+  </sql>
+
+    <!-- 查询元数据表 -->
+    <select id="findMetaTable" resultType="map" parameterType="map">
+        SELECT * FROM
+        (
+        select a.TABLE_ID as tableId,a.TABLE_CODE as tableCode,a.TABLE_NAME as tableName,
+        a.TABLE_TYPE as tableType,a.TABLE_KIND as tableKind,a.DB_ID as dbId,a.IS_TEMP as isTemp,
+        a.IS_PUBLIC as isPublic,
+        a.UPDATE_DATE as updateDate, a.CREATE_DATE As createDate,
+        b.DB_ALIAS as dbAlias,
+        b.DB_TYPE as dbType,
+        a.SCAN_ID as scanId
+        from CRE_META_TABLE a left join CRE_DB_CONNECTION b
+        on a.DB_ID = b.DB_ID
+        where 1=1
+        <if test="packageId != null">
+            AND a.PACKAGE_ID = #{packageId,jdbcType=VARCHAR}
+        </if>
+        union
+        SELECT a.TABLE_ID AS tableId, a.TABLE_CODE AS tableCode,a.TABLE_NAME AS tableName,
+        a.TABLE_TYPE AS tableType,a.TABLE_KIND AS tableKind,a.DB_ID AS dbId,a.IS_TEMP AS isTemp,
+        a.IS_PUBLIC AS isPublic,a.UPDATE_DATE AS updateDate,a.CREATE_DATE AS createDate,
+        b.DB_ALIAS AS dbAlias,
+        b.DB_TYPE as dbType,
+        a.SCAN_ID as scanId
+        FROM
+        CRE_META_TABLE a
+        LEFT JOIN CRE_DB_CONNECTION b ON a.DB_ID = b.DB_ID
+        WHERE a.IS_PUBLIC = '1' AND
+        PACKAGE_ID =
+        (
+        SELECT FOLDER_PID FROM CRE_RULE_FOLDER
+        WHERE 1=1
+        <if test="packageId != null">
+            AND FOLDER_ID = #{packageId,jdbcType=VARCHAR}
+        </if>
+        )
+        ) t
+        ORDER BY t.createDate
+    </select>
+
+    <!-- 分页查询元数据表 -->
+    <select id="findMetaTableByPage" resultType="map" parameterType="map">
+  	select a.TABLE_ID as tableId,a.TABLE_CODE as tableCode,a.TABLE_NAME as tableName,a.TABLE_TYPE as tableType,
+  	a.TABLE_KIND as tableKind,a.IS_TEMP as isTemp,a.IS_PUBLIC as isPublic,a.UPDATE_DATE as updateDate, a.CREATE_DATE As createDate,
+    b.DB_ALIAS as dbAlias, a.SCAN_ID as scanId
+    from CRE_META_TABLE a,CRE_DB_CONNECTION b
+    where PACKAGE_ID = #{packageId,jdbcType=VARCHAR}
+    and a.DB_ID = b.DB_ID
+      order by a.CREATE_DATE DESC
+  </select>
+
+    <!-- pagedMetaTablesByDsNameTableNamePackageName -->
+    <select id="pagedMetaTablesByDsNameTableNamePackageName" parameterType="java.util.Map"
+            resultType="com.bonc.frame.entity.auth.resource.MetadataResource">
+        SELECT
+        a.TABLE_ID AS "tableId",
+        a.TABLE_NAME AS "tableName",
+        b.DB_ID AS "dbId",
+        b.DB_ALIAS AS "dbAlias",
+        c.FOLDER_ID AS "folderId",
+        c.FOLDER_NAME as "folderName"
+        FROM CRE_META_TABLE a
+        LEFT JOIN CRE_DB_CONNECTION b ON a.DB_ID = b.DB_ID
+        LEFT JOIN CRE_RULE_FOLDER c ON a.PACKAGE_ID = c.FOLDER_ID
+        WHERE 1=1
+        <if test="tableName != null and '' != tableName">
+            <bind name="tableNamePattern" value="'%' + _parameter.tableName + '%'"/>
+            and a.TABLE_NAME like #{tableNamePattern}
+        </if>
+        <if test="dbAlias != null and '' != dbAlias">
+            <bind name="dbAliasPattern" value="'%' + _parameter.dbAlias + '%'"/>
+            and b.DB_ALIAS like #{dbAliasPattern}
+        </if>
+        <if test="folderName != null and '' != folderName">
+            <bind name="folderNamePattern" value="'%' + _parameter.folderName + '%'"/>
+            and c.FOLDER_NAME like #{folderNamePattern}
+        </if>
+        ORDER BY a.CREATE_DATE DESC
+    </select>
+
+    <!-- 根据元数据表主键查询 -->
+    <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from CRE_META_TABLE
+        where TABLE_ID = #{tableId,jdbcType=VARCHAR}
+    </select>
+
+    <!-- 根据规则包ID查询元数据表 -->
+    <select id="selectByPackageId" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from CRE_META_TABLE
+        where PACKAGE_ID = #{packageId,jdbcType=VARCHAR}
+        order by CREATE_DATE
+    </select>
+
+    <!-- 删除元数据信息 -->
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from CRE_META_TABLE
+    where TABLE_ID = #{tableId,jdbcType=VARCHAR}
+  </delete>
+
+    <insert id="insert" parameterType="com.bonc.frame.entity.metadata.MetaDataTable">
+    insert into CRE_META_TABLE (TABLE_ID, PACKAGE_ID, DB_ID,
+      TABLE_CODE, TABLE_NAME, TABLE_TYPE, 
+      CREATE_DATE, CREATE_PERSON, UPDATE_DATE, 
+      UPDATE_PERSON)
+    values (#{tableId,jdbcType=VARCHAR}, #{packageId,jdbcType=VARCHAR}, #{dbId,jdbcType=VARCHAR}, 
+      #{tableCode,jdbcType=VARCHAR}, #{tableName,jdbcType=VARCHAR}, #{tableType,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{createPerson,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}, 
+      #{updatePerson,jdbcType=VARCHAR})
+  </insert>
+
+    <insert id="insertSelective" parameterType="com.bonc.frame.entity.metadata.MetaDataTable">
+        insert into CRE_META_TABLE
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="tableId != null">
+                TABLE_ID,
+            </if>
+            <if test="packageId != null">
+                PACKAGE_ID,
+            </if>
+            <if test="dbId != null">
+                DB_ID,
+            </if>
+            <if test="tableCode != null">
+                TABLE_CODE,
+            </if>
+            <if test="tableName != null">
+                TABLE_NAME,
+            </if>
+            <if test="tableType != null">
+                TABLE_TYPE,
+            </if>
+            <if test="tableKind != null">
+                TABLE_KIND,
+            </if>
+            <if test="isTemp != null">
+                IS_TEMP,
+            </if>
+            <if test="isPublic != null">
+                IS_PUBLIC,
+            </if>
+            <if test="cdtConfig != null">
+                CDT_CONFIG,
+            </if>
+            <if test="createDate != null">
+                CREATE_DATE,
+            </if>
+            <if test="createPerson != null">
+                CREATE_PERSON,
+            </if>
+            <if test="updateDate != null">
+                UPDATE_DATE,
+            </if>
+            <if test="updatePerson != null">
+                UPDATE_PERSON,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="tableId != null">
+                #{tableId,jdbcType=VARCHAR},
+            </if>
+            <if test="packageId != null">
+                #{packageId,jdbcType=VARCHAR},
+            </if>
+            <if test="dbId != null">
+                #{dbId,jdbcType=VARCHAR},
+            </if>
+            <if test="tableCode != null">
+                #{tableCode,jdbcType=VARCHAR},
+            </if>
+            <if test="tableName != null">
+                #{tableName,jdbcType=VARCHAR},
+            </if>
+            <if test="tableType != null">
+                #{tableType,jdbcType=VARCHAR},
+            </if>
+            <if test="tableKind != null">
+                #{tableKind,jdbcType=VARCHAR},
+            </if>
+            <if test="isTemp != null">
+                #{isTemp,jdbcType=VARCHAR},
+            </if>
+            <if test="isPublic != null">
+                #{isPublic,jdbcType=VARCHAR},
+            </if>
+            <if test="cdtConfig != null">
+                #{cdtConfig,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createPerson != null">
+                #{createPerson,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null">
+                #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatePerson != null">
+                #{updatePerson,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <!-- 更新选中的元数据表 -->
+    <update id="updateByPrimaryKeySelective" parameterType="com.bonc.frame.entity.metadata.MetaDataTable">
+        update CRE_META_TABLE
+        <set>
+            <if test="packageId != null">
+                PACKAGE_ID = #{packageId,jdbcType=VARCHAR},
+            </if>
+            <if test="dbId != null">
+                DB_ID = #{dbId,jdbcType=VARCHAR},
+            </if>
+            <if test="tableCode != null">
+                TABLE_CODE = #{tableCode,jdbcType=VARCHAR},
+            </if>
+            <if test="tableName != null">
+                TABLE_NAME = #{tableName,jdbcType=VARCHAR},
+            </if>
+            <if test="tableType != null">
+                TABLE_TYPE = #{tableType,jdbcType=VARCHAR},
+            </if>
+            <if test="tableKind != null">
+                TABLE_KIND = #{tableKind,jdbcType=VARCHAR},
+            </if>
+            <if test="isTemp != null">
+                IS_TEMP = #{isTemp,jdbcType=VARCHAR},
+            </if>
+            <if test="isPublic != null">
+                IS_PUBLIC = #{isPublic,jdbcType=VARCHAR},
+            </if>
+            <if test="cdtConfig != null">
+                CDT_CONFIG = #{cdtConfig,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="createDate != null">
+                CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createPerson != null">
+                CREATE_PERSON = #{createPerson,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null">
+                UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatePerson != null">
+                UPDATE_PERSON = #{updatePerson,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where TABLE_ID = #{tableId,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="com.bonc.frame.entity.metadata.MetaDataTable">
+    update CRE_META_TABLE
+    set PACKAGE_ID = #{packageId,jdbcType=VARCHAR},
+      DB_ID = #{dbId,jdbcType=VARCHAR},
+      TABLE_CODE = #{tableCode,jdbcType=VARCHAR},
+      TABLE_NAME = #{tableName,jdbcType=VARCHAR},
+      TABLE_TYPE = #{tableType,jdbcType=VARCHAR},
+      CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      CREATE_PERSON = #{createPerson,jdbcType=VARCHAR},
+      UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP},
+      UPDATE_PERSON = #{updatePerson,jdbcType=VARCHAR}
+    where TABLE_ID = #{tableId,jdbcType=VARCHAR}
+  </update>
+
+    <!-- 根据名字查询，用于验证insert和update名字的时候是否重名 -->
+    <select id="selectByName" parameterType="com.bonc.frame.entity.metadata.MetaDataTable" resultType="int">
+        select count(*)
+        from CRE_META_TABLE A,(
+        SELECT B.FOLDER_PID AS packageId
+        FROM CRE_RULE_FOLDER B
+        WHERE B.FOLDER_ID = #{packageId,jdbcType=VARCHAR}
+        AND B.FOLDER_PID IS NOT NULL
+        UNION
+        SELECT B.FOLDER_ID AS packageId
+        FROM CRE_RULE_FOLDER B
+        WHERE B.FOLDER_ID = #{packageId,jdbcType=VARCHAR}) T
+        where A.PACKAGE_ID = T.packageId
+        AND A.TABLE_NAME = #{tableName,jdbcType=VARCHAR}
+        <if test="tableId != null">
+            and A.TABLE_ID != #{tableId,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <!-- 根据名字查询，用于验证insert和update编码的时候是否重名 -->
+    <select id="selectByTableCode" parameterType="com.bonc.frame.entity.metadata.MetaDataTable" resultType="int">
+        select count(*)
+        from CRE_META_TABLE A,(
+        SELECT B.FOLDER_PID AS packageId
+        FROM CRE_RULE_FOLDER B
+        WHERE B.FOLDER_ID = #{packageId,jdbcType=VARCHAR}
+        AND B.FOLDER_PID IS NOT NULL
+        UNION
+        SELECT B.FOLDER_ID AS packageId
+        FROM CRE_RULE_FOLDER B
+        WHERE B.FOLDER_ID = #{packageId,jdbcType=VARCHAR}) T
+        where A.PACKAGE_ID = T.packageId
+        AND A.TABLE_CODE = #{tableName,jdbcType=VARCHAR}
+        <if test="tableId != null">
+            and A.TABLE_ID != #{tableId,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <!-- 查询规则包下所有数据源 -->
+    <select id="selectDbIdByPackageId" parameterType="string" resultType="map">
+  	SELECT DISTINCT
+		a.DB_ID as id,b.DB_ALIAS as name,'true' as isParent
+	FROM CRE_META_TABLE a,CRE_DB_CONNECTION b
+	WHERE	a.DB_ID = b.DB_ID
+	and a.PACKAGE_ID = #{packageId,jdbcType=VARCHAR}
+  </select>
+
+    <select id="selectDbByTableId" parameterType="string" resultType="com.bonc.frame.entity.datasource.DataSource">
+      SELECT
+      B.DB_ID AS "dbId",
+      B.DB_ALIAS AS "dbAlias",
+      B.DB_IP AS "dbIp",
+      B.DB_PORT AS "dbPort",
+      B.DB_TYPE AS "dbType",
+      B.DB_SERVICE_NAME AS "dbServiceName",
+      B.DB_USERNAME AS "dbUsername",
+      B.DB_PASSWORD AS "dbPassword",
+      B.IS_POOL AS "isPool",
+      B.MAX_CONNECT AS "maxConnect",
+      B.MAX_IDLE AS "maxIdle",
+      B.USER_ID AS "userId"
+    FROM CRE_META_TABLE A, CRE_DB_CONNECTION B
+    WHERE A.TABLE_ID = #{tableId,jdbcType=VARCHAR}
+      AND A .DB_ID = B.DB_ID
+  </select>
+
+    <select id="selectDbByDbId" parameterType="string" resultType="com.bonc.frame.entity.datasource.DataSource">
+      SELECT
+      DB_ID AS "dbId",
+      DB_ALIAS AS "dbAlias",
+      DB_IP AS "dbIp",
+      DB_PORT AS "dbPort",
+      DB_TYPE AS "dbType",
+      DB_SERVICE_NAME AS "dbServiceName",
+      DB_USERNAME AS "dbUsername",
+      DB_PASSWORD AS "dbPassword",
+      IS_POOL AS "isPool",
+      MAX_CONNECT AS "maxConnect",
+      MAX_IDLE AS "maxIdle",
+      USER_ID AS "userId"
+    FROM  CRE_DB_CONNECTION
+    WHERE DB_ID = #{dbId,jdbcType=VARCHAR}
+  </select>
+
+    <!-- 查询规则包下数据源下所有的表 -->
+    <select id="selectTablesByDbId" parameterType="map" resultType="map">
+  	SELECT 
+		a.TABLE_ID as id,a.DB_ID as dbId,a.TABLE_CODE as tableCode,a.TABLE_NAME as name
+	FROM CRE_META_TABLE a
+	WHERE a.PACKAGE_ID = #{packageId,jdbcType=VARCHAR}
+	and a.DB_ID = #{dbId,jdbcType=VARCHAR}
+  </select>
+
+    <!-- 查询sql的关键字，即表名，列名 -->
+    <select id="selectKeyWords" resultType="map" parameterType="string">
+  	SELECT TABLE_CODE as name FROM CRE_META_TABLE
+	WHERE PACKAGE_ID = #{packageId,jdbcType=VARCHAR}
+	UNION ALL
+	SELECT DISTINCT A.COLUMN_CODE as name FROM CRE_META_COLUMN A
+	WHERE A.TABLE_ID IN
+	(
+		SELECT temp.TABLE_ID FROM CRE_META_TABLE temp
+		WHERE temp.PACKAGE_ID = #{packageId,jdbcType=VARCHAR}
+	)
+  </select>
+
+    <!-- 根据tableId批量删除 -->
+    <delete id="deleteByTableIds" parameterType="string">
+        delete from CRE_META_TABLE
+        where TABLE_ID in
+        <foreach collection="list" item="tableId" index="index"
+                 open="(" close=")" separator=",">
+            #{tableId}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,97 @@
+#importKpiAlertModal .modal-dialog{
+    width: 1200px;
+}
+#importKpiAlertModal .modal-body{
+    max-height: 480px;
+    overflow: auto;
+}
+#importKpiAlertModal .selfAdaptionLeft{
+    float: left;
+    width: 100%;
+}
+#importKpiAlertModal .input-group{
+    width: 200px;
+    float: left;
+    margin: 0 0 10px 10px;
+}
+#importKpiAlertModal .icon-caret-down{
+    cursor: pointer;
+}
+#importKpiAlertModal .selfAdaptionLeft>div{
+    margin-right: 165px;
+}
+#importKpiAlertModal .selfAdaptionRight{
+    position: relative;
+    float: right;
+    width: 60px;
+    margin-left: -60px;
+}
+#importKpiAlertModal .selfAdaptionRight button{
+    height: 30px;
+}
+#importKpiAlertModal .dropdown-menu{
+    width: 100%;
+}
+#importKpiAlertModal .dropdown-menu li{
+    cursor: pointer;
+}
+.importKpi_kpiTableContainer{
+    margin-top: 8px;
+}
+.importKpi_kpiTableContainer .checkbox{
+    margin: 0;
+}
+.importKpi_kpiTableContainer .checkbox label{
+    vertical-align: middle;
+}
+.importKpi_kpiTableContainer .checkbox input{
+    cursor: pointer;
+}
+
+/*指标详情*/
+#importKpiDetailAlertModal .modal-body{
+    max-height: 450px;
+    overflow: auto;
+}
+/*指标详情-限定条件*/
+#importKpiDetailAlertModal .kpiDBWrapper .panel{
+    border-color: #eee;
+    margin-top: 5px;
+}
+#importKpiDetailAlertModal .panel-heading{
+    padding: 0;
+    border-bottom: none;
+    background-color: #f6f7fb;
+    color: #666;
+}
+#importKpiDetailAlertModal .kpiDBWrapper .topTxt>div{
+    display: inline-block;
+}
+#importKpiDetailAlertModal .kpiDBWrapper .topTxt>span{
+    margin-right: 10px;
+}
+#importKpiDetailAlertModal .limitColsConnSel{
+    width: 70px;
+}
+#importKpiDetailAlertModal .topTxt .cm-selectOption.form-control[readonly]{
+    background-color: transparent;
+}
+/*指标详情-限定条件-内容*/
+#importKpiDetailAlertModal .kpiLimitColsPanel p, #apiKpiLimitP p{
+    font-size: 26px;
+    /*color: #3280FC;*/
+    color: var(--colorNormal);
+}
+#importKpiDetailAlertModal .kpiLimitColRow>div{
+    display: inline-block;
+    margin: 8px 10px 0 0;
+}
+#importKpiDetailAlertModal .kpiLimitColRow .input-control{
+    width: 200px;
+}
+.limitLinkIcon{
+    font-size: 16px;
+    /*color: #3280FC;*/
+    color: var(--colorNormal);
+}
+

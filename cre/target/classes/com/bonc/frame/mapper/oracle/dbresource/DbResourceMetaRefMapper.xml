@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bonc.frame.mapper.dbresource.DbResourceMetaRefMapper">
+    <resultMap id="BaseResultMap" type="com.bonc.frame.entity.dbresource.DbResourceMetaRef">
+        <result column="DB_RESOURCE_ID" property="dbResourceId" jdbcType="VARCHAR"/>
+        <result column="TABLE_ID" property="tableId" jdbcType="VARCHAR"/>
+        <result column="IS_MAIN" property="isMain" jdbcType="VARCHAR"/>
+    </resultMap>
+    <resultMap id="ResultMapWithBLOBs" type="com.bonc.frame.entity.dbresource.DbResourceMetaRef"
+               extends="BaseResultMap">
+        <result column="RESOURCE_TABLE_REF" property="resourceTableRef" jdbcType="LONGVARCHAR"/>
+    </resultMap>
+    <sql id="Blob_Column_List">
+    RESOURCE_TABLE_REF
+  </sql>
+
+    <insert id="insert" parameterType="com.bonc.frame.entity.dbresource.DbResourceMetaRef">
+    insert into CRE_RESOURCE_META_REF (DB_RESOURCE_ID, TABLE_ID, IS_MAIN, 
+      RESOURCE_TABLE_REF)
+    values (#{dbResourceId,jdbcType=VARCHAR}, #{tableId,jdbcType=VARCHAR}, #{isMain,jdbcType=VARCHAR}, 
+      #{resourceTableRef,jdbcType=LONGVARCHAR})
+  </insert>
+
+    <insert id="insertSelective" parameterType="com.bonc.frame.entity.dbresource.DbResourceMetaRef">
+        insert into CRE_RESOURCE_META_REF
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="dbResourceId != null">
+                DB_RESOURCE_ID,
+            </if>
+            <if test="tableId != null">
+                TABLE_ID,
+            </if>
+            <if test="isMain != null">
+                IS_MAIN,
+            </if>
+            <if test="resourceTableRef != null">
+                RESOURCE_TABLE_REF,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="dbResourceId != null">
+                #{dbResourceId,jdbcType=VARCHAR},
+            </if>
+            <if test="tableId != null">
+                #{tableId,jdbcType=VARCHAR},
+            </if>
+            <if test="isMain != null">
+                #{isMain,jdbcType=VARCHAR},
+            </if>
+            <if test="resourceTableRef != null">
+                #{resourceTableRef,jdbcType=LONGVARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <!-- 删除资源中的表 -->
+    <delete id="deleteTableFromDbSource" parameterType="com.bonc.frame.entity.dbresource.DbResourceMetaRef">
+  	delete from CRE_RESOURCE_META_REF
+  	where DB_RESOURCE_ID =  #{dbResourceId,jdbcType=VARCHAR}
+  	and TABLE_ID = #{tableId,jdbcType=VARCHAR}
+  </delete>
+
+    <!-- 查询资源下所有的表 -->
+    <select id="selectByResourceId" parameterType="string" resultType="map">
+  	SELECT
+      a.TABLE_ID as tblId,
+      a.IS_MAIN as isMain,
+      b.DB_ID as dbId,
+      b.TABLE_NAME as tblName,
+      b.TABLE_CODE as tableCode
+	FROM CRE_RESOURCE_META_REF a,CRE_META_TABLE b
+	WHERE a.TABLE_ID = b.TABLE_ID
+	AND a.DB_RESOURCE_ID = #{dbResourceId,jdbcType=VARCHAR}
+  </select>
+
+    <!-- 根据资源id和表id查询是否，已经存在 -->
+    <select id="selectByResIdDbId" parameterType="com.bonc.frame.entity.dbresource.DbResourceMetaRef" resultType="int">
+  	SELECT count(1)
+	FROM CRE_RESOURCE_META_REF
+  	WHERE DB_RESOURCE_ID =  #{dbResourceId,jdbcType=VARCHAR}
+  	AND TABLE_ID = #{tableId,jdbcType=VARCHAR}
+  </select>
+
+    <!-- 根据资源id和表id更新 -->
+    <update id="updateByResIdTableId" parameterType="com.bonc.frame.entity.dbresource.DbResourceMetaRef">
+        update CRE_RESOURCE_META_REF
+        <set>
+            <if test="isMain != null">
+                IS_MAIN = #{isMain,jdbcType=VARCHAR},
+            </if>
+            <if test="resourceTableRef != null">
+                RESOURCE_TABLE_REF = #{resourceTableRef,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        where
+        DB_RESOURCE_ID = #{dbResourceId,jdbcType=VARCHAR}
+        AND TABLE_ID = #{tableId,jdbcType=VARCHAR}
+    </update>
+
+    <!-- 将资源下所有的表更新为非主表 -->
+    <update id="updateByResId" parameterType="string">
+  	update CRE_RESOURCE_META_REF
+    set IS_MAIN = '0'
+    where 
+    	DB_RESOURCE_ID =  #{dbResourceId,jdbcType=VARCHAR}
+  </update>
+
+    <!-- 查询资源下表之间的关系 -->
+    <select id="selectTableRelation" parameterType="string" resultType="map">
+  	select
+      a.DB_RESOURCE_ID as dbResourceId,
+      a.TABLE_ID as tableId,
+      a.IS_MAIN as isMain,
+      a.RESOURCE_TABLE_REF as tableRelation,
+      b.TABLE_NAME as tableName,
+      b.TABLE_CODE as tableCode
+	from CRE_RESOURCE_META_REF a,CRE_META_TABLE b
+	where a.TABLE_ID = b.TABLE_ID AND a.DB_RESOURCE_ID = #{dbResourceId,jdbcType=VARCHAR}
+  </select>
+
+    <select id="selectRelationTable" parameterType="string" resultType="com.bonc.frame.entity.metadata.RelationTable">
+        select
+        a.DB_RESOURCE_ID as dbResourceId,
+        a.TABLE_ID as tableId,
+        a.IS_MAIN as isMain,
+        a.RESOURCE_TABLE_REF as tableRelation,
+        b.TABLE_NAME as tableName,
+        b.TABLE_CODE as tableCode,
+        b.CDT_CONFIG as cdtConfig,
+        b.TABLE_KIND as tableKind
+        from CRE_RESOURCE_META_REF a,CRE_META_TABLE b
+        where a.TABLE_ID = b.TABLE_ID
+        AND a.DB_RESOURCE_ID = #{dbResourceId,jdbcType=VARCHAR}
+        order by a.IS_MAIN desc
+    </select>
+
+    <delete id="deleteOldRelate" parameterType="map">
+        delete from CRE_RESOURCE_META_REF
+        where DB_RESOURCE_ID = #{id,jdbcType=VARCHAR}
+        and TABLE_ID not in
+        <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <delete id="deleteByResourceIds" parameterType="string">
+        delete from CRE_RESOURCE_META_REF
+        where DB_RESOURCE_ID in
+        <foreach item="resourceId" collection="list" open="(" separator="," close=")">
+            #{resourceId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteByResourceId" parameterType="string">
+  	delete from CRE_RESOURCE_META_REF
+  	where DB_RESOURCE_ID = #{dbResourceId,jdbcType=VARCHAR}
+  </delete>
+
+    <delete id="deleteByTableId" parameterType="string">
+  	delete from CRE_RESOURCE_META_REF
+  	where TABLE_ID = #{tableId,jdbcType=VARCHAR}
+  </delete>
+
+</mapper>

@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" monitorInterval="30">
+
+    <Properties>
+        <Property name="pattern_layout">%d{yyyy-MM-dd HH:mm:ss,SSS} [%p] [%t] [%l] %m%n</Property>
+        <Property name="LOG_HOME">D:\BONC\cre\code\cre_log</Property>
+        <Property name="LOG_FILE">cre</Property>
+        <Property name="RULE_LOG_FILE">cre-rule</Property>
+        <Property name="ABTEST_RULE_LOG_FILE">cre-aBTest-rule</Property>
+        <Property name="MODEL_OPERATE_LOG_FILE">cre-model-operate-log</Property>
+    </Properties>
+
+    <!-- Define custom levels before using them for filtering below. -->
+    <CustomLevels>
+        <CustomLevel name="VERBOSE" intLevel="700"/>
+    </CustomLevels>
+
+    <Appenders>
+        <Console name="console" target="SYSTEM_OUT" follow="true">
+            <!-- <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/> -->
+            <PatternLayout charset="utf-8" pattern="${pattern_layout}"/>
+        </Console>
+
+        <RollingRandomAccessFile name="file"
+                                 fileName="${LOG_HOME}/${LOG_FILE}.log"
+                                 filePattern="${LOG_HOME}/${LOG_FILE}.log.%d{yyyy-MM-dd}-%i"
+                                 append="false">
+            <PatternLayout charset="utf-8" pattern="${pattern_layout}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"/>
+                <!--<SizeBasedTriggeringPolicy size="10 MB"/>-->
+            </Policies>
+
+            <DefaultRolloverStrategy>
+                <!--超过30天的自动删除-->
+                <Delete basePath="${LOG_HOME}/" maxDepth="1">
+                    <IfFileName glob="*${LOG_FILE}*.log"/>
+                    <IfLastModified age="30d"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+
+        </RollingRandomAccessFile>
+
+        <!-- 模型执行日志 -->
+        <RollingRandomAccessFile name="ruleLog"
+                                 fileName="${LOG_HOME}/${RULE_LOG_FILE}.log"
+                                 filePattern="${LOG_HOME}/${RULE_LOG_FILE}.log.%d{yyyy-MM-dd}-%i"
+                                 append="false">
+
+            <!-- 只打印debug以下级别的日志 -->
+            <ThresholdFilter level="DEBUG" onMatch="DENY" onMismatch="NEUTRAL"/>
+
+            <PatternLayout charset="utf-8" pattern="${pattern_layout}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"/>
+                <!--<SizeBasedTriggeringPolicy size="10 MB"/>-->
+            </Policies>
+            <DefaultRolloverStrategy>
+                <!--超过30天的自动删除-->
+                <Delete basePath="{LOG_HOME}/" maxDepth="1">
+                    <IfFileName glob="*${RULE_LOG_FILE}*.log"/>
+                    <IfLastModified age="30d">
+                        <!--<IfAny>
+                            <IfAccumulatedFileSize exceeds="10 GB"/>
+                        </IfAny>-->
+                    </IfLastModified>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingRandomAccessFile>
+
+        <!-- AB测试 模型执行日志 -->
+        <RollingRandomAccessFile name="aBTestRuleLog"
+                                 fileName="${LOG_HOME}/${ABTEST_RULE_LOG_FILE}.log"
+                                 filePattern="${LOG_HOME}/${ABTEST_RULE_LOG_FILE}.log.%d{yyyy-MM-dd}-%i"
+                                 append="true">
+
+            <!-- 只打印debug以下级别的日志 -->
+            <ThresholdFilter level="TRACE" onMatch="DENY" onMismatch="NEUTRAL"/>
+
+            <PatternLayout charset="utf-8" pattern="${pattern_layout}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"/>
+                <!--<SizeBasedTriggeringPolicy size="10 MB"/>-->
+            </Policies>
+            <DefaultRolloverStrategy>
+                <!--超过30天的自动删除-->
+                <Delete basePath="{LOG_HOME}/" maxDepth="1">
+                    <IfFileName glob="*${ABTEST_RULE_LOG_FILE}*.log.*"/>
+                    <IfLastModified age="90d">
+                        <!--<IfAny>
+                            <IfAccumulatedFileSize exceeds="10 GB"/>
+                        </IfAny>-->
+                    </IfLastModified>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingRandomAccessFile>
+
+        <!-- 模型操作日志 -->
+        <RollingRandomAccessFile name="modelOperateLog"
+                                 fileName="${LOG_HOME}/${MODEL_OPERATE_LOG_FILE}.log"
+                                 filePattern="${LOG_HOME}/${MODEL_OPERATE_LOG_FILE}.log.%d{yyyy-MM-dd}-%i"
+                                 append="true">
+
+            <!-- 只打印debug以下级别的日志 -->
+            <ThresholdFilter level="DEBUG" onMatch="DENY" onMismatch="NEUTRAL"/>
+
+            <PatternLayout charset="utf-8" pattern="${pattern_layout}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"/>
+                <!--<SizeBasedTriggeringPolicy size="10 MB"/>-->
+            </Policies>
+            <DefaultRolloverStrategy>
+                <!--超过30天的自动删除-->
+                <Delete basePath="{LOG_HOME}/" maxDepth="1">
+                    <IfFileName glob="*${MODEL_OPERATE_LOG_FILE}*.log"/>
+                    <IfLastModified age="30d">
+                        <!--<IfAny>
+                            <IfAccumulatedFileSize exceeds="10 GB"/>
+                        </IfAny>-->
+                    </IfLastModified>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingRandomAccessFile>
+
+        <Async name="asyncmodelOperateLog" bufferSize="1000" includeLocation="true">
+            <AppenderRef ref="modelOperateLog"/>
+        </Async>
+    </Appenders>
+
+    <Loggers>
+        <!-- 3rdparty Loggers -->
+        <Logger name="org.springframework" level="ERROR"/>
+        <!--<Logger name="org.springframework.web" level="ERROR"/>-->
+        <Logger name="springfox.documentation" level="ERROR"/>
+        <Logger name="org.hibernate" level="ERROR"/>
+        <Logger name="org.mybatis.spring" level="ERROR"/>
+        <Logger name="org.apache.jasper" level="ERROR"/>
+        <Logger name="org.quartz.core" level="ERROR" additivity="true"/>
+        <Logger name="org.apache.commons.beanutils.converters" level="ERROR"/>
+        <Logger name="org.apache.thrift.transport.TSaslTransport" level="ERROR"/>
+        <Logger name="org.apache.zookeeper" level="ERROR"/>
+        <Logger name="org.apache.curator" level="ERROR"/>
+
+        <!-- SQL -->
+        <Logger name="org.apache.ibatis" level="DEBUG"/>
+        <Logger name="com.bonc.frame.dao" level="DEBUG" additivity="true"/>
+        <Logger name="com.bonc.frame.mapper" level="DEBUG" additivity="true"/>
+        <Logger name="com.bonc.frame.engine.mapper" level="DEBUG" additivity="true"/>
+
+        <!--<Logger name="org.apache.ibatis" level="ERROR"/>
+        <Logger name="com.bonc.frame.dao" level="ERROR" additivity="true"/>
+        <Logger name="com.bonc.frame.mapper" level="ERROR" additivity="true"/>
+        <Logger name="com.bonc.frame.engine.mapper" level="ERROR" additivity="true"/>-->
+
+        <!-- 接口日志 -->
+        <AsyncLogger name="com.bonc.framework.api" level="VERBOSE" additivity="false">
+            <AppenderRef ref="ruleLog"/>
+            <AppenderRef ref="aBTestRuleLog"/>
+            <!--<AppenderRef ref="file"/>
+            <AppenderRef ref="console"/>-->
+        </AsyncLogger>
+
+        <!-- 模型执行日志 -->
+        <AsyncLogger name="com.bonc.framework.rule.executor" level="VERBOSE" additivity="false">
+            <AppenderRef ref="ruleLog"/>
+            <AppenderRef ref="aBTestRuleLog"/>
+            <!--<AppenderRef ref="file"/>
+            <AppenderRef ref="console"/>-->
+        </AsyncLogger>
+
+        <!-- 模型操作日志 -->
+        <Logger name="com.bonc.frame.service.impl.rule.ModelOperateLogServiceImpl" level="TRACE" additivity="false">
+            <AppenderRef ref="asyncmodelOperateLog"/>
+            <!--<AppenderRef ref="console"/>-->
+        </Logger>
+        <Logger name="com.bonc.frame.service.modelCompare" level="TRACE" additivity="false">
+            <AppenderRef ref="asyncmodelOperateLog"/>
+            <!--<AppenderRef ref="console"/>-->
+        </Logger>
+
+        <!-- Root Logger -->
+        <Root level="debug" includeLocation="true">
+            <AppenderRef ref="file"/>
+            <AppenderRef ref="console"/>
+        </Root>
+
+    </Loggers>
+</Configuration>

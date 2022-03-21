@@ -1,0 +1,86 @@
+#temp > i{
+	background-position: -86px 0px;
+}
+#temp.active > i{
+	background-position: -58px 0px;
+}
+.addParam > i{
+	background-position: 0px -59px;
+}
+.instanceVars > i{
+	background-position: -57px -58px;
+}
+div#values {
+    border: 1px solid #d9d9d9;
+    top: -1px;
+    position: relative;
+    z-index: 1;
+    padding: 23px 35px;
+}
+.dictValues {
+    clear: left;
+    margin-top: 35px;
+    padding: 20px 20px 14px 20px;
+    border: 1px solid #aaa;
+    float: left;
+    overflow-y: auto;
+    width: 280px;
+    height: 140px;
+}
+.dictValues > p{
+	cursor: pointer;
+/* 	width: 320px; */
+}
+.dictValues > p.active,.selectSource ul li.active{
+	color: #ed9e21;
+}
+.dictBtns{
+	width: 120px;
+	float: left;
+	margin: 30px 30px 0 20px;
+}
+.dictBtns button {
+    border: 1px solid #d3d3d3;
+    border-radius: 2px;
+    color: #676767;
+    width: 56px;
+    height: 30px;
+    outline: none;
+    margin:5px;
+}
+.dictBtns button.importTableVal{
+	width: 120px;
+}
+.addDictIpts{
+/* 	overflow: hidden; */
+    display: none;
+    position: absolute;
+    top: 285px;
+    left: 167px;
+}
+.paramDesc{
+	width: 99px;
+	padding: 2px;
+	float: left;
+	margin: 0 13px;
+}
+.addDictIpts>input[type='button']{
+	width: 23px;
+	height: 23px;
+	outline: none;
+	border-radius: 2px;
+	border: none;
+	float: left;
+}
+.addToDict{
+    margin-left: 9px;
+    background:transparent url('../../imgs/function/sure.png') no-repeat center center;
+}
+.calcleAddToDict{
+    margin-left: 9px;
+    background:transparent url('../../imgs/function/cancle.png') no-repeat center center;
+}
+
+#paramTypeSelect {
+	float:left;
+}

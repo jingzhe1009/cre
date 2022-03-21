@@ -1,0 +1,107 @@
+<link href="${ctx.contextPath}/static/css/commonResource/paramAdd.css" rel="stylesheet"/>
+
+<div class="modal fade" id="paramAddAlertModal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <!--标题-->
+            <div class="modal-header">
+                <h4 class="modal-title">添加参数</h4>
+            </div>
+            <!--参数列表-->
+            <div class="modal-body">
+                <div>
+                    <!--公共参数池-->
+                    <div id="paramAddCommonContainer">
+                        <div class="resourceTableIcon"><i class="icon icon-wrench"> 公共参数</i></div>
+                        <div class="selfAdaptionLeft">
+                            <div>
+                                <div class="input-group params_public">
+                                    <input data-col="variableGroupName" type="text" class="form-control"
+                                           placeholder="参数组">
+                                    <label class="input-control-icon-right" data-toggle="dropdown">
+                                        <i class="icon icon-caret-down "></i>
+                                    </label>
+                                    <ul class="dropdown-menu pull-right paramAdd_paramGroupList"></ul>
+                                </div>
+                                <div class="input-group">
+                                    <input data-col="variableAlias" type="text" class="form-control" placeholder="参数别名">
+                                </div>
+                                <div class="input-group">
+                                    <input data-col="variableTypeId" type="text" class="form-control typeIdInput" placeholder="参数类型">
+                                    <label class="input-control-icon-right" data-toggle="dropdown">
+                                        <i class="icon icon-caret-down "></i>
+                                    </label>
+                                    <ul class="dropdown-menu pull-right paramAdd_typeValueList"></ul>
+                                </div>
+                                <div class="input-group">
+                                    <input data-col="kindId" type="text" class="form-control paramAdd_kindInput" placeholder="参数种类">
+                                    <label class="input-control-icon-right" data-toggle="dropdown">
+                                        <i class="icon icon-caret-down "></i>
+                                    </label>
+                                    <ul class="dropdown-menu pull-right paramAdd_tableKindList">
+                                        <li kindId="K1"><a>输入变量</a></li>
+                                        <li kindId="K2"><a>输出变量</a></li>
+                                        <li kindId="K3"><a>中间变量</a></li>
+                                        <li kindId="K4"><a>系统常量</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="selfAdaptionRight">
+                            <button class="btn btn-primary paramAddSearch" type="button" is-public="1">搜索</button>
+                        </div>
+                        <div style="clear:both;"></div>
+                        <div class="paramAddTableContainer">
+                            <table id="paramAdd_commonParamTable"></table>
+                        </div>
+                    </div>
+                    <hr>
+
+                    <!--场景-->
+                    <div id="paramAddFolderContainer">
+                        <div class="resourceTableIcon"><i class="icon icon-group"> 场景下参数</i></div>
+                        <div class="selfAdaptionLeft">
+                            <div>
+                                <div class="input-group">
+                                    <input data-col="variableAlias" type="text" class="form-control" placeholder="参数别名">
+                                </div>
+                                <div class="input-group">
+                                    <input data-col="typeId" type="text" class="form-control typeIdInput" placeholder="参数类型">
+                                    <label class="input-control-icon-right" data-toggle="dropdown">
+                                        <i class="icon icon-caret-down "></i>
+                                    </label>
+                                    <ul class="dropdown-menu pull-right paramAdd_typeValueList"></ul>
+                                </div>
+                                <div class="input-group params_folder">
+                                    <input data-col="kindId" type="text" class="form-control paramAdd_kindInput" placeholder="参数种类">
+                                    <label class="input-control-icon-right" data-toggle="dropdown">
+                                        <i class="icon icon-caret-down "></i>
+                                    </label>
+                                    <ul class="dropdown-menu pull-right paramAdd_tableKindList">
+                                        <li kindId="K1"><a>输入变量</a></li>
+                                        <li kindId="K2"><a>输出变量</a></li>
+                                        <li kindId="K3"><a>中间变量</a></li>
+                                        <li kindId="K4"><a>系统常量</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="selfAdaptionRight">
+                            <button class="btn btn-primary paramAddSearch" type="button" is-public="0">搜索</button>
+                        </div>
+                        <div style="clear:both;"></div>
+                        <div class="paramAddTableContainer">
+                            <table id="paramAdd_folderParamTable"></table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!--操作-->
+            <div class="modal-footer">
+                <button id="paramAddConfirm" type="button" class="btn btn-primary">保存</button>
+                <button id="paramAddCancel" type="button" class="btn btn-minor" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>

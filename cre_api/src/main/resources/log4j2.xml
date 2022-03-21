@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+
+    <Properties>
+        <Property name="pattern_layout">%d %-5p (%F:%L) - %m%n</Property>
+        <Property name="LOG_HOME">E://log</Property>
+        <Property name="LOG_FILE">cre</Property>
+    </Properties>
+
+    <Appenders>
+        <Console name="console" target="SYSTEM_OUT" follow="true">
+            <ThresholdFilter level="warn" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${pattern_layout}"/>
+        </Console>
+
+        <RollingRandomAccessFile name="file"
+                                 fileName="${LOG_HOME}/${LOG_FILE}.log"
+                                 filePattern="${LOG_HOME}/${LOG_FILE}.log.%d{yyyy-MM-dd}"
+                                 append="true">
+            <PatternLayout pattern="${pattern_layout}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" />
+                <!--<SizeBasedTriggeringPolicy size="10 MB" />-->
+            </Policies>
+        </RollingRandomAccessFile>
+    </Appenders>
+
+    <Loggers>
+        <!-- 3rdparty Loggers -->
+        <Logger name="org.springframework" level="INFO"/>
+
+        <!-- Root Logger -->
+        <Root level="INFO" includeLocation="true">
+            <AppenderRef ref="file"/>
+            <AppenderRef ref="console"/>
+        </Root>
+    </Loggers>
+</Configuration>

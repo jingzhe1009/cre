@@ -1,0 +1,351 @@
+#pageContent {
+    height:calc( 100% - 11px);
+    width: 100%;
+}
+#pageBody {
+    width: 100%;
+    height:80%;
+    height: calc(100% - 34px);
+    border: 1px solid transparent;
+}
+.operation{
+	display: flex;
+	flex-direction: row-reverse;
+}
+
+.magement { float:left;}
+.magement a { 
+	line-height:30px;
+	/*color:#3780f1; */
+	color: var(--colorNormal);
+	margin-right:40px;
+}
+
+.ruleContent li { 
+	list-style:none; 
+	padding:0;
+	
+}
+.ruleContent {
+	padding-left:0px;
+	margin: 0;
+}
+
+.ruleContent dl {
+	position:relative;
+	height:180px;		
+	margin:10px;
+	/* width:calc(95%/6); */
+	border-radius:5px;
+	
+	background:#fff;
+	margin-bottom:0;
+	box-shadow: 0 4px 6px 0 rgba(73, 138, 248, 0.13);
+}
+
+.a {
+	background:transparent;
+	position:absolute;
+	width:100%;
+	z-index:10;
+	top:80px;
+	left:0;
+	padding:0 13px;
+	border-radius:5px;	
+}
+.ruleContent dl dd .addS {
+	width:100%;
+	background:#fff; 
+	overflow:visible; 
+	box-shadow:0 4px 6px 0 rgba(73, 138, 248, 0.13);
+}
+.ruleContent dl dd .addPs { 
+	height:auto; 
+	overflow:visible;
+}
+
+
+
+.ruleContent dl dd p {min-height:49px; text-indent:28px; line-height:24px; height:48px; overflow:hidden;}
+
+.ruleContent dl:nth-child(6n){ 
+	margin-right:0;
+}
+.ruleContent dl dt {
+	font-size:14px;
+	font-weight:normal;
+	text-align:center;
+	border-bottom:1px solid #eee;
+	line-height:38px;
+}
+.ruleContent dl dd {
+	padding:13px 13px 13px 18px;
+	color:#666;
+}
+
+
+/* 开关    */
+
+.row { text-align:right;margin-bottom:5px;}
+
+.ruleContent input[type="checkbox"] {
+    display: none;
+}
+.ruleContent input[type="checkbox"] + label {
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+    position: relative;
+    -webkit-transition: 0.3s;
+    transition: 0.3s;
+    margin: 0px 20px;
+    box-sizing: border-box;
+    box-shadow: 0 4px 6px 0 rgba(23,116, 239, 0.11);
+}
+.ruleContent input[type="checkbox"] + label:after {
+    content: '';
+    display: block;
+    position: absolute;
+    -webkit-transition: 0.3s;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.inset_3:checked + label.blue {
+    background: #02BABC;
+}
+
+.inset_3:checked + label.blue:after {
+    background: #fff;
+}
+
+.inset_3:checked + label:after {
+    left: calc(100% - 18px);
+}
+
+.inset_3 + label {
+    background: #ddd;
+    border-radius: 20px;
+}
+
+.inset_3 + label:after {
+    background: #fff;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    top: 2px;
+    left: 2px;
+}
+@media only screen and (min-width:1366px) and (max-width: 1920px){
+	.ruleContent li {
+	list-style:none; 
+	padding:0;
+	/*width:20%;*/
+	}
+}
+
+
+/* 白底蓝border按钮    */
+.butD1 { 
+	font-size:14px;
+	color:#02BABC;
+	border:1px solid #02BABC;
+	height: 32px;
+	line-height:32px;
+	background:#fff;
+	padding:0 10px;
+	border-radius:4px;
+	min-width: 80px;
+	text-align: center;
+}
+
+.butD1:hover { 
+	background:#02BABC;
+	color:#fff;
+}
+button.butD1:focus, button.butD1:active{
+	border:1px solid #02BABC;
+}
+
+.no-rule { 
+	margin: 10px;
+    background: white;
+    text-align: center;
+    line-height: 45px;
+}
+
+/*!* 提示弹窗   *!*/
+/*.messager-content { */
+/*	background:#000; */
+/*	opacity:1;*/
+/*}*/
+/*.messager-success {*/
+/*	background:#000;*/
+/*	opacity:0.6;*/
+/*}*/
+
+.btnDiv {
+	float:right;
+}
+/*模型发布*/
+#publishModelDiv .radio{
+	display: inline-block;
+}
+#publishModelDiv .mustIcon{
+	color: #EA644A;
+	text-align: center;
+	vertical-align: middle;
+	padding-right: 5px;
+}
+/* 通用  */
+.mr8 { margin-right:8px;}
+
+.editModelBase{
+	position: absolute;
+	/*color: #3280FC;*/
+	color: var(--colorNormal);
+	cursor: pointer;
+	right: 10px;
+	top: 50%;
+	transform: translateY( -50% );
+}
+.mustIcon{
+	color: #EA644A;
+	text-align: center;
+	vertical-align: middle;
+	padding-right: 5px;
+}
+/*版本选择*/
+.versionSel{
+	display: inline-block;
+	vertical-align: super;
+	margin-left: 15px;
+}
+.versionSelLabel{
+	position: inherit;
+}
+.versionSelMenu{
+	top: auto;
+	left: auto;
+	min-width: auto;
+	text-align: left;
+	max-height: 150px;
+	overflow: auto;
+}
+.versionSelLabel, .versionSelMenu li{
+	cursor: pointer;
+}
+
+.card_container {
+	margin: 10px;
+	border-radius: 10px;
+	background: #ffffff;
+	box-shadow: 0 4px 6px 0 rgba(73, 138, 248, 0.13);
+}
+
+.card_background_0 {
+	background: url(../../imgs/rule/card_0.png) no-repeat;
+	background-size: 100% 100%;
+}
+
+.card_background_1 {
+	background: url(../../imgs/rule/card_1.jpg) no-repeat;
+	background-size: 100% 100%;
+}
+
+.card_header {
+	display: flex;
+	justify-content: space-between;
+	padding: 20px 0;
+}
+
+.card_container .card_header .card_title {
+	position: relative;
+	height: 30px;
+	line-height: 30px;
+	padding: 0 30px 0 20px;
+	background: transparent;
+	background: linear-gradient(to right, transparent , rgba(2,186,188,0.2));
+	border-top-right-radius: 30px;
+	border-bottom-right-radius: 30px;
+	font-size: 16px;
+	color: #2E3D55;
+	letter-spacing: 0;
+	font-weight: bold;
+	overflow: hidden;
+	text-overflow:ellipsis;
+	white-space: nowrap;
+}
+
+.card_container .card_header .card_subtitle {
+	flex-shrink: 0;
+}
+
+.card_container .card_main {
+	display: flex;
+	align-items: center;
+	font-size: 14px;
+	padding-bottom: 10px;
+}
+
+.card_container .card_main .card_content_left {
+	padding: 0 20px;
+	flex-grow: 1;
+	color: #2E3D55;
+	letter-spacing: 0;
+	text-align: justify;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 3;
+	align-self: flex-start;
+}
+
+.card_container .card_main .card_content_left p {
+	overflow: hidden;
+	margin: 0;
+}
+
+.card_container .card_main .hr {
+	width: 1px;
+	border-left: 1px solid #e5e5e5;
+	padding: 5% 0;
+}
+
+.card_container .card_main .card_content_right {
+	display: flex;
+	flex-direction: column;
+	padding: 0 20px;
+	flex-shrink: 0;
+	align-self: stretch;
+}
+
+.card_container .card_main .card_content_right .card_button_group {
+	display: flex;
+	flex-grow: 1;
+	align-items: center;
+}
+
+.card_container .card_main .card_content_right .card_button_group .link:nth-of-type( 1 ) {
+	margin-right: 15px;
+}
+
+.card_container .card_footer {
+	display: flex;
+	justify-content: center;
+	padding-bottom: 20px;
+}
+
+.card_container .card_footer button {
+	margin-right: 10px;
+}
+
+.card_container .card_footer button:last-child {
+	margin-right: 0;
+}
+
+.link {
+	display: inline-block;
+	cursor: pointer;
+	color: #02BABC;
+}
+

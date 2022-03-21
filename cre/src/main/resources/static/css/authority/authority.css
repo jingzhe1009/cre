@@ -1,0 +1,98 @@
+#pageBody {
+    width: 100%;
+    height:80%;
+    height: calc(100% - 34px);
+    border: 1px solid transparent;
+}
+#pageContent {
+    height:calc( 100%-11px);
+    width: 100%;
+}
+#authorityContainer{
+    padding:14px 24px;
+    margin:10px 10px 1px;
+    background: #fff;
+    border-radius:5px;
+}
+#authorityTab li{
+    cursor: pointer;
+}
+#authorityTabContent{
+    background: #fff;
+    border-radius:5px;
+}
+.show{
+    display: block;
+}
+.close{
+    display: none;
+}
+/*必填项*/
+.mustIcon{
+    color: #EA644A;
+    text-align: center;
+    vertical-align: middle;
+    padding-right: 5px;
+}
+#authorityTabContent{
+    height: auto;
+    padding-top:14px;
+    margin-top: 10px;
+    background: #fff;
+    border-radius:5px;
+}
+/*搜索栏*/
+#otherMgrContent .input-group, #authorityHeader .input-group{
+    width: 250px;
+    float: left;
+    margin: 0 0 10px 10px;
+}
+#authorityContainer .dropdown-menu{
+    text-align: center;
+}
+#authorityContainer .icon-caret-down{
+    cursor: pointer;
+}
+#otherMgrContent .input-group-addon{ /* 时间组件小按钮背景色设置 */
+    background-color: #fff;
+}
+.selfAdaptionLeft{
+    float: left;
+    width: 100%;
+}
+.selfAdaptionLeft>div{
+    margin-right: 175px;
+}
+.selfAdaptionRight{
+    position: relative;
+    float: right;
+    width: 170px;
+    margin-left: -170px;
+}
+#authorityHeader .selfAdaptionRight{
+    position: relative;
+    float: right;
+    width: 65px;
+    margin-left: -65px;
+}
+.resourceTableIcon{
+    /*color: #3280FC;*/
+    color: var(--colorNormal);
+    margin: 0 0 10px 10px;
+}
+#authorityPageTable, #authorityMgrContent{
+    margin: 8px 0;
+}
+#userGroupTable{
+    margin: 8px 0;
+}
+/*用户弹框*/
+#addUserAlertModal .modal-body{
+    max-height: 420px;
+    overflow: auto;
+}
+.cron_msg{
+    color: #EA644A;
+    cursor: pointer;
+    padding-top: 8px;
+}

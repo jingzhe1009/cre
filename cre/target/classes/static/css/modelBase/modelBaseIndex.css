@@ -1,0 +1,90 @@
+#pageBody {
+    width: 100%;
+    height:80%;
+    height: calc(100% - 34px);
+    border: 1px solid transparent;
+}
+#pageContent {
+    height:calc( 100%-11px);
+    width: 100%;
+}
+#modelBasePageContent{
+    padding:14px 24px;
+    margin:10px 10px 1px;
+    background: #fff;
+    border-radius:5px;
+}
+#modelVersionTableAlertModal .dropdown-menu,
+#modelBasePageContent .dropdown-menu {
+    width: 100%;
+    overflow: auto;
+    max-height: 280px;
+}
+.tableIcon{
+    /*color: #3280FC;*/
+    color: var(--colorNormal);
+    margin: 0 0 10px 0px;
+}
+.mustIcon{
+    color: #EA644A;
+    text-align: center;
+    vertical-align: middle;
+    padding-right: 5px;
+}
+.icon-caret-down, .dropdown-menu li, .switch input{
+    cursor: pointer;
+}
+.selfAdaptionLeft{
+    float: left;
+    width: 100%;
+}
+/*列表搜索栏 两栏布局*/
+.modelBaseContainer .selfAdaptionLeft .input-group{
+    width: 250px;
+    float: left;
+    margin: 0 10px 10px 0;
+}
+.modelBaseContainer .selfAdaptionLeft>div{
+    margin-right: 165px;
+}
+.modelBaseWrapper .selfAdaptionRight{
+    position: relative;
+    float: right;
+    width: 220px;
+    margin-left: -220px;
+}
+.modelBaseGroupWrapper .selfAdaptionRight{
+    position: relative;
+    float: right;
+    width: 140px;
+    margin-left: -145px;
+}
+/*弹框内 两栏布局*/
+#modelVersionTableAlertModal .modal-dialog{
+    width: 1100px;
+}
+#modelVersionTableAlertModal .selfAdaptionLeft .input-group{
+    width: 200px;
+    float: left;
+    margin: 0 10px 10px 0;
+}
+#modelVersionTableAlertModal .selfAdaptionLeft>div{
+    margin-right: 165px;
+}
+#modelVersionTableAlertModal .selfAdaptionRight{
+    position: relative;
+    float: right;
+    width: 160px;
+    margin-left: -160px;
+}
+#modelBaseTable, #modelBaseGroupTable, #ruleSetVersionTable{
+    margin: 8px 0;
+}
+/* 时间组件小按钮背景色设置 */
+.input-group-addon{
+    background-color: #fff;
+    cursor: pointer;
+}
+#modelVersionTableAlertModal .switch>input {
+    position: absolute;
+}

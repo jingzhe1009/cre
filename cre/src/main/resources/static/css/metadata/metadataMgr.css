@@ -1,0 +1,286 @@
+#pageBody {
+    width: 100%;
+    height: 80%;
+    height: calc(100% - 34px);
+    border: 1px solid transparent;
+}
+#pageContent {
+    height: calc(100% - 11px);
+    width: 100%;
+}
+#dsMgrContainer {
+    padding: 14px 24px;
+    margin: 10px 10px 25px 10px;
+    background: #fff;
+    border-radius: 5px;
+}
+#dsMgrContainer button{
+    outline: none;
+}
+
+/*主页面 面板*/
+#dsMgrContainer .panel-heading, #scanColsModal .panel-heading, #bindRelationModal .panel-heading{
+    height: 45px;
+}
+#dsMgrContainer .panel-heading button, #scanColsModal .panel-heading button{
+    float: right;
+    margin-left: 15px;
+}
+.panelEle {
+    width: 320px;
+    height: 30px;
+    display: inline-block;
+    margin-right: 10px;
+}
+.panelEle span{
+    display: inline;
+}
+.panelEle span:hover {
+    cursor: pointer;
+    padding-bottom: 3px;
+    border-bottom: 1px solid #cccccc;
+    font-size: 14px;
+}
+.panelElement_input .icon , #addRelationModal .icon-database{
+    color: #3280FC;
+}
+.panelElement_output .icon , #addRelationModal .icon-table , #bindRelationModal .icon-table{
+    color: #EA644A;
+}
+.panelElement_relation .icon {
+    color: #38B03F;
+}
+
+/*返回按钮*/
+#returnButton {
+    height: 30px;
+    position: relative;
+}
+#returnButton button {
+    position: absolute;
+    right: 15px;
+    margin-bottom: 12px;
+}
+
+/*扫描元数据弹框*/
+#colsSearchPanel {
+    position: relative;
+}
+#colsSearchButtons {
+    position: absolute;
+    left: 0;
+}
+#colsSearchInputGroup {
+    width: 250px;
+    position: absolute;
+    right: 15px;
+}
+#colsSearchBtn {
+    height: 32px;
+}
+.checkbox_mainPage {
+    display: inline-block;
+    width: 235px;
+    margin-left: 5px;
+}
+#colsListContainer{
+    max-height: 450px;
+    overflow: auto;
+}
+
+/*添加关联表弹框*/
+#addRelationModal .modal-dialog{
+    width: 750px;
+}
+#addRelationModal .panel-body{
+    padding: 10px 5px;
+}
+#addRelationModal span{
+    margin-left: 5px;
+}
+#relationPanel .relationPanelContent{
+    background-color: #fafafa;
+    /*min-height:100px;*/
+    /*_height:100px;*/
+    height: 100px;
+    overflow: scroll;
+    margin: 6px 0 12px 0;
+    padding: 5px;
+}
+.checkbox_relPage{
+    display: inline-block;
+    width: 250px;
+    margin-left: 5px;
+    overflow: hidden;
+}
+
+/*绑定关系弹框*/
+#bindRelModalBody{
+    max-height: 500px;
+    overflow: auto;
+}
+#bindRelationModal .modal-dialog{
+    width: 750px;
+}
+#template{
+    display: none;
+}
+.bindPanelElement{
+    position: relative;
+}
+.bindRelPanel{
+    width: 75%;
+    height: 100%;
+    display: inline-block;
+}
+.bindRelContent{
+    min-height: 65px;
+    max-height: 100px;
+    overflow: auto;
+}
+/*heading*/
+.bindPanelElement_heading{
+    position: relative;
+}
+.bindRelTableName{
+    width: 85%;
+    height: 100%;
+    overflow: auto;
+}
+.tableSpan{
+     position: absolute;
+     right: 5px;
+     top: 12px;
+ }
+/*右侧操作*/
+.bindRelOperate{
+    width: 25%;
+    height: 100%;
+    display: inline-block;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+}
+.bindRelOperate>div{
+    margin: 8px auto;
+    text-align: center;
+}
+.bindRelOperate button{
+    outline: 0;
+    width: 95px;
+    height: 30px;
+    border-radius: 2px;
+}
+.bindRelOperate ul{
+    width: 95px;
+}
+/*绑定关系-编辑 tree*/
+.tree_mainTableIcon{
+    font-size: 13px;
+    color: #f5922d;
+}
+.tree_commonTableIcon{
+    font-size: 13px;
+    color: #4796F2;
+}
+.tree_childrenTableIcon{
+    font-size: 12px;
+    color: #808080;
+}
+.tree_childrenTableIcon span{
+    color: #333;
+}
+.bindPanelElement_heading{
+    position: relative;
+}
+.bindRel_setMain{
+    color: #f5922d;
+    cursor: pointer;
+}
+
+/*点击编辑弹框*/
+#bindEditModal .modal-dialog{
+    width: 700px;
+}
+#bindEditModal .modal-body{
+    display: flex;
+}
+#bindEditModal_left{
+    width: 28%;
+    height: 375px;
+    display: inline-block;
+    background-color: #f7f7f7;
+    padding: 8px 1px 8px 10px;
+    overflow: auto;
+}
+#bindEditModal_left .tree{
+    cursor: pointer;
+}
+#bindEditModal_right{
+    width: 70%;
+    height: 375px;
+    display: inline-block;
+    margin-left: 10px;
+}
+#bindEditModal_relation{
+    width: 100%;
+    height: 90%;
+    border-left: 1px solid #e7e6e6;
+    border-right: 1px solid #e7e6e6;
+    border-top: 1px solid #e7e6e6;
+    padding: 5px;
+    overflow: auto;
+    outline: none;
+}
+#bindEditModal_footer{
+    width: 100%;
+    height: 35px;
+    line-height: 35px;
+    background-color: #F2F2F2;
+    border: 1px solid #e7e6e6;
+    position: relative;
+}
+#operationSign{
+    margin-left: 8px;
+}
+#operationSign span{
+    display: inline-block;
+    width: 30px;
+    height: 25px;
+    line-height: 25px;
+    text-align: center;
+    background-color: #fff;
+    border: 1px solid #D2D2D2;
+    cursor: pointer;
+}
+#bindEditModal_content_buttons{
+    position: absolute;
+    right: 5px;
+    top: -2px;
+}
+#bindEditModal_content_buttons button{
+    width: 55px;
+    height: 25px;
+    line-height: 25px;
+    border-radius: 2px;
+    padding: 0;
+}
+/*必填项图标*/
+.mustIcon{
+    color: #EA644A;
+    text-align: center;
+    vertical-align: middle;
+    padding-right: 5px;
+}
+
+.addRelationCheckInput {
+    position: absolute !important;
+}
+
+
+
+
+
+
+
+

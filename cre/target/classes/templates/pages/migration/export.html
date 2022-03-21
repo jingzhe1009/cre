@@ -1,0 +1,21 @@
+<link href="${ctx.contextPath}/static/css/migration/migration.css" rel="stylesheet"/>
+
+<!--导出模型弹框-->
+<div class="modal fade" id="exportModelsAlertModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">请选择要导出的模型</h4>
+            </div>
+            <#include "/pages/migration/exportContent.html">
+        </div>
+    </div>
+</div>
+
+
+<#include "/pages/migration/exportReport.html">
+<#include "/pages/common/loading.html">
+<#include "/pages/common/confirmAlert.html">
+
+<script src="${ctx.contextPath}/static/js/common/loading.js"></script>
+<script src="${ctx.contextPath}/static/js/common/confirmAlert.js"></script>

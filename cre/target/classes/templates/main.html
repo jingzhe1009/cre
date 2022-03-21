@@ -1,0 +1,217 @@
+<#include "/commonHead.html">
+<style>
+    .cm-selectPeacock {
+        float: left;
+    }
+
+    .cm-underlineIpt {
+        border-bottom: 1px solid #dbdbdb;
+        border-top: 0px;
+        border-left: 0px;
+        border-right: 0px;
+        outline: none;
+    }
+
+    .row-css {
+        margin: 0 0 0 21px;
+    }
+
+    .row-css > div {
+        margin: 10px 0;
+    }
+</style>
+<div id="page">
+    <!--    <div id="pageHeader">-->
+    <!--        <p>当前位置：<span>工作台</span></p>-->
+    <!--    </div>-->
+    <div id="pageBody">
+        <div id="pageContent">
+            <!--            <div id="sysUserLoginContainer">-->
+            <!--                <div id="robotImgContainer">-->
+            <!--                    <img id="robotImg" src="${ctx.contextPath}/static/imgs/mainNew/robot.png"/>-->
+            <!--                </div>-->
+            <!--                <p class="tipWrap">Hi！<span id="timeMsg">${timeMsg!}</span><span class="uname">${Session["session_key_user_name"]!"admin"}</span>    欢迎使用北京银行规则引擎（BRE）    上次登录时间 <span>${loginDate!}</span></p>-->
+            <!--            </div>-->
+            <div class="infoBox">
+                <div class="infoItem realTime">
+                    <img class="executeImg" src="${ctx.contextPath}/static/imgs/mainNew/icon_zsszxqk.png" alt="">
+                    <div class="executeInfo">
+                        <p class="infoTitle">准实时执行情况</p>
+                        <div class="numBox">
+                            <div style="display: flex;flex-wrap: wrap;align-items: baseline;flex-grow: 1">
+                                <span class="successNum">50</span>次成功
+                            </div>
+                            <hr class="splitLabel"/>
+                            <div style="display: flex;flex-wrap: wrap;align-items: baseline;flex-grow: 1">
+                                <span class="failNum">15</span>次失败
+                            </div>
+<!--                            <hr class="splitLabel"/>
+                            <div style="display: flex;flex-wrap: wrap;align-items: baseline;flex-grow: 1">
+                                <span class="executeNum">15</span>次正在执行
+                            </div>-->
+                        </div>
+                    </div>
+                </div>
+                <div class="infoItem">
+                    <img class="executeImg" src="${ctx.contextPath}/static/imgs/mainNew/icon_zssyqk.png" alt="">
+                    <div class="executeInfo">
+                        <p class="infoTitle">准实时调用情况</p>
+                        <div class="numBox">
+                            <div style="display: flex;flex-wrap: wrap;align-items: baseline;flex-grow: 1">
+                                <span class="diaoyongNum">20</span>次
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="infoItem top3">
+                    <img class="executeImg" src="${ctx.contextPath}/static/imgs/mainNew/icon_zssgz.png" alt="">
+                    <div class="executeInfo">
+                        <p class="infoTitle">准实时规则top3</p>
+                        <div class="numBox">
+                            <span style="display: flex">
+                                <div style="display: flex;align-items: baseline">
+                                    <span class="top1">50</span>次
+                                </div>
+                                <div style="display: flex; flex-direction: column;">
+                                    <div class="topTitle">链家黑名单</div>
+                                    <div class="topTitle">模型1</div>
+                                </div>
+                            </span>
+                            <hr class="splitLabel"/>
+                            <span style="display: flex">
+                                <div style="display: flex;align-items: baseline">
+                                    <span class="top1">50</span>次
+                                </div>
+                                <div style="display: flex; flex-direction: column;">
+                                    <div class="topTitle">链家黑名单</div>
+                                    <div class="topTitle">模型1</div>
+                                </div>
+                            </span>
+                            <hr class="splitLabel"/>
+                            <span style="display: flex">
+                                <div style="display: flex;align-items: baseline">
+                                    <span class="top1">50</span>次
+                                </div>
+                                <div style="display: flex; flex-direction: column;">
+                                    <div class="topTitle">链家黑名单</div>
+                                    <div class="topTitle">模型1</div>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="gatherBox">
+                <div class="gatherItem modelSummary">
+                    <p class="gatherTitle">模型汇总</p>
+                    <ul>
+                        <li>
+                            <span class="model">
+                                规则模型
+                                <span class="modelNum">10</span>
+                            </span>
+                            <span class="edition">
+                                版本
+                                <span class="editionNum">10</span>
+                            </span>
+                        </li>
+                        <li>
+                            <span class="model">
+                                评分模型
+                                <span class="modelNum">10</span>
+                            </span>
+                            <span class="edition">
+                                版本
+                                <span class="editionNum">10</span>
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="gatherItem modelEnable">
+                    <p class="gatherTitle">模型启用</p>
+                    <ul>
+                        <li>
+                            <span class="model">
+                                已启用
+                                <span class="modelNum">10</span>
+                            </span>
+                            <span class="edition">
+                                未启用
+                                <span class="editionNum">10</span>
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="gatherItem offlineTask">
+                    <p class="gatherTitle">离线任务</p>
+                    <ul>
+                        <li><span class="model">已启用<span class="modelNum">10</span></span><span
+                                class="edition">正在执行<span class="editionNum">10</span></span></li>
+                        <li><span class="model">已完成<span class="modelNum">10</span></span><span class="edition">异常<span
+                                class="editionNum">10</span></span></li>
+
+                    </ul>
+                </div>
+            </div>
+            <div class="workbentchCt container-fluid">
+                <div class="chart1 ruleExecution col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                    <div id="ruleExecution"></div>
+                    <select name="" class="selBox scenes" onchange="main.selectChange( 'RuleExecution', 'folderId', this.options[ this.options.selectedIndex ].value )">
+                        <option value="0">全部场景</option>
+                        <option value="1">其他场景</option>
+                    </select>
+                    <select name="" class="selBox selBank mechanism" onchange="main.selectChange( 'RuleExecution', 'deptId', this.options[ this.options.selectedIndex ].value )">
+                        <option value="0">中关村分行</option>
+                        <option value="1">其他分行</option>
+                    </select>
+                    <!--                    <ul class="selBox">-->
+                    <!--                        <span>全部场景</span>-->
+
+                    <!--                        <li></li>-->
+                    <!--                        <li></li>-->
+                    <!--                    </ul>-->
+                </div>
+                <div class="chartsBox">
+                    <div class="chart2 numberOfCalls col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                        <select name="" class="selBox scenes selBank" onchange="main.selectChange( 'NumberOfCallsLeft', 'folderId', this.options[ this.options.selectedIndex ].value )">
+                            <option value="0">全部场景</option>
+                            <option value="1">其他场景</option>
+                        </select>
+                        <div id="numberOfCallsLeft"></div>
+                    </div>
+                    <div class="chart2 chart3 col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                        <select name="" class="selBox scenes" onchange="main.selectChange( 'NumberOfCallsRight', 'folderId', this.options[ this.options.selectedIndex ].value )">
+                            <option value="0">全部场景</option>
+                            <option value="1">其他场景</option>
+                        </select>
+                        <select name="" class="selBox selBank mechanism " onchange="main.selectChange( 'NumberOfCallsRight', 'deptId', this.options[ this.options.selectedIndex ].value, this.options.selectedIndex )">
+                            <option value="0">中关村分行</option>
+                            <option value="1">其他分行</option>
+                        </select>
+                        <div id="numberOfCallsRight"></div>
+                    </div>
+                </div>
+
+                <!--                <div class="table1 col-xs-12 col-sm-12 col-md-12 col-lg-12">-->
+                <!--                    <div class="tblWrap">-->
+                <!--                        <div class="cm-tableTopSearch">-->
+                <!--                            <span style="padding: 5px 5px;float:left;margin: 10px 0;">规则所属类别:</span>-->
+                <!--                            <div class="cm-searchGroup">-->
+                <!--                                <div class="cm-select cm-mdSel" id="select1"></div>-->
+                <!--                                &lt;!&ndash;                <input type="text" class="cm-selGrpIpt" /> &ndash;&gt;-->
+                <!--                                &lt;!&ndash;                <input type="button" class="cm-searchBtn" /> &ndash;&gt;-->
+                <!--                            </div>-->
+                <!--                        </div>-->
+                <!--                        <table id="table1"></table>-->
+                <!--                    </div>-->
+                <!--                </div>-->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 对话框HTML -->
+<#include "/commonFoot.html">
+<script src="static/js/main.js"></script>
+<!--<script src="static/js/mainCopy.js"></script>-->
+</body>
+</html>

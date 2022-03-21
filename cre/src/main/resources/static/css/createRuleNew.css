@@ -1,0 +1,81 @@
+#pageBody {
+    width: 100%;
+    height:80%;
+    height: calc(100% - 34px);
+}
+#pageHeader {
+	/*margin: 10px 25px;*/
+}
+#pageContent {
+    height: 100%;
+    width: 100%;
+	/*padding: 10px 25px;*/
+	border: 10px solid transparent;
+}
+.indexBox {
+	margin-bottom: 20px;
+	background: #fff;
+	border-radius:5px;
+}
+.indexTitle {
+	font-size: 16px;
+	color: #2E3D55;
+	letter-spacing: 0;
+	padding: 20px;
+	border-bottom: 1px solid #EAEDF1;
+	margin: 0;
+}
+.indexDescribeTxt {
+	padding: 20px;
+	margin: 0;
+}
+/*快捷入口*/
+.indexChildBoxWrapper {
+	display: flex;
+	padding: 0 20px 20px 0;
+}
+.indexChildBoxWrapper .indexChildBox {
+	flex-grow: 1;
+	height: 276px;
+	border: 1px solid #EEF2F7;
+	border-radius: 10px;
+	margin: 0 0 0 20px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+.indexChildBoxWrapper .indexChildBox img {
+	width: 80px;
+	height: 80px;
+	margin-top: 20px;
+}
+.indexChildBoxWrapper .indexChildBox button {
+	height: 32px;
+	margin: 20px 0 10px 0;
+	outline: none;
+}
+.indexChildBoxWrapper .indexChildBox button:visited {
+	outline: none;
+}
+
+/*流程图*/
+.indexPicBoxWarp {
+	display: flex;
+}
+.indexPicBoxWarp .indexBox {
+	flex:1;
+	height: 281px;
+}
+.indexPicBoxWarp .indexBox:nth-child(1) {
+	margin-right: 20px;
+}
+.indexPicBoxWarp .indexBox:nth-child(3) {
+	padding: 0 20px 20px 20px;
+	align-self: center;
+}
+.indexPicBoxWarp .indexBox img{
+	display: block;
+	margin: 0 auto;
+	padding: 20px;
+}

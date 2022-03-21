@@ -1,0 +1,220 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+html,body{
+    height: 100%;
+    width: 100%;
+    background:#f4f4f4;
+    text-align:center;
+    font-family: "Helvetica Neue", Helvetica, Tahoma, Arial, 'Microsoft Yahei', 'PingFang SC', 'Hiragino Sans GB', 'WenQuanYi Micro Hei', sans-serif;
+}
+.banner{
+
+    display: inline-block;
+    width: 60%;
+    height: 60%;
+    position: fixed;
+    left:0;
+    top:0;
+}
+.mainContent {
+    text-align: center;
+    width:100%;
+    height:100%;
+    background: url(../imgs/login/pic_bg.png) no-repeat;
+    background-size: 100% 100%;
+}
+
+.insideleft{
+    background:transparent url(../imgs/login/computer.png) no-repeat center -30px;
+    background-size:100% auto;
+    float: left;
+    z-index:5;
+    width:55%;
+    max-width: 789px;
+    height: 523px;
+    left:150px;
+    top:70px;
+}
+.titleBox{
+    padding-left: 103px;
+    text-align: left;
+    margin-bottom:40px;
+}
+.titleBox>img{
+    vertical-align: middle;
+}
+.title{
+    font-size: 34px;
+    font-weight: bold;
+    color: #02BABC;
+    display: inline-block;
+    vertical-align: middle;
+}
+.title>span{
+    font-size: 12px;
+    display: block;
+}
+.insideright{
+    width: 580px;
+    right: 0;
+    top: 210px;
+    text-align: center;
+    border-radius: 15px;
+    position: absolute;
+}
+
+.foot{
+    text-align: center;
+    background-size: 100% auto;
+    width: 500px;
+    height: 68px;
+    bottom: 0;
+    position: fixed;
+    right: 0;
+}
+
+#copyright{
+    font-size:12px;
+    color:#666;
+}
+#copyright span{
+    display: block;
+}
+#btn{
+    background-image: linear-gradient(45deg, #3BBB9F 0%, #00AFB7 100%);
+    color: white;
+    border: none;
+    border-radius:20px;
+    width: 370px;
+    height: 44px;
+    margin-top: 60px;
+    font-size: 14px;
+    cursor:pointer;
+    font-family: "Helvetica Neue", Helvetica, Tahoma, Arial, 'Microsoft Yahei', 'PingFang SC', 'Hiragino Sans GB', 'WenQuanYi Micro Hei', sans-serif;
+}
+#btn:active,#btn:focus{
+    border:none;
+    outline:none;
+    box-shadow:none;
+}
+.p1{
+    padding:0 45px;
+}
+.iptwrap{
+    border-bottom: 1px solid #ced2d2;
+    border-radius:2px;
+    height: 40px;
+    margin:0 auto;
+    margin-bottom:20px;
+    width: 370px;
+}
+.iptwrap.active{
+    border-bottom:1px solid #1e79f0;
+}
+.licon {
+    width: 39px;
+    height: 39px;
+    display: inline-block;
+    background: url(../imgs/login/icon_user.png) no-repeat center center;
+}
+.psdIcon{
+    background: url(../imgs/login/icon_code.png) no-repeat center center;
+}
+.lname {
+    margin: 14px 0 7px;
+    font-size:16px;
+    color: #676767;
+}
+input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill{
+    background:#fff;
+    -webkit-box-shadow: 0 0 0px 1000px white inset;
+    color:#999;
+}
+.iptwrap input {
+    float: right;
+    width: calc(100% - 50px);
+    line-height: 39px;
+    outline: none;
+    border: none;
+    padding: 0 5px;
+    color: #333;
+    font-size: 16px;
+}
+.rbWrap{
+    font-size: 14px;
+    color: #676767;
+    padding: 0 10px;
+    height: 30px;
+    width: 350px;
+    margin: 0 auto;
+    margin-top:27px;
+}
+.errorTxt {
+    display: block;
+    margin-top:20px;
+    font-size:16px;
+    color:#3780f1;
+}
+.forgetPwd{
+    float: right;
+}
+.rbPsd > i {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    background: transparent url(../imgs/login/checkbox_normal.png) no-repeat center center;
+    top: 5px;
+    position: relative;
+}
+.rbPsd > input:checked + i{
+    background: transparent url(../imgs/login/checkbox_checked.png) no-repeat center center;
+}
+#remenberPsd {
+    position: absolute;
+    left: -99999px;
+}
+.rbPsd {
+    position: relative;
+    top: -6px;
+    cursor:pointer;
+    float:left;
+}
+
+.w1366 .mainContent{
+    top:15%;
+}
+.w1366 .foot{
+    height:48px;
+}
+.w1366 #copyright{
+    line-height:48px;
+}
+
+.w1024 .mainContent {
+    padding: 0 5%;
+    width:auto;
+    top:20%;
+}
+.w1024 .insideleft{
+    width:55%;
+}
+.w1024 .insideright {
+    height: 400px;
+    width:365px;
+}
+.w1024 .title {
+    margin-top: 40px;
+    margin-bottom: 25px;
+}
+.w1024 #btn{
+    margin-top:10px;
+}
+.w1024 .foot{
+    height:36px;
+}
+.w1024 #copyright{
+    line-height:36px;
+}

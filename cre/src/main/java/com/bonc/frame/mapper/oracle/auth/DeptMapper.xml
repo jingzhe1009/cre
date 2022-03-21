@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bonc.frame.mapper.auth.DeptMapper">
+
+    <resultMap id="BaseResultMap" type="com.bonc.frame.entity.auth.Dept">
+        <id column="DEPT_ID" property="deptId" jdbcType="VARCHAR"/>
+        <result column="DEPT_NAME" property="deptName" jdbcType="VARCHAR"/>
+        <result column="DEPT_DESC" property="deptDesc" jdbcType="VARCHAR"/>
+        <result column="PARENT_ID" property="parentId" jdbcType="VARCHAR"/>
+        <result column="USER_NUM" property="userNum" jdbcType="INTEGER"/>
+        <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP"/>
+        <result column="CREATE_PERSON" property="createPerson" jdbcType="VARCHAR"/>
+        <result column="UPDATE_PERSON" property="updatePerson" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="BaseResultMap2" extends="BaseResultMap" type="com.bonc.frame.entity.auth.DeptExt">
+        <result column="PARENT_NAME" property="parentName" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+      DEPT_ID,DEPT_NAME, DEPT_DESC, PARENT_ID,USER_NUM,CREATE_DATE, UPDATE_DATE, CREATE_PERSON,UPDATE_PERSON
+    </sql>
+
+    <sql id="Base_Column_List2">
+      a.DEPT_ID,
+      a.DEPT_NAME,
+      a.DEPT_DESC,
+      a.PARENT_ID,
+      a.USER_NUM,
+      a.CREATE_DATE,
+      a.UPDATE_DATE,
+      a.CREATE_PERSON,
+      a.UPDATE_PERSON
+    </sql>
+
+
+    <insert id="insert" parameterType="com.bonc.frame.entity.auth.Dept">
+        insert into CRE_AUTH_DEPT
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="deptId != null">
+                DEPT_ID,
+            </if>
+            <if test="deptName != null">
+                DEPT_NAME,
+            </if>
+            <if test="deptDesc != null">
+                DEPT_DESC,
+            </if>
+            <if test="parentId != null">
+                PARENT_ID,
+            </if>
+            <if test="userNum != null">
+                USER_NUM,
+            </if>
+            <if test="createDate != null">
+                CREATE_DATE,
+            </if>
+            <if test="updateDate != null">
+                UPDATE_DATE,
+            </if>
+            <if test="createPerson != null">
+                CREATE_PERSON,
+            </if>
+            <if test="updatePerson != null">
+                UPDATE_PERSON,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="deptId != null">
+                #{deptId,jdbcType=VARCHAR},
+            </if>
+            <if test="deptName != null">
+                #{deptName,jdbcType=VARCHAR},
+            </if>
+            <if test="deptDesc != null">
+                #{deptDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="parentId != null">
+                #{parentId,jdbcType=VARCHAR},
+            </if>
+            <if test="userNum != null">
+                #{userNum,jdbcType=INTEGER},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateDate != null">
+                #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createPerson != null">
+                #{createPerson,jdbcType=VARCHAR},
+            </if>
+            <if test="updatePerson != null">
+                #{updatePerson,jdbcType=VARCHAR},
+            </if>
+        </trim>
+
+    </insert>
+
+    <select id="listByDeptName" resultMap="BaseResultMap2" parameterType="map">
+        select
+        <include refid="Base_Column_List2"/>, b.DEPT_NAME as "PARENT_NAME"
+        from
+        CRE_AUTH_DEPT a
+        left join CRE_AUTH_DEPT b
+        on a.PARENT_ID = b.DEPT_ID
+        where 1=1
+        <if test="deptName != null and '' != deptName">
+            <bind name="deptNamePattern" value="'%' + _parameter.deptName + '%'"/>
+            and a.DEPT_NAME like #{deptNamePattern}
+        </if>
+    </select>
+
+    <select id="list" resultMap="BaseResultMap" >
+        select
+        <include refid="Base_Column_List"/>
+        from CRE_AUTH_DEPT
+    </select>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from CRE_AUTH_DEPT
+        where DEPT_ID = #{deptId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="findByName" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from CRE_AUTH_DEPT
+        where DEPT_NAME = #{deptName,jdbcType=VARCHAR}
+    </select>
+    <select id="nameList" resultType="map">
+        select
+        DEPT_ID,DEPT_NAME
+        from CRE_AUTH_DEPT
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        delete from CRE_AUTH_DEPT
+        where DEPT_ID = #{deptId,jdbcType=VARCHAR} or PARENT_ID = #{deptId,jdbcType=VARCHAR}
+    </delete>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.bonc.frame.entity.auth.Dept">
+        update CRE_AUTH_DEPT
+        <set>
+            <if test="deptId != null">
+                DEPT_ID=#{deptId,jdbcType=VARCHAR},
+            </if>
+            <if test="deptName != null">
+                DEPT_NAME=#{deptName,jdbcType=VARCHAR},
+            </if>
+            <if test="deptDesc != null">
+                DEPT_DESC=#{deptDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="parentId != null">
+                PARENT_ID= #{parentId,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                CREATE_DATE=#{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateDate != null">
+                UPDATE_DATE=#{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createPerson != null">
+                CREATE_PERSON=#{createPerson,jdbcType=VARCHAR},
+            </if>
+            <if test="updatePerson != null">
+                UPDATE_PERSON=#{updatePerson,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where DEPT_ID = #{deptId,jdbcType=VARCHAR}
+    </update>
+
+</mapper>

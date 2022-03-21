@@ -1,0 +1,155 @@
+<link href="${ctx.contextPath}/static/plugin/DataTables/RowReorder-1.2.3/css/rowReorder.dataTables.min.css"
+      rel="stylesheet"/>
+<link href="${ctx.contextPath}/static/css/ruleSet/ruleSetVersion.css" rel="stylesheet"/>
+
+<!-- 新建/修改 规则集版本 弹框 -->
+<div class="modal fade" id="rulSetVersionAlertModal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <!--弹框标题-->
+            <div class="modal-header"><h4 class="modal-title"></h4></div>
+            <!--字段-->
+            <div class="modal-body">
+                <form class="form-horizontal" data-validator-option="{stopOnError:true}">
+                    <div class="form-group">
+                        <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3"><i class="mustIcon">*</i>规则集名称</label>
+                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                            <input disabled id="ruleSetHeaderName" type="text" class="form-control">
+                        </div>
+                    </div>
+<!--                    <div class="form-group">-->
+<!--                        <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3"><i class="mustIcon">*</i>版本号</label>-->
+<!--                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">-->
+<!--                            <input id="ruleSetVersion" col-name="version" type="text" class="form-control"-->
+<!--                                   data-rule="版本号:required;">-->
+<!--                        </div>-->
+<!--                    </div>-->
+                    <div id="saveTypeDiv" class="form-group hide">
+                        <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3"><i class="mustIcon">*</i>更新方式</label>
+                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 saveTypeRadio">
+                            <div class="radio">
+                                <label><input type="radio" name="saveTypeRadio" value="1" checked>仅更新</label>
+                            </div>
+                            <div class="radio">
+                                <label><input type="radio" name="saveTypeRadio" value="0">存为新版本</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3">版本描述</label>
+                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                            <textarea id="ruleSetVersionDes" col-name="ruleSetDesc" type="text"
+                                      class="form-control" data-rule="版本描述:length[0~255, true]"></textarea>
+                        </div>
+                    </div>
+                </form>
+
+                <div id="versionRulesContainer">
+                    <div class="selfAdaptionLeft">
+                        <div></div>
+                    </div>
+                    <div class="selfAdaptionRight">
+                        <button id="addVersionRule" class="btn btn-primary" type="button">添加新规则</button>
+                    </div>
+                    <div style="clear: both"></div>
+                    <div id="versionRulesTableContainer">
+                        <table id="actionTbl">
+                            <thead>
+                            <tr>
+                                <th>序号</th>
+                                <th>规则名</th>
+                                <th>终止规则集</th>
+                                <th>终止流程</th>
+                                <th>规则条件</th>
+                                <th>规则结果</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                        </table>
+                        <div class="prompt">(注：表格中的每行首列可拖拽进行排序！)</div>
+                    </div>
+                </div>
+            </div>
+            <!--操作按钮-->
+            <div class="modal-footer">
+                <button id="saveRuleSetVersion" type="button" class="btn btn-primary">保存</button>
+                <button id="versionModalCancel" type="button" class="btn btn-minor" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 规则 配置详情 -->
+<div class="modal fade" id="ruleConfigModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title"><span class="actDT">规则配置</span></h4>
+            </div>
+            <div class="modal-body">
+                <!-- 规则id,名称 -->
+                <input type="hidden" id="editRuleIdx"/>
+                <input type="hidden" id="ruleUid" value="">
+                <div class="cdtdp1"><span class="cm-blueLeft">规则名称：</span>
+                    <input type="text" class="textL actDetailName" id="actDetailName"/>
+                </div>
+                <!--条件-->
+                <div>
+                    <span class="cm-blueLeft">规则条件：</span>
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <div class="topTxt">
+                                <span>满足以下</span>
+                                <div id="actRuleConnSel"></div>
+                                <span>条件</span>
+                            </div>
+                        </div>
+                        <div class="panel-body rglWrap">
+                            <!-- 条件配置内容 -->
+                            <div class="actLeftRuleCdt"></div>
+                            <button class="cdtRuleAddBtn butD">新增条件</button>
+                        </div>
+                    </div>
+                </div>
+                <!--结果-->
+                <div>
+                    <span class="cm-blueLeft">执行结果：</span>
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <div class="topTxt">
+                                <span>规则命中结果</span>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" name="isEndAction" class="mt15"> 是否终止规则集
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" name="isEndFlow" class="mt15"> 是否终止流程
+                                </label>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <!-- 结果配置内容 -->
+                            <div class="actRightRuleCdt rglWrap"></div>
+                            <button class="cdtResuleAddBtn butD">新增结果</button>
+                        </div>
+                    </div>
+                </div>
+                <!--配置预览-->
+                <div>
+                    <button id="seePreviewBtn" class="butD seePreview">查看配置预览</button>
+                    <div class="cdtRstWrap"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="saveActRuleTotbl" type="button" class="btn btn-primary">保存</button>
+                <button id="cslActCfg" type="button" class="btn btn-minor" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 规则配置->表达式 -->
+<#include "/pages/rule/expRuleConfig.html">
+<!--引入指标-->
+<#include "/pages/kpi/importKpi.html">
+
+

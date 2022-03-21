@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bonc.frame.mapper.resource.VariableGroupMapper">
+    <resultMap id="BaseResultMap" type="com.bonc.frame.entity.commonresource.VariableGroup">
+        <result column="VARIABLE_GROUP_ID" property="variableGroupId" jdbcType="VARCHAR"/>
+        <result column="VARIABLE_GROUP_NAME" property="variableGroupName" jdbcType="VARCHAR"/>
+        <result column="CREATE_PERSON" property="createPerson" jdbcType="VARCHAR"/>
+        <result column="UPDATE_PERSON" property="updatePerson" jdbcType="VARCHAR"/>
+        <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        VARIABLE_GROUP_ID, VARIABLE_GROUP_NAME, CREATE_PERSON, UPDATE_PERSON,
+        CREATE_DATE, UPDATE_DATE
+    </sql>
+
+    <!-- 检验 variableGroupName 唯一性 -->
+    <select id="countByName" parameterType="java.util.Map" resultType="int">
+        select count(*) as "count" from CRE_PUB_VARIABLE_GROUP
+        where VARIABLE_GROUP_NAME = #{variableGroupName,jdbcType=VARCHAR}
+        <if test="variableGroupId != null">
+            and VARIABLE_GROUP_ID != #{variableGroupId,jdbcType=VARCHAR}
+        </if>
+    </select>
+    
+    <select id="countGroupById" parameterType="java.lang.String" resultType="int">
+        SELECT count(1) from CRE_PUB_VARIABLE_GROUP WHERE VARIABLE_GROUP_ID = #{variableGroupId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="countVariablesById" parameterType="java.lang.String" resultType="int">
+        SELECT count(1) from CRE_VARIABLE WHERE VARIABLE_GROUP_ID = #{variableGroupId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="select" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"></include>
+        FROM CRE_PUB_VARIABLE_GROUP
+        WHERE VARIABLE_GROUP_NAME like CONCAT(CONCAT('%',#{variableGroupName,jdbcType=VARCHAR}),'%')
+        ORDER BY CREATE_DATE DESC
+    </select>
+
+    <select id="getVariableGroupById" parameterType="map" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"></include>
+        FROM CRE_PUB_VARIABLE_GROUP
+        WHERE 1=1
+        <if test="variableGroupId != null">
+            and VARIABLE_GROUP_ID = #{variableGroupId,jdbcType=VARCHAR}
+        </if>
+        <if test="variableGroupName != null">
+            and VARIABLE_GROUP_NAME = #{variableGroupName,jdbcType=VARCHAR}
+        </if>
+        ORDER BY CREATE_DATE DESC
+    </select>
+
+    <select id="listAll" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT
+        VARIABLE_GROUP_ID, VARIABLE_GROUP_NAME
+        FROM CRE_PUB_VARIABLE_GROUP
+        ORDER BY CREATE_DATE DESC
+    </select>
+
+    <insert id="insertSelective" parameterType="com.bonc.frame.entity.commonresource.VariableGroup">
+        insert into CRE_PUB_VARIABLE_GROUP
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="variableGroupId != null">
+                VARIABLE_GROUP_ID,
+            </if>
+            <if test="variableGroupName != null">
+                VARIABLE_GROUP_NAME,
+            </if>
+            <if test="createPerson != null">
+                CREATE_PERSON,
+            </if>
+            <if test="createDate != null">
+                CREATE_DATE,
+            </if>
+            <if test="updatePerson != null">
+                UPDATE_PERSON,
+            </if>
+            <if test="updateDate != null">
+                UPDATE_DATE,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="variableGroupId != null">
+                #{variableGroupId,jdbcType=VARCHAR},
+            </if>
+            <if test="variableGroupName != null">
+                #{variableGroupName,jdbcType=VARCHAR},
+            </if>
+            <if test="createPerson != null">
+                #{createPerson,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatePerson != null">
+                #{updatePerson,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null">
+                #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.bonc.frame.entity.commonresource.VariableGroup">
+        update CRE_PUB_VARIABLE_GROUP
+        <set>
+            <if test="variableGroupName != null">
+                VARIABLE_GROUP_NAME = #{variableGroupName,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null">
+                UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatePerson != null">
+                UPDATE_PERSON = #{updatePerson,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where VARIABLE_GROUP_ID = #{variableGroupId,jdbcType=VARCHAR}
+    </update>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+       delete from CRE_PUB_VARIABLE_GROUP
+        where VARIABLE_GROUP_ID = #{variableGroupId,jdbcType=VARCHAR}
+    </delete>
+
+</mapper>

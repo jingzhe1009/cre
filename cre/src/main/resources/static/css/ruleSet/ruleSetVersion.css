@@ -1,0 +1,140 @@
+#versionRulesContainer{
+    border: 1px dashed #ccc;
+    padding: 8px 5px;
+}
+#rulSetVersionAlertModal .selfAdaptionLeft{
+    float: left;
+    width: 100%;
+}
+#rulSetVersionAlertModal .selfAdaptionLeft>div{
+    margin-right: 105px;
+}
+#rulSetVersionAlertModal .selfAdaptionRight{
+    position: relative;
+    float: right;
+    width: 100px;
+    margin-left: -100px;
+}
+#rulSetVersionAlertModal .selfAdaptionRight button{
+    height: 30px;
+}
+#rulSetVersionAlertModal .radio{
+    display: inline-block;
+    margin-right: 20px;
+}
+#rulSetVersionAlertModal .modal-body{
+    max-height: 450px;
+    overflow: auto;
+}
+#versionRulesTableContainer{
+    margin-top: 8px;
+}
+.prompt{
+    color: #EA644A;
+    text-indent: 1em;
+}
+/*规则配置页面*/
+#ruleConfigModal .modal-dialog{
+    width: 1100px;
+}
+#ruleConfigModal .modal-body{
+    max-height: 550px;
+    overflow: auto;
+}
+#ruleConfigModal .modal-body>div{
+    margin: 0 0 12px 0;
+}
+#ruleConfigModal .panel{
+    border-color: #eee;
+    margin: 10px 0 0 20px;
+}
+#ruleConfigModal .panel-heading{
+    border-bottom: none;
+    background-color: #f6f7fb;
+    color: #666;
+}
+.topTxt>div{
+    display: inline-block;
+}
+.topTxt>span{
+    margin-right: 10px;
+}
+/*连接条件*/
+.topTxt .cm-selectPeacock {
+    margin-right: 10px;
+    width: 70px;
+}
+.topTxt .cm-selectOption.form-control[readonly]{
+    background:transparent;
+}
+/*规则配置行*/
+div.leftCdtRuleCdt, div.cdtRuleCdtOpt, div.rightCdtRuleCdt,div.valType,div.inputSel, div.lineCdtRuleCdt, div.lineRuleCdtOpt  {
+    width: 200px;
+    float: left;
+    margin: 8px 20px 0 0;
+}
+.actLeftRuleCdt > div,.actRightRuleCdt > div, .lineRuleCdt > div{
+    clear: both;
+    min-height: 50px;
+}
+.inputVal {
+    float: left;
+    margin-top: 8px;
+    margin-right:15px;
+}
+.cdtValue {
+    height: 30px;
+    padding: 5px 8px;
+}
+.cdtResultIptWrap > input {
+    height: 30px;
+    padding: 0 8px;
+}
+.actLeftRuleCdt .cm-selectOption.form-control[readonly],
+.actRightRuleCdt .cm-selectOption.form-control[readonly]{
+    color:#666;
+    background-color:transparent;
+    border-bottom:1px solid #ddd;
+}
+.cdtResultIptWrap {
+    float: left;
+    margin-right: 20px;
+}
+.delActRow {
+    width: 50px;
+    height: 50px;
+    display: inline-block;
+    background:#444;
+    cursor:pointer;
+    float: left;
+    background:transparent url(../../imgs/common/optIcons.png) no-repeat left top;
+    background-position: -14px -25px;
+}
+/*规则表格图标*/
+.optIcon {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    margin: 0 5px;
+    background:transparent url(../../imgs/common/optIcons.png) no-repeat left top;
+    top: 5px;
+    position: relative;
+    cursor:pointer;
+}
+.iconDel{
+    background-position: -284px -43px;
+}
+.iconDel:hover{
+    background-position: -260px -43px;
+}
+.iconEdit {
+    background-position: -31px -77px;
+}
+.iconEdit:hover {
+    background-position: -1px -77px;
+}
+#ruleConfigModal .butD{
+    float:none;
+    margin-top: 10px;
+}
+

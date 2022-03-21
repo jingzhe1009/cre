@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bonc.frame.mapper.oracle.aBTest.ABSwitchMapper">
+
+    <resultMap id="ABSwitchMap" type="com.bonc.frame.entity.aBTest.ABSwitch">
+        <id column="A_RULE_ID" property="aRuleId" jdbcType="VARCHAR"/>
+        <result column="B_RULE_ID" property="bRuleId" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="ABSwitchPathMap" type="com.bonc.frame.entity.aBTest.ABSwitchPath">
+        <id column="LOG_ID" property="logId" jdbcType="VARCHAR"/>
+        <result column="HEAD_RULE_ID" property="headRuleId" jdbcType="VARCHAR"/>
+        <result column="P_RULE_ID" property="pRuleId" jdbcType="VARCHAR"/>
+        <result column="N_RULE_ID" property="nRuleId" jdbcType="VARCHAR"/>
+        <result column="OPERATE_PERSON" property="operatePerson" jdbcType="VARCHAR"/>
+        <result column="OPERATE_TIME" property="operateTime" jdbcType="TIMESTAMP"/>
+        <result column="OPERATE_USER_JOB_NUMBER" property="operateUserJobNumber" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!-- 查询模型A的映射结果 -->
+    <select id="getSwitchByHeader" parameterType="string" resultMap="ABSwitchMap">
+        SELECT A_RULE_ID, B_RULE_ID FROM CRE_AB_SWITCH WHERE A_RULE_ID = #{aRuleId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="isInHeader" parameterType="string" resultType="int">
+        SELECT count(1) FROM CRE_AB_SWITCH WHERE A_RULE_ID = #{aRuleId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="isInTail" parameterType="string" resultType="int">
+        SELECT count(1) FROM CRE_AB_SWITCH WHERE B_RULE_ID = #{aRuleId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getSwitchByTail" parameterType="string" resultMap="ABSwitchMap">
+        SELECT * FROM CRE_AB_SWITCH WHERE B_RULE_ID = #{aRuleId,jdbcType=VARCHAR}
+    </select>
+
+    <insert id="insertSwitch" parameterType="com.bonc.frame.entity.aBTest.ABSwitch">
+        insert into CRE_AB_SWITCH
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="aRuleId != null">
+                A_RULE_ID,
+            </if>
+            <if test="bRuleId != null">
+                B_RULE_ID,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="aRuleId != null">
+                #{aRuleId,jdbcType=VARCHAR},
+            </if>
+            <if test="bRuleId != null">
+                #{bRuleId,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateSwitch" parameterType="com.bonc.frame.entity.aBTest.ABSwitch">
+        update CRE_AB_SWITCH
+        <set>
+            <if test="bRuleId != null">
+                B_RULE_ID = #{bRuleId,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where A_RULE_ID = #{aRuleId,jdbcType=VARCHAR}
+    </update>
+
+    <insert id="insertSwitchPath" parameterType="com.bonc.frame.entity.aBTest.ABSwitchPath">
+        insert into CRE_AB_SWITCH_PATH
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="logId != null">
+                LOG_ID,
+            </if>
+            <if test="headRuleId != null">
+                HEAD_RULE_ID,
+            </if>
+            <if test="pRuleId != null">
+                P_RULE_ID,
+            </if>
+            <if test="nRuleId != null">
+                N_RULE_ID,
+            </if>
+            <if test="operatePerson != null">
+                OPERATE_PERSON,
+            </if>
+            <if test="operateTime != null">
+                OPERATE_TIME,
+            </if>
+            <if test="operateUserJobNumber != null">
+                OPERATE_USER_JOB_NUMBER,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="logId != null">
+                #{logId,jdbcType=VARCHAR},
+            </if>
+            <if test="headRuleId != null">
+                #{headRuleId,jdbcType=VARCHAR},
+            </if>
+            <if test="pRuleId != null">
+                #{pRuleId,jdbcType=VARCHAR},
+            </if>
+            <if test="nRuleId != null">
+                #{nRuleId,jdbcType=VARCHAR},
+            </if>
+            <if test="operatePerson != null">
+                #{operatePerson,jdbcType=VARCHAR},
+            </if>
+            <if test="operateTime != null">
+                #{operateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="operateUserJobNumber != null">
+                #{operateUserJobNumber,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+
+</mapper>

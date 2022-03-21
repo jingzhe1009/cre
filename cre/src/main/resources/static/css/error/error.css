@@ -1,0 +1,30 @@
+@charset "utf-8";
+/* CSS Document */
+html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, a, img, dl, dt, dd, ol, ul, li, form, table { margin:0; padding:0; border:0; list-style:none;}
+div, span, h1, h2, h3, h4, h5, h6, p, a, img, dl, dt, dd, ol, ul, li, form { overflow:hidden;}
+input { margin:0; padding:0; }
+h1,h2,h3,h4,h5,h6 {font-size:12px; font-weight:normal;}
+a,area{blr:expression(this.onFocus=this.blur())}
+a { text-decoration:none;}
+a:hover { text-decoration:underline;}
+html, body { font-family:"微软雅黑", "宋体" }
+.boxcenter { margin:0 auto;}
+
+
+
+.gxj_404Block { width:372px; height:303px; padding-left:276px; padding-top:105px; background:url(../../imgs/error/404bg.png) top left no-repeat; position:absolute; top:50%; left:50%; margin:-180px 0 0 -324px;}
+.gxj_404Block h2 { font-size:24px; color:#333; line-height:50px;}
+.gxj_404Block p { line-height:26px; font-size:14px; color:#666;}
+
+.gxj_500Block { 
+/* 	width:372px;  */
+	height:303px; padding-left:288px; padding-top:55px; background:url(../../imgs/error/500bg.png) left 20px no-repeat; position:absolute; top:50%; left:50%; margin:-180px 0 0 -324px;}
+.gxj_500Block h2 { font-size:24px; color:#333; line-height:50px;}
+.gxj_500Block p { line-height:26px; font-size:14px; color:#666;}
+
+
+.gxj_503Block { width:372px; height:303px; padding-left:289px; padding-top:90px; background:url(../../imgs/error/503bg.png) left 30px  no-repeat; position:absolute; top:50%; left:50%; margin:-180px 0 0 -324px;}
+.gxj_503Block h2 { font-size:24px; color:#333; line-height:50px;}
+.gxj_503Block p { line-height:26px; font-size:14px; color:#666;}
+
+

@@ -1,0 +1,17 @@
+Action校验测试案例:
+Right：
+[a]=[b]
+[a]=[b];
+[a]=[b];[a]=[b]
+[a]=[b];[a]=[b];
+[WDJZ_CUBE1_YPJ]=[IS_DEV]
+fun()
+fun([a])
+fun([a]);
+
+Error:
+[a]
+[a]==[b]
+1
+1+
+1+++1

@@ -1,0 +1,86 @@
+#pageBody {
+    width: 100%;
+    height:80%;
+    height: calc(100% - 34px);
+    border: 1px solid transparent;
+}
+#pageContent {
+    height:calc( 100%-11px);
+    width: 100%;
+}
+#ruleSetPageContent{
+    padding:14px 24px;
+    margin:10px 10px 1px;
+    background: #fff;
+    border-radius:5px;
+}
+#ruleSetVersionTableAlertModal .dropdown-menu,
+#ruleSetPageContent .dropdown-menu {
+    width: 100%;
+    overflow: auto;
+    max-height: 280px;
+}
+.tableIcon{
+    /*color: #3280FC;*/
+    color: var(--colorNormal);
+    margin: 0 0 10px 0px;
+}
+.mustIcon{
+    color: #EA644A;
+    text-align: center;
+    vertical-align: middle;
+    padding-right: 5px;
+}
+.icon-caret-down, .dropdown-menu li, .switch input{
+    cursor: pointer;
+}
+.selfAdaptionLeft{
+    float: left;
+    width: 100%;
+}
+/*规则集列表搜索栏 两栏布局*/
+.ruleSetContainer .selfAdaptionLeft .input-group{
+    width: 250px;
+    float: left;
+    margin: 0 10px 10px 0;
+}
+.ruleSetContainer .selfAdaptionLeft>div{
+    margin-right: 175px;
+}
+.ruleSetContainer .selfAdaptionRight{
+    position: relative;
+    float: right;
+    width: 170px;
+    margin-left: -170px;
+}
+/*弹框内 两栏布局*/
+#ruleSetVersionTableAlertModal .selfAdaptionLeft .input-group{
+    width: 200px;
+    float: left;
+    margin: 0 10px 10px 0;
+}
+#ruleSetVersionTableAlertModal .selfAdaptionLeft>div{
+    margin-right: 175px;
+}
+#ruleSetVersionTableAlertModal .selfAdaptionRight{
+    position: relative;
+    float: right;
+    width: 170px;
+    margin-left: -170px;
+}
+#ruleSetTable, #ruleSetTypeTable, #ruleSetVersionTable{
+    margin: 8px 0;
+}
+/* 时间组件小按钮背景色设置 */
+.input-group-addon{
+    background-color: #fff;
+    cursor: pointer;
+}
+.cron_msg{
+    color: #EA644A;
+    cursor: pointer;
+    padding-top: 8px;
+}
+#ruleSetVersionTableAlertModal .switch>input {
+    position: absolute;
+}

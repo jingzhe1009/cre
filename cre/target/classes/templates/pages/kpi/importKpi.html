@@ -1,0 +1,193 @@
+<link href="${ctx.contextPath}/static/css/kpi/importKpi.css" rel="stylesheet"/>
+
+<!--模型引入指标选择页面-->
+<div class="modal fade" id="importKpiAlertModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header"><h4 class="modal-title">指标选择</h4></div>
+            <div class="modal-body">
+                <div class="selfAdaptionLeft">
+                    <div>
+                        <div class="input-group">
+                            <input data-col="kpiGroupName" type="text" class="form-control" placeholder="指标组">
+                            <label class="input-control-icon-right" data-toggle="dropdown">
+                                <i class="icon icon-caret-down "></i>
+                            </label>
+                            <ul class="dropdown-menu pull-right importKpi_kpiGroupList"></ul>
+                        </div>
+                        <div class="input-group">
+                            <input data-col="kpiName" type="text" class="form-control" placeholder="指标名称">
+                        </div>
+                        <div class="input-group">
+                            <input id="importKpi_kpiTypeInput" data-col="kpiType" type="text" class="form-control"
+                                   placeholder="数据类型">
+                            <label class="input-control-icon-right" data-toggle="dropdown">
+                                <i class="icon icon-caret-down "></i>
+                            </label>
+                            <ul class="dropdown-menu pull-right importKpi_kpiTypeList"></ul>
+                        </div>
+                        <div class="input-group">
+                            <input id="importKpi_fetchTypeInput" data-col="fetchType" type="text" class="form-control"
+                                   placeholder="取值方式">
+                            <label class="input-control-icon-right" data-toggle="dropdown">
+                                <i class="icon icon-caret-down "></i>
+                            </label>
+                            <ul class="dropdown-menu pull-right importKpi_fetchTypeList">
+                                <li fetchType="0"><a>数据源</a></li>
+                                <li fetchType="1"><a>接口</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="selfAdaptionRight">
+                    <button class="btn btn-primary importKpiSearch" type="button">搜索</button>
+                </div>
+                <div style="clear:both;"></div>
+                <div class="importKpi_kpiTableContainer">
+                    <table id="importKpi_kpiTable"></table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="kpiImportConfirm" type="button" class="btn btn-primary">确定</button>
+                <button id="kpiImportCancel" type="button" class="btn btn-minor" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--指标详情弹框-->
+<div class="modal fade" id="importKpiDetailAlertModal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header"><h4 class="modal-title">指标详情</h4></div>
+            <div class="modal-body">
+                <!-- 1 指标通用基础信息 -->
+                <div class="kpiDefBase">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3">指标组：</label>
+                            <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                                <input col-name="kpiGroupName" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3">指标名称：</label>
+                            <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                                <input col-name="kpiName" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3">指标编码：</label>
+                            <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                                <input col-name="kpiCode" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3">数据类型：</label>
+                            <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                                <select id="kpiTypeSel" col-name="kpiType" class="form-control"></select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3">指标描述：</label>
+                            <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                                <textarea col-name="kpiDesc" type="text" class="form-control"></textarea>
+                            </div>
+                        </div>
+                        <div id="kpiSourceTypeRadioDiv" class="form-group">
+                            <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3">取数方式：</label>
+                            <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7 kpiSourceTypeRadio">
+                                <div class="radio">
+                                    <label><input disabled checked type="radio" name="kpiSourceTypeRadio"
+                                                  typeValue="0">数据源</label>
+                                </div>
+                                <div class="radio">
+                                    <label><input disabled type="radio" name="kpiSourceTypeRadio"
+                                                  typeValue="1">接口</label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- 2-1 数据源字段类型 -->
+                <div class="kpiSourceWrapper kpiDBWrapper">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3">数据源：</label>
+                            <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                                <input col-name="dbAlias" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3">表：</label>
+                            <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                                <input col-name="tableCode" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3">取值字段：</label>
+                            <div class="input-control has-icon-right col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                                <input col-name="kpiValueSourceName" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3">限定字段：</label>
+                            <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                                <div class="panel kpiLimitColsPanel">
+                                    <div class="panel-heading">
+                                        <div class="topTxt">
+                                            <span>满足以下</span>
+                                            <!--                                            <div class="limitColsConnSel"></div>-->
+                                            <span>条件</span>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div id="dsKpiLimitContent">
+                                            <div id="dsKpiLimitCols">
+                                                <!--col start-->
+                                                <!--col end-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- 2-2 接口类型 -->
+                <div class="kpiSourceWrapper kpiApiWrapper">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3">接口：</label>
+                            <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                                <input col-name="apiName" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3">取值字段：</label>
+                            <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                                <input col-name="kpiValueSourceName" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3">限定字段：</label>
+                            <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                                <div id="" class="panel kpiLimitColsPanel">
+                                    <div class="panel-heading">
+                                        <div class="topTxt"><span>接口参数列表</span></div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <table id="kpiDef_apiParamsTable"></table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="closeKpiDetail" type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+            </div>
+        </div>
+    </div>
+</div>

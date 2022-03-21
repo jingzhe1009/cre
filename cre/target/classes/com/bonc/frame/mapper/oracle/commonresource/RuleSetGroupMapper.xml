@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bonc.frame.mapper.resource.RuleSetGroupMapper">
+    <resultMap id="BaseResultMap" type="com.bonc.frame.entity.commonresource.RuleSetGroup">
+        <result column="RULE_SET_GROUP_ID" property="ruleSetGroupId" jdbcType="VARCHAR"/>
+        <result column="RULE_SET_GROUP_NAME" property="ruleSetGroupName" jdbcType="VARCHAR"/>
+        <result column="CREATE_PERSON" property="createPerson" jdbcType="VARCHAR"/>
+        <result column="UPDATE_PERSON" property="updatePerson" jdbcType="VARCHAR"/>
+        <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        RULE_SET_GROUP_ID, RULE_SET_GROUP_NAME, CREATE_PERSON, UPDATE_PERSON,
+        CREATE_DATE, UPDATE_DATE
+    </sql>
+
+    <!-- 检验 ruleSetGroupName 唯一性 -->
+    <select id="countByName" parameterType="java.util.Map" resultType="int">
+        select count(*) as "count" from CRE_PUB_RULE_SET_GROUP
+        where RULE_SET_GROUP_NAME = #{ruleSetGroupName,jdbcType=VARCHAR}
+        <if test="ruleSetGroupId != null">
+            and RULE_SET_GROUP_ID != #{ruleSetGroupId,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <!-- 检查当前组是否被使用 -->
+    <select id="countGroupUsed" parameterType="java.lang.String" resultType="int">
+        SELECT COUNT(1) FROM CRE_PUB_RULE_SET_HEADER
+        WHERE RULE_SET_GROUP_ID = #{ruleSetGroupId,jdbcType=VARCHAR}
+    </select>
+    
+    <select id="countGroupById" parameterType="java.lang.String" resultType="int">
+        SELECT count(1) from CRE_PUB_RULE_SET_GROUP WHERE RULE_SET_GROUP_ID = #{ruleSetGroupId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getByGroupName" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"></include>
+        FROM CRE_PUB_RULE_SET_GROUP
+        WHERE RULE_SET_GROUP_NAME like CONCAT(CONCAT('%',#{ruleSetGroupName,jdbcType=VARCHAR}),'%')
+        ORDER BY CREATE_DATE DESC
+    </select>
+
+    <insert id="insertSelective" parameterType="com.bonc.frame.entity.commonresource.RuleSetGroup">
+        insert into CRE_PUB_RULE_SET_GROUP
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="ruleSetGroupId != null">
+                RULE_SET_GROUP_ID,
+            </if>
+            <if test="ruleSetGroupName != null">
+                RULE_SET_GROUP_NAME,
+            </if>
+            <if test="createPerson != null">
+                CREATE_PERSON,
+            </if>
+            <if test="createDate != null">
+                CREATE_DATE,
+            </if>
+            <if test="updatePerson != null">
+                UPDATE_PERSON,
+            </if>
+            <if test="updateDate != null">
+                UPDATE_DATE,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="ruleSetGroupId != null">
+                #{ruleSetGroupId,jdbcType=VARCHAR},
+            </if>
+            <if test="ruleSetGroupName != null">
+                #{ruleSetGroupName,jdbcType=VARCHAR},
+            </if>
+            <if test="createPerson != null">
+                #{createPerson,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatePerson != null">
+                #{updatePerson,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null">
+                #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.bonc.frame.entity.commonresource.RuleSetGroup">
+        update CRE_PUB_RULE_SET_GROUP
+        <set>
+            <if test="ruleSetGroupName != null">
+                RULE_SET_GROUP_NAME = #{ruleSetGroupName,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null">
+                UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatePerson != null">
+                UPDATE_PERSON = #{updatePerson,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where RULE_SET_GROUP_ID = #{ruleSetGroupId,jdbcType=VARCHAR}
+    </update>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        delete from CRE_PUB_RULE_SET_GROUP
+        where RULE_SET_GROUP_ID = #{ruleSetGroupId,jdbcType=VARCHAR}
+    </delete>
+
+</mapper>

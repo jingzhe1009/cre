@@ -1,0 +1,269 @@
+<#include "/commonHead.html">
+<link href="${ctx.contextPath}/static/css/log/log.css" rel="stylesheet"/>
+<link href="${ctx.contextPath}/static/css/migration/migration.css" rel="stylesheet"/>
+<div id="page">
+    <div id="pageHeader">
+        <p>当前位置：<span>日志管理</span></p>
+    </div>
+    <div id="pageBody">
+        <div id="pageContent">
+            <div id="logContainer">
+                <!--Tab-->
+                <div id="logTabContainer">
+                    <ul class="nav nav-tabs" id="logTab">
+                        <li class="active" log-type="2"><a data-toggle="tab">模型执行日志</a></li>
+                        <li log-type="4"><a data-toggle="tab">模型操作日志</a></li>
+                        <li log-type="1"><a data-toggle="tab">操作日志</a></li>
+                        <li log-type="3"><a data-toggle="tab">接口日志</a></li>
+                        <li log-type="0"><a data-toggle="tab">系统日志</a></li>
+                        <li log-type="5"><a data-toggle="tab">导入导出日志</a></li>
+                    </ul>
+                </div>
+
+                <!--搜索框-->
+                <div id="logSearchContainer">
+                    <div class="logSearch_left">
+                        <div id="special">
+
+                            <!--0 系统日志独有-->
+                            <div class="input-group syslog">
+                                <input data-col="userName" type="text" class="form-control" placeholder="用户名称">
+                                <label class="input-control-icon-right"><i class="icon icon-user "></i></label>
+                            </div>
+                            <div class="input-group syslog">
+                                <input data-col="operateType" type="text" class="form-control"
+                                       placeholder="操作类型（请选择）">
+                                <label class="input-control-icon-right" data-toggle="dropdown"><i
+                                        class="icon icon-caret-down"></i></label>
+                                <ul class="dropdown-menu pull-right">
+                                    <li><a>全部</a></li>
+                                    <li><a>登录</a></li>
+                                    <li><a>登出</a></li>
+                                </ul>
+                            </div>
+
+                            <!--1 操作日志独有-->
+                            <div class="input-group operateLog">
+                                <input data-col="userName" type="text" class="form-control" placeholder="用户名称">
+                                <label class="input-control-icon-right"><i class="icon icon-user "></i></label>
+                            </div>
+                            <div class="input-group operateLog">
+                                <input data-col="operateType" type="text" class="form-control" placeholder="操作类型（请选择）">
+                                <label class="input-control-icon-right" data-toggle="dropdown"><i
+                                        class="icon icon-caret-down "></i></label>
+                                <ul class="dropdown-menu pull-right">
+                                    <li><a>全部</a></li>
+                                    <li><a>新建接口</a></li>
+                                    <li><a>修改接口</a></li>
+                                    <li><a>删除接口</a></li>
+                                    <li><a>新建参数</a></li>
+                                    <li><a>修改参数</a></li>
+                                    <li><a>删除参数</a></li>
+                                    <!--                                    <li><a>新建模型</a></li>-->
+                                    <!--                                    <li><a>修改模型</a></li>-->
+                                    <!--                                    <li><a>删除模型</a></li>-->
+                                </ul>
+                            </div>
+
+                            <!--4 模型操作日志独有-->
+                            <div class="input-group modelOperateLog">
+                                <input data-col="folderId" type="text" class="form-control folderIdInput"
+                                       placeholder="场景名称">
+                                <label class="input-control-icon-right" data-toggle="dropdown">
+                                    <i class="icon icon-caret-down"></i></label>
+                                <ul class="dropdown-menu pull-right ruleFolderList"></ul>
+                            </div>
+                            <div class="input-group modelOperateLog">
+                                <input data-col="modelName" type="text" class="form-control ruleIdInput"
+                                       placeholder="模型名称（请先选择场景）">
+                                <label class="input-control-icon-right" data-toggle="dropdown">
+                                    <i class="icon icon-caret-down"></i></label>
+                                <ul class="dropdown-menu pull-right ruleList"></ul>
+                            </div>
+                            <div class="input-group modelOperateLog">
+                                <input data-col="version" type="text" class="form-control ruleVersionInput"
+                                       placeholder="版本号（请先选择模型）">
+                                <label class="input-control-icon-right" data-toggle="dropdown">
+                                    <i class="icon icon-caret-down"></i></label>
+                                <ul class="dropdown-menu pull-right versionList"></ul>
+                            </div>
+                            <div class="input-group modelOperateLog">
+                                <input id="modelOperateTypeInput" data-col="operateType" type="text"
+                                       class="form-control" placeholder="操作类型（请选择）">
+                                <label class="input-control-icon-right" data-toggle="dropdown">
+                                    <i class="icon icon-caret-down "></i></label>
+                                <ul class="dropdown-menu pull-right modelOperateTypeList">
+                                    <li operateType="0"><a>创建模型头</a></li>
+                                    <li operateType="1"><a>删除模型</a></li>
+                                    <li operateType="2"><a>删除版本</a></li>
+                                    <li operateType="3"><a>暂存</a></li>
+                                    <li operateType="4"><a>提交</a></li>
+                                    <li operateType="5"><a>发布</a></li>
+                                    <li operateType="6"><a>启用</a></li>
+                                    <li operateType="7"><a>停用</a></li>
+                                    <li operateType="8"><a>克隆</a></li>
+                                    <li operateType="9"><a>修改模型头信息</a></li>
+                                </ul>
+                            </div>
+
+                            <!--2 规则日志独有-->
+                            <div class="input-group ruleLog">
+                                <input data-col="folderId" type="text" class="form-control folderIdInput"
+                                       placeholder="场景名称">
+                                <label class="input-control-icon-right" data-toggle="dropdown">
+                                    <i class="icon icon-caret-down"></i></label>
+                                <ul class="dropdown-menu pull-right ruleFolderList"></ul>
+                            </div>
+                            <div class="input-group ruleLog">
+                                <input data-col="ruleName" type="text" class="form-control ruleIdInput"
+                                       placeholder="模型名称（请先选择场景）">
+                                <label class="input-control-icon-right" data-toggle="dropdown">
+                                    <i class="icon icon-caret-down"></i></label>
+                                <ul class="dropdown-menu pull-right ruleList"></ul>
+                            </div>
+                            <div class="input-group ruleLog">
+                                <input data-col="ruleId" type="text" class="form-control ruleVersionInput"
+                                       placeholder="版本号（请先选择模型）">
+                                <label class="input-control-icon-right" data-toggle="dropdown">
+                                    <i class="icon icon-caret-down"></i></label>
+                                <ul class="dropdown-menu pull-right versionList"></ul>
+                            </div>
+                            <div class="input-group ruleLog">
+                                <input data-col="state" type="text" class="form-control" placeholder="执行状态（请选择）">
+                                <label class="input-control-icon-right stateMoreBtn" data-toggle="dropdown">
+                                    <i class="icon icon-caret-down "></i></label>
+                                <ul id="log_ruleStateList" class="dropdown-menu pull-right">
+                                    <li col-value="" value="全部"><a>全部</a></li>
+                                    <!--                                    <li col-value="1" value="执行中"><a>执行中</a></li>-->
+                                    <li col-value="2" value="执行完成"><a>执行完成</a></li>
+                                    <li col-value="-1" value="异常"><a>异常</a></li>
+                                </ul>
+                            </div>
+
+                            <!--3 接口日志独有-->
+                            <div class="input-group apiLog">
+                                <input data-col="apiName" type="text" class="form-control" placeholder="接口名称">
+                                <label class="input-control-icon-right"><i class="icon icon-link "></i></label>
+                            </div>
+
+                            <!--5 导入导出独有-->
+                            <div class="input-group importAndExportLog">
+                                <input id="importAndExportOperateTypeInput" data-col="operateType" type="text"
+                                       class="form-control" placeholder="操作类型">
+                                <label class="input-control-icon-right" data-toggle="dropdown">
+                                    <i class="icon icon-caret-down "></i></label>
+                                <ul class="dropdown-menu pull-right" id="importAndExportOperateTypeList">
+                                    <li><a>全部</a></li>
+                                    <li operateType="import" typeValue="导入"><a>导入</a></li>
+                                    <li operateType="export" typeValue="导出"><a>导出</a></li>
+                                </ul>
+                            </div>
+                            <div class="input-group importAndExportLog">
+                                <input id="importAndExportResultInput" data-col="success" type="text"
+                                       class="form-control" placeholder="操作结果">
+                                <label class="input-control-icon-right" data-toggle="dropdown">
+                                    <i class="icon icon-caret-down "></i></label>
+                                <ul class="dropdown-menu pull-right" id="importAndExportResultList">
+                                    <li><a>全部</a></li>
+                                    <li result="1" typeValue="成功"><a>成功</a></li>
+                                    <li result="-1" typeValue="失败"><a>失败</a></li>
+                                </ul>
+                            </div>
+                            <div class="input-group importAndExportLog">
+                                <input id="modelImportStrategyInput" data-col="modelImportStrategy" type="text" class="form-control" placeholder="导入策略">
+                                <label class="input-control-icon-right" data-toggle="dropdown"><i class="icon icon-caret-down "></i></label>
+                                <ul class="dropdown-menu pull-right" id="modelImportStrategyList">
+                                    <li><a>全部</a></li>
+                                    <li result="removal" typeValue="冲突重命名"><a>冲突重命名</a></li>
+                                    <li result="upLine" typeValue="冲突新建版本"><a>冲突新建版本</a></li>
+                                </ul>
+                            </div>
+
+                        </div>
+                        <!--公共搜索条件-->
+                        <div id="common">
+                            <div class="input-group date form-datetime" data-date=""
+                                 data-date-format="dd MM yyyy - HH:ii:ss p"
+                                 data-link-field="dtp_input1">
+                                <!--readonly=""-->
+                                <input data-col="startDate" class="form-control" size="16" type="text" value=""
+                                       placeholder="开始时间">
+                                <span class="input-group-addon"><span class="icon-remove"></span></span>
+                                <span class="input-group-addon"><span class="icon-calendar"></span></span>
+                            </div>
+                            <div class="input-group date form-datetime" data-date=""
+                                 data-date-format="dd MM yyyy - HH:ii:ss p"
+                                 data-link-field="dtp_input2">
+                                <!--readonly=""-->
+                                <input data-col="endDate" class="form-control" size="16" type="text" value=""
+                                       placeholder="结束时间">
+                                <span class="input-group-addon"><span class="icon-remove"></span></span>
+                                <span class="input-group-addon"><span class="icon-calendar"></span></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="logSearch_right">
+                        <button id="searchBtn" class="btn btn-primary" type="button">搜索</button>
+                    </div>
+                    <div style="clear:both;"></div>
+                </div>
+
+                <!--日志展示-->
+                <hr>
+                <div id="logContent">
+                    <table id="logTable"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--日志详情弹框-->
+<div class="modal fade" id="logDetailModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                    <span class="sr-only">关闭</span></button>
+                <h4 class="modal-title">详情</h4>
+            </div>
+            <div id="logModalBody" class="modal-body">
+                <textarea id="logModalBodyText"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--规则执行日志详情-->
+<div class="modal fade" id="ruleLogDetailModal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                        class="sr-only">关闭</span></button>
+                <h4 class="modal-title">执行详情</h4>
+            </div>
+            <form class="form" data-validator-option="{theme:'yellow_right_effect',stopOnError:true}">
+                <div id="ruleLogDetailModalBody" class="modal-body row-css"></div>
+            </form>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<#include "/pages/migration/importReport.html">
+<#include "/pages/migration/exportReport.html">
+<#include "/commonFoot.html">
+<script type="text/javascript">
+    var pubFolderId = '${pubFolderId!}';
+</script>
+<script src="${ctx.contextPath}/static/js/log/log.js"></script>
+<script src="${ctx.contextPath}/static/js/migration/export.js"></script>
+<script src="${ctx.contextPath}/static/js/migration/import.js"></script>
+</body>
+</html>

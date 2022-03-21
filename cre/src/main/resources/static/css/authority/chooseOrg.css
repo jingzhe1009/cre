@@ -1,0 +1,21 @@
+#chooseOrgAlertModal .modal-body {
+    margin-bottom: 15px;
+}
+#userMsgContainer {
+    margin: 0 0 8px 0;
+}
+#chooseOrgAlertModal .resourceTableIcon {
+    display: inline-block;
+    width: 80px;
+    color: #F1A325;
+}
+#chooseOrg_userName {
+    display: inline;
+    width: 250px;
+    height: 28px;
+    outline: none;
+}
+#chooseOrgTreeContainer {
+    border: 1px dashed #ccc;
+    padding: 10px 8px;
+}

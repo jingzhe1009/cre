@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bonc.frame.mapper.auth.GroupMapper">
+
+    <resultMap id="BaseResultMap" type="com.bonc.frame.entity.auth.Group">
+        <id column="GROUP_ID" property="groupId" jdbcType="VARCHAR"/>
+        <result column="GROUP_NAME" property="groupName" jdbcType="VARCHAR"/>
+        <result column="GROUP_DESC" property="groupDesc" jdbcType="VARCHAR"/>
+        <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP"/>
+        <result column="CREATE_PERSON" property="createPerson" jdbcType="VARCHAR"/>
+        <result column="UPDATE_PERSON" property="updatePerson" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+      GROUP_ID,GROUP_NAME, GROUP_DESC, CREATE_DATE, UPDATE_DATE, CREATE_PERSON,UPDATE_PERSON
+    </sql>
+    <insert id="insert" parameterType="com.bonc.frame.entity.auth.Group">
+        insert into CRE_AUTH_GROUP
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="groupId != null">
+                GROUP_ID,
+            </if>
+            <if test="groupName != null">
+                GROUP_NAME,
+            </if>
+            <if test="groupDesc != null">
+                GROUP_DESC,
+            </if>
+            <if test="createDate != null">
+                CREATE_DATE,
+            </if>
+            <if test="updateDate != null">
+                UPDATE_DATE,
+            </if>
+            <if test="createPerson != null">
+                CREATE_PERSON,
+            </if>
+            <if test="updatePerson != null">
+                UPDATE_PERSON,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="groupId != null">
+                #{groupId,jdbcType=VARCHAR},
+            </if>
+            <if test="groupName != null">
+                #{groupName,jdbcType=VARCHAR},
+            </if>
+            <if test="groupDesc != null">
+                #{groupDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateDate != null">
+                #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createPerson != null">
+                #{createPerson,jdbcType=VARCHAR},
+            </if>
+            <if test="updatePerson != null">
+                #{updatePerson,jdbcType=VARCHAR},
+            </if>
+        </trim>
+
+    </insert>
+
+    <select id="listByGroupName" resultMap="BaseResultMap" parameterType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from CRE_AUTH_GROUP
+        where 1=1
+        <if test="groupName != null and '' != groupName">
+            <bind name="groupNamePattern" value="'%' + _parameter.groupName + '%'" />
+            and GROUP_NAME like #{groupNamePattern}
+        </if>
+    </select>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from CRE_AUTH_GROUP
+        where GROUP_ID = #{groupId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="findByName" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from CRE_AUTH_GROUP
+        where GROUP_NAME = #{groupName,jdbcType=VARCHAR}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        delete from CRE_AUTH_GROUP
+        where GROUP_ID = #{groupId,jdbcType=VARCHAR}
+    </delete>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.bonc.frame.entity.auth.Group">
+        update CRE_AUTH_GROUP
+        <set>
+            <if test="groupId != null">
+                GROUP_ID=#{groupId,jdbcType=VARCHAR},
+            </if>
+            <if test="groupName != null">
+                GROUP_NAME=#{groupName,jdbcType=VARCHAR},
+            </if>
+            <if test="groupDesc != null">
+                GROUP_DESC=#{groupDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                CREATE_DATE=#{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateDate != null">
+                UPDATE_DATE=#{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createPerson != null">
+                CREATE_PERSON=#{createPerson,jdbcType=VARCHAR},
+            </if>
+            <if test="updatePerson != null">
+                UPDATE_PERSON=#{updatePerson,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where GROUP_ID = #{groupId,jdbcType=VARCHAR}
+    </update>
+
+</mapper>

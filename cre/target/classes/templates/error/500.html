@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8"></meta>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"></meta>
+    <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
+    <link rel="icon" href="${ctx.contextPath}/static/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="${ctx.contextPath}/static/favicon.ico" type="image/x-icon" />
+    <link href="${ctx.contextPath}/static/css/error/error.css" type="text/css" rel="stylesheet">
+    <title>风控规则引擎2.0</title>
+<head>
+<body>
+    <!-- 500 error -->
+    <div class="gxj_500Block gxj_500bg">
+        <h2>应用程序中的服务器错误</h2>
+        <p>运行时错误</p>
+        <p>说明：处理您的请求时发生异常，已终止请求</p>
+    </div>
+    <!-- // 500 error -->
+    <div style="display:none;">
+        ${exception!}
+    </div>
+</body>
+</html>

@@ -1,0 +1,59 @@
+#pageBody {
+    width: 100%;
+    height: 80%;
+    height: calc(100% - 34px);
+    border: 1px solid transparent;
+}
+#pageContent {
+    height: calc(100% - 11px);
+    width: 100%;
+}
+#metadataConfigContainer {
+    padding: 14px 24px;
+    margin: 10px 10px 25px 10px;
+    background: #fff;
+    border-radius: 5px;
+}
+/*返回按钮*/
+#returnButton {
+    height: 30px;
+    position: relative;
+    margin-top: 30px;
+}
+#returnButton button {
+    position: absolute;
+    right: 15px;
+}
+
+/*head*/
+#metadataConfigHeader{
+    position: relative;
+    margin-top: 10px;
+}
+#metadataConfig_operate{
+    position: absolute;
+    right: 5px;
+    top: 0px;
+}
+/*搜索框*/
+#metadata_searchInputGroup{
+    width: 250px;
+}
+#metadataConfig_searchBtn{
+    height: 32px;
+}
+
+/*表字段列表*/
+#tableColsTable .checkbox label{
+    vertical-align: middle;
+}
+#tableColsTable .checkbox input{
+    cursor: pointer;
+}
+/*必填项图标*/
+.mustIcon{
+    color: #EA644A;
+    text-align: center;
+    vertical-align: middle;
+    padding-right: 5px;
+}

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.bonc.frame.mapper.staticdata.StaticDataMapper">
+   
+   <resultMap id="data" type="com.bonc.frame.entity.staticdata.StaticDataVo">
+  			<result property="key" column="key"/>
+  			<result property="value" column="value"/>
+  			<result property="remarks" column="remarks"/>
+  			<result property="remarks1" column="remarks1"/>
+  			<result property="remarks2" column="remarks2"/>
+  			<result property="remarks3" column="remarks3"/>
+   </resultMap>
+   
+   
+   <!-- 查询数据库连接配置码表 -->
+   <select id="dbType" resultMap="data">
+        select 
+        a.db_type as "key",
+        a.db_name as "value",
+        a.db_str as "remarks",
+        a.db_driver_class_path as "remarks1",
+        a.db_test_sql as "remarks2" 
+        from CRE_DB_CONNECT_STR a
+   </select>
+   
+    
+   <!-- 查询系统变量 -->
+   <!--<select id="sysVariable" resultMap="data">
+        SELECT 
+        VALUE_ID as "key",
+        VALUE_REMARKS as "value"
+		FROM brm_rule_variable_value
+   </select>-->
+</mapper>

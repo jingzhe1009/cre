@@ -1,0 +1,283 @@
+<#include "/commonHead.html">
+<link href="${ctx.contextPath}/static/plugin/zui1.8.1/lib/chosen/chosen.min.css" rel="stylesheet">
+<link href="${ctx.contextPath}/static/css/aBTest/aBTest.css" rel="stylesheet"/>
+<div id="page">
+    <div id="pageHeader">
+        <p>当前位置：<span>ABTest</span></p>
+    </div>
+    <div id="pageBody">
+        <div id="pageContent">
+            <div id="ABTestPageContainer">
+                <!--搜索框-->
+                <div id="ABTestPage_SearchContainer">
+                    <div class="selfAdaptionLeft">
+                        <div>
+                            <div class="input-group">
+                                <input data-col="aBTestName" type="text" class="form-control" placeholder="测试名称"/>
+                            </div>
+                            <div class="input-group">
+                                <input data-col="folderName" type="text" class="form-control" placeholder="场景名称"/>
+                            </div>
+                            <div class="input-group">
+                                <input data-col="aModelName" type="text" class="form-control" placeholder="模型名称"/>
+                            </div>
+                            <div class="input-group status">
+                                <input data-col="status" type="text" class="form-control" placeholder="测试状态（请选择）"/>
+                                <label class="input-control-icon-right" data-toggle="dropdown"><i class="icon icon-caret-down"></i></label>
+                                <ul class="dropdown-menu pull-right"></ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="selfAdaptionRight">
+                        <button class="btn btn-primary ABTestSearch" type="button" onclick="abTestModal.initSearch();">搜索</button>
+                        <button class="btn btn-primary" type="button" onclick="abTestModal.showABTest(0);">添加</button>
+                    </div>
+                    <div style="clear:both;"></div>
+                </div>
+
+                <!--内容展示表格-->
+                <div id="ABTestTable_box">
+                    <table id="ABTestTable"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 新建/编辑ABTest -->
+<div class="modal fade" id="ABTestEditAlertModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header"><h4 class="modal-title"> 新建 ABTest </h4></div>
+            <div class="modal-body">
+                <form class="form-horizontal" data-validator-option="{stopOnError:true}">
+                    <div class="form-group">
+                        <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3"><i class="mustIcon">*</i>测试名称</label>
+                        <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                            <input id="ABTest_TestName" type="text" col-name="aBTestName" class="form-control" data-rule="测试名称:required;"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3"><i class="mustIcon">*</i>场景名称</label>
+                        <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                            <select id="ABTest_packageInput"
+                                    data-placeholder="请选择/输入场景名称"
+                                    class="chosen-select form-control"
+                                    col-name="folderId"
+                                    onchange="abTestModal.handleFolderChange( $( this ) )"
+                            ></select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3"><i class="mustIcon">*</i>模型名称</label>
+                        <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                            <select id="ABTest_moduleInput"
+                                    data-placeholder="请选择/输入场景名称"
+                                    class="chosen-select form-control"
+                                    col-name="ruleName"
+                                    onchange="abTestModal.handleModelChange( $( this ) )"
+                            ></select>
+                        </div>
+                    </div>
+
+                    <div id="ABTest_AVersion_FormGroup" class="form-group">
+                        <label for="ABTest_AVersion_FormGroup" class="col-xs-3 col-sm-3 col-md-3 col-lg-3"><i class="mustIcon">*</i>A模型版本</label>
+                        <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                            <select id="ABTest_AModel" class="form-control" col-name="aRuleId" data-rule="A模型版本:required;"></select>
+                        </div>
+                    </div>
+
+                    <div id="ABTest_BVersion_FormGroup" class="form-group">
+                        <label for="ABTest_BVersion_FormGroup" class="col-xs-3 col-sm-3 col-md-3 col-lg-3"><i class="mustIcon">*</i>B模型版本</label>
+                        <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                            <select id="ABTest_BModel" class="form-control" col-name="bRuleId" data-rule="B模型版本:required;"></select>
+                        </div>
+                    </div>
+
+                    <div id="ABTest_AFetchStartTime_FormGroup" class="form-group">
+                        <label for="ABTest_AFetchStartTime_FormGroup" class="col-xs-3 col-sm-3 col-md-3 col-lg-3"><i class="mustIcon">*</i>A模型测试开始时间</label>
+                        <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                            <div class="input-group date form-datetime" data-date-format="dd MM yyyy" >
+                                <input col-name="aFetchStartTime" class="form-control" size="16" type="text" placeholder="A模型测试开始时间" />
+                                <span class="input-group-addon"><span class="icon-remove"></span></span>
+                                <span class="input-group-addon"><span class="icon-calendar"></span></span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div id="ABTest_describe_FormGroup" class="form-group">
+                        <label for="ABTest_describe_FormGroup" class="col-xs-3 col-sm-3 col-md-3 col-lg-3">描述</label>
+                        <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                            <textarea id="ABTest_desc" class="form-control" type="text" col-name="aBTestDesc" data-rule="描述:length[~255, true];"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="abTestModal.saveABTest();">保存</button>
+                <button type="button" class="btn btn-minor" data-dismiss="modal" onclick="abTestModal.clearEdit();">取消
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ABTest 查看详情 -->
+<div class="modal fade" id="ABTestDetailAlertModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header"><h4 class="modal-title"> 查看 ABTest 详情 </h4></div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3">测试名称</label>
+                        <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                            <input type="text" col-name="aBTestName" class="form-control"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3">产品名称</label>
+                        <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                            <input type="text" col-name="productName" class="form-control"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3">场景名称</label>
+                        <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                            <input type="text" col-name="folderName" class="form-control"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3">模型名称</label>
+                        <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                            <input type="text" col-name="aModelName" class="form-control"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3">A模型版本号</label>
+                        <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                            <input type="text" col-name="aModelVerson" class="form-control"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3">B模型版本号</label>
+                        <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                            <input type="text" col-name="bModelVerson" class="form-control"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3">A模型开始测试时间</label>
+                        <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                            <input type="text" col-name="aFetchStartTime" class="form-control"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3">测试状态</label>
+                        <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                            <input type="text" col-name="status" class="form-control"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3">开始时间</label>
+                        <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                            <input type="text" col-name="startTime" class="form-control"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3">结束时间</label>
+                        <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                            <input type="text" col-name="endTime" class="form-control"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3">已测试时长（天）</label>
+                        <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                            <input type="text" col-name="duration" class="form-control"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3">已测试数量（个）</label>
+                        <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                            <input type="text" col-name="bExecuteCount" class="form-control"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3">描述</label>
+                        <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                            <textarea type="text" col-name="aBTestDesc" class="form-control"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3">异常信息</label>
+                        <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                            <textarea type="text" col-name="exception" class="form-control"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3">创建人</label>
+                        <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                            <input type="text" col-name="createPerson" class="form-control"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3">创建时间</label>
+                        <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                            <input type="text" col-name="createDate" class="form-control"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3">更新人</label>
+                        <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                            <input type="text" col-name="updatePerson" class="form-control"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3">更新时间</label>
+                        <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                            <input type="text" col-name="updateDate" class="form-control"/>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="abTestModal.clearDetail();">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<#include "/pages/common/loading.html">
+<#include "/pages/common/confirmAlert.html">
+<#include "/commonFoot.html">
+
+<script type="text/javascript">
+    var abTestStatus = ${abTestStatus![]};
+</script>
+<script src="${ctx.contextPath}/static/plugin/zui1.8.1/lib/chosen/chosen.min.js"></script>
+<script src="${ctx.contextPath}/static/js/aBTest/aBTest.js"></script>
+<script src="${ctx.contextPath}/static/js/common/confirmAlert.js"></script>
+<script src="${ctx.contextPath}/static/js/common/loading.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,39 @@
+#folder_commonParamContainer{
+    padding:14px 0;
+    margin:10px 10px 1px;
+}
+#folder_commonParamContainer .icon-caret-down, #folder_paramGroupSelector li{
+    cursor: pointer;
+}
+#folder_commonParamContainer .resourceTableIcon{
+    /*color: #3280FC;*/
+    color: var(--colorNormal);
+    margin: 0 0 10px 10px;
+}
+#folder_commonParamContainer .input-group{
+    width: 250px;
+    float: left;
+    margin: 0 0 10px 10px;
+}
+#folder_commonParamContainer .dropdown-menu{
+    text-align: center;
+}
+#folder_commonParamContainer .selfAdaptionLeft{
+    float: left;
+    width: 100%;
+}
+#folder_commonParamContainer .selfAdaptionLeft>div{
+    margin-right: 70px;
+}
+#folder_commonParamContainer .selfAdaptionRight{
+    position: relative;
+    float: right;
+    width: 65px;
+    margin-left: -65px;
+}
+#folder_commonParamContainer .selfAdaptionRight button{
+    outline: none;
+}
+#folder_paramTable{
+    margin: 8px 0;
+}

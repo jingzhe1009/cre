@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bonc.frame.mapper.variable.VariableApiMapper">
+    <resultMap id="BaseResultMap" type="com.bonc.frame.entity.variable.reference.VariableApi">
+        <result column="API_ID" property="apiId" jdbcType="VARCHAR"/>
+        <result column="VARIABLE_ID" property="variableId" jdbcType="VARCHAR"/>
+        <result column="API_VARIABLE_TYPE" property="apiVariableType" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        API_ID, VARIABLE_ID, API_VARIABLE_TYPE
+    </sql>
+
+    <select id="countByVaribaleId" parameterType="java.lang.String" resultType="int">
+        select count(*) as "count" from CRE_VARIABLE_API
+        where VARIABLE_ID = #{variableId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectByVaribaleId" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"></include>
+        FROM CRE_VARIABLE_API
+        WHERE VARIABLE_ID = #{variableId,jdbcType=VARCHAR}
+    </select>
+
+    <insert id="insertSelective" parameterType="com.bonc.frame.entity.variable.reference.VariableApi">
+        insert into CRE_VARIABLE_API
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="apiId != null">
+                API_ID,
+            </if>
+            <if test="variableId != null">
+                VARIABLE_ID,
+            </if>
+            <if test="apiVariableType != null">
+                API_VARIABLE_TYPE,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="apiId != null">
+                #{apiId,jdbcType=VARCHAR},
+            </if>
+            <if test="variableId != null">
+                #{variableId,jdbcType=VARCHAR},
+            </if>
+            <if test="apiVariableType != null">
+                #{apiVariableType,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <!-- 批量添加 -->
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into CRE_VARIABLE_API (
+        API_ID, VARIABLE_ID, API_VARIABLE_TYPE
+        ) select A.* from (
+        <foreach collection="list" item="item" index="index" separator="UNION ALL">
+            select
+            #{item.apiId,jdbcType=VARCHAR},
+            #{item.variableId,jdbcType=VARCHAR},
+            #{item.apiVariableType,jdbcType=VARCHAR}
+            from dual
+        </foreach>) A
+    </insert>
+
+    <update id="updateVariableId" parameterType="java.util.Map">
+        update CRE_VARIABLE_API
+        SET
+                VARIABLE_ID = #{variableId,jdbcType=VARCHAR}
+        where VARIABLE_ID = #{oldVariableId,jdbcType=VARCHAR}
+        AND API_ID = #{apiId,jdbcType=VARCHAR}
+    </update>
+
+
+    <delete id="deleteByVariableId" parameterType="java.lang.String">
+        delete from CRE_VARIABLE_API
+        where VARIABLE_ID = #{variableId,jdbcType=VARCHAR}
+    </delete>
+
+    <delete id="deleteByApiId" parameterType="java.lang.String">
+        delete from CRE_VARIABLE_API
+        where API_ID = #{apiId,jdbcType=VARCHAR}
+    </delete>
+
+    <delete id="deleteByVariableIdApiId" parameterType="java.util.Map">
+        delete from CRE_VARIABLE_API
+        where VARIABLE_ID = #{variableId,jdbcType=VARCHAR} AND API_ID = #{apiId,jdbcType=VARCHAR}
+    </delete>
+
+    <!-- apiId、variableId的批量删除 -->
+    <delete id="deleteBatchByVariableIdApiId" parameterType="java.util.List">
+        delete from CRE_VARIABLE_API
+        where (
+        <foreach collection="list" item="item" index="index" separator=" ) or (">
+            VARIABLE_ID = #{item.variableId,jdbcType=VARCHAR} AND API_ID = #{item.apiId,jdbcType=VARCHAR}
+        </foreach>
+        )
+    </delete>
+
+</mapper>

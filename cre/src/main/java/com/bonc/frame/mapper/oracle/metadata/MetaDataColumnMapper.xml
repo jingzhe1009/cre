@@ -1,0 +1,481 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bonc.frame.mapper.metadata.MetaDataColumnMapper">
+    <resultMap id="BaseResultMap" type="com.bonc.frame.entity.metadata.MetaDataColumn">
+        <id column="COLUMN_ID" property="columnId" jdbcType="VARCHAR"/>
+        <result column="TABLE_ID" property="tableId" jdbcType="VARCHAR"/>
+        <result column="COLUMN_CODE" property="columnCode" jdbcType="VARCHAR"/>
+        <result column="COLUMN_NAME" property="columnName" jdbcType="VARCHAR"/>
+        <result column="COLUMN_TYPE" property="columnType" jdbcType="VARCHAR"/>
+        <result column="COLUMN_SIZE" property="columnSize" jdbcType="INTEGER"/>
+        <result column="IS_PK" property="isPk" jdbcType="VARCHAR"/>
+        <result column="IS_NULL" property="isNull" jdbcType="VARCHAR"/>
+        <result column="DEFAULT_VALUE" property="defaultValue" jdbcType="VARCHAR"/>
+        <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="CREATE_PERSON" property="createPerson" jdbcType="VARCHAR"/>
+        <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP"/>
+        <result column="UPDATE_PERSON" property="updatePerson" jdbcType="VARCHAR"/>
+        <result column="SCAN_ID" property="scanId" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        COLUMN_ID, TABLE_ID, COLUMN_CODE, COLUMN_NAME, COLUMN_TYPE, COLUMN_SIZE, IS_PK, IS_NULL,
+        DEFAULT_VALUE,CREATE_DATE,CREATE_PERSON,UPDATE_DATE,UPDATE_PERSON, SCAN_ID
+    </sql>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from CRE_META_COLUMN
+        where COLUMN_ID = #{columnId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectColumnInfoByProperty" resultMap="BaseResultMap" parameterType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from CRE_META_COLUMN
+        where 1=1
+        <if test="columnId != null">
+            AND COLUMN_ID = #{columnId,jdbcType=VARCHAR}
+        </if>
+        <if test="columnCode != null">
+            AND COLUMN_CODE = #{columnCode,jdbcType=VARCHAR}
+        </if>
+        <if test="columnName != null">
+            AND COLUMN_NAME = #{columnName,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <select id="selectColumnInfoBatch" resultMap="BaseResultMap" parameterType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from CRE_META_COLUMN
+        where COLUMN_ID IN (
+        <foreach collection="columnIdList" item="item" index="index" separator=",">
+            #{item,jdbcType=VARCHAR}
+        </foreach>
+        )
+    </select>
+
+    <!-- 统计字段被使用次数 -->
+    <select id="countMetaColumnUsed" resultType="int" parameterType="java.lang.String">
+        SELECT SUM("count") FROM (
+          SELECT COUNT(1) AS "count" FROM CRE_RULE_TASK_COLUMN_MAPPING
+          WHERE INPUT_COLUMN_ID = #{columnId,jdbcType=VARCHAR}
+          OR OUTPUT_COLUMN_ID = #{columnId,jdbcType=VARCHAR}
+          UNION ALL
+          SELECT COUNT(1) AS "count" FROM CRE_RULE_TASK_VARIABLE_MAPPING
+          WHERE COLUMN_ID = #{columnId,jdbcType=VARCHAR}
+          UNION ALL
+          SELECT COUNT(1) AS "count" FROM CRE_KPI_FETCH_LIMITERS WHERE COLUMN_ID = #{columnId,jdbcType=VARCHAR}
+        )
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from CRE_META_COLUMN
+    where COLUMN_ID = #{columnId,jdbcType=VARCHAR}
+  </delete>
+
+    <insert id="insert" parameterType="com.bonc.frame.entity.metadata.MetaDataColumn">
+    insert into CRE_META_COLUMN (COLUMN_ID, TABLE_ID, COLUMN_CODE,
+      COLUMN_NAME, COLUMN_TYPE, COLUMN_SIZE,
+        IS_PK, IS_NULL, DEFAULT_VALUE,SCAN_ID
+      )
+    values (#{columnId,jdbcType=VARCHAR}, #{tableId,jdbcType=VARCHAR}, #{columnCode,jdbcType=VARCHAR}, 
+      #{columnName,jdbcType=VARCHAR}, #{columnType,jdbcType=VARCHAR}, #{columnSize,jdbcType=INTEGER},
+        #{isPk,jdbcType=VARCHAR}, #{isNull,jdbcType=VARCHAR}, #{defaultValue,jdbcType=VARCHAR},
+        #{scanId,jdbcType=VARCHAR}
+      )
+  </insert>
+
+    <insert id="insertSelective" parameterType="com.bonc.frame.entity.metadata.MetaDataColumn">
+        insert into CRE_META_COLUMN
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="columnId != null">
+                COLUMN_ID,
+            </if>
+            <if test="tableId != null">
+                TABLE_ID,
+            </if>
+            <if test="columnCode != null">
+                COLUMN_CODE,
+            </if>
+            <if test="columnName != null">
+                COLUMN_NAME,
+            </if>
+            <if test="columnType != null">
+                COLUMN_TYPE,
+            </if>
+            <if test="columnSize != null">
+                COLUMN_SIZE,
+            </if>
+            <if test="isPk != null">
+                IS_PK,
+            </if>
+            <if test="isNull != null">
+                IS_NULL,
+            </if>
+            <if test="defaultValue != null">
+                DEFAULT_VALUE,
+            </if>
+            <if test="createDate != null">
+                CREATE_DATE,
+            </if>
+            <if test="createPerson != null">
+                CREATE_PERSON,
+            </if>
+            <if test="updateDate != null">
+                UPDATE_DATE,
+            </if>
+            <if test="updatePerson != null">
+                UPDATE_PERSON,
+            </if>
+            <if test="scanId != null">
+                SCAN_ID,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="columnId != null">
+                #{columnId,jdbcType=VARCHAR},
+            </if>
+            <if test="tableId != null">
+                #{tableId,jdbcType=VARCHAR},
+            </if>
+            <if test="columnCode != null">
+                #{columnCode,jdbcType=VARCHAR},
+            </if>
+            <if test="columnName != null">
+                #{columnName,jdbcType=VARCHAR},
+            </if>
+            <if test="columnType != null">
+                #{columnType,jdbcType=VARCHAR},
+            </if>
+            <if test="columnSize != null">
+                #{columnSize,jdbcType=INTEGER},
+            </if>
+            <if test="isPk != null">
+                #{isPk,jdbcType=VARCHAR},
+            </if>
+            <if test="isNull != null">
+                #{isNull,jdbcType=VARCHAR},
+            </if>
+            <if test="defaultValue != null">
+                #{defaultValue,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createPerson != null">
+                #{createPerson,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null">
+                #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatePerson != null">
+                #{updatePerson,jdbcType=VARCHAR},
+            </if>
+            <if test="scanId != null">
+                #{scanId,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.bonc.frame.entity.metadata.MetaDataColumn">
+        update CRE_META_COLUMN
+        <set>
+            <if test="tableId != null">
+                TABLE_ID = #{tableId,jdbcType=VARCHAR},
+            </if>
+            <if test="columnCode != null">
+                COLUMN_CODE = #{columnCode,jdbcType=VARCHAR},
+            </if>
+            <if test="columnName != null">
+                COLUMN_NAME = #{columnName,jdbcType=VARCHAR},
+            </if>
+            <if test="columnType != null">
+                COLUMN_TYPE = #{columnType,jdbcType=VARCHAR},
+            </if>
+            <if test="columnSize != null">
+                COLUMN_SIZE = #{columnSize,jdbcType=INTEGER},
+            </if>
+            <if test="isPk != null">
+                IS_PK = #{isPk,jdbcType=VARCHAR},
+            </if>
+            <if test="isNull != null">
+                IS_NULL = #{isNull,jdbcType=VARCHAR},
+            </if>
+            <if test="defaultValue != null">
+                DEFAULT_VALUE = #{defaultValue,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createPerson != null">
+                CREATE_PERSON = #{createPerson,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null">
+                UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatePerson != null">
+                UPDATE_PERSON = #{updatePerson,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where COLUMN_ID = #{columnId,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="com.bonc.frame.entity.metadata.MetaDataColumn">
+    update CRE_META_COLUMN
+    set TABLE_ID = #{tableId,jdbcType=VARCHAR},
+      COLUMN_CODE = #{columnCode,jdbcType=VARCHAR},
+      COLUMN_NAME = #{columnName,jdbcType=VARCHAR},
+      COLUMN_TYPE = #{columnType,jdbcType=VARCHAR},
+      COLUMN_SIZE = #{columnSize,jdbcType=INTEGER},
+      IS_PK = #{isPk,jdbcType=VARCHAR},
+      IS_NULL = #{isNull,jdbcType=VARCHAR},
+      DEFAULT_VALUE = #{defaultValue,jdbcType=VARCHAR}
+    where COLUMN_ID = #{columnId,jdbcType=VARCHAR}
+  </update>
+
+    <!-- 根据tableId查询表的所有列 -->
+    <select id="selectColumnsByTableId" parameterType="string" resultType="map">
+        SELECT DISTINCT
+        a.COLUMN_ID AS id,
+        a.TABLE_ID AS tableId,
+        a.COLUMN_CODE AS columnCode,
+        a.COLUMN_NAME AS name,
+        b.TABLE_CODE AS tableCode,
+        b.TABLE_NAME AS tableName
+        FROM
+        CRE_META_COLUMN a LEFT JOIN CRE_META_TABLE b
+        ON a.TABLE_ID = b.TABLE_ID
+        WHERE a.TABLE_ID = #{tableId,jdbcType=VARCHAR}
+        UNION ALL
+        SELECT DISTINCT
+        a.COLUMN_ID AS id,
+        a.TABLE_ID AS tableId,
+        a.COLUMN_CODE AS columnCode,
+        a.COLUMN_NAME AS name,
+        b.TABLE_CODE AS tableCode,
+        b.TABLE_NAME AS tableName
+        FROM
+        CRE_META_COLUMN a LEFT JOIN CRE_META_TABLE b
+        ON a.TABLE_ID = b.TABLE_ID
+        LEFT JOIN CRE_RESOURCE_META_REF t
+        ON a.TABLE_ID = t.TABLE_ID
+        WHERE
+        t.db_resource_id = #{tableId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectAllColumnsByTableId" parameterType="string"
+            resultType="com.bonc.frame.entity.metadata.MetaDataColumn">
+        SELECT
+        A.COLUMN_ID AS "columnId",
+        A.TABLE_ID AS "tableId",
+        A.COLUMN_CODE AS "columnCode",
+        A.COLUMN_NAME AS "columnName",
+        A.COLUMN_TYPE AS "columnType",
+        A.COLUMN_SIZE AS "columnSize",
+        A.IS_PK AS "isPk",
+        A.IS_NULL AS "isNull",
+        A.DEFAULT_VALUE AS "defaultValue",
+        A.CREATE_DATE AS "createDate",
+        A.CREATE_PERSON AS "createPerson",
+        A.UPDATE_DATE AS "updateDate",
+        A.UPDATE_PERSON AS "updatePerson",
+        A.SCAN_ID AS "scanId"
+        FROM CRE_META_COLUMN a
+        WHERE a.TABLE_ID = #{tableId,jdbcType=VARCHAR}
+    </select>
+
+    <!-- 根据tableId查询表的所有列 -->
+    <select id="selectColumnsByTableId1" parameterType="string" resultType="map">
+  	SELECT DISTINCT
+        a.COLUMN_ID as id,
+        a.TABLE_ID as tableId,
+        a.COLUMN_CODE as columnCode,
+        a.COLUMN_NAME as name,
+        b.TABLE_CODE as tableCode,
+        b.TABLE_NAME as tableName
+	FROM CRE_META_COLUMN a,CRE_META_TABLE b
+	WHERE a.TABLE_ID = #{tableId,jdbcType=VARCHAR}
+	AND a.TABLE_ID = b.TABLE_ID
+  </select>
+
+
+    <!-- 获取资源下的所有列 -->
+    <select id="selectByResourceId" parameterType="string" resultType="map">
+  	SELECT
+        a.COLUMN_CODE as columnCode,
+        a.COLUMN_NAME as columnName,
+        a.COLUMN_ID as columnId,
+        a.TABLE_ID as tableId,
+        b.TABLE_NAME as tableName,
+        b.TABLE_CODE as tableCode
+	FROM CRE_META_COLUMN a left join CRE_META_TABLE b
+	on a.TABLE_ID = b.TABLE_ID
+	left join CRE_RESOURCE_META_REF r
+	on a.TABLE_ID = r.TABLE_ID
+	WHERE r.db_resource_id = #{dbResourceId}
+  </select>
+
+    <!-- 根据tableId查询表的所有列的详细信息 -->
+    <select id="selectColumnsInfo" parameterType="string" resultType="map">
+  	SELECT
+        a.COLUMN_ID as columnId,
+        a.TABLE_ID as tableId,
+        a.COLUMN_CODE as columnCode,
+        a.COLUMN_NAME as columnName,
+        a.COLUMN_SIZE as columnSize,
+        a.IS_PK as isPk,
+        a.IS_NULL as isNull,
+        b.TYPE_VALUE as columnType
+	FROM CRE_META_COLUMN a, CRE_VARIABLE_TYPE b
+	WHERE a.TABLE_ID = #{tableId,jdbcType=VARCHAR}
+	AND a.COLUMN_TYPE = b.TYPE_ID
+	AND (a.COLUMN_NAME like #{columnName,jdbcType=VARCHAR}
+	OR a.COLUMN_CODE like #{columnName,jdbcType=VARCHAR}
+	)
+        ORDER BY a.COLUMN_NAME
+  </select>
+
+    <!--  -->
+    <delete id="deleteByTableId" parameterType="java.lang.String">
+  	delete from CRE_META_COLUMN
+  	where TABLE_ID = #{tableId,jdbcType=VARCHAR}
+  </delete>
+
+    <!-- 根据tableId查询表的所有列的详细信息 -->
+    <select id="selectByTableId" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT DISTINCT
+        <include refid="Base_Column_List"/>
+        FROM CRE_META_COLUMN
+        WHERE TABLE_ID = #{tableId,jdbcType=VARCHAR}
+        OR TABLE_ID in (SELECT TABLE_ID FROM CRE_RESOURCE_META_REF
+        WHERE DB_RESOURCE_ID = #{tableId,jdbcType=VARCHAR})
+    </select>
+
+    <!-- 获取表的列 树 -->
+    <select id="getSysVarTree" parameterType="java.lang.String" resultType="map">
+        SELECT A.TABLE_ID as id,'root' as pid,A.TABLE_NAME as name,'true' as isParent
+        FROM CRE_META_TABLE A
+        WHERE A.PACKAGE_ID = #{packageId,jdbcType=VARCHAR}
+        AND (A.TABLE_KIND = '1' OR A.TABLE_KIND = '2')
+        UNION ALL
+        SELECT B.COLUMN_ID as id,B.TABLE_ID as pid,B.COLUMN_NAME as name,'false' as isParent
+        FROM CRE_META_COLUMN B
+        WHERE TABLE_ID in (
+        SELECT TABLE_ID FROM CRE_META_TABLE TEMP
+        WHERE TEMP.PACKAGE_ID = #{packageId,jdbcType=VARCHAR}
+        AND (TEMP.TABLE_KIND = '1' OR TEMP.TABLE_KIND = '2')
+        )
+  </select>
+
+    <!-- 根据columnId查询所有的列信息 -->
+    <select id="selectColumnsInfos" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from CRE_META_COLUMN
+        where COLUMN_ID in
+        <foreach collection="list" item="columnId" index="index"
+                 open="(" close=")" separator=",">
+            #{columnId}
+        </foreach>
+    </select>
+
+    <!-- 删除columnCode,tableId相同的 -->
+    <delete id="deleteByCondition" parameterType="com.bonc.frame.entity.metadata.MetaDataColumn">
+  	delete from CRE_META_COLUMN
+  	where COLUMN_CODE = #{columnCode,jdbcType=VARCHAR}
+    AND TABLE_ID = #{tableId,jdbcType=VARCHAR}
+  </delete>
+
+    <!-- 根据扫描关键字(表编码)，查询该表 所有的列信息 -->
+    <select id="getAllColumnByScanKey" parameterType="map" resultType="map">
+  	SELECT COLUMN_ID as columnId,COLUMN_NAME as columnName
+      FROM CRE_META_COLUMN
+	WHERE TABLE_ID IN (
+      SELECT TABLE_ID FROM CRE_META_TABLE
+		WHERE PACKAGE_ID = #{packageId}
+		AND TABLE_CODE = #{tableCode}
+	)
+  </select>
+
+    <select id="getAllColumnByScanKeyFromTemp" parameterType="map" resultType="map">
+        SELECT COLUMN_ID as columnId,COLUMN_NAME as columnName
+        FROM CRE_META_COLUMN_TEMP
+        WHERE TABLE_ID IN (
+        SELECT TABLE_ID FROM CRE_META_TABLE_TEMP
+        WHERE PACKAGE_ID = #{packageId}
+        AND TABLE_CODE = #{tableCode}
+        )
+    </select>
+
+    <select id="getAllColumnByScanIdFromTemp" parameterType="map" resultType="map">
+        SELECT COLUMN_ID as columnId,COLUMN_NAME as columnName
+        FROM CRE_META_COLUMN_TEMP
+        WHERE SCAN_ID = #{scanId}
+    </select>
+
+    <!-- 根据columnId批量删除column -->
+    <delete id="deleteColumns" parameterType="string">
+        delete from CRE_META_COLUMN
+        where COLUMN_ID in
+        <foreach item="columnId" collection="list" open="(" separator="," close=")">
+            #{columnId}
+        </foreach>
+    </delete>
+
+    <!-- 清空扫描的临时表记录  -->
+    <delete id="deleteMetaColumnTemp" parameterType="string">
+  	delete from CRE_META_COLUMN_TEMP
+        where SCAN_ID = #{scanId}
+  </delete>
+    <delete id="deleteMetaTableTemp" parameterType="string">
+  	delete from CRE_META_TABLE_TEMP
+        where SCAN_ID = #{scanId}
+  </delete>
+
+    <!-- 从正式表中删除在临时表中的记录 -->
+    <delete id="deleteMetaTable">
+        delete from CRE_META_TABLE
+        where table_id in(
+        select table_id from CRE_META_TABLE_TEMP
+        )
+  </delete>
+
+    <!-- 将扫描结果的临时记录保存到真实表中  -->
+    <insert id="importMetaTable" parameterType="string">
+        INSERT INTO CRE_META_TABLE
+        SELECT * FROM CRE_META_TABLE_TEMP
+        WHERE SCAN_ID = #{scanId}
+  </insert>
+    <insert id="importMetaColumn" parameterType="string">
+        INSERT INTO CRE_META_COLUMN SELECT * FROM CRE_META_COLUMN_TEMP
+        where COLUMN_ID in
+        <foreach item="columnId" collection="list" open="(" separator="," close=")">
+            #{columnId}
+        </foreach>
+    </insert>
+
+    <!-- 根据tableId集合查询所有的列信息 -->
+    <select id="selectByTableIds" parameterType="string" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from CRE_META_COLUMN
+        where TABLE_ID in
+        <foreach item="tableId" collection="list" open="(" separator="," close=")">
+            #{tableId}
+        </foreach>
+        order by CREATE_DATE
+    </select>
+
+    <!-- 根据tableId批量删除 -->
+    <delete id="deleteByTableIds" parameterType="string">
+        delete
+        from CRE_META_COLUMN
+        where TABLE_ID in
+        <foreach item="tableId" collection="list" open="(" separator="," close=")">
+            #{tableId}
+        </foreach>
+    </delete>
+</mapper>

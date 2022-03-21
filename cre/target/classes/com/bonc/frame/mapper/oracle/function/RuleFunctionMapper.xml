@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bonc.frame.mapper.function.RuleFunctionMapper" >
+  <resultMap id="BaseResultMap" type="com.bonc.frame.entity.function.RuleFunction" >
+    <id column="FUNCTION_ID" property="functionId" jdbcType="VARCHAR" />
+    <result column="GROUP_ID" property="groupId" jdbcType="VARCHAR" />
+    <result column="FOLDER_ID" property="folderId" jdbcType="VARCHAR" />
+    <result column="FUNCTION_NAME" property="functionName" jdbcType="VARCHAR" />
+    <result column="FUNCTION_DESC" property="functionDesc" jdbcType="VARCHAR" />
+    <result column="FUNCTION_RETURN_TYPE" property="functionReturnType" jdbcType="VARCHAR" />
+    <result column="FUNCTION_RETURN_VALUE" property="functionReturnValue" jdbcType="VARCHAR" />
+    <result column="CLASS_TYPE" property="classType" jdbcType="VARCHAR" />
+    <result column="FUNCTION_CLASS_PATH" property="functionClassPath" jdbcType="VARCHAR" />
+    <result column="CLASS_NAME" property="className" jdbcType="VARCHAR" />
+    <result column="FUNCTION_METHOD_NAME" property="functionMethodName" jdbcType="VARCHAR" />
+    <result column="CREATE_PERSON" property="createPerson" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_PERSON" property="updatePerson" jdbcType="VARCHAR" />
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.bonc.frame.entity.function.RuleFunction" extends="BaseResultMap" >
+    <result column="FUNCTION_PARAMS_CONF" property="functionParamsConf" jdbcType="CLOB" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    FUNCTION_ID, GROUP_ID, FOLDER_ID, FUNCTION_NAME, FUNCTION_DESC, FUNCTION_RETURN_TYPE, 
+    FUNCTION_RETURN_VALUE, CLASS_TYPE, FUNCTION_CLASS_PATH, CLASS_NAME, FUNCTION_METHOD_NAME, 
+    CREATE_PERSON, CREATE_DATE, UPDATE_PERSON, UPDATE_DATE
+  </sql>
+  <sql id="Blob_Column_List" >
+    FUNCTION_PARAMS_CONF
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from CRE_RULE_FUNCTION
+    where FUNCTION_ID = #{functionId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from CRE_RULE_FUNCTION
+    where FUNCTION_ID = #{functionId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insertSelective" parameterType="com.bonc.frame.entity.function.RuleFunction" >
+    insert into CRE_RULE_FUNCTION
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="functionId != null" >
+        FUNCTION_ID,
+      </if>
+      <if test="groupId != null" >
+        GROUP_ID,
+      </if>
+      <if test="folderId != null" >
+        FOLDER_ID,
+      </if>
+      <if test="functionName != null" >
+        FUNCTION_NAME,
+      </if>
+      <if test="functionDesc != null" >
+        FUNCTION_DESC,
+      </if>
+      <if test="functionReturnType != null" >
+        FUNCTION_RETURN_TYPE,
+      </if>
+      <if test="functionReturnValue != null" >
+        FUNCTION_RETURN_VALUE,
+      </if>
+      <if test="classType != null" >
+        CLASS_TYPE,
+      </if>
+      <if test="functionClassPath != null" >
+        FUNCTION_CLASS_PATH,
+      </if>
+      <if test="className != null" >
+        CLASS_NAME,
+      </if>
+      <if test="functionMethodName != null" >
+        FUNCTION_METHOD_NAME,
+      </if>
+      <if test="createPerson != null" >
+        CREATE_PERSON,
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE,
+      </if>
+      <if test="updatePerson != null" >
+        UPDATE_PERSON,
+      </if>
+      <if test="updateDate != null" >
+        UPDATE_DATE,
+      </if>
+      <if test="functionParamsConf != null" >
+        FUNCTION_PARAMS_CONF,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="functionId != null" >
+        #{functionId,jdbcType=VARCHAR},
+      </if>
+      <if test="groupId != null" >
+        #{groupId,jdbcType=VARCHAR},
+      </if>
+      <if test="folderId != null" >
+        #{folderId,jdbcType=VARCHAR},
+      </if>
+      <if test="functionName != null" >
+        #{functionName,jdbcType=VARCHAR},
+      </if>
+      <if test="functionDesc != null" >
+        #{functionDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="functionReturnType != null" >
+        #{functionReturnType,jdbcType=VARCHAR},
+      </if>
+      <if test="functionReturnValue != null" >
+        #{functionReturnValue,jdbcType=VARCHAR},
+      </if>
+      <if test="classType != null" >
+        #{classType,jdbcType=VARCHAR},
+      </if>
+      <if test="functionClassPath != null" >
+        #{functionClassPath,jdbcType=VARCHAR},
+      </if>
+      <if test="className != null" >
+        #{className,jdbcType=VARCHAR},
+      </if>
+      <if test="functionMethodName != null" >
+        #{functionMethodName,jdbcType=VARCHAR},
+      </if>
+      <if test="createPerson != null" >
+        #{createPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatePerson != null" >
+        #{updatePerson,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="functionParamsConf != null" >
+        #{functionParamsConf,jdbcType=CLOB},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bonc.frame.entity.function.RuleFunction" >
+    update CRE_RULE_FUNCTION
+    <set >
+      <if test="groupId != null" >
+        GROUP_ID = #{groupId,jdbcType=VARCHAR},
+      </if>
+      <if test="folderId != null" >
+        FOLDER_ID = #{folderId,jdbcType=VARCHAR},
+      </if>
+      <if test="functionName != null" >
+        FUNCTION_NAME = #{functionName,jdbcType=VARCHAR},
+      </if>
+      <if test="functionDesc != null" >
+        FUNCTION_DESC = #{functionDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="functionReturnType != null" >
+        FUNCTION_RETURN_TYPE = #{functionReturnType,jdbcType=VARCHAR},
+      </if>
+      <if test="functionReturnValue != null" >
+        FUNCTION_RETURN_VALUE = #{functionReturnValue,jdbcType=VARCHAR},
+      </if>
+      <if test="classType != null" >
+        CLASS_TYPE = #{classType,jdbcType=VARCHAR},
+      </if>
+      <if test="functionClassPath != null" >
+        FUNCTION_CLASS_PATH = #{functionClassPath,jdbcType=VARCHAR},
+      </if>
+      <if test="className != null" >
+        CLASS_NAME = #{className,jdbcType=VARCHAR},
+      </if>
+      <if test="functionMethodName != null" >
+        FUNCTION_METHOD_NAME = #{functionMethodName,jdbcType=VARCHAR},
+      </if>
+      <if test="createPerson != null" >
+        CREATE_PERSON = #{createPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatePerson != null" >
+        UPDATE_PERSON = #{updatePerson,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null" >
+        UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="functionParamsConf != null" >
+        FUNCTION_PARAMS_CONF = #{functionParamsConf,jdbcType=CLOB},
+      </if>
+    </set>
+    where FUNCTION_ID = #{functionId,jdbcType=VARCHAR}
+  </update>
+  
+    <!-- 分页查询函数列表 -->
+    <select id="getFunList" resultMap="ResultMapWithBLOBs" parameterType="map">
+        select * from CRE_RULE_FUNCTION 
+        where FUNCTION_NAME like #{functionName,jdbcType=VARCHAR}
+        <if test="groupId != null and groupId != ''" >
+            AND GROUP_ID = #{groupId,jdbcType=VARCHAR}
+        </if>
+        <if test="folderId != null" >
+            AND FOLDER_ID = #{folderId,jdbcType=VARCHAR}
+        </if>
+        order by CREATE_DATE
+    </select>
+    
+    <!-- 查询函数名是否重复 -->
+    <select id="getFunCountByName" parameterType="map" resultType="int">
+        select count(*) as "count" from CRE_RULE_FUNCTION 
+        where FUNCTION_NAME = #{functionName,jdbcType=VARCHAR}
+        <if test="folderId != null" >
+            and FOLDER_ID = #{folderId,jdbcType=VARCHAR}
+        </if>  
+        <if test="groupId != null and groupId != ''" >
+            and GROUP_ID = #{groupId,jdbcType=VARCHAR}
+        </if> 
+        <if test="functionId != null" >
+            and FUNCTION_ID != #{functionId,jdbcType=VARCHAR}
+        </if>
+    </select>
+</mapper>

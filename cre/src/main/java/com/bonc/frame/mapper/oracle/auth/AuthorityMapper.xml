@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bonc.frame.mapper.auth.AuthorityMapper">
+
+    <resultMap id="BaseResultMap" type="com.bonc.frame.entity.auth.Authority">
+        <id column="ID" property="id" jdbcType="VARCHAR"/>
+        <result column="RESOURCE_ID" property="resourceId" jdbcType="VARCHAR"/>
+        <result column="RESOURCE_TYPE_ID" property="resourceTypeId" jdbcType="VARCHAR"/>
+        <result column="RESOURCE_EXPRESSION" property="resourceExpression" jdbcType="VARCHAR"/>
+        <result column="SUBJECT_ID" property="subjectId" jdbcType="VARCHAR"/>
+        <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP"/>
+        <result column="CREATE_PERSON" property="createPerson" jdbcType="VARCHAR"/>
+        <result column="UPDATE_PERSON" property="updatePerson" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+      ID, RESOURCE_ID, RESOURCE_TYPE_ID, RESOURCE_EXPRESSION, SUBJECT_ID,
+      CREATE_DATE, UPDATE_DATE, CREATE_PERSON, UPDATE_PERSON
+    </sql>
+
+    <!-- 查看某一主体对某一资源类型的部分功能拥有的全部权限 -->
+    <select id="getOperatePermitsWithoutAllByResourceType" parameterType="java.util.Map" resultMap="BaseResultMap">
+        SELECT RESOURCE_ID，RESOURCE_EXPRESSION FROM CRE_AUTH_AUTHORITY
+        WHERE SUBJECT_ID = #{subjectId,jdbcType=VARCHAR}
+        AND RESOURCE_TYPE_ID = #{resourceTypeId,jdbcType=VARCHAR}
+        AND RESOURCE_ID = '*' AND RESOURCE_EXPRESSION != '*'
+    </select>
+
+    <!-- 查看多个主体对某一资源类型的部分功能拥有的全部权限 -->
+    <select id="getSubjectsOperatePermitsWithoutAllByResourceType" parameterType="java.util.Map" resultMap="BaseResultMap">
+        SELECT RESOURCE_ID，RESOURCE_EXPRESSION,SUBJECT_ID FROM CRE_AUTH_AUTHORITY
+        WHERE SUBJECT_ID IN
+        <foreach collection="subjectIds" index="index" item="subjectId" open="(" separator="," close=")">
+            #{subjectId}
+        </foreach>
+        AND RESOURCE_TYPE_ID = #{resourceTypeId,jdbcType=VARCHAR}
+        AND RESOURCE_ID = '*' AND RESOURCE_EXPRESSION != '*'
+    </select>
+
+    <!-- 查看某一主体对某一资源类型的拥有的全部权限 -->
+    <select id="getOperatePermitsByResourceType" parameterType="java.util.Map" resultMap="BaseResultMap">
+        SELECT RESOURCE_ID，RESOURCE_EXPRESSION FROM CRE_AUTH_AUTHORITY
+        WHERE SUBJECT_ID = #{subjectId,jdbcType=VARCHAR}
+        AND RESOURCE_TYPE_ID = #{resourceTypeId,jdbcType=VARCHAR}
+        AND RESOURCE_ID = '*'
+    </select>
+
+    <!-- 查看某一主体对某一资源类型是否拥有全部权限 -->
+    <select id="hasAllPermitsByResourceType" parameterType="java.util.Map" resultType="int">
+        SELECT COUNT (1) FROM CRE_AUTH_AUTHORITY
+        WHERE SUBJECT_ID = #{subjectId,jdbcType=VARCHAR}
+        AND RESOURCE_TYPE_ID = #{resourceTypeId,jdbcType=VARCHAR}
+        AND RESOURCE_ID = '*' AND RESOURCE_EXPRESSION = '*'
+    </select>
+
+    <!-- 查看多个主体对某一资源类型是否拥有全部权限 -->
+    <select id="hasAllPermitsByResourceTypesubjectIds" parameterType="java.util.Map" resultType="int">
+        SELECT COUNT (1) FROM CRE_AUTH_AUTHORITY
+        WHERE SUBJECT_ID  IN
+        <foreach collection="subjectIds" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        AND RESOURCE_TYPE_ID = #{resourceTypeId,jdbcType=VARCHAR}
+        AND RESOURCE_ID = '*' AND RESOURCE_EXPRESSION = '*'
+    </select>
+
+    <!-- 查看主体对某一资源类型是否拥有全部权限 -->
+    <select id="hasAllPermitsBySubjectsResourceType" parameterType="java.util.Map" resultType="int">
+        SELECT COUNT (1) FROM CRE_AUTH_AUTHORITY
+        WHERE SUBJECT_ID IN
+        <foreach collection="subjectIds" index="index" item="subjectId" open="(" separator="," close=")">
+            #{subjectId}
+        </foreach>
+        AND RESOURCE_TYPE_ID = #{resourceTypeId,jdbcType=VARCHAR}
+        AND RESOURCE_ID = '*' AND RESOURCE_EXPRESSION = '*'
+    </select>
+
+    <select id="hasAllPermitsBySubjectsResourceTypeExpression" parameterType="java.util.Map" resultType="int">
+        SELECT COUNT (1) FROM CRE_AUTH_AUTHORITY
+        WHERE SUBJECT_ID IN
+        <foreach collection="subjectIds" index="index" item="subjectId" open="(" separator="," close=")">
+            #{subjectId}
+        </foreach>
+        AND RESOURCE_TYPE_ID = #{resourceTypeId,jdbcType=VARCHAR}
+        AND RESOURCE_ID = '*'
+        AND INSTR(RESOURCE_EXPRESSION, #{resourceExpression,jdbcType=VARCHAR}) > 0
+    </select>
+
+    <!-- 根据主体id和资源类型获取权限列表 -->
+    <select id="getPermitsBySubjectResourceType" parameterType="java.util.Map"
+            resultMap="BaseResultMap">
+        SELECT RESOURCE_ID，RESOURCE_EXPRESSION FROM CRE_AUTH_AUTHORITY WHERE
+        SUBJECT_ID = #{subjectId,jdbcType=VARCHAR}
+        AND RESOURCE_TYPE_ID = #{resourceTypeId,jdbcType=VARCHAR}
+        AND RESOURCE_EXPRESSION != '*'
+    </select>
+
+    <!-- 根据主体id、资源id和资源类型获取权限列表 -->
+    <select id="getPermitBySubjectResourceId" parameterType="java.util.Map"
+            resultMap="BaseResultMap">
+        SELECT RESOURCE_ID，RESOURCE_EXPRESSION FROM CRE_AUTH_AUTHORITY WHERE
+        SUBJECT_ID = #{subjectId,jdbcType=VARCHAR}
+        AND RESOURCE_ID = #{resourceId,jdbcType=VARCHAR}
+        AND RESOURCE_TYPE_ID = #{resourceTypeId,jdbcType=VARCHAR}
+    </select>
+
+    <!-- 根据主体id、资源id列表和资源类型获取权限列表 -->
+    <select id="getPermitsBySubjectResourceIds" parameterType="java.util.Map" resultMap="BaseResultMap">
+        SELECT RESOURCE_ID，RESOURCE_EXPRESSION FROM CRE_AUTH_AUTHORITY WHERE
+        SUBJECT_ID = #{subjectId,jdbcType=VARCHAR}
+        AND RESOURCE_ID IN
+        <foreach collection="resourceIds" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        AND RESOURCE_TYPE_ID = #{resourceTypeId,jdbcType=VARCHAR}
+    </select>
+
+    <!-- 根据主体id、资源id列表和资源类型获取权限列表 -->
+    <select id="getPermitsBySubjectsResourceIds" parameterType="java.util.Map" resultMap="BaseResultMap">
+        SELECT RESOURCE_ID，RESOURCE_EXPRESSION,SUBJECT_ID FROM CRE_AUTH_AUTHORITY WHERE
+        SUBJECT_ID IN
+        <foreach collection="subjectIds" index="index" item="subjectId" open="(" separator="," close=")">
+            #{subjectId}
+        </foreach>
+        AND RESOURCE_ID IN
+        <foreach collection="resourceIds" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        AND RESOURCE_TYPE_ID = #{resourceTypeId,jdbcType=VARCHAR}
+    </select>
+
+    <!-- 根据主体列表和资源id获取所有权限表达式 -->
+    <select id="getAllPermitsBySubjectIdsResourceId"
+            parameterType="java.util.Map" resultType="java.lang.String">
+        SELECT DISTINCT(a.RESOURCE_EXPRESSION)
+        FROM CRE_AUTH_AUTHORITY a
+        WHERE a.SUBJECT_ID IN
+        <foreach collection="subjectIds" index="index" item="subjectId" open="(" separator="," close=")">
+            #{subjectId}
+        </foreach>
+        AND (
+        (a.RESOURCE_TYPE_ID = '0' AND a.RESOURCE_ID = '*') OR
+        (a.RESOURCE_TYPE_ID = #{resourceTypeId,jdbcType=VARCHAR}
+        <if test="resourceId != null">
+            AND (a.RESOURCE_ID = '*' OR a.RESOURCE_ID = #{resourceId,jdbcType=VARCHAR})
+        </if>
+        ))
+    </select>
+
+    <select id="getAllResourceIdsBySubjectIdsResourceType"
+            parameterType="java.util.Map" resultType="java.lang.String">
+        SELECT DISTINCT(a.RESOURCE_ID)
+        FROM CRE_AUTH_AUTHORITY a
+        WHERE a.SUBJECT_ID IN
+        <foreach collection="subjectIds" index="index" item="subjectId" open="(" separator="," close=")">
+            #{subjectId}
+        </foreach>
+        AND a.RESOURCE_TYPE_ID = #{resourceTypeId,jdbcType=VARCHAR}
+        AND a.RESOURCE_ID != '*'
+    </select>
+
+    <insert id="insertSelective" parameterType="com.bonc.frame.entity.auth.Authority">
+        INSERT INTO CRE_AUTH_AUTHORITY
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="resourceId != null">
+                RESOURCE_ID,
+            </if>
+            <if test="resourceTypeId != null">
+                RESOURCE_TYPE_ID,
+            </if>
+            <if test="resourceExpression != null">
+                RESOURCE_EXPRESSION,
+            </if>
+            <if test="subjectId != null">
+                SUBJECT_ID,
+            </if>
+            <if test="createDate != null">
+                CREATE_DATE,
+            </if>
+            <if test="createPerson != null">
+                CREATE_PERSON,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="resourceId != null">
+                #{resourceId,jdbcType=VARCHAR},
+            </if>
+            <if test="resourceTypeId != null">
+                #{resourceTypeId,jdbcType=VARCHAR},
+            </if>
+            <if test="resourceExpression != null">
+                #{resourceExpression,jdbcType=VARCHAR},
+            </if>
+            <if test="subjectId != null">
+                #{subjectId,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createPerson != null">
+                #{createPerson,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <insert id="insertBatch" parameterType="java.util.List">
+        INSERT INTO CRE_AUTH_AUTHORITY (
+        ID, RESOURCE_ID, RESOURCE_TYPE_ID, RESOURCE_EXPRESSION, SUBJECT_ID,
+        CREATE_DATE, CREATE_PERSON
+        ) select A.* from (
+        <foreach collection="list" item="item" index="index" separator="UNION ALL">
+            select
+            #{item.id,jdbcType=VARCHAR},
+            #{item.resourceId,jdbcType=VARCHAR},
+            #{item.resourceTypeId,jdbcType=VARCHAR},
+            #{item.resourceExpression,jdbcType=VARCHAR},
+            #{item.subjectId,jdbcType=VARCHAR},
+            #{item.createDate,jdbcType=TIMESTAMP},
+            #{item.createPerson,jdbcType=VARCHAR}
+            from dual
+        </foreach>
+        ) A
+    </insert>
+
+    <insert id="upsert" parameterType="com.bonc.frame.entity.auth.Authority">
+        MERGE INTO CRE_AUTH_AUTHORITY
+        USING dual ON (
+        RESOURCE_ID = #{resourceId,jdbcType=VARCHAR} AND
+        RESOURCE_TYPE_ID = #{resourceTypeId,jdbcType=VARCHAR} AND
+        SUBJECT_ID = #{subjectId,jdbcType=VARCHAR}
+        )
+        WHEN MATCHED THEN UPDATE
+        <set>
+            RESOURCE_EXPRESSION,
+            UPDATE_DATE,
+            UPDATE_PERSON
+        </set>
+        WHEN NOT MATCHED THEN INSERT
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="resourceId != null">
+                RESOURCE_ID,
+            </if>
+            <if test="resourceTypeId != null">
+                RESOURCE_TYPE_ID,
+            </if>
+            <if test="resourceExpression != null">
+                RESOURCE_EXPRESSION,
+            </if>
+            <if test="subjectId != null">
+                SUBJECT_ID,
+            </if>
+            <if test="createDate != null">
+                CREATE_DATE,
+            </if>
+            <if test="createPerson != null">
+                CREATE_PERSON,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="resourceId != null">
+                #{resourceId,jdbcType=VARCHAR},
+            </if>
+            <if test="resourceTypeId != null">
+                #{resourceTypeId,jdbcType=VARCHAR},
+            </if>
+            <if test="resourceExpression != null">
+                #{resourceExpression,jdbcType=VARCHAR},
+            </if>
+            <if test="subjectId != null">
+                #{subjectId,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createPerson != null">
+                #{createPerson,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+
+    <insert id="upsertBatch" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="begin" close=";end;" separator=";">
+            MERGE INTO CRE_AUTH_AUTHORITY
+            USING dual ON (
+            RESOURCE_ID = #{item.resourceId,jdbcType=VARCHAR} AND
+            RESOURCE_TYPE_ID = #{item.resourceTypeId,jdbcType=VARCHAR} AND
+            SUBJECT_ID = #{item.subjectId,jdbcType=VARCHAR}
+            )
+            WHEN MATCHED THEN UPDATE
+            <set>
+                RESOURCE_EXPRESSION = #{item.resourceExpression,jdbcType=VARCHAR},
+                UPDATE_DATE = #{item.updateDate,jdbcType=TIMESTAMP},
+                UPDATE_PERSON = #{item.updatePerson,jdbcType=VARCHAR}
+            </set>
+            WHEN NOT MATCHED THEN INSERT
+            (ID,
+            RESOURCE_ID,
+            RESOURCE_TYPE_ID,
+            RESOURCE_EXPRESSION,
+            SUBJECT_ID,
+            CREATE_DATE,
+            CREATE_PERSON
+            )
+            values (  #{item.id,jdbcType=VARCHAR},
+            #{item.resourceId,jdbcType=VARCHAR},
+            #{item.resourceTypeId,jdbcType=VARCHAR},
+            #{item.resourceExpression,jdbcType=VARCHAR},
+            #{item.subjectId,jdbcType=VARCHAR},
+            #{item.updateDate,jdbcType=TIMESTAMP},
+            #{item.updatePerson,jdbcType=VARCHAR}
+            )
+        </foreach>
+    </insert>
+
+    <update id="updateBatch" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="begin" close=";end;" separator=";">
+            UPDATE CRE_AUTH_AUTHORITY
+            <set>
+                RESOURCE_EXPRESSION = #{item.resourceExpression,jdbcType=VARCHAR},
+                UPDATE_DATE = #{item.updateDate,jdbcType=TIMESTAMP},
+                UPDATE_PERSON = #{item.updatePerson,jdbcType=TIMESTAMP}
+            </set>
+            WHERE
+            RESOURCE_ID = #{item.resourceId,jdbcType=VARCHAR} AND
+            RESOURCE_TYPE_ID = #{item.resourceTypeId,jdbcType=VARCHAR} AND
+            SUBJECT_ID = #{item.subjectId,jdbcType=VARCHAR}
+        </foreach>
+    </update>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        DELETE FROM CRE_AUTH_AUTHORITY WHERE ID = #{id,jdbcType=VARCHAR}
+    </delete>
+
+    <!-- 通过主体id删除 -->
+    <delete id="deleteBySubjectId" parameterType="java.lang.String">
+        DELETE FROM CRE_AUTH_AUTHORITY WHERE SUBJECT_ID = #{subjectId,jdbcType=VARCHAR}
+    </delete>
+
+    <!-- 通过主体和资源id删除 或  通过主体和资源类型删除 -->
+    <delete id="deleteBySubjectResource" parameterType="java.util.Map">
+        DELETE FROM CRE_AUTH_AUTHORITY WHERE SUBJECT_ID = #{subjectId,jdbcType=VARCHAR}
+        <if test="resourceId != null ">
+            AND RESOURCE_ID = #{resourceId,jdbcType=VARCHAR}
+        </if>
+        <if test="resourceTypeId != null ">
+            AND RESOURCE_TYPE_ID = #{resourceTypeId,jdbcType=VARCHAR}
+        </if>
+    </delete>
+
+    <!-- 通过主体和资源id删除 或  通过主体和资源类型删除 -->
+    <delete id="deleteBySubjectResources" parameterType="java.util.Map">
+        DELETE FROM CRE_AUTH_AUTHORITY WHERE SUBJECT_ID = #{subjectId,jdbcType=VARCHAR}
+        AND RESOURCE_ID IN
+        <foreach collection="resourceIds" index="index" item="resourceId" open="(" separator="," close=")">
+            #{resourceId}
+        </foreach>
+        AND RESOURCE_TYPE_ID = #{resourceTypeId,jdbcType=VARCHAR}
+    </delete>
+
+    <!-- 通过资源id直接删除，当数据被删除时，其权限应该一起删除 -->
+    <delete id="deleteByResourceId" parameterType="java.util.Map">
+        DELETE FROM CRE_AUTH_AUTHORITY WHERE
+        RESOURCE_ID = #{resourceId,jdbcType=VARCHAR}
+        AND RESOURCE_TYPE_ID = #{resourceTypeId,jdbcType=VARCHAR}
+    </delete>
+
+    <delete id="deleteByResourceIds" parameterType="java.util.Map">
+        DELETE FROM CRE_AUTH_AUTHORITY WHERE
+        RESOURCE_TYPE_ID = #{resourceTypeId,jdbcType=VARCHAR}
+        AND RESOURCE_ID IN
+        <foreach collection="resourceIds" index="index" item="resourceId" open="(" separator="," close=")">
+            #{resourceId}
+        </foreach>
+    </delete>
+
+    <update id="updateRuleIdByOldResourceId" parameterType="java.util.Map">
+        UPDATE CRE_AUTH_AUTHORITY
+        <set>
+            RESOURCE_ID = #{newResourceId,jdbcType=VARCHAR}
+        </set>
+        WHERE
+        RESOURCE_TYPE_ID = #{resourceTypeId,jdbcType=VARCHAR}
+        AND RESOURCE_ID = #{oldResourceId,jdbcType=VARCHAR}
+    </update>
+
+
+</mapper>

@@ -1,0 +1,149 @@
+<!-- 变量对象属性  modal在对话框中不添加fade,添加fade会导致标题显示有问题-->
+<div class="modal fade" id="entityProp">
+<input type="hidden" id="entityPid" value="">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" onclick="entityModal.hideClear();"><span aria-hidden="true">×</span><span class="sr-only">关闭</span></button>
+        <h4 class="modal-title" id="entityPropTitle">修改规则</h4>
+      </div>
+      <div class="modal-body">
+<!--      <button class="btn cm-btnAdd newValBtn" id="newEntityVal" onclick="newEntityVal.show();">新建变量</button>-->
+      <button class="btn btn-primary newValBtn" id="newEntityVal" onclick="newEntityVal.show();">新建变量</button>
+      	<table id="tableEntity" style="width:860px;">
+		</table>
+      </div>
+      <div class="modal-footer">
+<!--      	<button type="button" class="btn cm-btnSec" onclick="entityModal.showLast()">完成</button>-->
+      	<button type="button" class="btn btn-minor" onclick="entityModal.showLast()">完成</button>
+        <button type="button" class="btn btn-primary" onclick="entityModal.hideClear();">关闭</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- 删除接口确认对话框start -->
+<div class="modal fade" id="delEntityVariableDiv">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">关闭</span></button>
+        <h4 class="modal-title">是否确认删除</h4>
+      </div>
+      <div class="modal-footer">
+<!--        <button type="button" class="btn cm-btnSec" data-dismiss="modal">取消</button>-->
+        <button type="button" class="btn btn-minor" data-dismiss="modal">取消</button>
+        <button id="delVariableEntityBtn" type="button" class="btn btn-primary" onclick="deleteEntityModal.submit();">确认</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="newEntityValModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+       <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">关闭</span></button>
+        <h4 class="modal-title">新建变量</h4>
+      </div>
+      <form id="newEntityValForm">
+      <div class="modal-body row-css">
+        <div><span class="modalTxt">变量别名：</span><input type="text" id="variableAliasEntity" class="cm-underlineIpt" data-rule="变量别名:required;length[1~127, true];"/></div>
+        <div><span class="modalTxt">变量编码：</span><input type="text" id="entityVariableCode" class="cm-underlineIpt" data-rule="变量编码:required;length[1~30];code;"/></div>
+<!--        <div><span class="modalTxt">编码别名：</span><input type="text" id="entityVariableAlias" class="cm-underlineIpt" data-rule="编码别名:required;required;length(1~64);"/></div>-->
+        <div><span class="modalTxt">变量类型：</span><div id="entityValType" class="cm-select cm-mdSel"></div></div>
+        <div><span class="modalTxt">变量描述：</span><input type="text" id="entityVariableRemarks" class="cm-underlineIpt"/></div>
+      </div>
+      </form>
+      <div class="modal-footer">
+<!--      	<button type="button" class="btn cm-btnSec" data-dismiss="modal">取消</button>-->
+      	<button type="button" class="btn btn-minor" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-primary" onclick="newEntityVal.submit();">确定</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 修改变量 -->
+<div class="modal fade" id="modifyEntity">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">关闭</span></button>
+        <h4 class="modal-title">修改变量</h4>
+      </div>
+      <form id="modifyEntityForm">
+      <div class="modal-body row-css">
+      	<input type="hidden" id="entityVariableIdSec">
+      	<input type="hidden" id="entityIdSec">
+        <div>
+          <span class="modalTxt">变量别名：</span><input type="text" id="variableAliasEntitySec" class="cm-underlineIpt" data-rule="变量别名:required;length[1~127, true];"/>
+          <label id="modifyEntity_cronMsg" class="icon icon-exclamation-sign" data-toggle="tooltip" data-placement="bottom" title="参数引用状态下不能修改别名！"></label>
+        </div>
+        <div><span class="modalTxt">变量编码：</span><input type="text" id="entityVariableCodeSec" class="cm-underlineIpt" data-rule="变量编码:required;length[1~30];code;"/></div>
+<!--        <div><span class="modalTxt">编码别名：</span><input type="text" id="entityVariableAliasSec" class="cm-underlineIpt" data-rule="编码别名:required;required;length(1~64);"/></div>-->
+        <div><span class="modalTxt">变量类型：</span><div id="entityValTypeSec" class="cm-select cm-mdSel"></div></div>
+        <div><span class="modalTxt">变量描述：</span><input type="text" id="entityVariableRemarksSec" class="cm-underlineIpt"/></div>
+      </div>
+      </form>
+      <div class="modal-footer">
+<!--          <button type="button" class="btn cm-btnSec" data-dismiss="modal">取消</button>-->
+  <!--        <button type="button" class="btn btn-primary" onclick="entityModifyModal.submit();">确定</button>-->
+          <button type="button" class="btn btn-minor" data-dismiss="modal">取消</button>
+          <button type="button" class="btn btn-primary" onclick="entityModifyModal.verify();">确定</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--查看变量-->
+<div class="modal fade" id="objParamViewAlertModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">查看变量</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3">变量别名</label>
+                        <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                            <input disabled col-name="variableAlias" type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3">变量编码</label>
+                        <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                            <input disabled col-name="variableCode" type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3">变量类型</label>
+                        <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                            <input disabled col-name="typeValue" type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3">变量种类</label>
+                        <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                            <input disabled col-name="kindValue" type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group defaultValueGroup">
+                        <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3">默认值</label>
+                        <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                            <input disabled col-name="defaultValue" type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3">变量描述</label>
+                        <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                            <textarea disabled col-name="variableRemarks" type="text" class="form-control"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="closeObjParam btn btn-primary" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>

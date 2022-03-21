@@ -1,0 +1,55 @@
+<link href="${ctx.contextPath}/static/css/commonResource/folderParamList.css" rel="stylesheet"/>
+
+<!-- 公共接口展示列表: 场景下展示 -->
+<div id="folder_commonParamContainer">
+    <!--搜索框-->
+    <div>
+        <div class="resourceTableIcon"><i class="icon icon-wrench"> 公共参数</i></div>
+        <div class="selfAdaptionLeft">
+            <div>
+                <div class="folderParamSearch">
+                    <div class="input-group common_params">
+                        <input data-col="variableGroupName" type="text" class="form-control" placeholder="参数组名称（请选择）">
+                        <label class="input-control-icon-right" data-toggle="dropdown">
+                            <i class="icon icon-caret-down "></i>
+                        </label>
+                        <ul id="folder_paramGroupSelector" class="dropdown-menu pull-right paramGroupSelector_search"></ul>
+                    </div>
+                    <div class="input-group common_params">
+                        <input data-col="variableAlias" type="text" class="form-control" placeholder="参数别名">
+                    </div>
+                    <div class="input-group common_params">
+                        <input data-col="variableTypeId" type="text" class="form-control commonParams_typeInput" placeholder="参数类型">
+                        <label class="input-control-icon-right" data-toggle="dropdown">
+                            <i class="icon icon-caret-down "></i>
+                        </label>
+                        <ul class="dropdown-menu pull-right commonParams_typeList"></ul>
+                    </div>
+                    <div class="input-group common_params">
+                        <input data-col="kindId" type="text" class="form-control commonParams_kindInput" placeholder="参数种类">
+                        <label class="input-control-icon-right" data-toggle="dropdown">
+                            <i class="icon icon-caret-down "></i>
+                        </label>
+                        <ul class="dropdown-menu pull-right commonParams_kindList">
+                            <li kindId="K1"><a>输入变量</a></li>
+                            <li kindId="K2"><a>输出变量</a></li>
+                            <li kindId="K3"><a>中间变量</a></li>
+                            <li kindId="K4"><a>系统常量</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="selfAdaptionRight">
+            <button id="folder_paramSearch" class="btn btn-primary" type="button">搜索</button>
+        </div>
+        <div style="clear:both;"></div>
+    </div>
+
+    <!--内容展示表格-->
+    <div id="folder_paramTableContainer">
+        <table id="folder_paramTable"></table>
+    </div>
+</div>
+
+<!--<script src="${ctx.contextPath}/static/js/commonResource/folderParamList.js"></script>-->

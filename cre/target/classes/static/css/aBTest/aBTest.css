@@ -1,0 +1,76 @@
+#pageBody {
+    width: 100%;
+    height: 80%;
+    height: calc(100% - 34px);
+    border: 1px solid transparent;
+}
+
+#pageContent {
+    height: calc(100% - 11px);
+    width: 100%;
+}
+
+#ABTestPageContainer {
+    padding: 14px 24px;
+    margin: 10px 10px 1px;
+    background: #fff;
+    border-radius: 5px;
+}
+
+#ABTestPageContainer .dropdown-menu {
+    width: 100%;
+    max-height: 280px;
+    overflow: auto;
+}
+
+.mustIcon {
+    color: #EA644A;
+    text-align: center;
+    vertical-align: middle;
+    padding-right: 5px;
+}
+
+.selfAdaptionLeft {
+    float: left;
+    width: 100%;
+}
+
+#ABTestPage_SearchContainer .selfAdaptionLeft .input-group {
+    width: 250px;
+    float: left;
+    margin: 0 10px 10px 0;
+}
+
+#ABTestPage_SearchContainer .selfAdaptionLeft > div {
+    margin-right: 135px;
+}
+
+#ABTestPage_SearchContainer .selfAdaptionRight {
+    position: relative;
+    float: right;
+    width: 130px;
+    margin-left: -130px;
+}
+
+#ABTestTable {
+    margin: 8px 0;
+}
+
+/* 时间组件小按钮背景色设置 */
+.input-group-addon {
+    background-color: #fff;
+    cursor: pointer;
+}
+
+#ABTestDetailAlertModal .modal-body {
+    max-height: 500px;
+    overflow: auto;
+}
+
+.icon-caret-down, .dropdown-menu, .switch input {
+    cursor: pointer;
+}
+
+#ABTestTable .label-dot {
+    vertical-align: baseline;
+}

@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bonc.frame.dao.resource.RuleSetMapper">
+    <resultMap id="RuleSetHeaderMap" type="com.bonc.frame.entity.commonresource.RuleSetHeader">
+        <result column="RULE_SET_HEADER_ID" property="ruleSetHeaderId" jdbcType="VARCHAR"/>
+        <result column="RULE_SET_NAME" property="ruleSetName" jdbcType="VARCHAR"/>
+        <result column="RULE_SET_GROUP_ID" property="ruleSetGroupId" jdbcType="VARCHAR"/>
+        <result column="RULE_SET_HEADER_DESC" property="ruleSetHeaderDesc" jdbcType="VARCHAR"/>
+        <result column="CREATE_PERSON" property="createPerson" jdbcType="VARCHAR"/>
+        <result column="UPDATE_PERSON" property="updatePerson" jdbcType="VARCHAR"/>
+        <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <resultMap id="RuleSetMap" type="com.bonc.frame.entity.commonresource.RuleSet">
+        <result column="RULE_SET_NAME" property="ruleSetName" jdbcType="VARCHAR"/>
+        <result column="RULE_SET_ID" property="ruleSetId" jdbcType="VARCHAR"/>
+        <result column="RULE_SET_CONTENT" property="ruleSetContent" jdbcType="VARCHAR"/>
+        <result column="PARAMS" property="params" jdbcType="VARCHAR"/>
+        <result column="RULE_SET_DESC" property="ruleSetDesc" jdbcType="VARCHAR"/>
+        <result column="VERSION" property="version" jdbcType="VARCHAR"/>
+        <result column="ENABLE" property="enable" jdbcType="VARCHAR"/>
+        <result column="RULE_SET_HEADER_ID" property="ruleSetHeaderId" jdbcType="VARCHAR"/>
+        <result column="CREATE_PERSON" property="createPerson" jdbcType="VARCHAR"/>
+        <result column="UPDATE_PERSON" property="updatePerson" jdbcType="VARCHAR"/>
+        <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <resultMap id="RuleSetHeaderGroupExtMap" type="com.bonc.frame.entity.commonresource.RuleSetHeaderGroupExt"
+               extends="RuleSetHeaderMap">
+        <result column="RULE_SET_GROUP_NAME" property="ruleSetGroupName" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="RuleSetHeader_Column_List">
+        RULE_SET_HEADER_ID, RULE_SET_NAME, RULE_SET_GROUP_ID, RULE_SET_HEADER_DESC,
+        CREATE_DATE, UPDATE_DATE, CREATE_PERSON, UPDATE_PERSON
+    </sql>
+
+    <sql id="RuleSet_Column_List">
+        b.RULE_SET_NAME, a.RULE_SET_ID, a.RULE_SET_CONTENT, a.PARAMS, a.RULE_SET_DESC,
+        a.VERSION, a.ENABLE, a.RULE_SET_HEADER_ID, a.CREATE_DATE, a.UPDATE_DATE,
+        a.CREATE_PERSON, a.UPDATE_PERSON
+    </sql>
+
+    <!-- 检验 ruleSetName 唯一性 -->
+    <select id="getRuleSetHeaderByPrimaryKey" parameterType="java.lang.String" resultMap="RuleSetHeaderMap">
+        select   <include refid="RuleSetHeader_Column_List"/> from CRE_PUB_RULE_SET_HEADER
+        where RULE_SET_HEADER_ID != #{ruleSetHeaderId,jdbcType=VARCHAR}
+    </select>
+
+
+
+    <!-- 检验 ruleSetName 唯一性 -->
+    <select id="countByName" parameterType="java.util.Map" resultType="int">
+        select count(*) as "count" from CRE_PUB_RULE_SET_HEADER
+        where RULE_SET_NAME = #{ruleSetName,jdbcType=VARCHAR}
+        <if test="ruleSetHeaderId != null">
+            AND RULE_SET_HEADER_ID != #{ruleSetHeaderId,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <!-- 检验 version ruleSetHeaderId 联合唯一性 -->
+    <select id="countByVersionAndHeaderId" parameterType="java.util.Map" resultType="int">
+        select count(*) as "count" from CRE_PUB_RULE_SET
+        where VERSION = #{version,jdbcType=VARCHAR}
+        AND RULE_SET_HEADER_ID = #{ruleSetHeaderId,jdbcType=VARCHAR}
+        <if test="ruleSetId != null">
+            AND RULE_SET_ID != #{ruleSetId,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <!-- 统计规则集下启用状态的版本的数量 -->
+    <select id="countEnableVersions" parameterType="java.lang.String" resultType="int">
+        SELECT COUNT(1) FROM CRE_PUB_RULE_SET WHERE
+        RULE_SET_HEADER_ID = #{ruleSetHeaderId,jdbcType=VARCHAR}
+        AND "ENABLE" = '1'
+    </select>
+
+    <!-- 查看当前版本规则集是否在启用中 -->
+    <select id="checkRuleSetEnable" parameterType="java.lang.String" resultType="int">
+        SELECT COUNT(1) FROM CRE_PUB_RULE_SET WHERE
+        RULE_SET_ID = #{ruleSetId,jdbcType=VARCHAR}
+        AND "ENABLE" = '1'
+    </select>
+
+    <!-- 获取规则集头信息列表 -->
+    <select id="getHeaderList" parameterType="java.util.Map" resultMap="RuleSetHeaderGroupExtMap">
+        SELECT
+        a.RULE_SET_HEADER_ID, a.RULE_SET_NAME, a.RULE_SET_GROUP_ID, a.RULE_SET_HEADER_DESC,
+        a.CREATE_DATE, a.UPDATE_DATE, a.CREATE_PERSON, a.UPDATE_PERSON, b.RULE_SET_GROUP_NAME
+        FROM CRE_PUB_RULE_SET_HEADER a LEFT JOIN CRE_PUB_RULE_SET_GROUP b
+        ON a.RULE_SET_GROUP_ID = b.RULE_SET_GROUP_ID
+        WHERE 1=1
+        <if test="ruleSetName != null">
+            <bind name="pattern" value="'%' + _parameter.ruleSetName + '%'"/>
+            AND a.RULE_SET_NAME like #{pattern}
+        </if>
+        <if test="ruleSetGroupName != null">
+            <bind name="pattern2" value="'%' + _parameter.ruleSetGroupName + '%'"/>
+            AND b.RULE_SET_GROUP_NAME like #{pattern2}
+        </if>
+        <if test="startDate != null and '' != startDate">
+            and a.CREATE_DATE &gt;= to_date(#{startDate,jdbcType=TIMESTAMP} ,'yyyy-mm-dd hh24:mi:ss')
+        </if>
+        <if test="endDate != null and '' != endDate">
+            and a.CREATE_DATE &lt;= to_date(#{endDate,jdbcType=TIMESTAMP} ,'yyyy-mm-dd hh24:mi:ss')
+        </if>
+        ORDER BY CREATE_DATE DESC
+    </select>
+
+    <!-- 获取规则集头信息列表  用于权限管理查询 -->
+    <select id="getHeaderListResource" parameterType="java.util.Map" resultType="com.bonc.frame.entity.auth.resource.PubRuleSetResource">
+        SELECT
+        a.RULE_SET_HEADER_ID AS "ruleSetHeaderId",
+        a.RULE_SET_NAME AS "ruleSetName",
+        a.RULE_SET_GROUP_ID AS "ruleSetGroupId",
+        a.RULE_SET_HEADER_DESC AS "ruleSetHeaderDesc",
+        a.CREATE_DATE AS "createDate",
+        a.UPDATE_DATE AS "updateDate",
+        a.CREATE_PERSON AS "createPerson",
+        a.UPDATE_PERSON AS "updatePerson",
+        b.RULE_SET_GROUP_NAME AS "ruleSetGroupName"
+        FROM CRE_PUB_RULE_SET_HEADER a LEFT JOIN CRE_PUB_RULE_SET_GROUP b
+        ON a.RULE_SET_GROUP_ID = b.RULE_SET_GROUP_ID
+        WHERE 1=1
+        <if test="ruleSetName != null">
+            <bind name="pattern" value="'%' + _parameter.ruleSetName + '%'"/>
+            AND a.RULE_SET_NAME like #{pattern}
+        </if>
+        <if test="ruleSetGroupName != null">
+            <bind name="pattern2" value="'%' + _parameter.ruleSetGroupName + '%'"/>
+            AND b.RULE_SET_GROUP_NAME like #{pattern2}
+        </if>
+        <if test="startDate != null and '' != startDate">
+            and a.CREATE_DATE &gt;= to_date(#{startDate,jdbcType=TIMESTAMP} ,'yyyy-mm-dd hh24:mi:ss')
+        </if>
+        <if test="endDate != null and '' != endDate">
+            and a.CREATE_DATE &lt;= to_date(#{endDate,jdbcType=TIMESTAMP} ,'yyyy-mm-dd hh24:mi:ss')
+        </if>
+        ORDER BY a.CREATE_DATE DESC
+    </select>
+
+    <!-- 获取指定版本规则集 -->
+    <select id="getRuleSetByRuleSetId" parameterType="java.util.Map" resultMap="RuleSetMap">
+        SELECT
+        <include refid="RuleSet_Column_List"/>
+        FROM CRE_PUB_RULE_SET a
+        LEFT JOIN CRE_PUB_RULE_SET_HEADER b
+        ON a.RULE_SET_HEADER_ID = b.RULE_SET_HEADER_ID
+        WHERE a.RULE_SET_ID = #{ruleSetId,jdbcType=VARCHAR}
+    </select>
+
+    <!-- 获取指定规则集版本列表 -->
+    <select id="getRuleSetVersionList" parameterType="java.util.Map" resultMap="RuleSetMap">
+        SELECT
+        <include refid="RuleSet_Column_List"/>
+        FROM CRE_PUB_RULE_SET a
+        LEFT JOIN CRE_PUB_RULE_SET_HEADER b
+        ON a.RULE_SET_HEADER_ID = b.RULE_SET_HEADER_ID
+        WHERE a.RULE_SET_HEADER_ID = #{ruleSetHeaderId,jdbcType=VARCHAR}
+        <if test="enable != null and '' != enable">
+            and a.ENABLE = #{enable,jdbcType=VARCHAR}
+        </if>
+        <if test="startDate != null and '' != startDate">
+            and a.CREATE_DATE &gt;= to_date(#{startDate,jdbcType=TIMESTAMP} ,'yyyy-mm-dd hh24:mi:ss')
+        </if>
+        <if test="endDate != null and '' != endDate">
+            and a.CREATE_DATE &lt;= to_date(#{endDate,jdbcType=TIMESTAMP} ,'yyyy-mm-dd hh24:mi:ss')
+        </if>
+        ORDER BY a.CREATE_DATE DESC
+    </select>
+
+    <!-- 新建规则集头信息 -->
+    <insert id="insertRuleSetHeader" parameterType="com.bonc.frame.entity.commonresource.RuleSetHeader">
+        insert into CRE_PUB_RULE_SET_HEADER
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="ruleSetHeaderId != null">
+                RULE_SET_HEADER_ID,
+            </if>
+            <if test="ruleSetName != null">
+                RULE_SET_NAME,
+            </if>
+            <if test="ruleSetGroupId != null">
+                RULE_SET_GROUP_ID,
+            </if>
+            <if test="ruleSetHeaderDesc != null">
+                RULE_SET_HEADER_DESC,
+            </if>
+            <if test="createPerson != null">
+                CREATE_PERSON,
+            </if>
+            <if test="createDate != null">
+                CREATE_DATE,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="ruleSetHeaderId != null">
+                #{ruleSetHeaderId,jdbcType=VARCHAR},
+            </if>
+            <if test="ruleSetName != null">
+                #{ruleSetName,jdbcType=VARCHAR},
+            </if>
+            <if test="ruleSetGroupId != null">
+                #{ruleSetGroupId,jdbcType=VARCHAR},
+            </if>
+            <if test="ruleSetHeaderDesc != null">
+                #{ruleSetHeaderDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="createPerson != null">
+                #{createPerson,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <insert id="insertRuleSet" parameterType="com.bonc.frame.entity.commonresource.RuleSet">
+        insert into CRE_PUB_RULE_SET
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="ruleSetId != null">
+                RULE_SET_ID,
+            </if>
+            <if test="ruleSetContent != null">
+                RULE_SET_CONTENT,
+            </if>
+            <if test="params != null">
+                PARAMS,
+            </if>
+            <if test="ruleSetDesc != null">
+                RULE_SET_DESC,
+            </if>
+            <if test="version != null">
+                VERSION,
+            </if>
+            <if test="enable != null">
+                ENABLE,
+            </if>
+            <if test="ruleSetHeaderId != null">
+                RULE_SET_HEADER_ID,
+            </if>
+            <if test="createPerson != null">
+                CREATE_PERSON,
+            </if>
+            <if test="createDate != null">
+                CREATE_DATE,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="ruleSetId != null">
+                #{ruleSetId,jdbcType=VARCHAR},
+            </if>
+            <if test="ruleSetContent != null">
+                #{ruleSetContent,jdbcType=VARCHAR},
+            </if>
+            <if test="params != null">
+                #{params,jdbcType=VARCHAR},
+            </if>
+            <if test="ruleSetDesc != null">
+                #{ruleSetDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="version != null">
+                #{version,jdbcType=VARCHAR},
+            </if>
+            <if test="enable != null">
+                #{enable,jdbcType=VARCHAR},
+            </if>
+            <if test="ruleSetHeaderId != null">
+                #{ruleSetHeaderId,jdbcType=VARCHAR},
+            </if>
+            <if test="createPerson != null">
+                #{createPerson,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateRuleSetHeader" parameterType="com.bonc.frame.entity.commonresource.RuleSetHeader">
+        update CRE_PUB_RULE_SET_HEADER
+        <set>
+            <if test="ruleSetName != null">
+                RULE_SET_NAME = #{ruleSetName,jdbcType=VARCHAR},
+            </if>
+            <if test="ruleSetGroupId != null">
+                RULE_SET_GROUP_ID = #{ruleSetGroupId,jdbcType=VARCHAR},
+            </if>
+            <if test="ruleSetHeaderDesc != null">
+                RULE_SET_HEADER_DESC = #{ruleSetHeaderDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null">
+                UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatePerson != null">
+                UPDATE_PERSON = #{updatePerson,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where RULE_SET_HEADER_ID = #{ruleSetHeaderId,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateRuleSet" parameterType="com.bonc.frame.entity.commonresource.RuleSet">
+        update CRE_PUB_RULE_SET
+        <set>
+            <if test="ruleSetContent != null">
+                RULE_SET_CONTENT = #{ruleSetContent,jdbcType=VARCHAR},
+            </if>
+            <if test="params != null">
+                PARAMS = #{params,jdbcType=VARCHAR},
+            </if>
+            <if test="ruleSetDesc != null">
+                RULE_SET_DESC = #{ruleSetDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="enable != null">
+                ENABLE = #{enable,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null">
+                UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatePerson != null">
+                UPDATE_PERSON = #{updatePerson,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where RULE_SET_ID = #{ruleSetId,jdbcType=VARCHAR}
+    </update>
+
+    <delete id="deleteRuleSetHeaderByHeaderId" parameterType="java.lang.String">
+        delete from CRE_PUB_RULE_SET_HEADER
+        where RULE_SET_HEADER_ID = #{ruleSetHeaderId,jdbcType=VARCHAR}
+    </delete>
+
+    <delete id="deleteRuleSetsByHeaderId" parameterType="java.lang.String">
+        delete from CRE_PUB_RULE_SET
+        where RULE_SET_HEADER_ID = #{ruleSetHeaderId,jdbcType=VARCHAR}
+    </delete>
+
+    <delete id="deleteRuleSet" parameterType="java.lang.String">
+        delete from CRE_PUB_RULE_SET
+        where RULE_SET_ID = #{ruleSetId,jdbcType=VARCHAR}
+    </delete>
+
+    <select id="getMaxVersion" parameterType="java.lang.String" resultType="java.lang.String">
+        select * from (
+            SELECT
+            t1.VERSION
+            from CRE_PUB_RULE_SET t1  left join CRE_PUB_RULE_SET_HEADER t2 ON t1.RULE_SET_HEADER_ID= t2.RULE_SET_HEADER_ID
+            WHERE
+            t2.RULE_SET_HEADER_ID = #{ruleSetHeaderId,jdbcType=VARCHAR}
+--             AND t1.ENABLE ='1'
+            ORDER BY t1.CREATE_DATE DESC
+        ) where rownum=1
+
+    </select>
+
+</mapper>

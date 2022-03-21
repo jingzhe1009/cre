@@ -1,0 +1,479 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bonc.frame.mapper.oracle.aBTest.ABTestMapper">
+
+    <resultMap id="BaseResultMap" type="com.bonc.frame.entity.aBTest.ABTest">
+        <id column="AB_TEST_ID" property="aBTestId" jdbcType="VARCHAR"/>
+        <result column="AB_TEST_NAME" property="aBTestName" jdbcType="VARCHAR"/>
+        <result column="AB_TEST_DESC" property="aBTestDesc" jdbcType="VARCHAR"/>
+        <result column="A_RULE_ID" property="aRuleId" jdbcType="VARCHAR"/>
+        <result column="B_RULE_ID" property="bRuleId" jdbcType="VARCHAR"/>
+        <result column="PRODUCT_NAME" property="productName" jdbcType="VARCHAR"/>
+        <result column="PRODUCT_CODE" property="productCode" jdbcType="VARCHAR"/>
+        <result column="CREATE_PERSON" property="createPerson" jdbcType="VARCHAR"/>
+        <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="UPDATE_PERSON" property="updatePerson" jdbcType="VARCHAR"/>
+        <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP"/>
+        <result column="CREATE_USER_JOB_NUMBER" property="createUserJobNumber" jdbcType="VARCHAR"/>
+        <result column="UPDATE_USER_JOB_NUMBER" property="updateUserJobNumber" jdbcType="VARCHAR"/>
+        <result column="A_FETCH_COUNT" property="aFetchCount" jdbcType="NUMERIC" />
+        <result column="A_SUCCESS_COUNT" property="aSuccessCount" jdbcType="NUMERIC" />
+        <result column="A_FAILED_COUNT" property="aFailedCount" jdbcType="NUMERIC" />
+        <result column="B_EXECUTE_COUNT" property="bExecuteCount" jdbcType="NUMERIC" />
+        <result column="B_SUCCESS_COUNT" property="bSuccessCount" jdbcType="NUMERIC" />
+        <result column="B_FAILED_COUNT" property="bFailedCount" jdbcType="NUMERIC" />
+        <result column="STATUS" property="status" jdbcType="VARCHAR" />
+        <result column="START_TIME" property="startTime" jdbcType="TIMESTAMP" />
+        <result column="END_TIME" property="endTime" jdbcType="TIMESTAMP" />
+        <result column="FOLDER_ID" property="folderId" jdbcType="VARCHAR" />
+        <result column="FOLDER_NAME" property="folderName" jdbcType="VARCHAR" />
+        <result column="A_FETCH_START_TIME" property="aFetchStartTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <resultMap id="DetailResultMap" type="com.bonc.frame.entity.aBTest.ABTestDetail" extends="BaseResultMap">
+        <result column="EXCEPTION" property="exception" jdbcType="LONGVARCHAR"/>
+        <result column="A_MODEL_NAME" property="aModelName" jdbcType="VARCHAR"/>
+        <result column="A_MODEL_VERSION" property="aModelVerson" jdbcType="VARCHAR"/>
+        <result column="B_MODEL_NAME" property="bModelName" jdbcType="VARCHAR"/>
+        <result column="B_MODEL_VERSION" property="bModelVerson" jdbcType="VARCHAR"/>
+        <result column="RULE_NAME" property="ruleName" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+    <!-- 查询列表 -->
+    <select id="list" resultMap="DetailResultMap" parameterType="map">
+        SELECT A.AB_TEST_ID, A.AB_TEST_NAME, A.AB_TEST_DESC,
+        A.FOLDER_ID, A.FOLDER_NAME,
+        B.RULE_NAME AS "RULE_NAME",
+        A.A_RULE_ID, B.MODULE_NAME AS "A_MODEL_NAME", B."VERSION" AS "A_MODEL_VERSION",
+        A.B_RULE_ID,
+        --         A.B_RULE_ID, C.MODULE_NAME AS "B_MODEL_NAME", C."VERSION" AS "B_MODEL_VERSION",
+        (CASE WHEN C.MODULE_NAME IS NULL THEN D.MODULE_NAME ELSE C.MODULE_NAME END) "B_MODEL_NAME",
+        (CASE WHEN C."VERSION" IS  NULL THEN D."VERSION" || '(草稿)'  ELSE C."VERSION" END) "B_MODEL_VERSION",
+        A.PRODUCT_NAME, A.PRODUCT_CODE,
+        A.CREATE_DATE, A.CREATE_PERSON, A.UPDATE_DATE, A.UPDATE_PERSON,
+        A.CREATE_USER_JOB_NUMBER, A.UPDATE_USER_JOB_NUMBER,
+        A.A_FETCH_COUNT, A.A_SUCCESS_COUNT, A.A_FAILED_COUNT,
+        A.B_EXECUTE_COUNT, A.B_SUCCESS_COUNT, A.B_FAILED_COUNT,
+        A.STATUS, A.START_TIME, A.END_TIME, A.A_FETCH_START_TIME
+        FROM CRE_AB_TEST A
+        LEFT JOIN CRE_RULE_DETAIL B ON A.A_RULE_ID = B.RULE_ID
+        LEFT JOIN CRE_RULE_DETAIL C ON A.B_RULE_ID = C.RULE_ID
+        LEFT JOIN CRE_RULE_DETAIL_DRAFT D ON A .B_RULE_ID = D.RULE_ID
+        WHERE 1=1
+        <if test="aBTestName != null and '' != aBTestName">
+            <bind name="pattern1" value="'%' + _parameter.aBTestName + '%'"/>
+            AND A.AB_TEST_NAME LIKE #{pattern1}
+        </if>
+        <if test="aModelName != null and '' != aModelName">
+            <bind name="pattern2" value="'%' + _parameter.aModelName + '%'"/>
+            AND B.MODULE_NAME LIKE #{pattern2}
+        </if>
+        <if test="productName != null and '' != productName">
+            <bind name="pattern3" value="'%' + _parameter.productName + '%'"/>
+            AND A.PRODUCT_NAME LIKE #{pattern3}
+        </if>
+        <if test="folderName != null and '' != folderName">
+            <bind name="pattern4" value="'%' + _parameter.folderName + '%'"/>
+            AND A.FOLDER_NAME LIKE #{pattern4}
+        </if>
+        <if test="folderId != null and '' != folderId">
+            and A.FOLDER_ID = #{folderId,jdbcType=VARCHAR}
+        </if>
+        <if test="status != null and '' != status">
+            and A.STATUS = #{status,jdbcType=VARCHAR}
+        </if>
+        ORDER BY CREATE_DATE DESC
+    </select>
+
+    <!-- 查看详情 -->
+    <select id="detail" resultMap="DetailResultMap" parameterType="string">
+        SELECT A.AB_TEST_ID, A.AB_TEST_NAME, A.AB_TEST_DESC,
+        A.FOLDER_ID, A.FOLDER_NAME,
+        B.RULE_NAME AS "RULE_NAME",
+        A.A_RULE_ID, B.MODULE_NAME AS "A_MODEL_NAME", B."VERSION" AS "A_MODEL_VERSION",
+         A.B_RULE_ID,
+--         A.B_RULE_ID, C.MODULE_NAME AS "B_MODEL_NAME", C."VERSION" AS "B_MODEL_VERSION",
+        (CASE WHEN C.MODULE_NAME IS NULL THEN D.MODULE_NAME ELSE C.MODULE_NAME END) "B_MODEL_NAME",
+        (CASE WHEN C."VERSION" IS  NULL THEN D."VERSION" || '(草稿)'  ELSE C."VERSION" END) "B_MODEL_VERSION",
+        A.PRODUCT_NAME, A.PRODUCT_CODE,
+        A.CREATE_DATE, A.CREATE_PERSON, A.UPDATE_DATE, A.UPDATE_PERSON,
+        A.CREATE_USER_JOB_NUMBER, A.UPDATE_USER_JOB_NUMBER,
+        A.A_FETCH_COUNT, A.A_SUCCESS_COUNT, A.A_FAILED_COUNT,
+        A.B_EXECUTE_COUNT, A.B_SUCCESS_COUNT, A.B_FAILED_COUNT,
+        A.STATUS, A.EXCEPTION, A.START_TIME, A.END_TIME, A.A_FETCH_START_TIME
+        FROM CRE_AB_TEST A
+        LEFT JOIN CRE_RULE_DETAIL B ON A.A_RULE_ID = B.RULE_ID
+        LEFT JOIN CRE_RULE_DETAIL C ON A.B_RULE_ID = C.RULE_ID
+        LEFT JOIN CRE_RULE_DETAIL_DRAFT D ON A .B_RULE_ID = D.RULE_ID
+        WHERE A.AB_TEST_ID = #{aBTestId,jdbcType=VARCHAR}
+    </select>
+
+    <!-- 是否在运行中 -->
+    <select id="isRunning" parameterType="string" resultType="int">
+        select count(*) as "count" from CRE_AB_TEST
+        where AB_TEST_ID = #{aBTestId,jdbcType=VARCHAR}
+        AND STATUS = '1'
+    </select>
+
+    <!-- 按照状态查询 -->
+    <select id="getByStatus" parameterType="string" resultMap="BaseResultMap">
+        select * from CRE_AB_TEST
+        where STATUS = #{status,jdbcType=VARCHAR}
+    </select>
+
+    <!-- 查询名称是否重复 -->
+    <select id="isNameExist" parameterType="map" resultType="int">
+        select count(*) as "count" from CRE_AB_TEST
+        where AB_TEST_NAME = #{aBTestName,jdbcType=VARCHAR}
+        <if test="aBTestId != null">
+            and AB_TEST_ID != #{aBTestId,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <insert id="insertSelective" parameterType="com.bonc.frame.entity.aBTest.ABTestDetail">
+        insert into CRE_AB_TEST
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="aBTestId != null">
+                AB_TEST_ID,
+            </if>
+            <if test="aBTestName != null">
+                AB_TEST_NAME,
+            </if>
+            <if test="aBTestDesc != null">
+                AB_TEST_DESC,
+            </if>
+            <if test="aRuleId != null">
+                A_RULE_ID,
+            </if>
+            <if test="bRuleId != null">
+                B_RULE_ID,
+            </if>
+            <if test="productName != null">
+                PRODUCT_NAME,
+            </if>
+            <if test="productCode != null">
+                PRODUCT_CODE,
+            </if>
+
+            <if test="folderId != null">
+                FOLDER_ID,
+            </if>
+            <if test="folderName != null">
+                FOLDER_NAME,
+            </if>
+
+            <if test="createPerson != null">
+                CREATE_PERSON,
+            </if>
+            <if test="createDate != null">
+                CREATE_DATE,
+            </if>
+            <if test="updatePerson != null">
+                UPDATE_PERSON,
+            </if>
+            <if test="updateDate != null">
+                UPDATE_DATE,
+            </if>
+
+            <if test="createUserJobNumber != null">
+                CREATE_USER_JOB_NUMBER,
+            </if>
+            <if test="updateUserJobNumber != null">
+                UPDATE_USER_JOB_NUMBER,
+            </if>
+
+            <if test="aFetchCount != null">
+                A_FETCH_COUNT,
+            </if>
+            <if test="aSuccessCount != null">
+                A_SUCCESS_COUNT,
+            </if>
+            <if test="aFailedCount != null">
+                A_FAILED_COUNT,
+            </if>
+            <if test="bExecuteCount != null">
+                B_EXECUTE_COUNT,
+            </if>
+            <if test="bSuccessCount != null">
+                B_SUCCESS_COUNT,
+            </if>
+            <if test="bFailedCount != null">
+                B_FAILED_COUNT,
+            </if>
+
+            <if test="status != null">
+                STATUS,
+            </if>
+            <if test="exception != null">
+                EXCEPTION,
+            </if>
+            <if test="startTime != null">
+                START_TIME,
+            </if>
+            <if test="endTime != null">
+                END_TIME,
+            </if>
+            <if test="aFetchStartTime != null">
+                A_FETCH_START_TIME,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="aBTestId != null">
+                #{aBTestId,jdbcType=VARCHAR},
+            </if>
+            <if test="aBTestName != null">
+                #{aBTestName,jdbcType=VARCHAR},
+            </if>
+            <if test="aBTestDesc != null">
+                #{aBTestDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="aRuleId != null">
+                #{aRuleId,jdbcType=VARCHAR},
+            </if>
+            <if test="bRuleId != null">
+                #{bRuleId,jdbcType=VARCHAR},
+            </if>
+            <if test="productName != null">
+                #{productName,jdbcType=VARCHAR},
+            </if>
+            <if test="productCode != null">
+                #{productCode,jdbcType=VARCHAR},
+            </if>
+
+            <if test="folderId != null">
+                #{folderId,jdbcType=VARCHAR},
+            </if>
+            <if test="folderName != null">
+                #{folderName,jdbcType=VARCHAR},
+            </if>
+
+            <if test="createPerson != null">
+                #{createPerson,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatePerson != null">
+                #{updatePerson,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null">
+                #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createUserJobNumber != null">
+                #{createUserJobNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="updateUserJobNumber != null">
+                #{updateUserJobNumber,jdbcType=VARCHAR},
+            </if>
+
+            <if test="aFetchCount != null">
+                #{aFetchCount,jdbcType=NUMERIC},
+            </if>
+            <if test="aSuccessCount != null">
+                #{aSuccessCount,jdbcType=NUMERIC},
+            </if>
+            <if test="aFailedCount != null">
+                #{aFailedCount,jdbcType=NUMERIC},
+            </if>
+            <if test="bExecuteCount != null">
+                #{bExecuteCount,jdbcType=NUMERIC},
+            </if>
+            <if test="bSuccessCount != null">
+                #{bSuccessCount,jdbcType=NUMERIC},
+            </if>
+            <if test="bFailedCount != null">
+                #{bFailedCount,jdbcType=NUMERIC},
+            </if>
+
+            <if test="status != null">
+                #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="exception != null">
+                #{exception,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="startTime != null">
+                #{startTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endTime != null">
+                #{endTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="aFetchStartTime != null">
+                #{aFetchStartTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.bonc.frame.entity.aBTest.ABTestDetail">
+        update CRE_AB_TEST
+        <set>
+            <if test="aBTestName != null">
+                AB_TEST_NAME = #{aBTestName,jdbcType=VARCHAR},
+            </if>
+            <if test="aBTestDesc != null">
+                AB_TEST_DESC = #{aBTestDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="aRuleId != null">
+                A_RULE_ID = #{aRuleId,jdbcType=VARCHAR},
+            </if>
+            <if test="bRuleId != null">
+                B_RULE_ID = #{bRuleId,jdbcType=VARCHAR},
+            </if>
+
+            <if test="productName != null">
+                PRODUCT_NAME = #{productName,jdbcType=VARCHAR},
+            </if>
+            <if test="productCode != null">
+                PRODUCT_CODE = #{productCode,jdbcType=VARCHAR},
+            </if>
+
+            <if test="folderId != null">
+                FOLDER_ID = #{folderId,jdbcType=VARCHAR},
+            </if>
+            <if test="folderName != null">
+                FOLDER_NAME = #{folderName,jdbcType=VARCHAR},
+            </if>
+
+            <if test="createPerson != null">
+                CREATE_PERSON = #{createPerson,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatePerson != null">
+                UPDATE_PERSON = #{updatePerson,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null">
+                UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createUserJobNumber != null">
+                CREATE_USER_JOB_NUMBER = #{createUserJobNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="updateUserJobNumber != null">
+                UPDATE_USER_JOB_NUMBER = #{updateUserJobNumber,jdbcType=VARCHAR},
+            </if>
+
+            <if test="aFetchCount != null">
+                A_FETCH_COUNT = #{aFetchCount,jdbcType=NUMERIC},
+            </if>
+            <if test="aSuccessCount != null">
+                A_SUCCESS_COUNT = #{aSuccessCount,jdbcType=NUMERIC},
+            </if>
+            <if test="aFailedCount != null">
+                A_FAILED_COUNT = #{aFailedCount,jdbcType=NUMERIC},
+            </if>
+            <if test="bExecuteCount != null">
+                B_EXECUTE_COUNT = #{bExecuteCount,jdbcType=NUMERIC},
+            </if>
+            <if test="bSuccessCount != null">
+                B_SUCCESS_COUNT = #{bSuccessCount,jdbcType=NUMERIC},
+            </if>
+            <if test="bFailedCount != null">
+                B_FAILED_COUNT = #{bFailedCount,jdbcType=NUMERIC},
+            </if>
+
+            <if test="status != null">
+                STATUS = #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="exception != null">
+                EXCEPTION = #{exception,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="startTime != null">
+                START_TIME = #{startTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endTime != null">
+                END_TIME = #{endTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="aFetchStartTime != null">
+                A_FETCH_START_TIME = #{aFetchStartTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where AB_TEST_ID = #{aBTestId,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateFetchStartTime" parameterType="com.bonc.frame.entity.aBTest.ABTest">
+        update CRE_AB_TEST
+        <set>
+            <if test="aFetchStartTime != null">
+                A_FETCH_START_TIME = #{aFetchStartTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where AB_TEST_ID = #{aBTestId,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateExecuteStatus" parameterType="com.bonc.frame.entity.aBTest.ABTest">
+        update CRE_AB_TEST
+        <set>
+            <if test="aFetchCount != null">
+                A_FETCH_COUNT = #{aFetchCount,jdbcType=NUMERIC},
+            </if>
+            <if test="aSuccessCount != null">
+                A_SUCCESS_COUNT = #{aSuccessCount,jdbcType=NUMERIC},
+            </if>
+            <if test="aFailedCount != null">
+                A_FAILED_COUNT = #{aFailedCount,jdbcType=NUMERIC},
+            </if>
+            <if test="bExecuteCount != null">
+                B_EXECUTE_COUNT = #{bExecuteCount,jdbcType=NUMERIC},
+            </if>
+            <if test="bSuccessCount != null">
+                B_SUCCESS_COUNT = #{bSuccessCount,jdbcType=NUMERIC},
+            </if>
+            <if test="bFailedCount != null">
+                B_FAILED_COUNT = #{bFailedCount,jdbcType=NUMERIC},
+            </if>
+
+            <!--<if test="status != null">
+                STATUS = #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="exception != null">
+                EXCEPTION = #{exception,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="startTime != null">
+                START_TIME = #{startTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endTime != null">
+                END_TIME = #{endTime,jdbcType=TIMESTAMP},
+            </if>-->
+        </set>
+        where AB_TEST_ID = #{aBTestId,jdbcType=VARCHAR}
+    </update>
+
+    <update id="changeStatus" parameterType="com.bonc.frame.entity.aBTest.ABTest">
+        update CRE_AB_TEST
+        <set>
+            <if test="bRuleId != null">
+                B_RULE_ID = #{bRuleId,jdbcType=VARCHAR},
+            </if>
+            <if test="updatePerson != null">
+                UPDATE_PERSON = #{updatePerson,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null">
+                UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateUserJobNumber != null">
+                UPDATE_USER_JOB_NUMBER = #{updateUserJobNumber,jdbcType=VARCHAR},
+            </if>
+
+            <if test="status != null">
+                STATUS = #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="exception != null">
+                EXCEPTION = #{exception,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="startTime != null">
+                START_TIME = #{startTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endTime != null">
+                END_TIME = #{endTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where AB_TEST_ID = #{aBTestId,jdbcType=VARCHAR}
+    </update>
+
+    <delete id="deleteByPrimaryKey" parameterType="string">
+        delete from CRE_AB_TEST where AB_TEST_ID = #{aBTestId,jdbcType=VARCHAR}
+    </delete>
+
+
+</mapper>

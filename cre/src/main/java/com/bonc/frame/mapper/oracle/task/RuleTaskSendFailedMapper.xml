@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bonc.frame.mapper.task.RuleTaskSendFailedMapper">
+    <resultMap id="BaseResultMap" type="com.bonc.frame.entity.task.RuleTaskLog">
+        <result column="TASK_ID" property="taskId" jdbcType="VARCHAR"/>
+        <result column="RULE_TASK_ID" property="ruleTaskId" jdbcType="VARCHAR"/>
+        <result column="MESSAGE" property="message" jdbcType="VARCHAR"/>
+        <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        TASK_ID, RULE_TASK_ID, MESSAGE, CREATE_DATE
+    </sql>
+
+
+    <insert id="insertSelective" parameterType="com.bonc.frame.entity.task.RuleTaskLog">
+        insert into CRE_RULE_TASK_SEND_FAILED
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="taskId != null">
+                TASK_ID,
+            </if>
+            <if test="ruleTaskId != null">
+                RULE_TASK_ID,
+            </if>
+            <if test="message != null">
+                MESSAGE,
+            </if>
+            <if test="createDate != null">
+                CREATE_DATE,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="taskId != null">
+                #{taskId,jdbcType=VARCHAR},
+            </if>
+            <if test="ruleTaskId != null">
+                #{ruleTaskId,jdbcType=VARCHAR},
+            </if>
+            <if test="message != null">
+                #{message,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.bonc.frame.entity.task.RuleTaskLog">
+        update CRE_RULE_TASK_SEND_FAILED
+        <set>
+            <if test="message != null">
+                MESSAGE = #{message,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null">
+                UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where FINAL_KEY = #{finalKey,jdbcType=VARCHAR}
+    </update>
+
+    <delete id="deleteByTaskId" parameterType="java.lang.String">
+       delete from CRE_RULE_TASK_SEND_FAILED
+        where TASK_ID = #{taskId,jdbcType=VARCHAR}
+    </delete>
+
+</mapper>

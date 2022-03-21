@@ -1,0 +1,40 @@
+<#include "/commonHead.html">
+<link href="${ctx.contextPath}/static/css/migration/migration.css" rel="stylesheet"/>
+<div id="page">
+    <div id="pageHeader">
+        <p>当前位置：<span>导入导出</span></p>
+    </div>
+    <div id="pageBody">
+        <div id="pageContent">
+            <div id="globalMigrationContainer">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" data-target="#importContent">导入</a></li>
+                    <li><a data-toggle="tab" data-target="#exportContent">导出</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane fade active in" id="importContent">
+                        <#include "/pages/migration/importContent.html">
+                    </div>
+                    <div class="tab-pane fade" id="exportContent">
+                        <b>请选择要导出的模型</b>
+                        <#include "/pages/migration/exportContent.html">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<#include "/pages/migration/importReport.html">
+<#include "/pages/migration/exportReport.html">
+<#include "/pages/common/loading.html">
+<#include "/pages/common/confirmAlert.html">
+<#include "/commonFoot.html">
+
+<script src="${ctx.contextPath}/static/js/migration/global.js"></script>
+<script src="${ctx.contextPath}/static/js/migration/export.js"></script>
+<script src="${ctx.contextPath}/static/js/migration/import.js"></script>
+<script src="${ctx.contextPath}/static/js/common/loading.js"></script>
+<script src="${ctx.contextPath}/static/js/common/confirmAlert.js"></script>
+</body>
+</html>

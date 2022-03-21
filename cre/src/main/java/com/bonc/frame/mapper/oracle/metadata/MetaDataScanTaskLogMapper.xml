@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bonc.frame.mapper.metadata.MetaDataScanTaskLogMapper" >
+  <resultMap id="BaseResultMap" type="com.bonc.frame.entity.metadata.MetaDataScanTaskLog" >
+    <id column="LOG_ID" property="logId" jdbcType="VARCHAR" />
+    <result column="SCAN_ID" property="scanId" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.bonc.frame.entity.metadata.MetaDataScanTaskLog" extends="BaseResultMap" >
+    <result column="SCAN_CONTEXT" property="scanContext" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    LOG_ID, SCAN_ID
+  </sql>
+  <sql id="Blob_Column_List" >
+    SCAN_CONTEXT
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from brm_meta_scan_task_log
+    where LOG_ID = #{logId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from CRE_META_SCAN_TASK_LOG
+    where LOG_ID = #{logId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.bonc.frame.entity.metadata.MetaDataScanTaskLog" >
+    insert into CRE_META_SCAN_TASK_LOG (LOG_ID, SCAN_ID, SCAN_CONTEXT
+      )
+    values (#{logId,jdbcType=VARCHAR}, #{scanId,jdbcType=VARCHAR}, #{scanContext,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.bonc.frame.entity.metadata.MetaDataScanTaskLog" >
+    insert into CRE_META_SCAN_TASK_LOG
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="logId != null" >
+        LOG_ID,
+      </if>
+      <if test="scanId != null" >
+        SCAN_ID,
+      </if>
+      <if test="scanContext != null" >
+        SCAN_CONTEXT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="logId != null" >
+        #{logId,jdbcType=VARCHAR},
+      </if>
+      <if test="scanId != null" >
+        #{scanId,jdbcType=VARCHAR},
+      </if>
+      <if test="scanContext != null" >
+        #{scanContext,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bonc.frame.entity.metadata.MetaDataScanTaskLog" >
+    update CRE_META_SCAN_TASK_LOG
+    <set >
+      <if test="scanId != null" >
+        SCAN_ID = #{scanId,jdbcType=VARCHAR},
+      </if>
+      <if test="scanContext != null" >
+        SCAN_CONTEXT = #{scanContext,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where LOG_ID = #{logId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.bonc.frame.entity.metadata.MetaDataScanTaskLog" >
+    update CRE_META_SCAN_TASK_LOG
+    set SCAN_ID = #{scanId,jdbcType=VARCHAR},
+      SCAN_CONTEXT = #{scanContext,jdbcType=LONGVARCHAR}
+    where LOG_ID = #{logId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bonc.frame.entity.metadata.MetaDataScanTaskLog" >
+    update CRE_META_SCAN_TASK_LOG
+    set SCAN_ID = #{scanId,jdbcType=VARCHAR}
+    where LOG_ID = #{logId,jdbcType=VARCHAR}
+  </update>
+</mapper>

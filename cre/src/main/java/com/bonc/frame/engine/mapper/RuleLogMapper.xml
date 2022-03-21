@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bonc.frame.engine.mapper.RuleLogMapper" >
+  
+  <!-- 插入规则执行日志 -->
+  <insert id="insertRuleLog" parameterType="com.bonc.framework.rule.log.entity.RuleLog" >
+    insert into CRE_RULE_LOG
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="logId != null" >
+        LOG_ID,
+      </if>
+      <if test="ruleId != null" >
+        RULE_ID,
+      </if>
+      <if test="folderId != null" >
+        FOLDER_ID,
+      </if>
+      <if test="state != null" >
+        STATE,
+      </if>
+      <if test="hitRuleNum != null" >
+        HIT_RULE_NUM,
+      </if>
+      <if test="startTime != null" >
+        START_TIME,
+      </if>
+      <if test="endTime != null" >
+        END_TIME,
+      </if>
+      <if test="inputData != null" >
+        INPUT_DATA,
+      </if>
+      <if test="outputData != null" >
+        OUTPUT_DATA,
+      </if>
+      <if test="exception != null" >
+        EXCEPTION,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="logId != null" >
+        #{logId,jdbcType=VARCHAR},
+      </if>
+      <if test="ruleId != null" >
+        #{ruleId,jdbcType=VARCHAR},
+      </if>
+      <if test="folderId != null" >
+        #{folderId,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="hitRuleNum != null" >
+        #{hitRuleNum,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="inputData != null" >
+        #{inputData,jdbcType=CLOB},
+      </if>
+      <if test="outputData != null" >
+        #{outputData,jdbcType=CLOB},
+      </if>
+      <if test="exception != null" >
+        #{exception,jdbcType=CLOB},
+      </if>
+    </trim>
+  </insert>
+  
+  <!-- 批量插入规则执行日志 -->
+  <insert id="insertBatchRuleLog" parameterType="java.util.List" >
+    BEGIN 
+    <foreach collection ="list" item="ruleLog" separator ="">
+	    insert into CRE_RULE_LOG
+	    (LOG_ID,RULE_ID,FOLDER_ID,STATE,HIT_RULE_NUM,
+	     START_TIME,END_TIME,INPUT_DATA,OUTPUT_DATA,EXCEPTION)
+	    VALUES
+		 (#{ruleLog.logId,jdbcType=VARCHAR},#{ruleLog.ruleId,jdbcType=VARCHAR},
+        #{ruleLog.folderId,jdbcType=VARCHAR},#{ruleLog.state,jdbcType=VARCHAR},
+        #{ruleLog.hitRuleNum,jdbcType=VARCHAR},#{ruleLog.startTime,jdbcType=TIMESTAMP},
+        #{ruleLog.endTime,jdbcType=TIMESTAMP},#{ruleLog.inputData,jdbcType=CLOB},
+        #{ruleLog.outputData,jdbcType=CLOB},#{ruleLog.exception,jdbcType=CLOB});
+    </foreach >
+    COMMIT;  
+    END;
+  </insert>
+  
+  <!-- 插入规则执行日志详情 -->
+  <insert id="insertRuleLogDetail" parameterType="com.bonc.framework.rule.log.entity.RuleLogDetail" >
+    insert into CRE_RULE_LOG_DETAIL
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="logId != null" >
+        LOG_ID,
+      </if>
+      <if test="nodeId != null" >
+        NODE_ID,
+      </if>
+      <if test="nodeName != null" >
+        NODE_NAME,
+      </if>
+      <if test="nodeType != null" >
+        NODE_TYPE,
+      </if>
+      <if test="state != null" >
+        STATE,
+      </if>
+      <if test="startTime != null" >
+        START_TIME,
+      </if>
+      <if test="endTime != null" >
+        END_TIME,
+      </if>
+      <if test="result != null" >
+        RESULT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="logId != null" >
+        #{logId,jdbcType=VARCHAR},
+      </if>
+      <if test="nodeId != null" >
+        #{nodeId,jdbcType=VARCHAR},
+      </if>
+      <if test="nodeName != null" >
+        #{nodeName,jdbcType=VARCHAR},
+      </if>
+      <if test="nodeType != null" >
+        #{nodeType,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="result != null" >
+        #{result,jdbcType=CLOB},
+      </if>
+    </trim>
+  </insert>
+  
+  <!-- 批量插入规则执行日志详情 -->
+  <insert id="insertBatchRuleLogDetail" parameterType="java.util.List" >
+    BEGIN 
+    <foreach collection ="list" item="ruleLogDetail" separator ="">
+	    insert into CRE_RULE_LOG_DETAIL
+	    (ID,LOG_ID,NODE_ID,NODE_NAME,NODE_TYPE,STATE,
+	     START_TIME,END_TIME,RESULT)
+	     VALUES
+	     (#{ruleLogDetail.id,jdbcType=VARCHAR},#{ruleLogDetail.logId,jdbcType=VARCHAR},
+	     #{ruleLogDetail.nodeId,jdbcType=VARCHAR},#{ruleLogDetail.nodeName,jdbcType=VARCHAR},
+	     #{ruleLogDetail.nodeType,jdbcType=VARCHAR},#{ruleLogDetail.state,jdbcType=VARCHAR},
+	     #{ruleLogDetail.startTime,jdbcType=TIMESTAMP},#{ruleLogDetail.endTime,jdbcType=TIMESTAMP},
+	     #{ruleLogDetail.result,jdbcType=CLOB});
+	</foreach >
+    COMMIT;  
+    END;
+  </insert>
+</mapper>

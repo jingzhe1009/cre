@@ -1,0 +1,59 @@
+<#include "/commonHead.html">
+<link href="${ctx.contextPath}/static/css/rule/ruleTest.css" rel="stylesheet" />
+<div id="page">
+	<div id="pageHeader">
+		<p>当前位置：<span id="title"></span></p>
+	</div>
+	<div id="pageBody">
+		<div id="pageContent">
+		  <div class="container-fluid varDiv">
+			  <ul>
+			     <#list variableList as variable>
+			      <li class="col-lg-3 col-md-3">
+			         ${variable.variableAlias}
+			         <#if variable.aliasCode ?? >
+			         <input type="text" class="textL" variableType="${variable.typeId!}" name="${variable.aliasCode}"/>
+			         <#else>
+			         <input type="text" class="textL" variableType="${variable.typeId!}" name="${variable.variableCode}"/>
+			         </#if>
+			      </li>
+			     </#list>
+			  </ul>
+		  </div>
+		  <div class="result">
+		       <span class="resuleTit">测试结果：</span>
+		    <div class="testRuslt" id="ruleTestRuslt">
+<!--                 <div> -->
+<!--                     <p><span class="iconOpen"></span><span>网络连接故障...</span></p> -->
+<!--                     <ul> -->
+<!--                         <li>请检查网络电缆是否插好</li> -->
+<!--                         <li>请确保服务器没有挂掉</li> -->
+<!--                     </ul> -->
+<!--                 </div> -->
+<!--                 <p>2016-11-16 19:45:22 正在编译规则包。 </p> -->
+<!--                 <p>2016-11-16 19:45:22 规则包编译<span class="red">成功</span>。 </p> -->
+            </div>
+		  </div>
+		  <div class="savediv container-fluid fr">
+              <button class="btn  btn-primary" type="button" onclick="testFn.test();">测试</button>
+              <button class="btn  btn-primary" type="button" onclick="testFn.lastPage();">上一步</button>
+          </div>
+		</div>
+	</div>
+</div>
+
+<#include "/commonFoot.html">
+<script type="text/javascript">
+    var folderId = '${folderId!}';
+    var ruleId = '${ruleId!}';
+    var ruleName = '${ruleName!}';
+    var moduleName = '${moduleName!}';
+    var folderName = creCommon.getCookie('folderName');
+    //设置标题
+    var title = folderName + '>' + moduleName + ">测试";
+    $("#title").text(title);
+</script>
+<script src="${ctx.contextPath}/static/js/rule/ruleTest.js"></script>
+
+</body>
+</html>

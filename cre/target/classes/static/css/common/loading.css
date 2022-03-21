@@ -1,0 +1,8 @@
+/*loading*/
+#loadingModal{
+    background-color: transparent;
+    text-align: center;
+}
+#loadingModal img {
+    padding-top: 20%;
+}

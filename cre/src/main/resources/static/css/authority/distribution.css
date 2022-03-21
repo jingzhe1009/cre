@@ -1,0 +1,98 @@
+#ResourceDistributionAlertModal .modal-body{
+    margin-bottom: 15px;
+}
+.resourceTargetContainer{
+    margin: 0 0 8px 0;
+}
+.resourceTargetContainer .resourceTableIcon{
+    display: inline-block;
+    width: 80px;
+    color: #F1A325;
+}
+.resourceTargetContainer input{
+    display: inline;
+    width: 200px;
+    height: 28px;
+    outline: none;
+}
+/*三列中间自适应*/
+.distributeResourceContainer {
+    border: 1px dashed #ccc;
+    position: relative;
+    float: left;
+    width: 385px;
+    margin: 0 -385px 0 0;
+    padding: 6px;
+}
+.threeRowsSelfAdaption_right {
+    float: right;
+    margin: 0 0 0 -385px;
+}
+.threeRowsSelfAdaption_middle {
+    float: left;
+    width: 100%;
+}
+.threeRowsSelfAdaption_middleContent {
+    margin: 0 390px 0 390px;
+}
+.threeRowsSelfAdaption_middleContent>div{
+    border: 1px solid #ccc;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    margin: 5px auto;
+    text-align: center;
+    cursor: pointer;
+}
+.threeRowsSelfAdaption_middleContent>div:hover{
+    /*background-color: #3280FC;*/
+    /*border: 1px solid #3280FC;*/
+    background-color: var(--colorNormal);
+    border: 1px solid var(--colorNormal);
+    color: #fff;
+}
+.threeRowsSelfAdaption_middleContent div i{
+    font-size: 18px;
+}
+/*资源搜索栏两列自适应*/
+#ResourceDistributionAlertModal .selfAdaptionRight{
+    position: relative;
+    float: right;
+    width: 60px;
+    margin-left: -60px;
+}
+.distributeTableContainer{
+    margin-top: 8px;
+    max-height: 320px;
+    min-height: 320px;
+    overflow: auto;
+}
+/*左右列表样式*/
+.distributeTableContainer ul{
+    padding-left: 0;
+}
+.distributeTableContainer .checkbox{
+    padding: 5px 0 5px 5px;
+    border-bottom: 1px solid rgb(236, 239, 248);
+    color: #666;
+    margin: 0;
+}
+.distributeTableContainer .checkbox span{
+    margin-left: 25px;
+}
+.distributeTableContainer .checkbox input{
+    cursor: pointer;
+}
+.distributeTableContainer .checkbox:nth-child(odd){
+    background-color: #fbfbfd;
+}
+/*全选行*/
+.distributeTableContainer .checkAllBox span{
+    display: inline-block;
+    width: 280px;
+    text-align: center;
+}
+.distributeTableContainer .checkAllBox{
+    background-color: #f6f7fb;
+    color: #333;
+}

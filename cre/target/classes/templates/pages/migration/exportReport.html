@@ -1,0 +1,44 @@
+<!--导出报告-->
+<div class="modal fade" id="exportReportAlertModal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">导出报告</h4>
+            </div>
+            <div class="modal-body">
+                <div class="exportHeader">
+                    <b>操作类型：</b><span id="operateType"></span>
+                    <b>系统版本：</b><span id="systemVersion"></span>
+                    <b>日期：</b><span id="date"></span>
+                    <b>结果：</b><span id="success"></span>
+                </div>
+
+                <div class="exportSuccess">
+                    <div class="container-fluid exportDiv ">
+                        <b>总统计：</b>
+                        <table id="exportSuccess_total"></table>
+                    </div>
+                    <div class="container-fluid exportDiv ">
+                        <b>导出场景列表：</b>
+                        <table id="exportSuccess_folder"></table>
+                    </div>
+                    <div class="container-fluid exportDiv ">
+                        <b>导出模型组列表：</b>
+                        <table id="exportSuccess_public"></table>
+                    </div>
+                </div>
+
+                <div class="exportFailed">
+                    <div class="container-fluid exportDiv ">
+                        <b>缺失数据列表：</b>
+                        <table id="exportFailed_lack"></table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="closeExportReport" type="button" class="btn btn-minor" data-dismiss="modal">返回</button>
+                <button id="closeExportAll" type="button" class="btn btn-minor" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>

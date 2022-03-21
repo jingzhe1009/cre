@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bonc.frame.dao.ruletype.RuleTypeMapper">
+  <resultMap id="BaseResultMap" type="com.bonc.frame.entity.rule.RuleType">
+    <id column="RULE_TYPE" jdbcType="VARCHAR" property="ruleType" />
+    <result column="RULE_TYPE_NAME" jdbcType="VARCHAR" property="ruleTypeName" />
+    <result column="RULE_TYPE_DESC" jdbcType="VARCHAR" property="ruleTypeDesc" />
+    <result column="ORDER" jdbcType="VARCHAR" property="order" />
+    <result column="IS_ONLY" jdbcType="VARCHAR" property="isOnly" />
+    <result column="CREATE_PERSON" jdbcType="VARCHAR" property="createPerson" />
+    <result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="UPDATE_PERSON" jdbcType="VARCHAR" property="updatePerson" />
+    <result column="UPDATE_DATE" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.bonc.frame.entity.rule.RuleType">
+    <result column="RULE_TYPE_HTML" jdbcType="LONGVARCHAR" property="ruleTypeHtml" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    RULE_TYPE, RULE_TYPE_NAME, RULE_TYPE_DESC, ORDER, IS_ONLY, CREATE_PERSON, CREATE_DATE, 
+    UPDATE_PERSON, UPDATE_DATE
+  </sql>
+  <sql id="Blob_Column_List">
+    RULE_TYPE_HTML
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from cre_rule_type
+    where RULE_TYPE = #{ruleType,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from cre_rule_type
+    where RULE_TYPE = #{ruleType,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.bonc.frame.entity.rule.RuleType">
+    insert into cre_rule_type (RULE_TYPE, RULE_TYPE_NAME, RULE_TYPE_DESC, 
+      ORDER, IS_ONLY, CREATE_PERSON, 
+      CREATE_DATE, UPDATE_PERSON, UPDATE_DATE, 
+      RULE_TYPE_HTML)
+    values (#{ruleType,jdbcType=VARCHAR}, #{ruleTypeName,jdbcType=VARCHAR}, #{ruleTypeDesc,jdbcType=VARCHAR}, 
+      #{order,jdbcType=VARCHAR}, #{isOnly,jdbcType=VARCHAR}, #{createPerson,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{updatePerson,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}, 
+      #{ruleTypeHtml,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bonc.frame.entity.rule.RuleType">
+    insert into cre_rule_type
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="ruleType != null">
+        RULE_TYPE,
+      </if>
+      <if test="ruleTypeName != null">
+        RULE_TYPE_NAME,
+      </if>
+      <if test="ruleTypeDesc != null">
+        RULE_TYPE_DESC,
+      </if>
+      <if test="order != null">
+        ORDER,
+      </if>
+      <if test="isOnly != null">
+        IS_ONLY,
+      </if>
+      <if test="createPerson != null">
+        CREATE_PERSON,
+      </if>
+      <if test="createDate != null">
+        CREATE_DATE,
+      </if>
+      <if test="updatePerson != null">
+        UPDATE_PERSON,
+      </if>
+      <if test="updateDate != null">
+        UPDATE_DATE,
+      </if>
+      <if test="ruleTypeHtml != null">
+        RULE_TYPE_HTML,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="ruleType != null">
+        #{ruleType,jdbcType=VARCHAR},
+      </if>
+      <if test="ruleTypeName != null">
+        #{ruleTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="ruleTypeDesc != null">
+        #{ruleTypeDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="order != null">
+        #{order,jdbcType=VARCHAR},
+      </if>
+      <if test="isOnly != null">
+        #{isOnly,jdbcType=VARCHAR},
+      </if>
+      <if test="createPerson != null">
+        #{createPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatePerson != null">
+        #{updatePerson,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null">
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ruleTypeHtml != null">
+        #{ruleTypeHtml,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bonc.frame.entity.rule.RuleType">
+    update cre_rule_type
+    <set>
+      <if test="ruleTypeName != null">
+        RULE_TYPE_NAME = #{ruleTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="ruleTypeDesc != null">
+        RULE_TYPE_DESC = #{ruleTypeDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="order != null">
+        ORDER = #{order,jdbcType=VARCHAR},
+      </if>
+      <if test="isOnly != null">
+        IS_ONLY = #{isOnly,jdbcType=VARCHAR},
+      </if>
+      <if test="createPerson != null">
+        CREATE_PERSON = #{createPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatePerson != null">
+        UPDATE_PERSON = #{updatePerson,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null">
+        UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ruleTypeHtml != null">
+        RULE_TYPE_HTML = #{ruleTypeHtml,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where RULE_TYPE = #{ruleType,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.bonc.frame.entity.rule.RuleType">
+    update cre_rule_type
+    set RULE_TYPE_NAME = #{ruleTypeName,jdbcType=VARCHAR},
+      RULE_TYPE_DESC = #{ruleTypeDesc,jdbcType=VARCHAR},
+      ORDER = #{order,jdbcType=VARCHAR},
+      IS_ONLY = #{isOnly,jdbcType=VARCHAR},
+      CREATE_PERSON = #{createPerson,jdbcType=VARCHAR},
+      CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      UPDATE_PERSON = #{updatePerson,jdbcType=VARCHAR},
+      UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP},
+      RULE_TYPE_HTML = #{ruleTypeHtml,jdbcType=LONGVARCHAR}
+    where RULE_TYPE = #{ruleType,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bonc.frame.entity.rule.RuleType">
+    update cre_rule_type
+    set RULE_TYPE_NAME = #{ruleTypeName,jdbcType=VARCHAR},
+      RULE_TYPE_DESC = #{ruleTypeDesc,jdbcType=VARCHAR},
+      ORDER = #{order,jdbcType=VARCHAR},
+      IS_ONLY = #{isOnly,jdbcType=VARCHAR},
+      CREATE_PERSON = #{createPerson,jdbcType=VARCHAR},
+      CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      UPDATE_PERSON = #{updatePerson,jdbcType=VARCHAR},
+      UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP}
+    where RULE_TYPE = #{ruleType,jdbcType=VARCHAR}
+  </update>
+  <select id="selectRuleType" resultType="map">
+  	SELECT RULE_TYPE "key",RULE_TYPE_NAME "text" FROM CRE_RULE_TYPE ORDER BY CREATE_DATE
+  </select>
+</mapper>
