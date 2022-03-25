@@ -44,19 +44,25 @@ public class ModelBaseController {
 
     @RequestMapping("/group/list")
     @ResponseBody
-    public ResponseResult getModelGroups(String modelGroupName) {
+    public ResponseResult getModelGroups(String modelGroupName,HttpServletRequest request) {
         if (modelGroupName == null) {
             modelGroupName = "";
         }
+        // 验证数据权限
+        final String loginUserId = ControllerUtil.getLoginUserId(request);
+
         return modelBaseService.getModelGroups(modelGroupName);
     }
 
     @RequestMapping("/group/paged")
     @ResponseBody
-    public Map<String, Object> getModelGroupsPaged(String modelGroupName, String start, String length) {
+    public Map<String, Object> getModelGroupsPaged(String modelGroupName, String start, String length,HttpServletRequest request) {
         if (modelGroupName == null) {
             modelGroupName = "";
         }
+        // 验证数据权限
+        final String loginUserId = ControllerUtil.getLoginUserId(request);
+
         return modelBaseService.getModelGroupsPaged(modelGroupName, start, length);
     }
 

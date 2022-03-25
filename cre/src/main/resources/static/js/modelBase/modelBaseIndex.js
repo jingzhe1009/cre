@@ -863,16 +863,21 @@ function initModelBaseGroupTable(obj) {
         "serverSide": true,
         "pageLength": 10,
         "columns": [
-            {"title": "模型组名称", "data": "modelGroupName", "width": "30%"},
-            {"title": "创建时间", "data": "createDate", "width": "25%"},
-            {"title": "创建人", "data": "createPerson", "width": "20%"},
+            {"title": "产品名称", "data": "modelGroupName", "width": "8%"},
+            {"title": "产品编码", "data": "modelGroupName", "width": "8%"},
+            {"title": "产品描述", "data": "modelGroupName", "width": "12%"},
+            {"title": "调用渠道", "data": "modelGroupName", "width": "12%"},
+            {"title": "创建时间", "data": "createDate", "width": "10%"},
+            {"title": "创建人", "data": "createPerson", "width": "10%"},
             {
-                "title": "操作", "data": null, "width": "25%", "render": function (data, type, row) {
+                "title": "操作", "data": null, "width": "40%", "render": function (data, type, row) {
                     var htmlStr = "";
                     htmlStr += '<span type="button" class="cm-tblB" onclick="modelGroupModal.show(2, this)">查看</span>';
                     htmlStr += '<span type="button" class="cm-tblB" onclick="modelGroupModal.show(1, this)">修改</span>';
                     htmlStr += '<span type="button" class="cm-tblB" onclick="exportModal.initExportPage(1, 1, getExportParams(\'' + row.modelGroupId + '\', \'' + row.modelGroupName + '\'))">导出</span>';
                     htmlStr += '<span type="button" class="cm-tblC delBtn" onclick="modelGroupModal.deleteGroup(\'' + row.modelGroupId + '\')">删除</span>';
+                    htmlStr += '<span type="button" class="cm-tblB" onclick="modelGroupModal.show(\'' + row.modelGroupId + '\')">设置调用渠道</span>';
+                    htmlStr += '<span type="button" class="cm-tblB" onclick="modelGroupModal.show(\'' + row.modelGroupId + '\')">查看模型</span>';
                     return htmlStr;
                 }
             }],

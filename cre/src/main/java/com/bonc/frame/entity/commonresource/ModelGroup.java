@@ -15,6 +15,26 @@ public class ModelGroup extends BaseEntity {
 
     private String modelGroupName;
 
+    private String modelGroupCode;
+
+    public String getModelGroupCode() {
+        return modelGroupCode;
+    }
+
+    public void setModelGroupCode(String modelGroupCode) {
+        this.modelGroupCode = modelGroupCode;
+    }
+
+    public String getModelGroupDesc() {
+        return modelGroupDesc;
+    }
+
+    public void setModelGroupDesc(String modelGroupDesc) {
+        this.modelGroupDesc = modelGroupDesc;
+    }
+
+    private String modelGroupDesc;
+
     public String getModelGroupId() {
         return modelGroupId;
     }
@@ -36,6 +56,8 @@ public class ModelGroup extends BaseEntity {
         final StringBuilder sb = new StringBuilder("ModelGroup{");
         sb.append("modelGroupId='").append(modelGroupId).append('\'');
         sb.append(", modelGroupName='").append(modelGroupName).append('\'');
+        sb.append(", modelGroupCode='").append(modelGroupCode).append('\'');
+        sb.append(", modelGroupDesc='").append(modelGroupDesc).append('\'');
         sb.append(", createDate=").append(createDate);
         sb.append(", createPerson='").append(createPerson).append('\'');
         sb.append(", updatePerson='").append(updatePerson).append('\'');

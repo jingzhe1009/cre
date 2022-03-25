@@ -91,5 +91,13 @@ public interface UserService {
     Map<String, Object> deptUser(String deptId, String userName, String start, String length);
 
     ResponseResult deptAddUser(List<String> userIds, String deptId);
+
+    /**
+     * 新建用户是绑定渠道
+     * @param channelId 渠道id
+     * @param userId 用户id
+     * @return
+     */
+    ResponseResult userAddChannel(String channelId, String userId);
 }
 

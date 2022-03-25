@@ -7,10 +7,7 @@ import com.bonc.frame.entity.user.UserExt;
 import com.bonc.frame.service.UserService;
 import com.bonc.frame.service.auth.AuthorityService;
 import com.bonc.frame.service.auth.SubjectService;
-import com.bonc.frame.util.ControllerUtil;
-import com.bonc.frame.util.IdUtil;
-import com.bonc.frame.util.MD5Util;
-import com.bonc.frame.util.ResponseResult;
+import com.bonc.frame.util.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,6 +38,8 @@ public class UserServiceImpl implements UserService {
     private final String _MYBITSID_PREFIX = "com.bonc.frame.mapper.oracle.user.UserMapper.";
 
     private final String _MIDDLETABLE_PREFIX = "com.bonc.frame.mapper.auth.MiddleTableMapper.";
+
+    private final String _DEPT_PREFIX = "com.bonc.frame.mapper.auth.DeptMapper.";
 
     @Override
     public UserAccountEn queryUserIdAndPassword(String userId, String password) throws Exception {
@@ -419,6 +418,28 @@ public class UserServiceImpl implements UserService {
     public ResponseResult deptAddUser(List<String> userIds, String deptId) {
         deleteMiddleTable2("deleteByDeptIdUser", deptId);
         saveMiddleTable3(userIds, "insertBatchUserDept", deptId, UserDept.class);
+        return ResponseResult.createSuccessInfo();
+    }
+
+    /**
+     * 新建用户是绑定渠道
+     * @param channelId 渠道id
+     * @param userId 用户id
+     * @return
+     */
+    @Override
+    public ResponseResult userAddChannel(String channelId, String userId) {
+        // 校验是不是渠道
+        List<Channel> channel = daoHelper.queryForList(_DEPT_PREFIX + "selectChannelById", channelId);
+        if (CollectionUtil.isEmpty(channel)) {
+            return ResponseResult.createFailInfo("未获取到渠道数据，请重新选择");
+        }
+        // 建立关联 userChannel表
+        String id = IdUtil.createId();
+        UserChannel userChannel = new UserChannel(id, userId, channelId);
+        // 移除原来的关联
+        daoHelper.delete(_DEPT_PREFIX + "userRemoveChannel", userId);
+        daoHelper.insert(_DEPT_PREFIX + "userAddChannel", userChannel);
         return ResponseResult.createSuccessInfo();
     }
 

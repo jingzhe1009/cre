@@ -1,8 +1,11 @@
 package com.bonc.frame.controller.auth;
 
 import com.bonc.frame.entity.auth.DepartmentVo;
+import com.bonc.frame.entity.auth.DeptChannelTree;
 import com.bonc.frame.service.UserService;
+import com.bonc.frame.service.auth.ChannelService;
 import com.bonc.frame.service.auth.DeptService;
+import com.bonc.frame.util.ControllerUtil;
 import com.bonc.frame.util.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 import java.util.List;
 
@@ -21,6 +25,8 @@ public class ChooseController {
     UserService userService;
     @Autowired
     DeptService deptService;
+    @Autowired
+    ChannelService channelService;
 
     /**
      * 展示用户已有角色
@@ -122,6 +128,31 @@ public class ChooseController {
     public ResponseResult deptTree() {
         List<DepartmentVo> voList = deptService.deptTree();
         return ResponseResult.createSuccessInfo("success", voList);
+    }
+
+    /**
+     * 展示机构-渠道树
+     * @return
+     */
+    @RequestMapping(value = "/channelTreeWithDept")
+    @ResponseBody
+    public ResponseResult channelTree( HttpServletRequest request) {
+        final String loginUserId = ControllerUtil.getLoginUserId(request);
+        List<DeptChannelTree> voList = channelService.channelTreeWithDept(loginUserId);
+        return ResponseResult.createSuccessInfo("success", voList);
+    }
+
+    /**
+     * 用户添加渠道
+     *
+     * @param channelId
+     * @param userId
+     * @return
+     */
+    @RequestMapping(value = "/userAddChannel", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseResult userAddChannel(@RequestParam(name = "channelId", defaultValue = "") String channelId, String userId) {
+        return userService.userAddChannel(channelId, userId);
     }
 
     /**

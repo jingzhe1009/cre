@@ -5,7 +5,7 @@
     border: 1px solid transparent;
 }
 #pageContent {
-    height:calc( 100%-11px);
+    height:calc( 100% - 11px);
     width: 100%;
 }
 #modelBasePageContent{
@@ -56,8 +56,8 @@
 .modelBaseGroupWrapper .selfAdaptionRight{
     position: relative;
     float: right;
-    width: 140px;
-    margin-left: -145px;
+    width: 160px;
+    margin-left: -220px;
 }
 /*弹框内 两栏布局*/
 #modelVersionTableAlertModal .modal-dialog{

@@ -1,6 +1,7 @@
 package com.bonc.frame.service.impl.auth;
 
 import com.bonc.frame.dao.DaoHelper;
+import com.bonc.frame.entity.auth.Channel;
 import com.bonc.frame.entity.auth.DepartmentVo;
 import com.bonc.frame.entity.auth.Dept;
 import com.bonc.frame.service.auth.DeptPathService;
@@ -74,6 +75,11 @@ public class DeptServiceImpl implements DeptService {
     public ResponseResult delete(String deptId) {
         if (deptId == null) {
             return ResponseResult.createFailInfo("请求参数不能为null");
+        }
+        // 验证此机构下有无渠道
+        List<Channel> list = daoHelper.queryForList(_DEPT_PREFIX + "getChannelByDept", deptId);
+        if (list.size()>0){
+            return ResponseResult.createFailInfo("机构已绑定渠道，无法删除");
         }
         daoHelper.delete(_DEPT_PREFIX + "deleteByPrimaryKey", deptId);
         deptPathService.delete(deptId);

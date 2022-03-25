@@ -4,6 +4,8 @@
     <resultMap id="BaseResultMap" type="com.bonc.frame.entity.commonresource.ModelGroup">
         <result column="MODEL_GROUP_ID" property="modelGroupId" jdbcType="VARCHAR"/>
         <result column="MODEL_GROUP_NAME" property="modelGroupName" jdbcType="VARCHAR"/>
+        <result column="MODEL_GROUP_CODE" property="modelGroupCode" jdbcType="VARCHAR"/>
+        <result column="MODEL_GROUP_DESC" property="modelGroupDesc" jdbcType="VARCHAR"/>
         <result column="CREATE_PERSON" property="createPerson" jdbcType="VARCHAR"/>
         <result column="UPDATE_PERSON" property="updatePerson" jdbcType="VARCHAR"/>
         <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
@@ -11,7 +13,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        MODEL_GROUP_ID, MODEL_GROUP_NAME, CREATE_PERSON, UPDATE_PERSON,
+        MODEL_GROUP_ID, MODEL_GROUP_NAME,MODEL_GROUP_CODE,MODEL_GROUP_DESC, CREATE_PERSON, UPDATE_PERSON,
         CREATE_DATE, UPDATE_DATE
     </sql>
 
@@ -67,6 +69,12 @@
             <if test="modelGroupName != null">
                 MODEL_GROUP_NAME,
             </if>
+            <if test="modelGroupCode != null">
+                MODEL_GROUP_CODE,
+            </if>
+            <if test="modelGroupDesc != null">
+                MODEL_GROUP_DESC,
+            </if>
             <if test="createPerson != null">
                 CREATE_PERSON,
             </if>
@@ -86,6 +94,12 @@
             </if>
             <if test="modelGroupName != null">
                 #{modelGroupName,jdbcType=VARCHAR},
+            </if>
+            <if test="modelGroupCode != null">
+                #{modelGroupCode,jdbcType=VARCHAR},
+            </if>
+            <if test="modelGroupDesc != null">
+                #{modelGroupDesc,jdbcType=VARCHAR},
             </if>
             <if test="createPerson != null">
                 #{createPerson,jdbcType=VARCHAR},
@@ -107,6 +121,12 @@
         <set>
             <if test="modelGroupName != null">
                 MODEL_GROUP_NAME = #{modelGroupName,jdbcType=VARCHAR},
+            </if>
+            <if test="modelGroupCode != null">
+                MODEL_GROUP_CODE = #{modelGroupName,jdbcType=VARCHAR},
+            </if>
+            <if test="modelGroupDesc != null">
+                MODEL_GROUP_DESC = #{modelGroupName,jdbcType=VARCHAR},
             </if>
             <if test="updateDate != null">
                 UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP},

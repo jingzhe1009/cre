@@ -7,6 +7,55 @@
     <div id="pageBody">
         <div id="pageContent">
             <div id="modelBasePageContent">
+
+                <!-- 模型组 -->
+                <div class="modelBaseContainer modelBaseGroupWrapper">
+                    <div class="tableIcon"><i class="icon icon-cubes"> 产品管理</i></div>
+                    <div class="selfAdaptionLeft">
+                        <div>
+                            <div class="input-group">
+                                <input data-col="modelGroupName" type="text" class="form-control"
+                                       placeholder="产品名称">
+                                <label class="input-control-icon-right" data-toggle="dropdown">
+                                    <i class="icon icon-caret-down "></i>
+                                </label>
+                                <ul class="dropdown-menu pull-right modelBaseGroupList"></ul>
+                            </div>
+                            <div class="input-group">
+                                <!--只有样式，内部未调，需要改相关接口-->
+                                <input data-col="channelName" type="text" class="form-control" placeholder="调用渠道">
+                                <label class="input-control-icon-right" data-toggle="dropdown">
+                                    <i class="icon icon-caret-down "></i>
+                                </label>
+                                <ul class="dropdown-menu pull-right modelBaseGroupList"></ul>
+                            </div>
+                            <div class="input-group date form-datetime" data-date=""
+                                 data-date-format="dd MM yyyy - HH:ii:ss p" data-link-field="dtp_input1">
+                                <input data-col="startDate" class="form-control" size="16" type="text" value=""
+                                       placeholder="开始时间">
+                                <span class="input-group-addon"><span class="icon-remove"></span></span>
+                                <span class="input-group-addon"><span class="icon-calendar"></span></span>
+                            </div>
+                            <div class="input-group date form-datetime" data-date=""
+                                 data-date-format="dd MM yyyy - HH:ii:ss p"
+                                 data-link-field="dtp_input2">
+                                <input data-col="endDate" class="form-control" size="16" type="text" value=""
+                                       placeholder="结束时间">
+                                <span class="input-group-addon"><span class="icon-remove"></span></span>
+                                <span class="input-group-addon"><span class="icon-calendar"></span></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="selfAdaptionRight">
+                        <button tableType="1" class="btn btn-primary modelBaseSearch" type="button">搜索</button>
+                        <button id="addModelBaseGroup" class="btn btn-primary" type="button">添加产品</button>
+                    </div>
+                    <div style="clear: both"></div>
+                    <div>
+                        <table id="modelBaseGroupTable"></table>
+                    </div>
+                </div>
+
                 <!-- 模型库 -->
                 <div class="modelBaseContainer modelBaseWrapper">
                     <div class="tableIcon"><i class="icon icon-cube-alt"> 公共模型</i></div>
@@ -14,7 +63,7 @@
                         <div>
                             <div class="input-group">
                                 <input data-col="modelGroupName" type="text" class="form-control"
-                                       placeholder="模型组（请选择）">
+                                       placeholder="产品名称（请选择）">
                                 <label class="input-control-icon-right" data-toggle="dropdown">
                                     <i class="icon icon-caret-down "></i>
                                 </label>
@@ -52,30 +101,7 @@
                 </div>
                 <hr/>
 
-                <!-- 模型组 -->
-                <div class="modelBaseContainer modelBaseGroupWrapper">
-                    <div class="tableIcon"><i class="icon icon-cubes"> 模型组</i></div>
-                    <div class="selfAdaptionLeft">
-                        <div>
-                            <div class="input-group">
-                                <input data-col="modelGroupName" type="text" class="form-control"
-                                       placeholder="模型组（请选择）">
-                                <label class="input-control-icon-right" data-toggle="dropdown">
-                                    <i class="icon icon-caret-down "></i>
-                                </label>
-                                <ul class="dropdown-menu pull-right modelBaseGroupList"></ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="selfAdaptionRight">
-                        <button tableType="1" class="btn btn-primary modelBaseSearch" type="button">搜索</button>
-                        <button id="addModelBaseGroup" class="btn btn-primary" type="button">添加组</button>
-                    </div>
-                    <div style="clear: both"></div>
-                    <div>
-                        <table id="modelBaseGroupTable"></table>
-                    </div>
-                </div>
+
             </div>
         </div>
     </div>

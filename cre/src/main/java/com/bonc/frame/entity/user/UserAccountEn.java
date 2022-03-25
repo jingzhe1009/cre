@@ -1,5 +1,6 @@
 package com.bonc.frame.entity.user;
 
+import com.bonc.frame.entity.auth.Channel;
 import com.bonc.frame.entity.auth.Dept;
 import com.bonc.frame.entity.auth.Group;
 import com.bonc.frame.entity.auth.Role;
@@ -42,6 +43,16 @@ public class UserAccountEn {
     private List<Group> groupList;
 
     private List<Dept> deptList;
+
+    private List<Channel> channelList;
+
+    public List<Channel> getChannelList() {
+        return channelList;
+    }
+
+    public void setChannelList(List<Channel> channelList) {
+        this.channelList = channelList;
+    }
 
     public UserAccountEn() {
 

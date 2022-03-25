@@ -1,0 +1,39 @@
+package com.bonc.frame.service.auth;
+
+import com.bonc.frame.entity.auth.Channel;
+import com.bonc.frame.entity.auth.DepartmentVo;
+import com.bonc.frame.entity.auth.DeptChannelTree;
+import com.bonc.frame.entity.auth.PlaceVo;
+import com.bonc.frame.util.ResponseResult;
+
+import java.util.List;
+import java.util.Map;
+
+public interface ChannelService {
+    ResponseResult save(Channel channel, String loginUserId);
+
+    Map<String, Object> list(String channelName, String start, String size);
+
+    ResponseResult delete(String channelId);
+
+    ResponseResult update(Channel channel, String loginUserId);
+
+    List<Object> nameList();
+
+    List<PlaceVo> channelTree();
+
+    /**
+     * 查看渠道下用户列表
+     * @param channelId 渠道id
+     * @return 用户信息
+     */
+    List<Object> userListByChannel(String channelId);
+
+    /**
+     * 获取机构-渠道树
+     * @param  loginUserId-当前登录用户-校验权限用
+     * @return 树形数据
+     */
+    List<DeptChannelTree> channelTreeWithDept(String loginUserId);
+
+}

@@ -17,7 +17,9 @@ function changeTab(tabId) {
         tabUrl = '/dept/view?idx=11&tabId=2' + flagStr;
     } else if (tabId == '3') {
         tabUrl = '/auth/view?idx=6&tabId=3' + flagStr;
-    } else {
+    } else if (tabId == '4') {
+        tabUrl = '/auth/view?idx=6&tabId=4' + flagStr;
+    }else {
         failedMessager.show('跳转失败！');
         return;
     }
@@ -1111,13 +1113,23 @@ function initTitles(tabId) {
                 return roleStr;
             }
         },
+        // {
+        //     "title": "机构", "data": "deptList", "render": function (data, type, row) {
+        //         var orgStr = '';
+        //         for (var i = 0; i < data.length; i++) {
+        //             orgStr += data[i].deptName;
+        //         }
+        //         return orgStr;
+        //     }
+        // },
         {
-            "title": "机构", "data": "deptList", "render": function (data, type, row) {
-                var orgStr = '';
+            "title": "渠道", "data": "channelList", "render": function (data, type, row) {
+                var chanStr = '';
                 for (var i = 0; i < data.length; i++) {
-                    orgStr += data[i].deptName;
+                    chanStr += data[i].channelName;
+
                 }
-                return orgStr;
+                return chanStr;
             }
         },
         {
@@ -1134,6 +1146,7 @@ function initTitles(tabId) {
                 htmlStr += '<span class="cm-tblC" type="button" onclick="userModal.deleteUser(\'' + row.userId + '\')">删除</span>';
                 htmlStr += '<span class="cm-tblB" onclick="distributeModal.checkAuth(0, \'' + row.userId + '\', \'' + row.userName + '\', userModal.distributeCallBack)" type="button">选择角色</span>';
                 htmlStr += '<span class="cm-tblB" onclick="chooseOrgModal.authCheck(\'' + row.userId + '\', \'' + row.userName + '\', \'' + JSON.stringify(orgIds).replace(/"/g, '&quot;') + '\', userModal.chooseOrgCallBack)" type="button">选择机构</span>';
+ //               htmlStr += '<span class="cm-tblB" onclick="chooseChannelModal.authCheck(\'' + row.userId + '\', \'' + row.userName + '\', \'' + JSON.stringify(orgIds).replace(/"/g, '&quot;') + '\', userModal.chooseOrgCallBack)" type="button">选择渠道</span>';
                 return htmlStr;
             }
         }
