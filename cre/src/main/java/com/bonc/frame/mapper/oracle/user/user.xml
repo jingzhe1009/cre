@@ -125,7 +125,6 @@
         LEFT JOIN CRE_AUTH_USER_ROLE c ON A .USER_ID = c.USER_ID
         LEFT JOIN CRE_AUTH_ROLE b ON c.ROLE_ID = b.ROLE_ID
         ) Q,
-
         (
         SELECT
         A .USER_ID,
@@ -136,7 +135,6 @@
         LEFT JOIN CRE_AUTH_USER_GROUP D ON A .USER_ID = D .USER_ID
         LEFT JOIN CRE_AUTH_GROUP E ON D . GROUP_ID = E . GROUP_ID
         ) W,
-
         (
         SELECT
         A .USER_ID,

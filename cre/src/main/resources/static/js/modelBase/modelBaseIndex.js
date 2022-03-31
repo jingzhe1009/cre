@@ -586,16 +586,19 @@ var modelGroupModal = {
         $('#modelBaseGroupAlert .form-control').attr('disabled', false);
         if (handleType == 0) {
             $('#modelBaseGroupAlert .modal-footer .notView button').css('display', 'inline-block');
-            $('#modelBaseGroupAlert .modal-title').text('').text('添加模型组');
+            $('#modelBaseGroupAlert .modal-title').text('').text('添加产品');
+            modelGroupModal.channelNameList();
         } else if (handleType == 1) {
             $('#modelBaseGroupAlert .modal-footer .notView button').css('display', 'inline-block');
-            $('#modelBaseGroupAlert .modal-title').text('').text('修改模型组');
+            $('#modelBaseGroupAlert .modal-title').text('').text('修改产品');
             modelGroupModal.echoGroupData(detail);
+            modelGroupModal.channelNameList();
         } else if (handleType == 2) {
             $('#modelBaseGroupAlert .modal-footer #closeModelBaseGroup').css('display', 'inline-block');
-            $('#modelBaseGroupAlert .modal-title').text('').text('查看模型组');
+            $('#modelBaseGroupAlert .modal-title').text('').text('查看产品');
             $('#modelBaseGroupAlert .form-control').attr('disabled', true);
             modelGroupModal.echoGroupData(detail);
+            modelGroupModal.channelNameList();
         }
         $('#modelBaseGroupAlert').attr('handleType', handleType).modal({'show': 'center', "backdrop": "static"});
     },
@@ -612,12 +615,40 @@ var modelGroupModal = {
                     $('#modelBaseGroupAlert').attr('groupId', data[key]);
                     continue;
                 }
+                if (key === 'channelId') { // 回显渠道id
+                    // $('#modelBaseGroupAlert').attr('channelId', data[key]);
+                    $('#modelGroupModal .channelSelector option[channelId="' + data[key] + '"]').prop('selected', true);
+                    continue;
+                }
                 var target = $("#modelBaseGroupAlert .form-control[col-name='" + key + "']");
                 if (target.length > 0) {
                     $(target).val(data[key]);
                 }
             }
         }
+    },
+    channelNameList: function () {
+        // 初始化渠道列表选择
+        $.ajax({
+            url: webpath + '/choose/channelNameList',
+            type: 'GET',
+            dataType: "json",
+            data: {},
+            success: function (data) {
+                if (data.status === 0) {
+                    var htmlStr = '';
+                    for (var i = 0; i < data.data.length; i++) {
+                        htmlStr += '<option channelId=\'' + data.data[i].channelId + '\'>' + data.data[i].channelName+'--'+ data.data[i].deptName + '</option>';
+                    }
+                   $('#channelNameSelector').empty().html(htmlStr);
+                } else {
+                    failedMessager.show(data.msg);
+                }
+            },
+            error: function (data) {
+                failedMessager.show(data.msg);
+            },
+        });
     },
     // 保存组数据
     saveRuleSetGourp: function () {
@@ -863,16 +894,21 @@ function initModelBaseGroupTable(obj) {
         "serverSide": true,
         "pageLength": 10,
         "columns": [
-            {"title": "模型组名称", "data": "modelGroupName", "width": "30%"},
-            {"title": "创建时间", "data": "createDate", "width": "25%"},
-            {"title": "创建人", "data": "createPerson", "width": "20%"},
+            {"title": "产品名称", "data": "modelGroupName", "width": "8%"},
+            {"title": "产品编码", "data": "modelGroupCode", "width": "8%"},
+            {"title": "产品描述", "data": "modelGroupDesc", "width": "12%"},
+            {"title": "调用渠道", "data": "modelGroupChannel", "width": "12%"},
+            {"title": "创建时间", "data": "createDate", "width": "10%"},
+            {"title": "创建人", "data": "createPerson", "width": "10%"},
             {
-                "title": "操作", "data": null, "width": "25%", "render": function (data, type, row) {
+                "title": "操作", "data": null, "width": "40%", "render": function (data, type, row) {
                     var htmlStr = "";
                     htmlStr += '<span type="button" class="cm-tblB" onclick="modelGroupModal.show(2, this)">查看</span>';
                     htmlStr += '<span type="button" class="cm-tblB" onclick="modelGroupModal.show(1, this)">修改</span>';
                     htmlStr += '<span type="button" class="cm-tblB" onclick="exportModal.initExportPage(1, 1, getExportParams(\'' + row.modelGroupId + '\', \'' + row.modelGroupName + '\'))">导出</span>';
                     htmlStr += '<span type="button" class="cm-tblC delBtn" onclick="modelGroupModal.deleteGroup(\'' + row.modelGroupId + '\')">删除</span>';
+                    htmlStr += '<span type="button" class="cm-tblB" onclick="modelGroupModal.show(1, this)">设置调用渠道</span>';
+                    htmlStr += '<span type="button" class="cm-tblB" onclick="modelGroupModal.show(\'' + row.modelGroupId + '\')">查看模型</span>';
                     return htmlStr;
                 }
             }],

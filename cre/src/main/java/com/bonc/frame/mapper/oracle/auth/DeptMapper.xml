@@ -6,7 +6,6 @@
         <id column="DEPT_ID" property="deptId" jdbcType="VARCHAR"/>
         <result column="DEPT_NAME" property="deptName" jdbcType="VARCHAR"/>
         <result column="DEPT_DESC" property="deptDesc" jdbcType="VARCHAR"/>
-        <result column="DEPT_CODE" property="deptCode" jdbcType="VARCHAR"/>
         <result column="PARENT_ID" property="parentId" jdbcType="VARCHAR"/>
         <result column="USER_NUM" property="userNum" jdbcType="INTEGER"/>
         <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
@@ -236,6 +235,46 @@
         from CRE_AUTH_CHANNEL
         where CHANNEL_ID = #{channelId,jdbcType=VARCHAR}
     </select>
+
+
+    <select id="getChannelByDept" resultMap="BaseResultMap4" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List4"/>
+        from CRE_AUTH_CHANNEL
+        where DEPT_ID = #{deptId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectChannelById" resultMap="BaseResultMap4" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List4"/>
+        from CRE_AUTH_CHANNEL
+        where CHANNEL_ID = #{channelId,jdbcType=VARCHAR}
+    </select>
+
+    <delete id="userRemoveChannel" parameterType="java.lang.String">
+        delete from CRE_AUTH_USER_CHAN
+        where USER_ID = #{userId,jdbcType=VARCHAR}
+    </delete>
+
+    <insert id="userAddChannel" parameterType="com.bonc.frame.entity.auth.UserChannel">
+        insert into CRE_AUTH_USER_CHAN
+        ( ID, USER_ID, CHAN_ID)
+        values
+        ( #{id,jdbcType=VARCHAR},
+        #{userId,jdbcType=VARCHAR},
+        #{channelId,jdbcType=VARCHAR})
+    </insert>
+    <select id="channelListWithDept" resultMap="BaseResultMap5" parameterType="java.lang.String">
+        select
+        a.CHANNEL_ID,a.CHANNEL_NAME,b.DEPT_NAME
+        from CRE_AUTH_CHANNEL a
+        left join CRE_AUTH_DEPT b on a.DEPT_ID = b.DEPT_ID
+        where 1=1
+        <if test="deptId != null">
+            and a.DEPT_ID = #{deptId,jdbcType=VARCHAR}
+        </if>
+    </select>
+
 
 
 </mapper>

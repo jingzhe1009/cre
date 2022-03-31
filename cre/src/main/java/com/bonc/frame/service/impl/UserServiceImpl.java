@@ -367,8 +367,6 @@ public class UserServiceImpl implements UserService {
         return ResponseResult.createSuccessInfo();
     }
 
-
-
     @Override
     @Transactional
     public Map<String, Object> role2User(String roleId, String userName, String start, String length) {
@@ -450,6 +448,28 @@ public class UserServiceImpl implements UserService {
         return ResponseResult.createSuccessInfo();
     }
 
+    /**
+     * 新建用户是绑定渠道
+     * @param channelId 渠道id
+     * @param userId 用户id
+     * @return
+     */
+    @Override
+    public ResponseResult userAddChannel(String channelId, String userId) {
+        // 校验是不是渠道
+        List<Channel> channel = daoHelper.queryForList(_DEPT_PREFIX + "selectChannelById", channelId);
+        if (CollectionUtil.isEmpty(channel)) {
+            return ResponseResult.createFailInfo("未获取到渠道数据，请重新选择");
+        }
+        // 建立关联 userChannel表
+        String id = IdUtil.createId();
+        UserChannel userChannel = new UserChannel(id, userId, channelId);
+        // 移除原来的关联
+        daoHelper.delete(_DEPT_PREFIX + "userRemoveChannel", userId);
+        daoHelper.insert(_DEPT_PREFIX + "userAddChannel", userChannel);
+        return ResponseResult.createSuccessInfo();
+    }
+
     @Override
     public ResponseResult channelAddUser(List<String> userIds, String channelId) {
         deleteMiddleTable2("deleteByChannelIdUser", channelId);
@@ -497,22 +517,6 @@ public class UserServiceImpl implements UserService {
         String[] newStrs = str.split(",");
         List<String> list = Arrays.asList(newStrs);
         return list;
-    }
-
-    @Override
-    public ResponseResult userAddChannel(String channelId, String userId) {
-        // 校验是不是渠道
-        List<Channel> channel = daoHelper.queryForList(_DEPT_PREFIX + "selectChannelById", channelId);
-        if (CollectionUtil.isEmpty(channel)) {
-            return ResponseResult.createFailInfo("未获取到渠道数据，请重新选择");
-        }
-        // 建立关联 userChannel表
-        String id = IdUtil.createId();
-        UserChannel userChannel = new UserChannel(id, userId, channelId);
-        // 移除原来的关联
-        daoHelper.delete(_DEPT_PREFIX + "userRemoveChannel", userId);
-        daoHelper.insert(_DEPT_PREFIX + "userAddChannel", userChannel);
-        return ResponseResult.createSuccessInfo();
     }
 
 }

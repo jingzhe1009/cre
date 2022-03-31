@@ -2,13 +2,13 @@
 <link href="${ctx.contextPath}/static/css/modelBase/modelBaseIndex.css" rel="stylesheet"/>
 <div id="page">
     <div id="pageHeader">
-        <p>当前位置：<span>模型库</span></p>
+        <p>当前位置：<span>产品管理</span></p>
     </div>
     <div id="pageBody">
         <div id="pageContent">
             <div id="modelBasePageContent">
 
-                <!--&lt;!&ndash; 模型组 &ndash;&gt;
+                <!-- 模型组 -->
                 <div class="modelBaseContainer modelBaseGroupWrapper">
                     <div class="tableIcon"><i class="icon icon-cubes"> 产品管理</i></div>
                     <div class="selfAdaptionLeft">
@@ -22,7 +22,7 @@
                                 <ul class="dropdown-menu pull-right modelBaseGroupList"></ul>
                             </div>
                             <div class="input-group">
-                                &lt;!&ndash;只有样式，内部未调，需要改相关接口&ndash;&gt;
+                                <!--只有样式，内部未调，需要改相关接口-->
                                 <input data-col="channelName" type="text" class="form-control" placeholder="调用渠道">
                                 <label class="input-control-icon-right" data-toggle="dropdown">
                                     <i class="icon icon-caret-down "></i>
@@ -54,10 +54,10 @@
                     <div>
                         <table id="modelBaseGroupTable"></table>
                     </div>
-                </div>-->
+                </div>
 
                 <!-- 模型库 -->
-                <div class="modelBaseContainer modelBaseWrapper">
+                <!--<div class="modelBaseContainer modelBaseWrapper">
                     <div class="tableIcon"><i class="icon icon-cube-alt"> 公共模型</i></div>
                     <div class="selfAdaptionLeft">
                         <div>
@@ -98,7 +98,7 @@
                     <div>
                         <table id="modelBaseTable"></table>
                     </div>
-                </div>
+                </div>-->
                 <hr/>
 
 
@@ -108,12 +108,12 @@
 </div>
 
 <!--添加/修改模型 基础信息 弹框-->
-<div class="modal fade" id="modelBaseAlertModal">
+<!--<div class="modal fade" id="modelBaseAlertModal">
     <div class="modal-dialog">
         <div class="modal-content">
-            <!--弹框标题-->
+            &lt;!&ndash;弹框标题&ndash;&gt;
             <div class="modal-header"><h4 class="modal-title"></h4></div>
-            <!--字段-->
+            &lt;!&ndash;字段&ndash;&gt;
             <div class="modal-body">
                 <form class="form-horizontal" data-validator-option="{stopOnError:true}">
                     <div class="form-group notFirst">
@@ -194,7 +194,7 @@
                     </div>
                 </form>
             </div>
-            <!--操作按钮-->
+            &lt;!&ndash;操作按钮&ndash;&gt;
             <div class="modal-footer">
                 <div class="notView">
                     <button id="firstVersion" type="button" class="btn btn-primary">下一步</button>
@@ -205,17 +205,17 @@
             </div>
         </div>
     </div>
-</div>
+</div>-->
 
 <!--模型各版本查看列表 弹框-->
-<div class="modal fade" id="modelVersionTableAlertModal">
+<!--<div class="modal fade" id="modelVersionTableAlertModal">
     <div class="modal-dialog">
         <div class="modal-content">
-            <!--弹框标题-->
+            &lt;!&ndash;弹框标题&ndash;&gt;
             <div class="modal-header">
                 <h4 class="modal-title"><span id="versionTable_title"></span>版本列表</h4>
             </div>
-            <!--模型版本列表-->
+            &lt;!&ndash;模型版本列表&ndash;&gt;
             <div class="modal-body">
                 <div class="selfAdaptionLeft">
                     <div>
@@ -250,35 +250,58 @@
                 </div>
                 <div class="selfAdaptionRight">
                     <button tableType="2" class="btn btn-primary modelBaseSearch" type="button">搜索</button>
-                    <!--                    <button id="addModelVersion" type="button" class="btn btn-primary">添加新版本</button>-->
+                    &lt;!&ndash;                    <button id="addModelVersion" type="button" class="btn btn-primary">添加新版本</button>&ndash;&gt;
                 </div>
                 <div style="clear: both"></div>
                 <div>
                     <table id="modelVersionTable"></table>
                 </div>
             </div>
-            <!--操作按钮-->
+            &lt;!&ndash;操作按钮&ndash;&gt;
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
             </div>
         </div>
     </div>
-</div>
+</div>-->
 
 <!--添加/修改组 弹框-->
-<!--<div class="modal fade" id="modelBaseGroupAlert">
+<div class="modal fade" id="modelBaseGroupAlert">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">添加模型组</h4>
+                <h4 class="modal-title">添加产品</h4>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal" data-validator-option="{stopOnError:true}">
+                <form id="addModelGroupForm" class="form-horizontal" data-validator-option="{stopOnError:true}">
                     <div class="form-group">
-                        <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3"><i class="mustIcon">*</i>模型组名称</label>
+                        <label class="col-xs-4 col-sm-4 col-md-4 col-lg-4"><i class="mustIcon">*</i>产品名称</label>
                         <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                             <input col-name="modelGroupName" type="text" class="form-control"
-                                   data-rule="模型组名称:required,length[1~64, true]">
+                                   data-rule="产品名称:required,length[1~64, true]">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-4 col-sm-4 col-md-4 col-lg-4"><i class="mustIcon">*</i>产品编码</label>
+                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                            <input col-name="modelGroupCode" type="text" class="form-control"
+                                   data-rule="产品编码:required,length[1~64, true]">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-4 col-sm-4 col-md-4 col-lg-4">产品描述</label>
+                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                            <input col-name="modelGroupDesc" type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-4 col-sm-4 col-md-4 col-lg-4">选择调用渠道</label>
+                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+<!--                            <select col-name="channelNameList" class="form-control channelSelector">-->
+<!--                                <option value="channel1">渠道1</option>-->
+<!--                                <option value="channel2">渠道2</option>-->
+<!--                            </select>-->
+                            <select id="channelNameSelector" col-name="channelId" class="form-control channelSelector"></select>
                         </div>
                     </div>
                 </form>
@@ -292,7 +315,7 @@
             </div>
         </div>
     </div>
-</div>-->
+</div>
 
 <#include "ruleClone.html">
 <#include "/pages/migration/export.html">
