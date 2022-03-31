@@ -12,7 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
@@ -52,7 +51,7 @@ public class ModelBaseController {
 
     @RequestMapping("/group/list")
     @ResponseBody
-    public ResponseResult getModelGroups(String modelGroupName,HttpServletRequest request) {
+    public ResponseResult getModelGroups(String modelGroupName, HttpServletRequest request) {
         if (modelGroupName == null) {
             modelGroupName = "";
         }
@@ -114,7 +113,7 @@ public class ModelBaseController {
      */
     @RequestMapping(value = "/channelTree")
     @ResponseBody
-    public ResponseResult channelTree( HttpServletRequest request,String modelGroupId) {
+    public ResponseResult channelTree(HttpServletRequest request, String modelGroupId) {
         final String loginUserId = ControllerUtil.getLoginUserId(request);
         List<DeptChannelTree> voList = modelBaseService.channelTree(loginUserId,modelGroupId);
         return ResponseResult.createSuccessInfo("success", voList);

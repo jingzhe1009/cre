@@ -1,11 +1,13 @@
 package com.bonc.frame.controller.auth;
 
 import com.bonc.frame.entity.auth.Channel;
+import com.bonc.frame.entity.auth.ChannelDto;
 import com.bonc.frame.entity.auth.DepartmentVo;
 import com.bonc.frame.entity.auth.PlaceVo;
 import com.bonc.frame.service.UserService;
 import com.bonc.frame.service.auth.ChannelService;
 import com.bonc.frame.service.auth.DeptService;
+import com.bonc.frame.util.ControllerUtil;
 import com.bonc.frame.util.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 import java.util.List;
 /**
@@ -165,7 +168,7 @@ public class ChooseController {
     @RequestMapping(value = "/userAddChannel", method = RequestMethod.POST)
     @ResponseBody
     public ResponseResult userAddChannel(@RequestParam(name = "channelId", defaultValue = "") String channelId, String userId) {
-        return userService.userAddChannel(channelId, userId);
+        return userService.userAddChannel2(channelId, userId);
     }
 
 
@@ -372,5 +375,17 @@ public class ChooseController {
     public Map<String, Object> DeptChannel(String deptId, String start,String length){
         Map<String, Object> result = deptService.deptChannel(deptId,start,length);
         return result;
+    }
+
+    /**
+     * 展示渠道数据
+     * @return
+     */
+    @RequestMapping(value = "/channelNameList")
+    @ResponseBody
+    public ResponseResult channelNameList( HttpServletRequest request) {
+        final String loginUserId = ControllerUtil.getLoginUserId(request);
+        List<ChannelDto> voList = channelService.channelNameList(loginUserId);
+        return ResponseResult.createSuccessInfo("success", voList);
     }
 }

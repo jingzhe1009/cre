@@ -1,11 +1,10 @@
 package com.bonc.frame.service.impl.auth;
 
 import com.bonc.frame.dao.DaoHelper;
-import com.bonc.frame.entity.auth.Channel;
-import com.bonc.frame.entity.auth.PlaceVo;
-import com.bonc.frame.entity.auth.UserChannel;
+import com.bonc.frame.entity.auth.*;
 import com.bonc.frame.service.auth.ChannelPathService;
 import com.bonc.frame.service.auth.ChannelService;
+import com.bonc.frame.util.CollectionUtil;
 import com.bonc.frame.util.IdUtil;
 import com.bonc.frame.util.ResponseResult;
 
@@ -23,7 +22,7 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Autowired
     private ChannelPathService channelPathService;
-
+    private final String _DEPT_PREFIX = "com.bonc.frame.mapper.auth.DeptMapper.";
     private final String _CHANNELPATH_PREFIX = "com.bonc.frame.mapper.auth.ChannelPathMapper.";
     private final String _CHANNEL_PREFIX="com.bonc.frame.mapper.auth.ChannelMapper.";
 
@@ -134,5 +133,70 @@ public class ChannelServiceImpl implements ChannelService {
             voList.add(ch);
         }
         return PlaceVo.PlaceTreeInfo(voList);
+    }
+
+    /**
+     * 查看渠道下用户列表
+     * @param channelId 渠道id
+     * @return 用户信息
+     */
+    @Override
+    public List<Object> userListByChannel(String channelId) {
+        List<Object> objects = daoHelper.queryForList(_CHANNEL_PREFIX + "userListByChannel", channelId);
+        return objects;
+    }
+
+    /**
+     * 获取机构-渠道树
+     * @param  loginUserId-当前登录用户-校验权限用
+     * @return 树形数据
+     */
+    @Override
+    public List<DeptChannelTree> channelTreeWithDept(String loginUserId) {
+        // 校验权限-获取全权数据或者本渠道数据
+
+        List<DeptChannelTree> deptTree = new ArrayList<>();
+        // 本账号的机构-渠道数据
+
+        // 全权数据
+        List<Dept> list = daoHelper.queryForList(_DEPT_PREFIX + "list");
+        for(Dept d:list){
+            DeptChannelTree dt = new DeptChannelTree(d.getDeptId(),d.getParentId(),d.getDeptName(),"0");
+            deptTree.add(dt);
+            // 每个机构-查询下属渠道数据
+            List<Channel> chList = daoHelper.queryForList(_DEPT_PREFIX+"getChannelByDept",d.getDeptId());
+            if (!CollectionUtil.isEmpty(chList)) {
+                for (Channel channel : chList) {
+                    // 如果渠道没有父数据,父id存机构id
+                    DeptChannelTree ch;
+                    if (Objects.equals(channel.getParentId(), null) || Objects.equals(channel.getParentId(), "")) {
+                        ch = new DeptChannelTree(channel.getChannelId(), channel.getDeptId(), channel.getChannelName(),"1");
+                    } else {
+                        // 有父数据的，parentId存父id
+                        ch = new DeptChannelTree(channel.getChannelId(),channel.getParentId(),channel.getChannelName(),"1");
+                    }
+                    deptTree.add(ch);
+                }
+            }
+        }
+        // 转换树形数据
+        return DeptChannelTree.listToTree(deptTree);
+    }
+
+    /**
+     * 展示渠道数据-拼接机构名版
+     * @param loginUserId 用户id，用于判定权限
+     * @return 集合
+     */
+    @Override
+    public List<ChannelDto> channelNameList(String loginUserId) {
+        // 权限相关-非全权只能看自己的渠道
+        String deptId = null;
+
+
+        List<DeptChannelTree> deptTree = new ArrayList<>();
+        // 全权：
+        List<ChannelDto> list = daoHelper.queryForList(_DEPT_PREFIX + "channelListWithDept",deptId);
+        return list;
     }
 }

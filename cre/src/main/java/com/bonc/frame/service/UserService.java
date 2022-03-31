@@ -74,7 +74,7 @@ public interface UserService {
 
     ResponseResult userAddDept(List<String> deptIds, String userId);
 
-    ResponseResult userAddChannel(String channelIds,String userId);
+    //ResponseResult userAddChannel(String channelIds,String userId);
 
     Map<String, Object> role2User(String roleId, String userName, String start, String length);
 
@@ -106,6 +106,6 @@ public interface UserService {
      * @param userId 用户id
      * @return
      */
-    ResponseResult userAddChannel(String channelId, String userId);
+    ResponseResult userAddChannel2(String channelId, String userId);
 }
 

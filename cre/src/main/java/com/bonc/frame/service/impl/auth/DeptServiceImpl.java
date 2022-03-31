@@ -22,6 +22,7 @@ public class DeptServiceImpl implements DeptService {
     private DeptPathService deptPathService;
 
     private final String _DEPT_PREFIX = "com.bonc.frame.mapper.auth.DeptMapper.";
+    private final String _MIDDLE_TABLE_PREFIX = "com.bonc.frame.mapper.auth.MiddleTableMapper.";
     private final String _DEPTPATH_PREFIX = "com.bonc.frame.mapper.auth.DeptPathMapper.";
 
     @Override

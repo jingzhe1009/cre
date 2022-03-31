@@ -455,7 +455,7 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public ResponseResult userAddChannel(String channelId, String userId) {
+    public ResponseResult userAddChannel2(String channelId, String userId) {
         // 校验是不是渠道
         List<Channel> channel = daoHelper.queryForList(_DEPT_PREFIX + "selectChannelById", channelId);
         if (CollectionUtil.isEmpty(channel)) {
