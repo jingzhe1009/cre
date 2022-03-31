@@ -1,9 +1,6 @@
 package com.bonc.frame.service.auth;
 
-import com.bonc.frame.entity.auth.Channel;
-import com.bonc.frame.entity.auth.DepartmentVo;
-import com.bonc.frame.entity.auth.DeptChannelTree;
-import com.bonc.frame.entity.auth.PlaceVo;
+import com.bonc.frame.entity.auth.*;
 import com.bonc.frame.util.ResponseResult;
 
 import java.util.List;
@@ -36,4 +33,10 @@ public interface ChannelService {
      */
     List<DeptChannelTree> channelTreeWithDept(String loginUserId);
 
+    /**
+     * 展示渠道数据-拼接机构名版
+     * @param loginUserId 用户id，用于判定权限
+     * @return 集合
+     */
+    List<ChannelDto> channelNameList(String loginUserId);
 }

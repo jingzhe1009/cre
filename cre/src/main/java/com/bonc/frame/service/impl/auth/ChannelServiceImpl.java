@@ -162,7 +162,7 @@ public class ChannelServiceImpl implements ChannelService {
         // 全权数据
         List<Dept> list = daoHelper.queryForList(_DEPT_PREFIX + "list");
         for(Dept d:list){
-            DeptChannelTree dt = new DeptChannelTree(d.getDeptId(),d.getParentId(),d.getDeptName());
+            DeptChannelTree dt = new DeptChannelTree(d.getDeptId(),d.getParentId(),d.getDeptName(),"0");
             deptTree.add(dt);
             // 每个机构-查询下属渠道数据
             List<Channel> chList = daoHelper.queryForList(_DEPT_PREFIX+"getChannelByDept",d.getDeptId());
@@ -171,10 +171,10 @@ public class ChannelServiceImpl implements ChannelService {
                     // 如果渠道没有父数据,父id存机构id
                     DeptChannelTree ch;
                     if (Objects.equals(channel.getParentId(), null) || Objects.equals(channel.getParentId(), "")) {
-                        ch = new DeptChannelTree(channel.getChannelId(), channel.getDeptId(), channel.getChannelName());
+                        ch = new DeptChannelTree(channel.getChannelId(), channel.getDeptId(), channel.getChannelName(),"1");
                     } else {
                         // 有父数据的，parentId存父id
-                        ch = new DeptChannelTree(channel.getChannelId(),channel.getParentId(),channel.getChannelName());
+                        ch = new DeptChannelTree(channel.getChannelId(),channel.getParentId(),channel.getChannelName(),"1");
                     }
                     deptTree.add(ch);
                 }
@@ -182,5 +182,22 @@ public class ChannelServiceImpl implements ChannelService {
         }
         // 转换树形数据
         return DeptChannelTree.listToTree(deptTree);
+    }
+
+    /**
+     * 展示渠道数据-拼接机构名版
+     * @param loginUserId 用户id，用于判定权限
+     * @return 集合
+     */
+    @Override
+    public List<ChannelDto> channelNameList(String loginUserId) {
+        // 权限相关-非全权只能看自己的渠道
+        String deptId = null;
+
+
+        List<DeptChannelTree> deptTree = new ArrayList<>();
+        // 全权：
+        List<ChannelDto> list = daoHelper.queryForList(_DEPT_PREFIX + "channelListWithDept",deptId);
+        return list;
     }
 }

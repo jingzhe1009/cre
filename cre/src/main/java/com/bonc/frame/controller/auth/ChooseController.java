@@ -1,5 +1,6 @@
 package com.bonc.frame.controller.auth;
 
+import com.bonc.frame.entity.auth.ChannelDto;
 import com.bonc.frame.entity.auth.DepartmentVo;
 import com.bonc.frame.entity.auth.DeptChannelTree;
 import com.bonc.frame.service.UserService;
@@ -139,6 +140,18 @@ public class ChooseController {
     public ResponseResult channelTree( HttpServletRequest request) {
         final String loginUserId = ControllerUtil.getLoginUserId(request);
         List<DeptChannelTree> voList = channelService.channelTreeWithDept(loginUserId);
+        return ResponseResult.createSuccessInfo("success", voList);
+    }
+
+    /**
+     * 展示渠道数据
+     * @return
+     */
+    @RequestMapping(value = "/channelNameList")
+    @ResponseBody
+    public ResponseResult channelNameList( HttpServletRequest request) {
+        final String loginUserId = ControllerUtil.getLoginUserId(request);
+        List<ChannelDto> voList = channelService.channelNameList(loginUserId);
         return ResponseResult.createSuccessInfo("success", voList);
     }
 
