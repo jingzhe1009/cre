@@ -1,6 +1,7 @@
 package com.bonc.frame.service.impl.auth;
 
 import com.bonc.frame.dao.DaoHelper;
+import com.bonc.frame.entity.auth.Channel;
 import com.bonc.frame.entity.auth.DepartmentVo;
 import com.bonc.frame.entity.auth.Dept;
 import com.bonc.frame.service.auth.DeptPathService;
@@ -21,6 +22,7 @@ public class DeptServiceImpl implements DeptService {
     private DeptPathService deptPathService;
 
     private final String _DEPT_PREFIX = "com.bonc.frame.mapper.auth.DeptMapper.";
+    private final String _MIDDLE_TABLE_PREFIX = "com.bonc.frame.mapper.auth.MiddleTableMapper.";
     private final String _DEPTPATH_PREFIX = "com.bonc.frame.mapper.auth.DeptPathMapper.";
 
     @Override
@@ -35,6 +37,7 @@ public class DeptServiceImpl implements DeptService {
         }
         final String deptId = IdUtil.createId();
         dept.setDeptId(deptId);
+        dept.setDeptCode(IdUtil.createId());
         dept.setUserNum(0);
         dept.setCreateDate(new Date());
         dept.setCreatePerson(loginUserId);
@@ -70,14 +73,25 @@ public class DeptServiceImpl implements DeptService {
     }
 
     @Override
+    public Map<String, Object> deptChannel(String deptId,  String start, String size) {
+        Map<String, Object> result= daoHelper.queryForPageList(_MIDDLE_TABLE_PREFIX + "deptChannel", deptId);
+        return result;
+    }
+
+    @Override
     @Transactional(rollbackFor = Exception.class)
     public ResponseResult delete(String deptId) {
-        if (deptId == null) {
+        List<Channel> list = daoHelper.queryForList(_DEPT_PREFIX + "selectChannelByDeptId", deptId);
+            if (list.size()>0){
+                   return ResponseResult.createFailInfo("无法删除");
+            }
+             if (deptId == null) {
             return ResponseResult.createFailInfo("请求参数不能为null");
-        }
-        daoHelper.delete(_DEPT_PREFIX + "deleteByPrimaryKey", deptId);
-        deptPathService.delete(deptId);
-        return ResponseResult.createSuccessInfo();
+            }
+            daoHelper.delete(_DEPT_PREFIX + "deleteByPrimaryKey", deptId);
+            deptPathService.delete(deptId);
+
+            return ResponseResult.createSuccessInfo();
     }
 
     @Override
@@ -105,6 +119,8 @@ public class DeptServiceImpl implements DeptService {
         final Dept resultDept = selectByPrimaryKey(dept.getDeptId());
         return resultDept == null ? false : true;
     }
+
+
 
     public Dept selectByPrimaryKey(String deptId) {
         return (Dept) daoHelper.queryOne(_DEPT_PREFIX + "selectByPrimaryKey", deptId);

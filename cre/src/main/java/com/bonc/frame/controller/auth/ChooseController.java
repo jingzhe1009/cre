@@ -1,7 +1,10 @@
 package com.bonc.frame.controller.auth;
 
+import com.bonc.frame.entity.auth.Channel;
 import com.bonc.frame.entity.auth.DepartmentVo;
+import com.bonc.frame.entity.auth.PlaceVo;
 import com.bonc.frame.service.UserService;
+import com.bonc.frame.service.auth.ChannelService;
 import com.bonc.frame.service.auth.DeptService;
 import com.bonc.frame.util.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +16,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Map;
 import java.util.List;
-
+/**
+ * web路径：用户-选择判断
+ * */
 @Controller
 @RequestMapping("/choose")
 public class ChooseController {
@@ -21,9 +26,11 @@ public class ChooseController {
     UserService userService;
     @Autowired
     DeptService deptService;
+    @Autowired
+    ChannelService channelService;
 
     /**
-     * 展示用户已有角色
+     * 展示用户已有角色/user2Role
      *
      * @param userId
      * @param roleName
@@ -39,7 +46,7 @@ public class ChooseController {
     }
 
     /**
-     * 展示用户未有角色
+     * 展示用户未有角色/userRole
      *
      * @param userId
      * @param roleName
@@ -125,6 +132,17 @@ public class ChooseController {
     }
 
     /**
+     * 展示渠道树
+     *
+     * @return
+     */
+    @RequestMapping(value ="/channelTree")
+    @ResponseBody
+     public ResponseResult channelTree(){
+         List<PlaceVo> channelList = channelService.channelTree();
+         return ResponseResult.createFailInfo("success",channelList);
+     }
+    /**
      * 用户添加机构
      *
      * @param deptIds
@@ -136,6 +154,22 @@ public class ChooseController {
     public ResponseResult userAddDept(@RequestParam(name = "deptIds[]", defaultValue = "") List<String> deptIds, String userId) {
         return userService.userAddDept(deptIds, userId);
     }
+
+    /**
+     * 用户添加渠道
+     *
+     * @param channelId
+     * @param userId
+     * @return
+     */
+    @RequestMapping(value = "/userAddChannel", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseResult userAddChannel(@RequestParam(name = "channelId", defaultValue = "") String channelId, String userId) {
+        return userService.userAddChannel(channelId, userId);
+    }
+
+
+
 
     /**
      * 展示角色已有用户
@@ -278,5 +312,65 @@ public class ChooseController {
         return userService.deptAddUser(userIds, deptId);
     }
 
+    /**
+     * 渠道已有用户
+     *
+     * @param channelId
+     * @param userName
+     * @param start
+     * @param length
+     * @return
+     */
+    @RequestMapping(value = "/channel2User", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Object> channel2User(String channelId, String userName, String start, String length) {
+        Map<String, Object> result = userService.channel2User(channelId, userName, start, length);
+        return result;
+    }
 
+
+    /**
+     * 渠道未有用户
+     *
+     * @param channelId
+     * @param userName
+     * @param start
+     * @param length
+     * @return
+     */
+    @RequestMapping(value = "/channelUser", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Object> channelUser(String channelId, String userName, String start, String length) {
+        Map<String, Object> result = userService.channelUser(channelId, userName, start, length);
+        return result;
+    }
+
+
+    /**
+     * 渠道添加用户
+     *
+     * @param userIds
+     * @param channelId
+     * @return
+     */
+    @RequestMapping(value = "/channelAddUser", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseResult ChannelAddUser(@RequestParam(name = "userIds[]", defaultValue = "") List<String> userIds, String channelId) {
+        return userService.channelAddUser(userIds, channelId);
+    }
+
+
+    /**
+     * 机构已有渠道
+     *
+     * @param deptId
+     *
+     * @return
+     */
+    @RequestMapping(value = "/deptChannel",method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Object> DeptChannel(String deptId, String start,String length){
+        Map<String, Object> result = deptService.deptChannel(deptId,start,length);
+        return result;
+    }
 }

@@ -392,7 +392,7 @@ public abstract class AbstractImportAdjustServiceImp implements ImportAdjustServ
         if (needSaveData != null) {
         	
         	//参数特殊化
-        	/*if("variable".equals(type)) {
+        	if("variable".equals(type)) {
         		List<Variable> variableList = daoHelper.queryForList("com.bonc.frame.dao.variable.VariableMapper.selectByPrimaryKey", fileObjectId);
             	if(variableList.size()>0)
             		return;
@@ -401,13 +401,8 @@ public abstract class AbstractImportAdjustServiceImp implements ImportAdjustServ
         		param.put("apiId", fileObjectId);
         		List<ApiConf> list = daoHelper.queryForList("com.bonc.frame.dao.api.ApiMapper.selectByPrimaryKey",param);
         		if(list.size()>0) return;
-        	}*/
-        	/*if("api".equals(type)) {
-        		Map<String, Object> param = new HashMap<>();
-        		param.put("apiId", fileObjectId);
-        		List<ApiConf> list = daoHelper.queryForList("com.bonc.frame.dao.api.ApiMapper.selectByPrimaryKey",param);
-        		if(list.size()>0) return;
-        	}*/
+        	}
+        	
             dataPersistenceObjectRef(type, object, context);
             dataPersistenceObject(type, needSaveData, context);
         }

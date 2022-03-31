@@ -34,8 +34,11 @@
             <id column="DEPT_ID" property="deptId" jdbcType="VARCHAR"/>
             <result column="DEPT_NAME" property="deptName" jdbcType="VARCHAR"/>
         </collection>
+        <collection property="channelList" ofType="com.bonc.frame.entity.auth.Channel">
+            <id column="CHANNEL_ID" property="channelId" jdbcType="VARCHAR"/>
+            <result column="CHANNEL_NAME" property="channelName" jdbcType="VARCHAR"/>
+        </collection>
     </resultMap>
-
     <select id="selectUser" resultMap="UserMap2" parameterType="java.util.Map">
         SELECT
         A .USER_ID,
@@ -51,7 +54,9 @@
         E . GROUP_ID,
         E .GROUP_NAME,
         G .DEPT_ID,
-        G .DEPT_NAME
+        G .DEPT_NAME,
+        H .CHANNEL_ID,
+        H .CHANNEL_NAME
         FROM
         CRE_USER A
         LEFT JOIN CRE_AUTH_USER_ROLE c ON A .USER_ID = c.USER_ID
@@ -60,6 +65,8 @@
         LEFT JOIN CRE_AUTH_GROUP E ON D . GROUP_ID = E . GROUP_ID
         LEFT JOIN CRE_AUTH_USER_ORG F ON A .USER_ID = F.USER_ID
         LEFT JOIN CRE_AUTH_DEPT G ON F.ORG_ID = G .DEPT_ID
+        LEFT JOIN CRE_AUTH_USER_CHAN I ON A .USER_ID = I.USER_ID
+        LEFT JOIN CRE_AUTH_CHANNEL H ON I.CHAN_ID = H .CHANNEL_ID
         WHERE 1=1
         <if test="currentUser != null and '' != currentUser">
             AND A.USER_ID IN (
@@ -97,7 +104,9 @@
         W."GROUP_ID",
         W.GROUP_NAME,
         Z.DEPT_ID,
-        Z.DEPT_NAME
+        Z.DEPT_NAME,
+        R.CHANNEL_ID,
+        R.CHANNEL_NAME
         FROM
         (
         SELECT
@@ -116,16 +125,18 @@
         LEFT JOIN CRE_AUTH_USER_ROLE c ON A .USER_ID = c.USER_ID
         LEFT JOIN CRE_AUTH_ROLE b ON c.ROLE_ID = b.ROLE_ID
         ) Q,
+
         (
         SELECT
         A .USER_ID,
-        E . GROUP_ID,
+        E .GROUP_ID,
         E .GROUP_NAME
         FROM
         CRE_USER A
         LEFT JOIN CRE_AUTH_USER_GROUP D ON A .USER_ID = D .USER_ID
         LEFT JOIN CRE_AUTH_GROUP E ON D . GROUP_ID = E . GROUP_ID
         ) W,
+
         (
         SELECT
         A .USER_ID,
@@ -135,7 +146,18 @@
         CRE_USER A
         LEFT JOIN CRE_AUTH_USER_ORG D ON A .USER_ID = D .USER_ID
         LEFT JOIN CRE_AUTH_DEPT E ON D .ORG_ID = E .DEPT_ID
-        ) Z
+        ) Z,
+
+        (
+        SELECT
+        A .USER_ID,
+        E .CHANNEL_ID,
+        E .CHANNEL_NAME
+        FROM
+        CRE_USER A
+        LEFT JOIN CRE_AUTH_USER_CHAN D ON A .USER_ID = D .USER_ID
+        LEFT JOIN CRE_AUTH_CHANNEL E ON D .CHAN_ID = E .CHANNEL_ID
+        ) R
         WHERE
         Q.USER_ID = W.USER_ID
         AND Q.USER_ID = Z.USER_ID
@@ -389,5 +411,4 @@
     <delete id="deleteUser" parameterType="string">
       DELETE FROM CRE_USER WHERE USER_ID = #{userId}
     </delete>
-
 </mapper>

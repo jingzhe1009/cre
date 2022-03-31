@@ -201,7 +201,7 @@ public class ApiImportAdjustServiceImp extends AbstractImportAdjustServiceImp {
     public String adjustKey(String type, ImportAdjustObject importAdjustObject, String
             toFolderId, ImportParam importParam, ImportContext context) throws Exception {
         String success = null;
-        success = adjustApiByApiContent(type, ExportConstant.API_ID, true, importAdjustObject, null, toFolderId, importParam, context);
+        success = adjustApiByApiContent(type, ExportConstant.API_URL, true, importAdjustObject, null, toFolderId, importParam, context);
         // 将名称 Id, 放到缓存种
         ApiConf fromData = (ApiConf) importAdjustObject.getFromData();
         String fromDataId = null;
@@ -213,7 +213,7 @@ public class ApiImportAdjustServiceImp extends AbstractImportAdjustServiceImp {
         if (fromData != null) {
             urlWithReturnAndParam = toData.paseApiUrlWithReturnAndParam();
         }
-        context.putneedSaveTmpIdAndName(ExportConstant.API_ID, urlWithReturnAndParam, type, fromDataId);
+        context.putneedSaveTmpIdAndName(ExportConstant.API_URL, urlWithReturnAndParam, type, fromDataId);
         return success;
     }
 
@@ -226,12 +226,12 @@ public class ApiImportAdjustServiceImp extends AbstractImportAdjustServiceImp {
             success = checkAdjustObjectProperty(type, ExportConstant.API_ID, false, false, importAdjustObject, suffix, toFolderId, importParam, context);
             suffix = getNextSuffix(suffix);
         } while (success == null || "-1".equals(success));
-        /*suffix = null;
+        suffix = null;
         success = null;
         do {
             success = checkAdjustObjectProperty(type, ExportConstant.API_NAME, false, true, importAdjustObject, suffix, toFolderId, importParam, context);
             suffix = getNextSuffix(suffix);
-        } while (success == null || "-1".equals(success));*/
+        } while (success == null || "-1".equals(success));
 
         return importAdjustObject.getSuccess();
     }
@@ -309,17 +309,16 @@ public class ApiImportAdjustServiceImp extends AbstractImportAdjustServiceImp {
 
         ApiConf toData = (ApiConf) importAdjustObject.getToData();
         String url = toData.paseApiUrl();
-        String apiId=toData.getApiId();
 
         // 通过获取数据库中的值, 获取缓存中的值
         List<ApiConf> dbApiList = null;
         ImportIdOrNameCacheObject cacheneedSaveIdAndName = null;
-        if (ExportConstant.API_ID.equals(idOrNameType)) {
-            if (!StringUtils.isBlank(apiId)) {
+        if (ExportConstant.API_URL.equals(idOrNameType)) {
+            if (!StringUtils.isBlank(url)) {
                 if (StringUtils.isNotBlank(toFolderId)) {
-                    dbApiList = apiService.selectApiByProperty(apiId, null, null, "0", toFolderId);
+                    dbApiList = apiService.selectApiByProperty(null, null, url, "0", toFolderId);
                 }
-                List<ApiConf> apiConfs = apiService.selectApiByProperty(apiId, null, null, "1", null);
+                List<ApiConf> apiConfs = apiService.selectApiByProperty(null, null, url, "1", null);
                 if (CollectionUtil.isEmpty(dbApiList)) {
                     dbApiList = apiConfs;
                 } else {

@@ -17,6 +17,8 @@ function changeTab(tabId) {
         tabUrl = '/dept/view?idx=11&tabId=2' + flagStr;
     } else if (tabId == '3') {
         tabUrl = '/auth/view?idx=6&tabId=3' + flagStr;
+    } else if (tabId == '4') {
+        tabUrl = '/channel/view?idx=8&tabId=4' + flagStr;
     } else {
         failedMessager.show('跳转失败！');
         return;
@@ -96,6 +98,29 @@ function initUserGroupSelector() {
                     htmlStr += '<option data-id=\'' + data[i].groupId + '\'>' + data[i].groupName + '</option>';
                 }
                 $('#addUserAlertModal .userGroupSelector').empty().html(htmlStr);
+            }
+        },
+        error: function (data) {
+            failedMessager.show(data.msg);
+        }
+    });
+}
+
+/* 初始化页面渠道下拉框 */
+function initChanSelector() {
+    $.ajax({
+        url: webpath + '/channel/list',
+        type: 'POST',
+        dataType: "json",
+        data: {},
+        success: function (data) {
+            if (data.data.length > 0) {
+                var data = data.data;
+                var htmlStr = '';
+                for (var i = 0; i < data.length; i++) {
+                    htmlStr += '<option channelId=\'' + data[i].channelId + '\'>' + data[i].channelName + '</option>';
+                }
+                $('#addUserAlertModal .chanSelector').empty().html(htmlStr);
             }
         },
         error: function (data) {
@@ -259,6 +284,7 @@ var userModal = {
         // }
         // obj['roleId'] = roleList; // 角色
         // obj['deptId'] = $('#addUserAlertModal .orgSelector option:selected').attr('org-id'); // 组织
+         obj['channelId'] = $('#addUserAlertModal .chanSelector option:selected').attr('channelId'); // 渠道
 
         return obj;
     },
@@ -275,6 +301,7 @@ var userModal = {
         delete obj.groupId;
         // delete obj.roleId;
         // delete obj.deptId;
+        // delete obj.channelId;
 
         var groupArr = $('#addUserAlertModal .userGroupSelector option:selected'); // groupList
         var groupList = new Array();
@@ -356,6 +383,11 @@ var userModal = {
         // initTable('0');
         searchData('0');
     },
+    // 渠道选择用户后保存后回调函数
+    chooseChanCallBack: function () {
+        // initTable('0');
+        searchData('0');
+    }
 }
 
 /**
@@ -947,6 +979,223 @@ function initOrgPage() {
     });
 }
 
+/**
+ * 渠道管理
+ */
+var chanModal = {
+    // 展示弹框
+    show: function (handleType, $this) {
+        var detail = {};
+        if ($this) {
+            var curRow = $this.parentNode.parentNode;
+            detail = $('#authorityPageTable').DataTable().row(curRow).data();
+        }
+        $('#chanAlertModal form')[0].reset();
+        $('#chanAlertModal .modal-footer button').css('display', 'none');
+        $('#chanAlertModal').removeAttr('channelId'); // 清除id标识
+        // handleType: 0新增 1修改 2查看
+        if (handleType == 0) {
+            $('#chanAlertModal .notView button').css('display', 'inline-block');
+            // 权限校验 authCheck
+            // $('#chanAlertModal .modal-title').text('添加渠道');
+            // $('#chanAlertModal').attr('handleType', handleType).modal({
+            //     'show': 'center',
+            //     "backdrop": "static"
+            // });
+            $.ajax({
+                    url: webpath + '/channel/save/checkAuth',
+                    type: 'GET',
+                    dataType: "json",
+                    data: {},
+                    success: function (data) {
+                        if (data.status === 0) {
+                            $('#chanAlertModal .modal-title').text('添加渠道');
+                            $('#chanAlertModal').attr('handleType', handleType).modal({
+                                'show': 'center',
+                                "backdrop": "static"
+                            });
+                        } else {
+                            failedMessager.show(data.msg);
+                        }
+                    }
+                });
+        } else if (handleType == 1) {
+            $('#chanAlertModal .notView button').css('display', 'inline-block');
+            // 权限校验 authCheck
+            $.ajax({
+                url: webpath + '/channel/update/checkAuth',
+                type: 'GET',
+                dataType: "json",
+                data: {},
+                success: function (data) {
+                    if (data.status === 0) {
+                        $('#chanAlertModal .modal-title').text('修改渠道');
+                        if (detail) {
+                            chanModal.echoData(detail); // 数据回显
+                        } else {
+                            failedMessager.show('无法查看！');
+                        }
+                        $('#chanAlertModal').attr('handleType', handleType).modal({
+                            'show': 'center',
+                            "backdrop": "static"
+                        });
+                    } else {
+                        failedMessager.show(data.msg);
+                    }
+                }
+            });
+        } else if (handleType == 2) {
+            $('#chanAlertModal #closeViewChan').css('display', 'inline-block');
+            $('#chanAlertModal .modal-title').text('查看渠道');
+            chanModal.echoData(detail); // 数据回显
+            $('#chanAlertModal').attr('handleType', handleType).modal({'show': 'center', "backdrop": "static"});
+        }
+    },
+    // 初始化渠道下拉框
+    initChanList: function () {
+        $.ajax({
+            url: webpath + '/dept/nameList',
+            type: 'GET',
+            dataType: "json",
+            data: {},
+            success: function (data) {
+                if (data.length > 0) {
+                    var htmlStr = '';
+                    for (var i = 0; i < data.length; i++) {
+                        htmlStr += '<option channelId=\'' + data[i].DEPT_ID + '\'>' + data[i].DEPT_NAME + '</option>';
+                    }
+                    $('#chanAlertChanSelector').empty().html('<option class="noParentChanOption" channelId=" ">请选择</option>' + htmlStr);
+                }
+            },
+            error: function (data) {
+                failedMessager.show(data.msg);
+            }
+        });
+    },
+    // 关闭弹框
+
+    hidden: function () {
+        $('#chanAlertModal form')[0].reset(); // 清空表单
+        $('#chanAlertModal').modal('toggle', 'center');
+    },
+    // 保存
+    saveChan: function () {
+        if (!$('#chanAlertModal form').isValid()) {
+            return;
+        }
+        var handleType = $('#chanAlertModal').attr('handleType'); // 0新增 1修改
+        var urlStr = '';
+        if (handleType == '0') {
+            urlStr = '/channel/save';
+        } else if (handleType == '1') {
+            urlStr = '/channel/update';
+        } else {
+            return;
+        }
+        var channelId = $('#chanAlertModal').attr('channelId');
+        var obj = chanModal.getAlertData(handleType, channelId); // 获取表单数据对象
+
+        if (obj) {
+            $.ajax({
+                url: webpath + urlStr,
+                type: 'POST',
+                dataType: "json",
+                contentType: 'application/json',
+                data: JSON.stringify(obj),
+                success: function (data) {
+                    if (data.status == 0) {
+                        successMessager.show('保存成功');
+                        // initTable('2');
+                        searchData('0');
+                        chanModal.initChanList(); // 需要刷新弹出框的渠道下拉框
+                        chanModal.hidden();
+                    } else {
+                        failedMessager.show(data.msg);
+                    }
+                },
+                error: function (data) {
+                    failedMessager.show(data.msg);
+                }
+            });
+        }
+    },
+    // 获取表单数据
+    getAlertData: function (handleType, channelId) {
+        var obj = {};
+        var inputs = $('#chanAlertModal .form-control');
+        for (var i = 0; i < inputs.length; i++) {
+            obj[$(inputs[i]).attr('col-name')] = $.trim($(inputs[i]).val());
+        }
+        //  单独处理一下
+        // obj['parentId'] = $.trim($('#chanAlertModal .chanSelector option:selected').attr('channelId'));
+        // if (handleType === '1') { // 修改参数多传varId
+        //     if (channelId) {
+        //         obj['channelId'] = channelId;
+        //     } else {
+        //         return {};
+        //     }
+        // }
+        obj['deptId'] = $.trim($('#chanAlertModal .chanSelector option:selected').attr('channelId'));
+        return obj;
+    },
+    // 回显
+    echoData: function (detail) {
+        var data = detail ? detail : {};
+        for (var key in data) {
+            if (key === 'channelId') { // 渠道id回显
+                $('#chanAlertModal').attr('channelId', data[key]);
+                continue;
+            }
+            if (key === 'parentId') { // 上级渠道特殊处理一下
+                $('#chanAlertModal .chanSelector option[channelId="' + data[key] + '"]').prop('selected', true);
+                continue;
+            }
+            if (key === 'parentId') { // 无父渠道的回显时回显'请选择'字样
+                if ($.trim(data[key]) == '') {
+                    $('#chanAlertChanSelector .noParentChanOption').prop('selected', true);
+                    continue;
+                }
+            }
+            var target = $("#chanAlertModal .form-control[col-name='" + key + "']");
+            if (target.length > 0) {
+                $(target).val(data[key]);
+            }
+        }
+    },
+    // 删除
+    deleteChan: function (channelId) {
+        if (channelId) {
+            confirmAlert.show('是否确认删除？', function () {
+                $.ajax({
+                    url: webpath + '/channel/delete',
+                    type: 'POST',
+                    dataType: "json",
+                    data: {'channelId': channelId},
+                    success: function (data) {
+                        if (data.status == 0) {
+                            // initTable('2');
+                            searchData('0');
+                            successMessager.show('删除成功');
+                        } else {
+                            failedMessager.show(data.msg);
+                        }
+                    },
+                    error: function (data) {
+                        failedMessager.show(data.msg);
+                    }
+                });
+            });
+        }
+    },
+}
+
+function initChanPage() {
+    // 保存
+    $('#saveChan').click(function () {
+        chanModal.saveChan();
+    });
+}
+
 function initPage() {
     // 时间选择插件: 选择时间和日期
     // $(".form-datetime").datetimepicker({
@@ -970,7 +1219,7 @@ function initPage() {
     $('.searchBtn').click(function () {
         searchData($(this).attr('table-type'));
     });
-
+    initChanPage();
     initRolePage();
     initOrgPage();
     initUserPage();
@@ -1018,6 +1267,7 @@ function initTabContent(tabId) {
             initRoleSelector(); // 初始化角色下拉框
             initOrgSelector(); // 初始化组织下拉框
             initUserGroupSelector(); // 初始化用户组下拉框
+            initChanSelector();//初始化渠道下拉框
             // initGroupTable(); // 初始化用户组列表
             searchData('1');
             $('#groupDiv').removeClass('close').addClass('show');
@@ -1035,12 +1285,17 @@ function initTabContent(tabId) {
         } else if (tabId == '2') { // 机构
             $('.special .orgMgr').css('display', 'block');
             orgModal.initOrgList();
-            $('#firstTableIcon').text(' 组织机构列表');
+            $('#firstTableIcon').text(' 机构列表');
             $('#authorityAddButton').text('添加组织').unbind('click').bind('click', function () {
                 orgModal.show(0);
             });
         }else if (tabId == '4') { // 渠道
-        	$('#firstTableIcon').text(' 渠道列表');
+            $('.special .chanMgr').css('display', 'block');
+            chanModal.initChanList();
+            $('#firstTableIcon').text(' 渠道列表');
+            $('#authorityAddButton').text('添加渠道').unbind('click').bind('click', function () {
+                chanModal.show(0);
+            });
         }
     }
 }
@@ -1111,21 +1366,35 @@ function initTitles(tabId) {
                 return roleStr;
             }
         },
+        // {
+        //     "title": "所属机构", "data": "deptList", "render": function (data, type, row) {
+        //         var orgStr = '';
+        //         for (var i = 0; i < data.length; i++) {
+        //             orgStr += data[i].deptName;
+        //         }
+        //         return orgStr;
+        //     }
+        // },
         {
-            "title": "机构", "data": "deptList", "render": function (data, type, row) {
-                var orgStr = '';
+            "title": "所属渠道", "data": "channelList", "render": function (data, type, row) {
+                var chanStr = '';
                 for (var i = 0; i < data.length; i++) {
-                    orgStr += data[i].deptName;
+                    chanStr += data[i].channelName;
                 }
-                return orgStr;
+                return chanStr;
             }
         },
         {
             "title": "操作", "data": null, "render": function (data, type, row) {
                 var deptListArr = row.deptList;
+                var channelListArr = row.channelList;
                 var orgIds = new Array();
+                var chanIds = new Array();
                 for (var i = 0; i < deptListArr.length; i++) {
                     orgIds.push(deptListArr[i].deptId);
+                }
+                for (var i = 0; i < channelListArr.length; i++) {
+                    chanIds.push(channelListArr[i].channelId);
                 }
                 var htmlStr = "";
                 htmlStr += '<div id="user_' + row.userId + '" style="display:none;">' + JSON.stringify(row) + '</div>';
@@ -1133,10 +1402,10 @@ function initTitles(tabId) {
                 htmlStr += '<span class="cm-tblB" onclick="userModal.show(1, \'' + row.userId + '\')" type="button">修改</span>';
                 htmlStr += '<span class="cm-tblC" type="button" onclick="userModal.deleteUser(\'' + row.userId + '\')">删除</span>';
                 htmlStr += '<span class="cm-tblB" onclick="distributeModal.checkAuth(0, \'' + row.userId + '\', \'' + row.userName + '\', userModal.distributeCallBack)" type="button">选择角色</span>';
-                htmlStr += '<span class="cm-tblB" onclick="chooseOrgModal.authCheck(\'' + row.userId + '\', \'' + row.userName + '\', \'' + JSON.stringify(orgIds).replace(/"/g, '&quot;') + '\', userModal.chooseOrgCallBack)" type="button">选择机构</span>';
+                htmlStr += '<span class="cm-tblB" onclick="chooseChanModal.authCheck(\'' + row.userId + '\', \'' + row.userName + '\', \'' + JSON.stringify(orgIds).replace(/"/g, '&quot;') + '\', userModal.chooseOrgCallBack)" type="button">选择渠道</span>';
                 return htmlStr;
             }
-        }
+        },
     ];
     // 角色管理 TODO
     var roleCols = [
@@ -1155,11 +1424,12 @@ function initTitles(tabId) {
             }
         }
     ];
-    // 组织管理
+    // 机构管理
     var orgCols = [
-        {"title": "组织机构名称", "data": "deptName"},
-        {"title": "上级组织机构", "data": "parentName"},
-        {"title": "描述", "data": "deptDesc"},
+        {"title": "机构名称", "data": "deptName"},
+        {"title": "机构编码", "data": "deptCode"},
+        // {"title": "上级机构", "data": "parentName"},
+        {"title": "机构描述", "data": "deptDesc"},
         {"title": "创建人", "data": "createPerson"},
         {"title": "创建时间", "data": "createDate"},
         {
@@ -1168,15 +1438,30 @@ function initTitles(tabId) {
                 htmlStr += '<span class="cm-tblB" onclick="orgModal.show(2, this)" type="button">查看</span>';
                 htmlStr += '<span class="cm-tblB" onclick="orgModal.show(1, this)" type="button">修改</span>';
                 htmlStr += '<span class="cm-tblC" onclick="orgModal.deleteOrg(\'' + row.deptId + '\')" type="button">删除</span>';
-                htmlStr += '<span class="cm-tblB" onclick="orgUserModal.init(\'' + row.deptId + '\', \'' + row.deptName + '\')" type="button">查看用户</span>';
+                htmlStr += '<span class="cm-tblB" onclick="orgUserModal.init(\'' + row.deptId + '\', \'' + row.deptName + '\')" type="button">查看渠道</span>';
                 return htmlStr;
             }
         }
     ];
-    
-    //渠道管理
-    var chlCols = [
-        {"title": "组织机构名称", "data": "deptName"}
+    // 渠道管理
+    var chanCols = [
+        {"title": "渠道名称", "data": "channelName"},
+        {"title": "渠道编码", "data": "channelCode"},
+        // {"title": "上级渠道", "data": "parentName"},
+        {"title": "渠道描述", "data": "channelDesc"},
+        {"title": "所属机构", "data": "deptName"},
+        {"title": "创建人", "data": "createPerson"},
+        {"title": "创建时间", "data": "createDate"},
+        {
+            "title": "操作", "data": "channelId", "render": function (data, type, row) {
+                var htmlStr = "";
+                htmlStr += '<span class="cm-tblB" onclick="chanModal.show(2, this)" type="button">查看</span>';
+                htmlStr += '<span class="cm-tblB" onclick="chanModal.show(1, this)" type="button">修改</span>';
+                htmlStr += '<span class="cm-tblC" onclick="chanModal.deleteChan(\'' + row.channelId + '\')" type="button">删除</span>';
+                htmlStr += '<span class="cm-tblB" onclick="chanUserModal.init(\'' + row.channelId+ '\', \'' + row.channelName + '\')" type="button">查看用户</span>';
+                return htmlStr;
+            }
+        }
     ];
     switch ($.trim(tabId)) {
         case '0':
@@ -1186,7 +1471,7 @@ function initTitles(tabId) {
         case '2':
             return orgCols;
         case '4':
-            return chlCols;
+            return chanCols;
         default:
             return '';
     }
@@ -1194,7 +1479,7 @@ function initTitles(tabId) {
 
 /* 匹配后台接口url */
 function initUrl(typeId) {
-    // 0用户管理 1角色管理 2机构管理
+    // 0用户管理 1角色管理 2机构管理 4渠道管理
     switch ($.trim(typeId)) {
         case '0':
             return '/user/list';
@@ -1203,7 +1488,7 @@ function initUrl(typeId) {
         case '2':
             return '/dept/list';
         case '4':
-            return '/dept/chl';
+            return '/channel/list';
         default:
             return '';
     }

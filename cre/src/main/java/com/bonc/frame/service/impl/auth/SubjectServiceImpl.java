@@ -39,7 +39,7 @@ public class SubjectServiceImpl implements SubjectService {
     private AuthorityService authorityService;
 
     private static final String _MYBITSID_PREFIX = "com.bonc.frame.mapper.auth.SubjectMapper.";
-
+    //通过当前用户获取主体
     @Override
     public List<String> selectSubjectsByCurrentUser() {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
@@ -50,7 +50,7 @@ public class SubjectServiceImpl implements SubjectService {
             List<String> subjects = (List<String>) session.getAttribute(ConstantFinal.SESSION_KEY_SUBJECT_ID);
             // 判读 session中的权限主体 有没有过期
             if (isTimeOutSessionSubject(subjectTimestamp) && (subjects == null || subjects.isEmpty())) {
-
+                //通过用户id获取主体
                 subjects = selectSubjectsByUserId(user.toString());
 
                 // session中权限主体的放置更新时间 以及 新查询到的session

@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 规则管理
  * @author jsj
  */
 @Controller
@@ -42,12 +43,16 @@ public class CreateRuleController {
 
     @Autowired
     private SysLogService sysLogService;
-
+    //添加规则集组
     @RequestMapping("/create")
     public String main(String ruleType, String ruleFolder, String idx, String childOpen, Model model, HttpServletRequest request) {
+        //规则类型
         List<Map<String, Object>> ruleTypeList = this.ruleService.getRuleType();
+        //规则场景
         List<Map<String, Object>> ruleFolderList = this.ruleService.getRuleFolder();
+        //参数类型
         List<Map<String, Object>> variableTypeList = this.variableService.getVariableType();
+        //参数种类
         List<Map<String, Object>> variableKindList = this.variableService.getVariableKind();
 
         model.addAttribute("ruleTypeList", JsonUtils.beanToJson(ruleTypeList).toString());

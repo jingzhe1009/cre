@@ -125,7 +125,7 @@ var importModal = {
             folderId: importModal.toFolder,
             modelGroupId: importModal.modelGroupId
         };
-        debugger;
+        
         //add
         if(targetType=='9'){
 			target = {

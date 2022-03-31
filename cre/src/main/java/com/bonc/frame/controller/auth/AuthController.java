@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * web界面：用户-权限管理-角色赋权
  * @author yedunyao
  * @date 2019/5/9 16:24
  */
@@ -43,6 +44,7 @@ public class AuthController {
 
     // ---------------------------------- 全部资源 ----------------------------------
 
+    //当前角色是否拥有全部权限
     @RequestMapping("/all/isGranted")
     @ResponseBody
     public ResponseResult isRoleHasAllPermits(String roleId) {
@@ -52,7 +54,7 @@ public class AuthController {
         }
         return ResponseResult.createSuccessInfo("当前角色未拥有全部权限", 0);
     }
-
+     //修改角色 赋予全部权限
     @PermissionsRequires(value = "/auth/update", resourceType = ResourceType.BUTTON)
     @RequestMapping("/all/grant")
     @ResponseBody
@@ -60,14 +62,14 @@ public class AuthController {
         final String currentUser = ControllerUtil.getLoginUserId(request);
         return authorityService.grantAllPermits(roleId, currentUser);
     }
-
+    //修改角色 取消全部权限
     @PermissionsRequires(value = "/auth/update", resourceType = ResourceType.BUTTON)
     @RequestMapping("/all/cancle")
     @ResponseBody
     public ResponseResult cancleAllPermits(String roleId) {
         return authorityService.cancleAllPermits(roleId);
     }
-
+    //修改角色 删除全部权限
     @PermissionsRequires(value = "/auth/update", resourceType = ResourceType.BUTTON)
     @RequestMapping("/all/delete")
     @ResponseBody
@@ -75,6 +77,7 @@ public class AuthController {
         return authorityService.deleteAllPermits(roleId);
     }
 
+    //查看角色权限
     @PermissionsRequires(value = "/auth/view", resourceType = ResourceType.BUTTON)
     @RequestMapping("/all/view")
     @ResponseBody
@@ -122,6 +125,7 @@ public class AuthController {
 
     // ---------------------------------- 菜单 ----------------------------------
 
+    //修改菜单
     @PermissionsRequires(value = "/auth/update", resourceType = ResourceType.BUTTON)
     @RequestMapping(value = "/menu/grant", method = {RequestMethod.POST})
     @ResponseBody
@@ -131,6 +135,7 @@ public class AuthController {
         return authorityService.grantMenuAndButton(authorities, currentUser, roleId , isAllAuth);
     }
 
+    //查看菜单
     @PermissionsRequires(value = "/auth/view", resourceType = ResourceType.BUTTON)
     @RequestMapping("/menu/view")
     @ResponseBody

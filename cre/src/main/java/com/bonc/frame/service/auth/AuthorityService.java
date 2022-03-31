@@ -12,20 +12,22 @@ import java.util.Map;
 import java.util.Set;
 
 /**
+ * 授权
+ *
  * @author yedunyao
  * @date 2019/8/14 14:20
  */
 public interface AuthorityService {
-
+    //菜单资源
     Map<String, Object> getMenuResourcesAndPermits(String roleId);
-
+    //模型资源
     Map<String, Object> getModelResourcesAndPermits(String roleId, String ruleName, String ruleType,
                                                     String folderName, String start, String size);
 
-
+    //标签资源
     Map<String, Object> getMetaResourcesAndPermits(String roleId, String tableName, String dbAlias,
                                                    String folderName, String start, String size);
-
+    //数据源
     Map<String, Object> getDataSourceResourcesAndPermits(String roleId,
                                                          String dbAlias,
                                                          String dbIp,
@@ -66,24 +68,25 @@ public interface AuthorityService {
      * @param length
      * @return
      */
+    //任务
     Map<String, Object> getTaskResourcesAndPermits(String roleId,
                                                    String taskName, String packageName,
                                                    String ruleName, String ruleVersion,
                                                    String start, String length);
-
+    //指标
     Map<String, Object> getKpiResourcesAndPermits(String roleId,
                                                   @Nullable String kpiName,
                                                   @Nullable String kpiGroupName,
                                                   @Nullable String kpiType,
                                                   @Nullable String fetchType,
                                                   String start, String length);
-
+    //场景
     Map<String, Object> getFolderResourcesAndPermits(String roleId, String folderName,
                                                      String start, String length);
 
     // 当前用户是否拥有全部权限
     boolean isCurrentUserHasAllPermits();
-
+    // 用户是否拥有全部权限
     boolean isUserHasAllPermits(String userId);
 
    // 角色是否拥有全部权限

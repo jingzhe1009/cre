@@ -1,9 +1,10 @@
 package com.bonc.frame.controller.auth;
 
-import com.bonc.frame.entity.auth.Dept;
+
+import com.bonc.frame.entity.auth.Channel;
 import com.bonc.frame.security.ResourceType;
 import com.bonc.frame.security.aop.PermissionsRequires;
-import com.bonc.frame.service.auth.DeptService;
+import com.bonc.frame.service.auth.ChannelService;
 import com.bonc.frame.util.ControllerUtil;
 import com.bonc.frame.util.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,16 +19,18 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 /**
- * web界面：菜单-机构管理
+ * web界面：用户-渠道管理
+ *
  *
  * */
 @Controller
-@RequestMapping("/dept")
-public class DeptController {
-    @Autowired
-    DeptService deptService;
+@RequestMapping("/channel")
+public class ChannelController {
 
-    @PermissionsRequires(value = "/org", resourceType = ResourceType.MENU)
+    @Autowired
+    ChannelService channelService;
+
+    @PermissionsRequires(value = "/chan", resourceType = ResourceType.MENU)
     @RequestMapping("/view")
     public String view(String idx, String childOpen, String tabId, Model model, HttpServletRequest request) {
         model.addAttribute("idx", idx);//菜单状态标识
@@ -36,67 +39,65 @@ public class DeptController {
         return "/pages/authority/authority";
     }
 
-    @PermissionsRequires(value = "/org/add", resourceType = ResourceType.BUTTON)
+    @PermissionsRequires(value = "/chan/add", resourceType = ResourceType.BUTTON)
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseResult save(@RequestBody Dept dept, HttpServletRequest request) {
+    public ResponseResult save(@RequestBody Channel channel, HttpServletRequest request) {
         final String loginUserId = ControllerUtil.getLoginUserId(request);
-        return deptService.save(dept, loginUserId);
+        return channelService.save(channel, loginUserId);
     }
 
-    @PermissionsRequires(value = "/org/view", resourceType = ResourceType.BUTTON)
+    @PermissionsRequires(value = "/chan/view", resourceType = ResourceType.BUTTON)
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> list(String deptName, String start, String length) {
-        Map<String, Object> result = deptService.list(deptName, start, length);
+    public Map<String, Object> list(String channelName, String start, String length) {
+        Map<String, Object> result = channelService.list(channelName, start, length);
         return result;
     }
 
-    @PermissionsRequires(value = "/org/view", resourceType = ResourceType.BUTTON)
+    @PermissionsRequires(value = "/chan/view", resourceType = ResourceType.BUTTON)
     @RequestMapping(value = "/nameList", method = RequestMethod.GET)
     @ResponseBody
     public List<Object> nameList() {
-        List<Object> result = deptService.nameList();
+        List<Object> result = channelService.nameList();
         return result;
     }
 
-    @PermissionsRequires(value = "/org/delete", resourceType = ResourceType.BUTTON)
+    @PermissionsRequires(value = "/chan/delete", resourceType = ResourceType.BUTTON)
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseResult delete(String deptId) {
-        return deptService.delete(deptId);
+    public ResponseResult delete(String channelId) {
+        return channelService.delete(channelId);
     }
 
-    @PermissionsRequires(value = "/org/update", resourceType = ResourceType.BUTTON)
+    @PermissionsRequires(value = "/chan/update", resourceType = ResourceType.BUTTON)
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseResult update(@RequestBody Dept dept, HttpServletRequest request) {
+    public ResponseResult update(@RequestBody Channel channel, HttpServletRequest request) {
         final String loginUserId = ControllerUtil.getLoginUserId(request);
-        return deptService.update(dept, loginUserId);
+        return channelService.update(channel, loginUserId);
     }
 
-
     // ------------------------------- 权限校验 -------------------------------
-
-    @PermissionsRequires(value = "/org/add", resourceType = ResourceType.BUTTON)
+    //增加渠道权限
+    @PermissionsRequires(value = "/chan/add", resourceType = ResourceType.BUTTON)
     @RequestMapping(value = "/save/checkAuth", method = RequestMethod.GET)
     @ResponseBody
     public ResponseResult save() {
         return ResponseResult.createSuccessInfo();
     }
-
-    @PermissionsRequires(value = "/org/update", resourceType = ResourceType.BUTTON)
+    //修改渠道权限
+    @PermissionsRequires(value = "/placce/update", resourceType = ResourceType.BUTTON)
     @RequestMapping(value = "/update/checkAuth", method = RequestMethod.GET)
     @ResponseBody
     public ResponseResult update() {
         return ResponseResult.createSuccessInfo();
     }
-
-    @PermissionsRequires(value = "/org/delete", resourceType = ResourceType.BUTTON)
+    //删除渠道权限
+    @PermissionsRequires(value = "/chan/delete", resourceType = ResourceType.BUTTON)
     @RequestMapping(value = "/delete/checkAuth", method = RequestMethod.GET)
     @ResponseBody
     public ResponseResult delete() {
         return ResponseResult.createSuccessInfo();
     }
-
 }

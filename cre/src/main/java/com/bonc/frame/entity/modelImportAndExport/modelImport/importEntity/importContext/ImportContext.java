@@ -11,7 +11,6 @@ import com.bonc.frame.entity.kpi.KpiGroup;
 import com.bonc.frame.entity.metadata.MetaDataColumn;
 import com.bonc.frame.entity.metadata.MetaDataTable;
 import com.bonc.frame.entity.modelImportAndExport.ImportAndExportOperateLog;
-import com.bonc.frame.entity.modelImportAndExport.modelExport.ExportParam;
 import com.bonc.frame.entity.modelImportAndExport.modelExport.entity.ExportConstant;
 import com.bonc.frame.entity.modelImportAndExport.modelExport.entity.ExportResult;
 import com.bonc.frame.entity.modelImportAndExport.modelExport.entity.data.ResultData;
@@ -36,7 +35,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -105,30 +103,18 @@ public class ImportContext {
         this.importFileString = importFileString;
         if (importFileObject == null) {
             try {
-                importFileObject = JSONObject.toJavaObject(JSONObject.parseObject(importFileString), ExportResult.class);
+            	System.out.println(importFileString);
+            	JSONObject jo = JSONObject.parseObject(importFileString);
+                importFileObject = JSONObject.toJavaObject(jo, ExportResult.class);
             } catch (Exception e) {
+            	e.printStackTrace();
                 throw new Exception("文件内容转java对象失败,文件内容有误", e);
             }
         }
-        //ADD
-        /*List<ExportParam> newTmp = new ArrayList<ExportParam>();
-        List<ExportParam> tmp=importFileObject.getExportParams();
-        for(ExportParam p:tmp) {
-        	if(p.getModelGroupId()==null||"".equals(p.getModelGroupId())) {
-        		p.setModelGroupId(p.getFolderId());
-        	}
-        	newTmp.add(p);
-        }
-        importFileObject.setExportParams(newTmp);*/
-        
-        //END
-        
         ResultData data = importFileObject.getData();
         if (data == null || data.isEmpty()) {
             throw new Exception("文件中的数据为空");
         }
-        ResultData tmpData = importFileObject.getData();
-        tmpData.getModelHeader();
         this.importFileObject = importFileObject;
         // ---- {variableCode:variableId} -----
         Map<String, VariableTreeNode> variableMap = data.getVariable();

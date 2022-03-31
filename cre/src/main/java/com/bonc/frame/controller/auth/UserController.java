@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
-
+/**
+ * web界面：菜单-用户管理
+ * */
 @Controller
 @RequestMapping("/user")
 public class UserController {

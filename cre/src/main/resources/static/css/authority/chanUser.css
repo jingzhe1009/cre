@@ -1,34 +1,32 @@
-#orgUserAlertModal .modal-body {
+#chanUserAlertModal .modal-body {
     margin-bottom: 15px;
 }
-.orgMsgContainer {
+.chanMsgContainer {
     margin: 0 0 20px 0;
 }
-.orgMsgContainer .resourceTableIcon {
+.chanMsgContainer .resourceTableIcon {
     display: inline-block;
     width: 80px;
     color: #F1A325;
 }
-.orgMsgContainer input {
+.chanMsgContainer input {
     display: inline;
-    width: 350px;
-    height: 35px;
+    width: 250px;
+    height: 28px;
     outline: none;
 }
 /*资源搜索栏两列自适应*/
-/**/
-#orgUserAlertModal .selfAdaptionRight {
+#chanUserAlertModal .selfAdaptionRight {
     position: relative;
     float: right;
-    width: 80px;
+    width: 60px;
     margin-left: -60px;
 }
-.orgUserContent {
+.chanUserContent {
     border: 1px dashed #ccc;
     padding: 10px 8px;
 }
-/*渠道列表*/
-/*外边距*/
-#orgPersonTable{
+/*用户列表*/
+#chanPersonTable{
     margin: 5px 0;
 }

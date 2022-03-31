@@ -1,5 +1,6 @@
 package com.bonc.frame.entity.user;
 
+import com.bonc.frame.entity.auth.Channel;
 import com.bonc.frame.entity.auth.Dept;
 import com.bonc.frame.entity.auth.Group;
 import com.bonc.frame.entity.auth.Role;
@@ -30,7 +31,17 @@ public class UserAccountEn {
     private String phoneNumber;
     private String email;
     //	private String org;
-//    private String deptId;    // 所属部门id
+//    	private String chan;
+
+    /*public String getChan() {
+        return chan;
+    }
+
+    public void setChan(String chan) {
+        this.chan = chan;
+    }*/
+
+    //    private String deptId;    // 所属部门id
     private String workPhone;
     private Date createDate;
     private String createPerson;
@@ -42,6 +53,8 @@ public class UserAccountEn {
     private List<Group> groupList;
 
     private List<Dept> deptList;
+
+    private List<Channel> channelList;
 
     public UserAccountEn() {
 
@@ -66,6 +79,14 @@ public class UserAccountEn {
         this.createPerson = userExt.getCreatePerson();
         this.updateDate = userExt.getUpdateDate();
         this.updatePerson = userExt.getUpdatePerson();
+    }
+
+    public List<Channel> getChannelList() {
+        return channelList;
+    }
+
+    public void setChannelList(List<Channel> channelList) {
+        this.channelList = channelList;
     }
 
     public List<Dept> getDeptList() {
@@ -216,7 +237,6 @@ public class UserAccountEn {
 		this.org = org;
 	}*/
 
-
     @Override
     public String toString() {
         return "UserAccountEn{" +
@@ -224,7 +244,7 @@ public class UserAccountEn {
                 ", jobNumber='" + jobNumber + '\'' +
                 ", userPassword='" + userPassword + '\'' +
                 ", userName='" + userName + '\'' +
-                ", userSex=" + userSex +
+                ", userSex='" + userSex + '\'' +
                 ", loginDate='" + loginDate + '\'' +
                 ", headThumb='" + headThumb + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
@@ -237,6 +257,7 @@ public class UserAccountEn {
                 ", roleList=" + roleList +
                 ", groupList=" + groupList +
                 ", deptList=" + deptList +
+                ", channelList=" + channelList +
                 '}';
     }
 }

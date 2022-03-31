@@ -4,9 +4,27 @@ public class UserExt extends UserAccountEn {
     private String deptId;
     private String groupId;
     private String roleId;
+    private String channelId;
     private String roleName;
     private String groupName;
     private String deptName;
+    private String channelName;
+
+    public String getChannelId() {
+        return channelId;
+    }
+
+    public void setChannelId(String channelId) {
+        this.channelId = channelId;
+    }
+
+    public String getChannelName() {
+        return channelName;
+    }
+
+    public void setChannelName(String channelName) {
+        this.channelName = channelName;
+    }
 
     public String getRoleName() {
         return roleName;

@@ -7,6 +7,8 @@
     <version>2.5.3</version>
     <packaging>jar</packaging>
 
+
+
     <!-- Spring Boot也提供了一个可选的 Maven Plugin来创建可执行的jars -->
     <build>
         <finalName>cre-2.5.3</finalName>

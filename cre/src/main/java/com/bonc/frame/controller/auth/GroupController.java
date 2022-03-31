@@ -16,7 +16,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
-
+/**
+ * 用户组
+ *
+ * */
 @Controller
 @RequestMapping("/group")
 public class GroupController {

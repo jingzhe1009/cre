@@ -197,14 +197,9 @@ public class RuleReferenceServiceImpl implements RuleReferenceService {
         List<ApiRule> needInsertList = new ArrayList<>(newApiIds.size());
         for (String apiId : newApiIds) {
             final ApiRule apiRule = buildApiRule(ruleId, apiId);
-            List<String> aIds = daoHelper.queryForList("com.bonc.frame.mapper.api.ApiRuleMapper.selectByApiId", apiId);
-            if(aIds.size()<1) {
-            	needInsertList.add(apiRule);
-            }
+            needInsertList.add(apiRule);
         }
-        if(needInsertList.size()>0) {
-        	daoHelper.insertBatch(_API_RULE_PREFIX + "insertBatch", needInsertList);
-        }
+        daoHelper.insertBatch(_API_RULE_PREFIX + "insertBatch", needInsertList);
     }
 
     // 批量删除模型-接口引用关系
@@ -464,10 +459,7 @@ public class RuleReferenceServiceImpl implements RuleReferenceService {
             if(variableKpiRange != null){
                 variableRule.setVariableRange(variableKpiRange.getResult());
             }
-            List<String> vIds = daoHelper.queryForList("com.bonc.frame.mapper.variable.VariableRuleMapper.selectByVaribaleId", varId);
-            if(vIds.size()<1) {
-            	variableRuleList.add(variableRule);
-            }
+            variableRuleList.add(variableRule);
         }
         for (String kpiId : kpiIdSet) {
             KpiRule kpiRule = new KpiRule();

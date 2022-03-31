@@ -208,7 +208,12 @@ public class PubOrPriImportReport {
 //        else if (ExportConstant.DB_COLUNM.equals(type)) {
 //
 //        }
-            else{
+            else if(ExportConstant.MODEL_GROUP.equals(groupType)){
+                objectFileFolderOrGroupId = ExportUtil.getObjectGroupId(type, fromData);
+                if(objectFileFolderOrGroupId==null) {
+                	objectFileFolderOrGroupId = ExportUtil.getObjectFolderId(type, fromData);
+                }
+            }else {
             	objectFileFolderOrGroupId = ExportUtil.getObjectFolderId(ExportConstant.FOLDER, fromData);
             }
             ImportAdjustObject folderOrGroupObject = context.getSuccessData(groupType, objectFileFolderOrGroupId);

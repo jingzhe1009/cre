@@ -42,47 +42,55 @@ import java.util.*;
  */
 @Service
 public class AuthorityServiceImpl implements AuthorityService {
-
+    //权限访问日志
     private Log log = LogFactory.getLog(getClass());
-
+    //持久层
     @Autowired
     private DaoHelper daoHelper;
-
+    //主体业务
     @Autowired
     private SubjectService subjectService;
-
+    //资源池业务
     @Autowired
     private ResourceService resourceService;
-
+    //规则详情业务
     @Autowired
     private RuleDetailService ruleDetailService;
-
+    //元数据管理
     @Autowired
     private MetaDataMgrService metaDataMgrService;
-
+    //公共参数管理
     @Autowired
     private VariableService variableService;
-
+    //接口业务
     @Autowired
     private ApiService apiService;
-
+    //规则集基础业务   规则头信息  规则集组  规则版本
     @Autowired
     private RuleSetBaseService ruleSetBaseService;
-
+    //数据源业务
     @Autowired
     private DataSourceService dataSourceService;
-
+    //规则离线任务
     @Autowired
     private RuleTaskService ruleTaskService;
-
+    //指标业务
     @Autowired
     private KpiService kpiService;
-
+    //规则业务
     @Autowired
     private RuleService ruleService;
-
+    //权限数据表
     private static final String _MYBITSID_PREFIX = "com.bonc.frame.mapper.auth.AuthorityMapper.";
 
+
+   /**
+    * 菜单权限
+    *
+    *
+    * */
+
+    //获取带权限的菜单列表(通过角色)
     @Override
     public Map<String, Object> getMenuResourcesAndPermits(String roleId) {
         // 获取主体
@@ -101,18 +109,18 @@ public class AuthorityServiceImpl implements AuthorityService {
             allResourcesDisplay(menuResources);
         }
 
-        // 获取主体具有的菜单资源权限
+        // 获取主体具有的菜单资源权限     单个或者多个权限
         if (hasAllPermits(subjectIdRole, ResourceType.MENU.getType()) &&
                 hasAllPermits(subjectIdRole, ResourceType.BUTTON.getType())) {
             allResourcesChoosed(menuResources);
         }
 
-        {
+        {   //主体表 将当前用户的主体 角色全部放入到列表中
             List<String> subjectsAll = new ArrayList<>();
             subjectsAll.addAll(subjectIdUser);
             subjectsAll.add(subjectIdRole);
 
-
+            //通过主体资源id获取不同的权限    将持有权限全部放入到表中
             Set<String> holdingMenuPermits = getDistinctPermitsBySubjectIdsResourceId(
                     ImmutableList.<String>of(subjectIdRole), null, ResourceType.MENU.getType());
             Set<String> holdingButtonPermits = getDistinctPermitsBySubjectIdsResourceId(
@@ -137,12 +145,13 @@ public class AuthorityServiceImpl implements AuthorityService {
 
 
         final List<Resource> resources = Resource.parse2Tree(menuResources);
-
+        //通过资源类型和许可获取操作权限    主体角色
         List<Authority> menuOperatePermits = getOperatePermitsByResourceTypeAndAllPermits(
                 subjectIdRole, ResourceType.MENU.getType());
         final List<Authority> buttonOperatePermits = getOperatePermitsByResourceTypeAndAllPermits(
                 subjectIdRole, ResourceType.BUTTON.getType());
         final LinkedList<Object> operatePermits = new LinkedList<>();
+        //菜单权限和按钮权限全部授权操作
         operatePermits.addAll(menuOperatePermits);
         operatePermits.addAll(buttonOperatePermits);
 
@@ -186,7 +195,7 @@ public class AuthorityServiceImpl implements AuthorityService {
         return result;
     }
 
-    // 元数据
+    // 获取带权限的元数据列表
     @Override
     public Map<String, Object> getMetaResourcesAndPermits(String roleId, String tableName, String dbAlias,
                                                           String folderName, String start, String length) {
@@ -217,6 +226,7 @@ public class AuthorityServiceImpl implements AuthorityService {
     /**
      * 数据源
      */
+    //获取带权限的数据源列表
     @Override
     public Map<String, Object> getDataSourceResourcesAndPermits(String roleId,
                                                                 String dbAlias,
@@ -243,7 +253,7 @@ public class AuthorityServiceImpl implements AuthorityService {
         return result;
     }
 
-    // 公共参数
+    // 获取带权限的公共参数列表
     @Override
     public Map<String, Object> getPubVariableResourcesAndPermits(String roleId,
                                                                  String variableAlias,
@@ -276,7 +286,7 @@ public class AuthorityServiceImpl implements AuthorityService {
         return result;
     }
 
-    // 公共接口
+    // 获取带权限的公共接口列表
     @Override
     public Map<String, Object> getPubApiResourcesAndPermits(String roleId,
                                                             String apiName, String apiGroupName,
@@ -305,7 +315,7 @@ public class AuthorityServiceImpl implements AuthorityService {
         return result;
     }
 
-    //规则库
+    //获取带权限的规则库列表
     @Override
     public Map<String, Object> getPubRuleSetResourcesAndPermits(String roleId,
                                                                 String ruleSetName, String ruleSetGroupName,
@@ -333,7 +343,7 @@ public class AuthorityServiceImpl implements AuthorityService {
         return result;
     }
 
-    //模型库
+    //获取带权限的模型库列表
     @Override
     public Map<String, Object> getPubModelBasesResourcesAndPermits(String roleId,
                                                                    String moduleName, String ruleType, String modelGroupName,
@@ -364,6 +374,7 @@ public class AuthorityServiceImpl implements AuthorityService {
     /**
      * 离线任务
      */
+    //获取带权限的离线任务列表
     @Override
     public Map<String, Object> getTaskResourcesAndPermits(String roleId,
                                                           String taskName, String packageName,
@@ -396,6 +407,7 @@ public class AuthorityServiceImpl implements AuthorityService {
     /**
      * 指标
      */
+    //获取带权限的指标列表
     @Override
     public Map<String, Object> getKpiResourcesAndPermits(String roleId,
                                                          @Nullable String kpiName,
@@ -430,6 +442,7 @@ public class AuthorityServiceImpl implements AuthorityService {
     /**
      * 场景
      */
+    //获取带权限的场景列表
     @Override
     public Map<String, Object> getFolderResourcesAndPermits(String roleId, String folderName,
                                                             String start, String length) {
@@ -612,7 +625,7 @@ public class AuthorityServiceImpl implements AuthorityService {
     }
 
     /**
-     * 当前用户是否拥有全部权限
+     * 当前用户是否拥有全部权限     subjectIdUser
      * @return
      */
     @Override
@@ -680,11 +693,13 @@ public class AuthorityServiceImpl implements AuthorityService {
         return hasAllPermitsBySubjectsResourceType(subjectIds, ResourceType.ALL.getType());
     }
 
+    // 主体的资源类型是否拥有全部权限
     @Override
     public boolean hasAllPermitsBySubjects(List<String> subjectIds, String resourceTypeId) {
         return hasAllPermitsBySubjects(subjectIds) || hasAllPermitsBySubjectsResourceType(subjectIds, resourceTypeId);
     }
 
+    //通过主体资源类型获取是否拥有全部权限
     @Override
     public boolean hasAllPermitsBySubjectsResourceType(List<String> subjectIds, String resourceTypeId) {
         if (subjectIds == null) {
@@ -1217,6 +1232,8 @@ public class AuthorityServiceImpl implements AuthorityService {
 
 
     // 由前端确定 resourceTypeId
+
+    //授权菜单和按钮全部权限
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResponseResult grantMenuAndButton(List<Authority> authorities, String currentUser,
@@ -1260,6 +1277,7 @@ public class AuthorityServiceImpl implements AuthorityService {
 
     }
 
+    //主键id删除
     @Override
     @Transactional
     public ResponseResult deleteByPrimaryKey(String id) {
@@ -1269,7 +1287,7 @@ public class AuthorityServiceImpl implements AuthorityService {
         daoHelper.delete(_MYBITSID_PREFIX + "deleteByPrimaryKey", id);
         return ResponseResult.createSuccessInfo();
     }
-
+   //主体id删除
     @Override
     @Transactional
     public ResponseResult deleteBySubjectId(String subjectId) {
@@ -1280,6 +1298,7 @@ public class AuthorityServiceImpl implements AuthorityService {
         return ResponseResult.createSuccessInfo();
     }
 
+    //主体类型删除
     @Override
     @Transactional
     public ResponseResult deleteBySubjectResourceType(String subjectId, String resourceTypeId) {

@@ -2,59 +2,66 @@ package com.bonc.frame.entity.auth;
 
 import java.util.Date;
 
-public class Dept extends UserMiddle{
-    private String deptId;
-
-    private String deptName;
-
-    private String deptCode;
-
-    private String deptDesc;
-
+public class Channel extends UserMiddle{
+    //渠道id
+    private String channelId;
+    //渠道编码
+    private String channelCode;
+    //渠道名称
+    private String channelName;
+    //渠道描述
+    private String channelDesc;
+    //上级渠道id
     private String parentId;
-
+    //上级渠道
     private String parentName;
-
+    //用户数
     private Integer userNum;
-
+    //创建日期
     private Date createDate;
-
+    //创建人
     private String createPerson;
-
+    //修改日期
     private Date updateDate;
-
+    //修改人
     private String updatePerson;
+    //机构ID
+    private String deptId;
+    //用户ID
+    private String userId;
 
-    public String getDeptId() {
-        return deptId;
+    @Override
+    public String getChannelId() {
+        return channelId;
     }
 
-    public void setDeptId(String deptId) {
-        this.deptId = deptId;
+    @Override
+    public void setChannelId(String channelId) {
+        this.channelId = channelId;
     }
 
-    public String getDeptName() {
-        return deptName;
+    public String getChannelName() {
+        return channelName;
     }
 
-    public String getDeptCode() {
-        return deptCode;
+    public String getChannelCode() {
+        return channelCode;
     }
 
-    public void setDeptCode(String deptCode) {
-        this.deptCode = deptCode;
+    public void setChannelCode(String channelCode) {
+        this.channelCode = channelCode;
     }
 
-    public void setDeptName(String deptName) {
-        this.deptName = deptName;
+    public void setChannelName(String channelName) {
+        this.channelName = channelName;
     }
 
-    public String getDeptDesc() {
-        return deptDesc;
+    public String getChannelDesc() {
+        return channelDesc;
     }
 
-    public void setDeptDesc(String deptDesc) {
-        this.deptDesc = deptDesc;
+    public void setChannelDesc(String channelDesc) {
+        this.channelDesc = channelDesc;
     }
 
     public String getParentId() {
@@ -114,12 +121,30 @@ public class Dept extends UserMiddle{
     }
 
     @Override
+    public String getDeptId() {
+        return deptId;
+    }
+
+    @Override
+    public void setDeptId(String deptId) {
+        this.deptId = deptId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    @Override
     public String toString() {
-        return "Dept{" +
-                "deptId='" + deptId + '\'' +
-                ", deptName='" + deptName + '\'' +
-                ", deptCode='" + deptCode + '\'' +
-                ", deptDesc='" + deptDesc + '\'' +
+        return "Channel{" +
+                "channelId='" + channelId + '\'' +
+                ", channelCode='" + channelCode + '\'' +
+                ", channelName='" + channelName + '\'' +
+                ", channelDesc='" + channelDesc + '\'' +
                 ", parentId='" + parentId + '\'' +
                 ", parentName='" + parentName + '\'' +
                 ", userNum=" + userNum +
@@ -127,6 +152,8 @@ public class Dept extends UserMiddle{
                 ", createPerson='" + createPerson + '\'' +
                 ", updateDate=" + updateDate +
                 ", updatePerson='" + updatePerson + '\'' +
+                ", deptId='" + deptId + '\'' +
+                ", userId='" + userId + '\'' +
                 '}';
     }
 }

@@ -7,16 +7,17 @@ import com.bonc.frame.entity.user.UserExt;
 import com.bonc.frame.service.UserService;
 import com.bonc.frame.service.auth.AuthorityService;
 import com.bonc.frame.service.auth.SubjectService;
-import com.bonc.frame.util.ControllerUtil;
-import com.bonc.frame.util.IdUtil;
-import com.bonc.frame.util.MD5Util;
-import com.bonc.frame.util.ResponseResult;
+import com.bonc.frame.util.*;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.zookeeper.data.Id;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import scala.util.parsing.combinator.testing.Str;
 
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.*;
 
 /**
@@ -41,6 +42,7 @@ public class UserServiceImpl implements UserService {
     private final String _MYBITSID_PREFIX = "com.bonc.frame.mapper.oracle.user.UserMapper.";
 
     private final String _MIDDLETABLE_PREFIX = "com.bonc.frame.mapper.auth.MiddleTableMapper.";
+    private final String _DEPT_PREFIX = "com.bonc.frame.mapper.auth.DeptMapper.";
 
     @Override
     public UserAccountEn queryUserIdAndPassword(String userId, String password) throws Exception {
@@ -103,6 +105,7 @@ public class UserServiceImpl implements UserService {
         return result;
     }
 
+    //新增用户
     @Override
     @Transactional
     public ResponseResult createUser(UserExt user, String loginUserId) {
@@ -110,6 +113,10 @@ public class UserServiceImpl implements UserService {
         if (userAccountEn != null) {
             return ResponseResult.createFailInfo("用户已存在");
         }
+        if (user.getChannelId().isEmpty()) {
+            return ResponseResult.createFailInfo("未选择渠道");
+        }
+
         user.setCreateDate(new Date());
         user.setCreatePerson(loginUserId);
         UserAccountEn userBase = new UserAccountEn(user);
@@ -118,9 +125,12 @@ public class UserServiceImpl implements UserService {
         String deptStr = user.getDeptId();
         String groupStr = user.getGroupId();
         String roleStr = user.getRoleId();
+        String channelStr=user.getChannelId();
         saveMiddleTable(groupStr, "insertBatchUserGroup", userId, UserGroup.class);
         saveMiddleTable(roleStr, "insertBatchUserRole", userId, UserRole.class);
         saveMiddleTable(deptStr, "insertBatchUserDept", userId, UserDept.class);
+        saveMiddleTable(channelStr,"insertBatchUserChannel",userId,UserChannel.class);
+
 
         // 创建主体
         subjectService.createUserSubject(userId);
@@ -141,6 +151,8 @@ public class UserServiceImpl implements UserService {
                     o = new UserRole(IdUtil.createId(), userId, s);
                 } else if (UserGroup.class == type) {
                     o = new UserGroup(IdUtil.createId(), userId, s);
+                } else if (UserChannel.class == type){
+                    o =new UserChannel(IdUtil.createId(), userId, s);
                 }
                 newList.add(o);
             }
@@ -161,6 +173,8 @@ public class UserServiceImpl implements UserService {
                     o = new UserRole(IdUtil.createId(), userId, s);
                 } else if (UserGroup.class == type) {
                     o = new UserGroup(IdUtil.createId(), userId, s);
+                } else if (UserChannel.class == type){
+                    o = new UserChannel(IdUtil.createId(), userId, s);
                 }
                 newList.add(o);
             }
@@ -181,6 +195,8 @@ public class UserServiceImpl implements UserService {
                     o = new UserRole(IdUtil.createId(), s, otherId);
                 } else if (UserGroup.class == type) {
                     o = new UserGroup(IdUtil.createId(), s, otherId);
+                } else if (UserChannel.class == type){
+                    o = new UserChannel(IdUtil.createId(), s, otherId);
                 }
                 newList.add(o);
             }
@@ -213,6 +229,9 @@ public class UserServiceImpl implements UserService {
             } else if (UserGroup.class == type) {
                 UserGroup userGroup = new UserGroup(IdUtil.createId(), userId, u.getGroupId());
                 newList.add(userGroup);
+            } else if (UserChannel.class == type){
+                UserChannel userChannel = new UserChannel(IdUtil.createId(), userId, u.getChannelId());
+                newList.add(userChannel);
             }
         }
         if (newList.size() > 0) {
@@ -225,6 +244,7 @@ public class UserServiceImpl implements UserService {
         return userAccountEn;
     }
 
+    //修改用户
     @Override
     @Transactional
     public ResponseResult updateUser(UserAccountEn user, String loginUserId) {
@@ -243,12 +263,15 @@ public class UserServiceImpl implements UserService {
 //        deleteMiddleTable("deleteByUserIdRole", userId);
         deleteMiddleTable("deleteByUserIdGroup", userId);
 //        deleteMiddleTable("deleteByUserIdDept", userId);
+//        deleteMiddleTable("deleteByUserIdChannel", userId);
         List<Role> roleList = user.getRoleList();
         List<Group> groupList = user.getGroupList();
         List<Dept> deptList = user.getDeptList();
+        List<Channel> channelList=user.getChannelList();
         saveMiddleTableByList(groupList, "insertBatchUserGroup", userId, UserGroup.class);
 //        saveMiddleTableByList(roleList, "insertBatchUserRole", userId, UserRole.class);
 //        saveMiddleTableByList(deptList, "insertBatchUserDept", userId, UserDept.class);
+//        saveMiddleTableByList(channelList, "insertBatchUserChannel", userId, UserChannel.class);
         ResponseResult result = ResponseResult.createSuccessInfo();
         return result;
     }
@@ -261,6 +284,7 @@ public class UserServiceImpl implements UserService {
         deleteMiddleTable("deleteByUserIdRole", userId);
         deleteMiddleTable("deleteByUserIdGroup", userId);
         deleteMiddleTable("deleteByUserIdDept", userId);
+//        deleteMiddleTable("deleteByUserIdChannel", userId);
         daoHelper.delete(_MYBITSID_PREFIX + "deleteUser", userId);
         ResponseResult result = ResponseResult.createSuccessInfo();
         return result;
@@ -274,11 +298,13 @@ public class UserServiceImpl implements UserService {
         params.put("jobNumber", jobNumber);
         // 除超级管理员外，只显示当前角色下的用户
         if (authorityService.isCurrentUserHasAllPermits()) {
-            return daoHelper.queryForPageList(_MYBITSID_PREFIX + "selectUser", params, start, size);
+            Map<String, Object> map = daoHelper.queryForPageList(_MYBITSID_PREFIX + "selectUser", params, start, size);
+            return map;
         }
         String currentUser = ControllerUtil.getCurrentUser();
         params.put("currentUser", currentUser);
-        return daoHelper.queryForPageList(_MYBITSID_PREFIX + "selectUser", params, start, size);
+        Map<String, Object> map = daoHelper.queryForPageList(_MYBITSID_PREFIX + "selectUser", params, start, size);
+        return map;
     }
 
     @Override
@@ -340,6 +366,8 @@ public class UserServiceImpl implements UserService {
         saveMiddleTable2(deptIds, "insertBatchUserDept", userId, UserDept.class);
         return ResponseResult.createSuccessInfo();
     }
+
+
 
     @Override
     @Transactional
@@ -423,6 +451,30 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public ResponseResult channelAddUser(List<String> userIds, String channelId) {
+        deleteMiddleTable2("deleteByChannelIdUser", channelId);
+        saveMiddleTable3(userIds, "insertBatchUserChannel", channelId, UserChannel.class);
+        return ResponseResult.createSuccessInfo();
+    }
+
+    @Override
+    public Map<String, Object> channel2User(String channelId, String userName, String start, String length) {
+        Map<String, Object> param = new HashMap<>();
+        param.put("channelId", channelId);
+        param.put("userName", userName);
+        Map<String, Object> result = daoHelper.queryForPageList(_MIDDLETABLE_PREFIX + "listUserForChannelHad", param, start, length);
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> channelUser(String channelId, String userName, String start, String length) {
+        Map<String, Object> param = new HashMap<>();
+        param.put("channelId", channelId);
+        param.put("userName", userName);
+        Map<String, Object> result = daoHelper.queryForPageList(_MIDDLETABLE_PREFIX + "listUserForChannelNotHad", param, start, length);
+        return result;
+    }
+    @Override
     @Transactional
     public Set<String> findRoles(String username) {
         return null;
@@ -446,5 +498,22 @@ public class UserServiceImpl implements UserService {
         List<String> list = Arrays.asList(newStrs);
         return list;
     }
+
+    @Override
+    public ResponseResult userAddChannel(String channelId, String userId) {
+        // 校验是不是渠道
+        List<Channel> channel = daoHelper.queryForList(_DEPT_PREFIX + "selectChannelById", channelId);
+        if (CollectionUtil.isEmpty(channel)) {
+            return ResponseResult.createFailInfo("未获取到渠道数据，请重新选择");
+        }
+        // 建立关联 userChannel表
+        String id = IdUtil.createId();
+        UserChannel userChannel = new UserChannel(id, userId, channelId);
+        // 移除原来的关联
+        daoHelper.delete(_DEPT_PREFIX + "userRemoveChannel", userId);
+        daoHelper.insert(_DEPT_PREFIX + "userAddChannel", userChannel);
+        return ResponseResult.createSuccessInfo();
+    }
+
 }
 

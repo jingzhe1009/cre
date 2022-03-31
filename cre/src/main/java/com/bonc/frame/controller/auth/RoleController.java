@@ -16,7 +16,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
-
+/**
+ * web界面：菜单-角色管理
+ *
+ * */
 @Controller
 @RequestMapping("/role")
 public class RoleController {
