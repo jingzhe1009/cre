@@ -83,7 +83,7 @@ public class DeptServiceImpl implements DeptService {
     public ResponseResult delete(String deptId) {
         List<Channel> list = daoHelper.queryForList(_DEPT_PREFIX + "selectChannelByDeptId", deptId);
             if (list.size()>0){
-                   return ResponseResult.createFailInfo("无法删除");
+                   return ResponseResult.createFailInfo("当前机构下存在渠道 无法删除");
             }
              if (deptId == null) {
             return ResponseResult.createFailInfo("请求参数不能为null");

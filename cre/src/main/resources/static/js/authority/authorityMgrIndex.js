@@ -1122,6 +1122,7 @@ var chanModal = {
     // 获取表单数据
     getAlertData: function (handleType, channelId) {
         var obj = {};
+        obj['channelId'] = channelId;
         var inputs = $('#chanAlertModal .form-control');
         for (var i = 0; i < inputs.length; i++) {
             obj[$(inputs[i]).attr('col-name')] = $.trim($(inputs[i]).val());

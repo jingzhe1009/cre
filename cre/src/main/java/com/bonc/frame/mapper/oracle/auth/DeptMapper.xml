@@ -6,6 +6,7 @@
         <id column="DEPT_ID" property="deptId" jdbcType="VARCHAR"/>
         <result column="DEPT_NAME" property="deptName" jdbcType="VARCHAR"/>
         <result column="DEPT_DESC" property="deptDesc" jdbcType="VARCHAR"/>
+        <result column="DEPT_CODE" property="deptCode" jdbcType="VARCHAR"/>
         <result column="PARENT_ID" property="parentId" jdbcType="VARCHAR"/>
         <result column="USER_NUM" property="userNum" jdbcType="INTEGER"/>
         <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>

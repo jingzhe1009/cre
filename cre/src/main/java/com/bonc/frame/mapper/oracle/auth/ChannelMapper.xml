@@ -196,6 +196,11 @@
         where CHANNEL_ID = #{channelId,jdbcType=VARCHAR} or PARENT_ID = #{channelId,jdbcType=VARCHAR}
     </delete>
 
+    <delete id="deleteChannel" parameterType="java.lang.String">
+        delete from  CRE_AUTH_USER_CHAN
+        where CHAN_ID=#{channelId,jdbcType=VARCHAR}
+    </delete>
+
     <update id="updateByPrimaryKeySelective" parameterType="com.bonc.frame.entity.auth.Channel">
         update CRE_AUTH_CHANNEL
         <set>

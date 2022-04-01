@@ -43,6 +43,8 @@ public class UserServiceImpl implements UserService {
 
     private final String _MIDDLETABLE_PREFIX = "com.bonc.frame.mapper.auth.MiddleTableMapper.";
     private final String _DEPT_PREFIX = "com.bonc.frame.mapper.auth.DeptMapper.";
+    private final String _CHANNEL_PREFIX="com.bonc.frame.mapper.auth.ChannelMapper.";
+    private final String _ROLE_PREFIX = "com.bonc.frame.mapper.auth.RoleMapper.";
 
     @Override
     public UserAccountEn queryUserIdAndPassword(String userId, String password) throws Exception {
@@ -284,8 +286,10 @@ public class UserServiceImpl implements UserService {
         deleteMiddleTable("deleteByUserIdRole", userId);
         deleteMiddleTable("deleteByUserIdGroup", userId);
         deleteMiddleTable("deleteByUserIdDept", userId);
-//        deleteMiddleTable("deleteByUserIdChannel", userId);
+        deleteMiddleTable("deleteByUserIdChannel", userId);
         daoHelper.delete(_MYBITSID_PREFIX + "deleteUser", userId);
+        daoHelper.delete(_CHANNEL_PREFIX+"deleteChannel",userId);
+        daoHelper.delete(_ROLE_PREFIX+"deleteRole",userId);
         ResponseResult result = ResponseResult.createSuccessInfo();
         return result;
     }

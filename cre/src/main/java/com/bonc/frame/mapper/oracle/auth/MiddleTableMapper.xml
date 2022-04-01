@@ -136,19 +136,29 @@
     </insert>
 
     <delete id="deleteByRoleIdUser" parameterType="java.lang.String">
-     DELETE FROM CRE_AUTH_USER_ROLE WHERE ROLE_ID=#{userId,jdbcType=VARCHAR}
+     DELETE
+     FROM CRE_AUTH_USER_ROLE
+     WHERE ROLE_ID=#{userId,jdbcType=VARCHAR}
     </delete>
     <delete id="deleteByUserIdRole" parameterType="java.lang.String">
-     DELETE FROM CRE_AUTH_USER_ROLE WHERE USER_ID=#{userId,jdbcType=VARCHAR}
+     DELETE
+     FROM CRE_AUTH_USER_ROLE
+     WHERE USER_ID=#{userId,jdbcType=VARCHAR}
     </delete>
     <delete id="deleteByUserIdGroup" parameterType="java.lang.String">
-     DELETE FROM CRE_AUTH_USER_GROUP WHERE USER_ID=#{userId,jdbcType=VARCHAR}
+     DELETE
+     FROM CRE_AUTH_USER_GROUP
+     WHERE USER_ID=#{userId,jdbcType=VARCHAR}
     </delete>
     <delete id="deleteByUserIdDept" parameterType="java.lang.String">
-     DELETE FROM CRE_AUTH_USER_ORG WHERE USER_ID=#{userId,jdbcType=VARCHAR}
+     DELETE
+     FROM CRE_AUTH_USER_ORG
+     WHERE USER_ID=#{userId,jdbcType=VARCHAR}
     </delete>
     <delete id="deleteByUserIdChannel" parameterType="java.lang.String">
-     DELETE FROM CRE_AUTH_USER_CHAN WHERE USER_ID=#{userId,jdbcType=VARCHAR}
+     DELETE FROM
+     CRE_AUTH_USER_CHAN
+     WHERE USER_ID=#{userId,jdbcType=VARCHAR}
     </delete>
 
     <select id="listRoleForUserHad" resultMap="RoleResultMap" parameterType="map">

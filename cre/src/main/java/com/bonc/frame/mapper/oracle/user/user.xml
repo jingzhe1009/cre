@@ -407,6 +407,7 @@
     </update>
 
     <delete id="deleteUser" parameterType="string">
-      DELETE FROM CRE_USER WHERE USER_ID = #{userId}
+      DELETE
+      FROM CRE_USER WHERE USER_ID = #{userId}
     </delete>
 </mapper>
