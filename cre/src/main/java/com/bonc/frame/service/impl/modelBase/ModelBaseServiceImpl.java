@@ -7,6 +7,7 @@ import com.bonc.frame.entity.auth.DeptChannelTree;
 import com.bonc.frame.entity.commonresource.ModelGroup;
 import com.bonc.frame.entity.commonresource.ModelGroupChannel;
 import com.bonc.frame.entity.commonresource.ModelGroupDto;
+import com.bonc.frame.entity.commonresource.ModelGroupVo;
 import com.bonc.frame.service.modelBase.ModelBaseService;
 import com.bonc.frame.util.*;
 import org.apache.commons.lang3.StringUtils;
@@ -42,9 +43,16 @@ public class ModelBaseServiceImpl implements ModelBaseService {
     public ResponseResult getModelGroups(String modelGroupName) {
         Map<String, Object> param = new HashMap<>();
         param.put("modelGroupName", modelGroupName);
-        final List<Object> list = daoHelper.queryForList(_MODEL_GROUP_MAPPER +
+        final List<ModelGroup> list = daoHelper.queryForList(_MODEL_GROUP_MAPPER +
                 "getByGroupName", param);
-        return ResponseResult.createSuccessInfo("success", list);
+        List<ModelGroupVo> voList = new ArrayList<>();
+        for (ModelGroup mg : list) {
+            ModelGroupVo vo = ModelGroupVo.getVo(mg);
+            List<Channel> nameList = daoHelper.queryForList(_MODEL_GROUP_MAPPER + "getChannelName", mg.getModelGroupId());
+            vo.setChannelList(nameList);
+            voList.add(vo);
+        }
+        return ResponseResult.createSuccessInfo("success", voList);
     }
 
     @Override
@@ -67,7 +75,7 @@ public class ModelBaseServiceImpl implements ModelBaseService {
 
     @Override
     @Transactional
-    public Map<String, Object> getModelGroupsPaged(String modelGroupName, String start, String length) {
+    public Map<String, Object> getModelGroupsPaged(String modelGroupName, String channelId, String start, String length) {
         // 验证默认分组-其他的存在，如果没有就插入一条，
         ModelGroup ch = ModelGroup.getDefaultGroup();
         List<ModelGroup> ls = daoHelper.queryForList(_MODEL_GROUP_MAPPER + "checkDefaultGroup", ch);
@@ -76,13 +84,14 @@ public class ModelBaseServiceImpl implements ModelBaseService {
         }
         Map<String, Object> param = new HashMap<>();
         param.put("modelGroupName", modelGroupName);
+        param.put("channelId", channelId);
         final Map<String, Object> map = daoHelper.queryForPageList(_MODEL_GROUP_MAPPER +
                 "getByGroupName", param, start, length);
         List<ModelGroup> data = (List<ModelGroup>) map.get("data");
         List<Map> dataMap = new ArrayList<>();
         for (ModelGroup datum : data) {
             String mgId = datum.getModelGroupId();
-            List<String> nameList = daoHelper.queryForList(_MODEL_GROUP_MAPPER + "getChannelName", mgId);
+            List<Channel> nameList = daoHelper.queryForList(_MODEL_GROUP_MAPPER + "getChannelName", mgId);
             Map mgMap = new HashMap();
             try {
                 mgMap = MapBeanUtil.convertBean2Map(datum);
@@ -94,7 +103,14 @@ public class ModelBaseServiceImpl implements ModelBaseService {
                 e.printStackTrace();
             }
             if (nameList.size() > 0) {
-                mgMap.put("modelGroupChannel", nameList.toString());
+                StringBuilder names = new StringBuilder();
+                for (int i = 0; i < nameList.size(); i++) {
+                    names.append(nameList.get(i).getChannelName());
+                    if (i<nameList.size()-1){
+                        names.append(", ");
+                    }
+                }
+                mgMap.put("modelGroupChannel", names.toString());
             } else {
                 mgMap.put("modelGroupChannel", "");
             }
@@ -127,7 +143,7 @@ public class ModelBaseServiceImpl implements ModelBaseService {
         if (checkGroupNameIsExist(mg.getModelGroupName(), null)) {
             return ResponseResult.createFailInfo("产品名称已存在");
         }
-        ModelGroup modelGroup = new ModelGroup(mg.getModelGroupName(),mg.getModelGroupCode(),mg.getModelGroupDesc());
+        ModelGroup modelGroup = ModelGroupDto.getMg(mg);
         modelGroup.setModelGroupId(IdUtil.createId());
         modelGroup.setCreateDate(new Date());
         modelGroup.setCreatePerson(userId);
@@ -151,18 +167,20 @@ public class ModelBaseServiceImpl implements ModelBaseService {
 
     @Override
     @Transactional
-    public ResponseResult updateModelGroup(ModelGroup modelGroup, String userId) {
-        if (modelGroup == null) {
+    public ResponseResult updateModelGroup(ModelGroupDto dto, String userId) {
+        if (dto == null) {
             return ResponseResult.createFailInfo("请求参数[modelGroup]不能为空");
         }
 
-        if (checkGroupNameIsExist(modelGroup.getModelGroupName(), modelGroup.getModelGroupId())) {
-            return ResponseResult.createFailInfo("模型组名称已存在");
+        if (checkGroupNameIsExist(dto.getModelGroupName(), dto.getModelGroupId())) {
+            return ResponseResult.createFailInfo("产品名称已存在");
         }
-
+        ModelGroup modelGroup = ModelGroupDto.getMg(dto);
         modelGroup.setUpdateDate(new Date());
         modelGroup.setUpdatePerson(userId);
         daoHelper.update(_MODEL_GROUP_MAPPER + "updateByPrimaryKeySelective", modelGroup);
+        // 更新关联渠道数据
+        this.groupAddChannel(modelGroup.getModelGroupId(), dto.getChannelList());
         return ResponseResult.createSuccessInfo();
     }
 

@@ -24,13 +24,13 @@ public interface ModelBaseService {
 
     ModelGroup getModelGroupByModelName(String modelGroupName);
 
-    Map<String, Object> getModelGroupsPaged(String modelGroupName, String start, String length);
+    Map<String, Object> getModelGroupsPaged(String modelGroupName,String channelId, String start, String length);
 
     ResponseResult createModelGroup(ModelGroupDto modelGroup, String userId);
 
     void insertModelGroupDataPersistence(ModelGroup modelGroup);
 
-    ResponseResult updateModelGroup(ModelGroup modelGroup, String userId);
+    ResponseResult updateModelGroup(ModelGroupDto modelGroup, String userId);
 
     boolean isGroupUsed(String modelGroupId);
 
