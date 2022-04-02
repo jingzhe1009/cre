@@ -63,14 +63,17 @@ public class ModelBaseController {
 
     @RequestMapping("/group/paged")
     @ResponseBody
-    public Map<String, Object> getModelGroupsPaged(String modelGroupName, String start, String length,HttpServletRequest request) {
+    public Map<String, Object> getModelGroupsPaged(String modelGroupName,String channelId, String start, String length,HttpServletRequest request) {
         if (modelGroupName == null) {
             modelGroupName = "";
+        }
+        if (channelId == null || channelId.equals("")) {
+            channelId = null;
         }
         // 验证数据权限
         final String loginUserId = ControllerUtil.getLoginUserId(request);
 
-        return modelBaseService.getModelGroupsPaged(modelGroupName, start, length);
+        return modelBaseService.getModelGroupsPaged(modelGroupName,channelId, start, length);
     }
 
     @RequestMapping("/group/create")
@@ -82,7 +85,7 @@ public class ModelBaseController {
 
     @RequestMapping("/group/update")
     @ResponseBody
-    public ResponseResult updateModelGroup(ModelGroup modelGroup, HttpServletRequest request) {
+    public ResponseResult updateModelGroup(ModelGroupDto modelGroup, HttpServletRequest request) {
         final String loginUserId = ControllerUtil.getLoginUserId(request);
         return modelBaseService.updateModelGroup(modelGroup, loginUserId);
     }

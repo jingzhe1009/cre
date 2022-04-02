@@ -598,7 +598,7 @@ var modelGroupModal = {
             $('#modelBaseGroupAlert .modal-title').text('').text('查看产品');
             $('#modelBaseGroupAlert .form-control').attr('disabled', true);
             modelGroupModal.echoGroupData(detail);
-            modelGroupModal.channelNameList();
+            // modelGroupModal.channelNameList();
         }
         $('#modelBaseGroupAlert').attr('handleType', handleType).modal({'show': 'center', "backdrop": "static"});
     },
@@ -638,9 +638,9 @@ var modelGroupModal = {
                 if (data.status === 0) {
                     var htmlStr = '';
                     for (var i = 0; i < data.data.length; i++) {
-                        htmlStr += '<option channelId=\'' + data.data[i].channelId + '\'>' + data.data[i].channelName+'--'+ data.data[i].deptName + '</option>';
+                        htmlStr += '<option channel-id=\'' + data.data[i].channelId + '\'>' + data.data[i].channelName+'--'+ data.data[i].deptName + '</option>';
                     }
-                   $('#channelNameSelector').empty().html(htmlStr);
+                   $('#channelSelector').empty().html(htmlStr);
                 } else {
                     failedMessager.show(data.msg);
                 }
@@ -699,6 +699,7 @@ var modelGroupModal = {
         }
         if (handleType == 1) { //修改需要加上组id
             obj['modelGroupId'] = $('#modelBaseGroupAlert').attr('groupId');
+            obj['channelList'] = $('#modelBaseGroupAlert .channelSelector option:selected').attr('channel-id');
         }
         return obj;
     },
