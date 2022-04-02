@@ -160,7 +160,7 @@ var userModal = {
                     }
                 }
             });
-        } else if (handleType == 1) {
+        } else if (handleType === 1) {
             $('#addUserAlertModal .modal-footer .notView button').css('display', 'inline-block');
             $('#addUserAlertModal .cron_msg').removeClass('hide');
             $('#userIdInput').attr('disabled', true);
@@ -183,12 +183,30 @@ var userModal = {
                     }
                 }
             });
-        } else if (handleType == 2) {
+        } else if (handleType === 2) {
+            $('#userIdInput').attr('disabled', true);
+            $('#userNameInput').attr('disabled', true);
+            $('#jobNumberInput').attr('disabled', true);
+            $('#sexSelector').attr("disabled",true);
+            $('#emailInput').attr('disabled', true);
+            $('#phoneInput').attr('disabled', true);
+            $('#passwordInput').attr('disabled', true);
+            $('#passwordAgainInput').attr('disabled', true);
+            $('#chanSelector').attr('disabled', true);
             $('#addUserAlertModal .modal-footer #closeViewUser').css('display', 'inline-block');
             $('#addUserAlertModal .modal-title').text('查看用户');
             $('#addUserAlertModal .cron_msg').addClass('hide');
             userModal.echoData(userId); // 数据回显
             $('#addUserAlertModal').attr('handleType', handleType).modal({'show': 'center', "backdrop": "static"});
+            // $('#userIdInput').attr('disabled', true);
+            // $('#userNameInput').attr('disabled', true);
+            // $('#jobNumberInput').attr('disabled', true);
+            // $('#sexSelector').attr("disabled",true);
+            // $('#emailInput').attr('disabled', true);
+            // $('#phoneInput').attr('disabled', true);
+            // $('#passwordInput').attr('disabled', true);
+            // $('#passwordAgainInput').attr('disabled', true);
+            // $('#chanSelector').attr('disabled', true);
         }
     },
     // 关闭弹框
@@ -650,6 +668,8 @@ var roleModal = {
             $('#roleAlertModal .modal-title').text('查看角色');
             roleModal.echoData(detail); // 数据回显
             $('#roleAlertModal').attr('handleType', handleType).modal({'show': 'center', "backdrop": "static"});
+            $('#roleAlert_name').attr('disabled', true);
+            $('#roleAlert_des').attr('disabled', true);
         }
     },
     // 关闭弹框
@@ -835,6 +855,10 @@ var orgModal = {
             $('#orgAlertModal .modal-title').text('查看机构');
             orgModal.echoData(detail); // 数据回显
             $('#orgAlertModal').attr('handleType', handleType).modal({'show': 'center', "backdrop": "static"});
+            $('#orgAlert_name').attr('disabled', true);
+            $('#orgAlert_code').attr('disabled', true);
+            $('#orgAlertOrgSelector').attr('disabled', true);
+            $('#orgAlert_des').attr('disabled', true);
         }
     },
     // 初始化机构下拉框
@@ -1045,10 +1069,15 @@ var chanModal = {
                 }
             });
         } else if (handleType == 2) {
+            $('#chanAlertModal .form-control').attr('disabled', true);
             $('#chanAlertModal #closeViewChan').css('display', 'inline-block');
             $('#chanAlertModal .modal-title').text('查看渠道');
             chanModal.echoData(detail); // 数据回显
             $('#chanAlertModal').attr('handleType', handleType).modal({'show': 'center', "backdrop": "static"});
+            $('#chanAlert_name').attr('disabled', true);
+            $('#chanAlert_code').attr('disabled', true);
+            $('#chanAlert_des').attr('disabled', true);
+            $('#chanAlertChanSelector').attr('disabled', true);
         }
     },
     // 初始化渠道下拉框
