@@ -28,25 +28,25 @@ var chooseChanModal = {
      *
      *      callBackFun: 保存成功后的回调函数
      */
-    initPage: function (userId, userName, orgIds, callBackFun) {
-        // 回显用户信息
-        $('#chooseChanAlertModal').attr('userId', userId);
-        $('#chooseChan_userName').val(userName);
-
-        // 初始化组织tree
-        chooseChanModal.initOrgTree(orgIds);
-
-        // 绑定页面事件
-        $('#saveChooseOrg').unbind().on('click', function () { // 保存
-            chooseChanModal.saveChoose(userId, callBackFun);
-        });
-
-        $('#cancelChooseOrg').unbind().on('click', function () { // 取消退出
-            chooseChanModal.clearAndClose();
-        });
-
-        $('#chooseChanAlertModal').modal({'show': 'center', "backdrop": "static"});
-    },
+    // initPage: function (userId, userName, orgIds, callBackFun) {
+    //     // 回显用户信息
+    //     $('#chooseChanAlertModal').attr('userId', userId);
+    //     $('#chooseChan_userName').val(userName);
+    //
+    //     // 初始化组织tree
+    //     chooseChanModal.initOrgTree(orgIds);
+    //
+    //     // 绑定页面事件
+    //     $('#saveChooseOrg').unbind().on('click', function () { // 保存
+    //         chooseChanModal.saveChoose(userId, callBackFun);
+    //     });
+    //
+    //     $('#cancelChooseOrg').unbind().on('click', function () { // 取消退出
+    //         chooseChanModal.clearAndClose();
+    //     });
+    //
+    //     $('#chooseChanAlertModal').modal({'show': 'center', "backdrop": "static"});
+    // },
     // 初始化组织树
     initOrgTree: function (orgIds) {
         $.ajax({

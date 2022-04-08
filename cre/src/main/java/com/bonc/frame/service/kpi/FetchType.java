@@ -6,7 +6,7 @@ package com.bonc.frame.service.kpi;
  */
 public enum FetchType {
 
-    DB("0"), API("1");
+    DB("0"), API("1"),KPI("2");
 
     private String value;
 

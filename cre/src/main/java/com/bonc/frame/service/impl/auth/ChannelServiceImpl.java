@@ -41,7 +41,6 @@ public class ChannelServiceImpl implements ChannelService {
         //新增渠道信息，入库保存
         final String channelId = IdUtil.createId();
         channel.setChannelId(channelId);
-        channel.setChannelCode(IdUtil.createId());
         //channel.setParentId();
         channel.setUserNum(0);
         channel.setCreateDate(new Date());

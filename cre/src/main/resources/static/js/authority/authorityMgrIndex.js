@@ -187,26 +187,17 @@ var userModal = {
             $('#userIdInput').attr('disabled', true);
             $('#userNameInput').attr('disabled', true);
             $('#jobNumberInput').attr('disabled', true);
-            $('#sexSelector').attr("disabled",true);
+            $('#userSexInput').attr("disabled",true);
             $('#emailInput').attr('disabled', true);
             $('#phoneInput').attr('disabled', true);
             $('#passwordInput').attr('disabled', true);
             $('#passwordAgainInput').attr('disabled', true);
-            $('#chanSelector').attr('disabled', true);
+            $('#channelList').attr('disabled', true);
             $('#addUserAlertModal .modal-footer #closeViewUser').css('display', 'inline-block');
             $('#addUserAlertModal .modal-title').text('查看用户');
             $('#addUserAlertModal .cron_msg').addClass('hide');
             userModal.echoData(userId); // 数据回显
             $('#addUserAlertModal').attr('handleType', handleType).modal({'show': 'center', "backdrop": "static"});
-            // $('#userIdInput').attr('disabled', true);
-            // $('#userNameInput').attr('disabled', true);
-            // $('#jobNumberInput').attr('disabled', true);
-            // $('#sexSelector').attr("disabled",true);
-            // $('#emailInput').attr('disabled', true);
-            // $('#phoneInput').attr('disabled', true);
-            // $('#passwordInput').attr('disabled', true);
-            // $('#passwordAgainInput').attr('disabled', true);
-            // $('#chanSelector').attr('disabled', true);
         }
     },
     // 关闭弹框
@@ -359,6 +350,13 @@ var userModal = {
                     $("#addUserAlertModal .sexSelector option[value='" + data[key] + "']").prop('selected', true);
                     continue;
                 }
+                // if (key === 'channelList'){ //所属渠道
+                //     var dataArr2 = data[key];
+                //     for (var q = 0; q < dataArr2.length; q++) {
+                //         $("#addUserAlertModal .channelSelector option[data-id='" + dataArr2[q].channelId + "']").prop('selected', true);
+                //     }
+                //     continue;
+                // }
                 var target = $("#addUserAlertModal .form-control[col-name='" + key + "']");
                 if (target.length > 0) {
                     target.val(data[key]);
@@ -1069,7 +1067,7 @@ var chanModal = {
                 }
             });
         } else if (handleType == 2) {
-            $('#chanAlertModal .form-control').attr('disabled', true);
+            // $('#chanAlertModal .form-control').attr('disabled', true);
             $('#chanAlertModal #closeViewChan').css('display', 'inline-block');
             $('#chanAlertModal .modal-title').text('查看渠道');
             chanModal.echoData(detail); // 数据回显
@@ -1080,7 +1078,7 @@ var chanModal = {
             $('#chanAlertChanSelector').attr('disabled', true);
         }
     },
-    // 初始化渠道下拉框
+    //初始化渠道下拉框
     initChanList: function () {
         $.ajax({
             url: webpath + '/dept/nameList',
@@ -1091,9 +1089,9 @@ var chanModal = {
                 if (data.length > 0) {
                     var htmlStr = '';
                     for (var i = 0; i < data.length; i++) {
-                        htmlStr += '<option channelId=\'' + data[i].DEPT_ID + '\'>' + data[i].DEPT_NAME + '</option>';
+                        htmlStr += '<option deptId=\'' + data[i].DEPT_ID + '\'>' + data[i].DEPT_NAME + '</option>';
                     }
-                    $('#chanAlertChanSelector').empty().html('<option class="noParentChanOption" channelId=" ">请选择</option>' + htmlStr);
+                    $('#chanAlertChanSelector').empty().html('<option class="OrgSelector" deptId=" ">请选择</option>' + htmlStr);
                 }
             },
             error: function (data) {
@@ -1102,7 +1100,6 @@ var chanModal = {
         });
     },
     // 关闭弹框
-
     hidden: function () {
         $('#chanAlertModal form')[0].reset(); // 清空表单
         $('#chanAlertModal').modal('toggle', 'center');
@@ -1156,16 +1153,15 @@ var chanModal = {
         for (var i = 0; i < inputs.length; i++) {
             obj[$(inputs[i]).attr('col-name')] = $.trim($(inputs[i]).val());
         }
-        //  单独处理一下
-        // obj['parentId'] = $.trim($('#chanAlertModal .chanSelector option:selected').attr('channelId'));
-        // if (handleType === '1') { // 修改参数多传varId
-        //     if (channelId) {
-        //         obj['channelId'] = channelId;
-        //     } else {
-        //         return {};
-        //     }
-        // }
+         // 单独处理一下
         obj['deptId'] = $.trim($('#chanAlertModal .chanSelector option:selected').attr('channelId'));
+        if (handleType === '1') { // 修改参数多传varId
+            if (channelId) {
+                obj['channelId'] = channelId;
+            } else {
+                return {};
+            }
+        }
         return obj;
     },
     // 回显
@@ -1432,7 +1428,7 @@ function initTitles(tabId) {
                 htmlStr += '<span class="cm-tblB" onclick="userModal.show(1, \'' + row.userId + '\')" type="button">修改</span>';
                 htmlStr += '<span class="cm-tblC" type="button" onclick="userModal.deleteUser(\'' + row.userId + '\')">删除</span>';
                 htmlStr += '<span class="cm-tblB" onclick="distributeModal.checkAuth(0, \'' + row.userId + '\', \'' + row.userName + '\', userModal.distributeCallBack)" type="button">选择角色</span>';
-                htmlStr += '<span class="cm-tblB" onclick="chooseChanModal.authCheck(\'' + row.userId + '\', \'' + row.userName + '\', \'' + JSON.stringify(orgIds).replace(/"/g, '&quot;') + '\', userModal.chooseOrgCallBack)" type="button">选择渠道</span>';
+                // htmlStr += '<span class="cm-tblB" onclick="chooseChanModal.authCheck(\'' + row.userId + '\', \'' + row.userName + '\', \'' + JSON.stringify(orgIds).replace(/"/g, '&quot;') + '\', userModal.chooseOrgCallBack)" type="button">选择渠道</span>';
                 return htmlStr;
             }
         },
@@ -1454,7 +1450,7 @@ function initTitles(tabId) {
             }
         }
     ];
-    // 机构管理
+    //机构管理
     var orgCols = [
         {"title": "机构名称", "data": "deptName"},
         {"title": "机构编码", "data": "deptCode"},

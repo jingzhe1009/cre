@@ -37,7 +37,6 @@ public class DeptServiceImpl implements DeptService {
         }
         final String deptId = IdUtil.createId();
         dept.setDeptId(deptId);
-        dept.setDeptCode(IdUtil.createId());
         dept.setUserNum(0);
         dept.setCreateDate(new Date());
         dept.setCreatePerson(loginUserId);

@@ -5,16 +5,27 @@ public class ChannelDto {
     private String channelId;
     //渠道名称
     private String channelName;
+    private String channelCode;
+
+    public String getChannelCode() {
+        return channelCode;
+    }
+
+    public void setChannelCode(String channelCode) {
+        this.channelCode = channelCode;
+    }
+
     // 机构名-用于拼接
     private String deptName;
 
     public ChannelDto() {
     }
 
-    public ChannelDto(String channelId, String channelName, String deptName) {
+    public ChannelDto(String channelId, String channelName, String deptName,String channelCode) {
         this.channelId = channelId;
         this.channelName = channelName;
         this.deptName = deptName;
+        this.channelCode = channelCode;
     }
 
     public String getChannelId() {

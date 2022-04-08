@@ -44,7 +44,7 @@ function initOrgChanTable(obj) {
         "columns": [
             {"title": "渠道名称", "data": "channelName"},
             {"title": "渠道编码", "data": "channelCode"},
-            {"title": "所属机构", "data": "deptId"},
+            {"title": "所属机构", "data": "deptName"},
         ],
         ajax: {
             url: webpath + '/choose/deptChannel',

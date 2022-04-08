@@ -107,7 +107,7 @@ public class KpiController {
 
     @RequestMapping(value = "/detail", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
-    public ResponseResult getDetai(String kpiId) {
+    public ResponseResult getDetail(String kpiId) {
         return kpiService.getDetail(kpiId);
     }
 

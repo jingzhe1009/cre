@@ -598,7 +598,7 @@ var modelGroupModal = {
             $('#modelBaseGroupAlert .modal-title').text('').text('查看产品');
             $('#modelBaseGroupAlert .form-control').attr('disabled', true);
             modelGroupModal.echoGroupData(detail);
-            // modelGroupModal.channelNameList();
+            modelGroupModal.channelNameList();
         }
         $('#modelBaseGroupAlert').attr('handleType', handleType).modal({'show': 'center', "backdrop": "static"});
     },
@@ -706,7 +706,7 @@ var modelGroupModal = {
     // 删除模型集组
     deleteGroup: function (groupId) {
         if (groupId) {
-            confirmAlert.show('是否确认删除？', function () {
+            confirmAlert.show('删除产品后该产品下的模型将移动到其他分组,是否继续？', function () {
                 $.ajax({
                     url: webpath + '/modelBase/group/delete',
                     type: 'POST',

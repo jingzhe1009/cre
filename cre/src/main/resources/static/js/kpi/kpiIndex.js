@@ -69,8 +69,14 @@ var kpiModal = {
             if (typeValueChecked === '0') { // DS
                 $('.kpiApiWrapper').addClass('hide');
                 $('.kpiDBWrapper').removeClass('hide');
+                $('.kpiKPIWrapper').addClass('hide');
             } else if (typeValueChecked === '1') { // API
                 $('.kpiApiWrapper').removeClass('hide');
+                $('.kpiDBWrapper').addClass('hide');
+                $('.kpiKPIWrapper').addClass('hide');
+            } else if ( typeValueChecked === '2') {// KPI
+                $('.kpiApiWrapper').addClass('hide');
+                $('.kpiKPIWrapper').removeClass('hide');
                 $('.kpiDBWrapper').addClass('hide');
             }
         });
@@ -166,6 +172,33 @@ var kpiModal = {
             kpiModal.getDetail(kpiId, kpiGroupId);
             $('#editKpi .form-control').attr('disabled', true);
             // $('#kpiDefContentWarp input[type="radio"]').attr('disabled', true);
+            $('#kpiDefContentWarp #addKpiLimitColRow').removeClass('show').addClass('hide');
+        }
+
+        $('select.chosen-select').chosen({
+            width: '100%',
+            no_results_text: '没有找到',    // 当检索时没有找到匹配项时显示的提示文本
+            // disable_search_threshold: 10, // 10 个以下的选择项则不显示检索框
+            search_contains: true         // 从任意位置开始检索
+        });
+    },
+    //指标下查看规则集
+    showKpiRuleSet: function (handleType, kpiId, kpiGroupId){
+        // handleType: 0查看
+        kpiModal.data.handleType = handleType;
+        $('#kpiDefContentWarp').removeAttr('kpiId').attr('handleType', handleType);
+        $('.kpiDefBase form')[0].reset();
+        $('.kpiDefBase form').validator('cleanUp');
+        $('.kpiKPIWrapper form').validator('cleanUp');
+        kpiLimitColsModal.clearCache(); // 清除各项缓存数据
+        $('.kpiDefBase .cron_msg').addClass('hide'); // 恢复提示文字状态
+        $('.kpiDefBase .cron_msg').parent().find('.form-control').removeAttr('disabled');
+        $('#editKpi .modal-footer button').css('display', 'none');
+        if (handleType === 0) {
+            $('#editKpi .modal-footer #closeViewKpiContent').css('display', 'inline-block');
+            $('#editKpi .modal-title').text('关联规则集');
+            kpiModal.getDetail(kpiId, kpiGroupId);
+            $('#editKpi .form-control').attr('disabled', true);
             $('#kpiDefContentWarp #addKpiLimitColRow').removeClass('show').addClass('hide');
         }
 
@@ -450,7 +483,7 @@ var kpiModal = {
                 data: {'kpiId': kpiId},
                 success: function (data) {
                     if (data.status === 0) {
-                        confirmAlert.show('是否确认删除？', function () {
+                        confirmAlert.show('删除该指标后引用该指标的规则集也会失效，是否继续', function () {
                             $.ajax({
                                 url: webpath + '/kpi/delete',
                                 type: 'POST',
@@ -726,14 +759,23 @@ function initKpiTable(obj) {
                             return '数据源';
                         case '1':
                             return '接口';
+                        case '2':
+                            return '输入指标';
                         default:
                             return '--';
                     }
                 }
             },
             {"title": "指标描述", "data": "kpiDesc", "width": "11%"},
-            {"title": "创建人", "data": "createPerson", "width": "9%"},
-            {"title": "创建时间", "data": "createDate", "width": "10%"},
+            // {"title": "创建人", "data": "createPerson", "width": "9%"},
+            // {"title": "创建时间", "data": "createDate", "width": "10%"},
+            {
+                "title": "关联规则集", "data": null, "width": "10%", "render": function (data, type, row){
+                    var htmlStr = "";
+                    htmlStr += '<span type="button" class="cm-tblB" onclick="kpiModal.showKpiRuleSet(0, \'' + row.kpiId + '\', \'' + row.kpiGroupId + '\')">查看</span>';
+                    return htmlStr;
+                }
+            },
             {
                 "title": "操作", "data": null, "width": "20%", "render": function (data, type, row) {
                     var htmlStr = "";

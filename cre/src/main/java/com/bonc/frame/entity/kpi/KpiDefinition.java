@@ -52,7 +52,11 @@ public class KpiDefinition extends BaseEntity {
      * 取数类型：0，数据源；1，接口
      */
     private String fetchType;
-
+    /**
+     *
+     * 关联规则集
+     * */
+    private String kpiRuleSet;
     /**
      * 指标值来源，可以是字段或参数的id
      */
@@ -364,6 +368,13 @@ public class KpiDefinition extends BaseEntity {
     public void setPlatformUpdateUserJobNumber(String platformUpdateUserJobNumber) {
         this.platformUpdateUserJobNumber = platformUpdateUserJobNumber;
     }
+    public String getKpiRuleSet() {
+        return kpiRuleSet;
+    }
+
+    public void setKpiRuleSet(String kpiRuleSet) {
+        this.kpiRuleSet = kpiRuleSet;
+    }
 
     @Override
     public String toString() {
@@ -402,6 +413,7 @@ public class KpiDefinition extends BaseEntity {
         sb.append(", kpiFetchLimitersList=").append(kpiFetchLimitersList);
         sb.append(", createDate=").append(createDate);
         sb.append(", createPerson='").append(createPerson).append('\'');
+        sb.append(", kpiRuleSet='").append(kpiRuleSet).append('\'');
         sb.append(", updatePerson='").append(updatePerson).append('\'');
         sb.append(", updateDate=").append(updateDate);
         sb.append('}');
@@ -418,6 +430,7 @@ public class KpiDefinition extends BaseEntity {
                 Objects.equals(kpiType, that.kpiType) &&
                 Objects.equals(kpiGroupId, that.kpiGroupId) &&
                 Objects.equals(fetchType, that.fetchType) &&
+                Objects.equals(kpiRuleSet, that.kpiRuleSet) &&
                 Objects.equals(kpiValueSource, that.kpiValueSource) &&
                 Objects.equals(kpiValueSourceCode, that.kpiValueSourceCode) &&
                 Objects.equals(dbId, that.dbId) &&

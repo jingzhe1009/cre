@@ -10,11 +10,11 @@
                 <!--Tab-->
                 <div id="tabContainer">
                     <ul class="nav nav-tabs" id="authorityTab">
+                        <li tab-id="2"><a data-toggle="tab">机构管理</a></li>
+                        <li tab-id="4"><a data-toggle="tab">渠道管理</a></li>
                         <li tab-id="0"><a data-toggle="tab">用户管理</a></li>
                         <li tab-id="1"><a data-toggle="tab">角色管理</a></li>
-                        <li tab-id="2"><a data-toggle="tab">机构管理</a></li>
                         <li tab-id="3"><a data-toggle="tab">权限管理</a></li>
-                        <li tab-id="4"><a data-toggle="tab">渠道管理</a></li>
                     </ul>
                 </div>
                 <!-- 展示内容 -->
@@ -167,7 +167,7 @@
                     <div class="form-group">
                         <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3">性别</label>
                         <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
-                            <select col-name="userSex" class="form-control sexSelector">
+                            <select id="userSexInput" col-name="userSex" class="form-control sexSelector">
                                 <option value="男">男</option>
                                 <option value="女">女</option>
                             </select>
@@ -383,7 +383,7 @@
                     <div class="form-group">
                         <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3"><i class="mustIcon">*</i>所属机构</label>
                         <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
-                            <select id="chanSelector" col-name="deptId" class="form-control chanSelector"></select>
+                            <select id="chanAlertChanSelector" col-name="deptName" class="form-control orgSelector"></select>
                         </div>
                     </div>
                 </form>

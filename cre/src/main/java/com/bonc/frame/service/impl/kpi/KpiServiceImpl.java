@@ -46,16 +46,16 @@ public class KpiServiceImpl implements KpiService {
 
     @Autowired
     private DaoHelper daoHelper;
-
+    //元数据管理
     @Autowired
     private DBMetaDataMgrService dbMetaDataMgrService;
-
+    //数据源
     @Autowired
     private DbResourceService dbResourceService;
 
     @Autowired
     private RuleReferenceService ruleReferenceService;
-
+    //认证
     @Autowired
     private AuthorityService authorityService;
 
@@ -89,11 +89,14 @@ public class KpiServiceImpl implements KpiService {
         List<KpiResult> results = new ArrayList<>(kpiDefinitionList.size());
         List<KpiDefinition> dbKpiDefinitions = new ArrayList<>();
         List<KpiDefinition> interfaceKpiDefinitions = new ArrayList<>();
+        List<KpiDefinition> inputKpiDefinitions = new ArrayList<>();
         for (KpiDefinition kpiDefinition : kpiDefinitionList) {
             if (FetchType.DB.getValue().equals(kpiDefinition.getFetchType())) {//数据源
                 dbKpiDefinitions.add(kpiDefinition);
             } else if (FetchType.API.getValue().equals(kpiDefinition.getFetchType())) {//接口
                 interfaceKpiDefinitions.add(kpiDefinition);
+            } else if (FetchType.KPI.getValue().equals(kpiDefinition.getFetchType())) {//输入指标
+                inputKpiDefinitions.add(kpiDefinition);
             }
         }
 
@@ -110,7 +113,12 @@ public class KpiServiceImpl implements KpiService {
             if (apiKpiValueBatch != null && !apiKpiValueBatch.isEmpty())
                 results.addAll(apiKpiValueBatch);
         }
-
+        if (!CollectionUtil.isEmpty(inputKpiDefinitions)) {
+            // KPI
+            List<KpiResult> inputKpiValueBatch = getKpiValueBatchByFetchType(inputKpiDefinitions, FetchType.KPI.getValue(), params, executorRequest);
+            if (inputKpiValueBatch !=null && !inputKpiValueBatch.isEmpty())
+                results.addAll(inputKpiValueBatch);
+        }
         return results;
     }
 
@@ -545,6 +553,8 @@ public class KpiServiceImpl implements KpiService {
             // 置空数据源相关属性
 //            kpiDefinition.setApiId("");
 //            kpiDefinition.setApiName("");
+        } else if ("2".equals(kpiDefinition.getFetchType())) {
+
         }
 
         daoHelper.update(_KPI_DEFINITION + "updateKpiDefinition", kpiDefinition);
