@@ -5,6 +5,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.bonc.frame.dao.DaoHelper;
 import com.bonc.frame.dao.rule.RuleDetailMapper;
 import com.bonc.frame.engine.EngineManager;
+import com.bonc.frame.entity.auth.Channel;
+import com.bonc.frame.entity.commonresource.ModelGroup;
+import com.bonc.frame.entity.commonresource.ModelGroupInfo;
 import com.bonc.frame.entity.kpi.KpiDefinition;
 import com.bonc.frame.entity.model.*;
 import com.bonc.frame.entity.modelCompare.entity.ModelOperateLog;
@@ -38,6 +41,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import scala.util.parsing.combinator.testing.Str;
 
 import javax.annotation.Nullable;
 import java.math.BigDecimal;
@@ -111,6 +115,10 @@ public class RuleDetailServiceImpl implements RuleDetailService {
     private ABTestService abTestService;
 
     private final String _MYBITSID_PREFIX = "com.bonc.frame.dao.rule.RuleDetailMapper.";
+
+    private static final String _MODEL_GROUP_MAPPER = "com.bonc.frame.mapper.resource.ModelGroupMapper.";
+
+    private static final String _RULE_DETAIL_MAPPER = "com.bonc.frame.mapper.rule.RuleDetailMapper.";
 
     /**
      * 模型-参数引用中间表
@@ -2161,6 +2169,53 @@ public class RuleDetailServiceImpl implements RuleDetailService {
             }
         }
         return ResponseResult.createSuccessInfo("查询成功", ruleDetailsBase);
+    }
+
+    /**
+     * 产品（模型组），通过id获取其下模型的集合
+     * @param modelGroupId 产品id
+     * @param loginUserId 用户id
+     * @return 数据集合
+     */
+    @Override
+    public ModelGroupInfo getModelByGroupId(String modelGroupId, String loginUserId) {
+        // 权限相关校验省略
+
+        ModelGroupInfo info = new ModelGroupInfo();
+        // 根据产品id获取详细信息
+        ModelGroup mg = (ModelGroup) daoHelper.queryOne(_MODEL_GROUP_MAPPER + "getGroupById", modelGroupId);
+        info.getModelGroupInfo(info,mg);
+        // 根据产品id获取关联渠道的信息
+        List<Channel> nameList = daoHelper.queryForList(_MODEL_GROUP_MAPPER + "getChannelName", modelGroupId);
+        info.setChannelList(nameList);
+        // 根据产品id获取模型的集合数据
+        List<RuleDetailHeader> modelList = daoHelper.queryForList(_RULE_DETAIL_MAPPER + "getModelListByGroup", modelGroupId);
+        info.setModelList(modelList);
+
+        return info;
+    }
+
+    /**
+     * 产品中添加（其他）分类中的模型到本产品
+     * 直接将对应模型的所属产品id切换
+     * @param modelList 要添加的模型集合
+     * @param modelGroupId 要添加到的产品的id
+     * @return 结果
+     */
+    @Override
+    @Transactional
+    public ResponseResult groupAddModel(List<RuleDetailHeader> modelList, String modelGroupId) {
+        // 直接将模型ruleDetail中的模型组-产品id换成新id。
+        if (modelList.size() > 0) {
+            for (RuleDetailHeader header : modelList) {
+                Map<String, String> map = new HashMap<>();
+                map.put("ruleId", header.getRuleName());
+                map.put("modelGroupId", modelGroupId);
+                daoHelper.update(_RULE_DETAIL_MAPPER + "groupAddModel", map);
+            }
+            return ResponseResult.createSuccessInfo("添加成功");
+        }
+        return ResponseResult.createFailInfo("未选择模型");
     }
 
 

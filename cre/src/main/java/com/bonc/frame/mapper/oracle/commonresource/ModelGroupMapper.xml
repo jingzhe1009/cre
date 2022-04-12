@@ -194,7 +194,7 @@
 
     <update id="deleteByUpdate" parameterType="java.lang.String">
         update CRE_RULE_DETAIL
-        set MODEL_GROUP_ID = "defaultGroup", IS_PUBLIC = '1'
+        set MODEL_GROUP_ID = 'defaultGroup', IS_PUBLIC = '1'
         where MODEL_GROUP_ID = #{modelGroupId,jdbcType=VARCHAR}
     </update>
 

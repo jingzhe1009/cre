@@ -2,8 +2,12 @@ package com.bonc.frame.controller.commonresource;
 
 import com.bonc.frame.entity.auth.DeptChannelTree;
 import com.bonc.frame.entity.commonresource.ModelGroup;
+import com.bonc.frame.entity.commonresource.ModelGroupChannelVo;
 import com.bonc.frame.entity.commonresource.ModelGroupDto;
+import com.bonc.frame.entity.commonresource.ModelGroupInfo;
+import com.bonc.frame.entity.rule.RuleDetailHeader;
 import com.bonc.frame.service.modelBase.ModelBaseService;
+import com.bonc.frame.service.rule.RuleDetailService;
 import com.bonc.frame.service.rule.RuleFolderService;
 import com.bonc.frame.util.ControllerUtil;
 import com.bonc.frame.util.ResponseResult;
@@ -30,6 +34,9 @@ public class ModelBaseController {
 
     @Autowired
     private ModelBaseService modelBaseService;
+
+    @Autowired
+    private RuleDetailService ruleDetailService;
 
     @Autowired
     private RuleFolderService ruleFolderService;
@@ -114,12 +121,40 @@ public class ModelBaseController {
      * @param modelGroupId 产品id，新增时可以传null
      * @return 渠道树
      */
-    @RequestMapping(value = "/channelTree")
+    @RequestMapping(value = "/channelList")
     @ResponseBody
-    public ResponseResult channelTree(HttpServletRequest request, String modelGroupId) {
+    public ResponseResult channelList(HttpServletRequest request, String modelGroupId) {
         final String loginUserId = ControllerUtil.getLoginUserId(request);
-        List<DeptChannelTree> voList = modelBaseService.channelTree(loginUserId,modelGroupId);
+        List<ModelGroupChannelVo> voList = modelBaseService.channelList(loginUserId,modelGroupId);
         return ResponseResult.createSuccessInfo("success", voList);
+    }
+
+    /**
+     * 产品查看其下所有的模型-页面跳转后数据展示
+     * @param modelGroupId 产品的id
+     * @param request 区分权限
+     * @return 模型结果集
+     */
+    @RequestMapping("/group/getModel")
+    @ResponseBody
+    public ResponseResult getModelByGroupId(String modelGroupId, HttpServletRequest request) {
+        // 验证数据权限
+        final String loginUserId = ControllerUtil.getLoginUserId(request);
+        ModelGroupInfo info = ruleDetailService.getModelByGroupId(modelGroupId, loginUserId);
+        return ResponseResult.createSuccessInfo("success", info);
+    }
+
+    /**
+     * 产品中添加（其他）分类中的模型到本产品
+     * 直接将对应模型的所属产品id切换
+     * @param modelList 要添加的模型集合
+     * @param modelGroupId 要添加到的产品的id
+     * @return 结果
+     */
+    @RequestMapping("/group/addModel")
+    @ResponseBody
+    public ResponseResult groupAddModel(List<RuleDetailHeader> modelList,String modelGroupId) {
+        return ruleDetailService.groupAddModel(modelList,modelGroupId);
     }
 
 }
