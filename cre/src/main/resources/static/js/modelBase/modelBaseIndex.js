@@ -726,6 +726,12 @@ var modelGroupModal = {
                 });
             });
         }
+    },
+    //查看模型
+    showModel: function(groupId){
+    	var url = webpath + "/ruleFolder/rulePackageMgr?folderId=" + groupId+'&childOpen=c';
+    	alert(url);
+        creCommon.loadHtml(url);
     }
 }
 
@@ -909,7 +915,8 @@ function initModelBaseGroupTable(obj) {
                     htmlStr += '<span type="button" class="cm-tblB" onclick="exportModal.initExportPage(1, 1, getExportParams(\'' + row.modelGroupId + '\', \'' + row.modelGroupName + '\'))">导出</span>';
                     htmlStr += '<span type="button" class="cm-tblC delBtn" onclick="modelGroupModal.deleteGroup(\'' + row.modelGroupId + '\')">删除</span>';
                     htmlStr += '<span type="button" class="cm-tblB" onclick="modelGroupModal.show(1, this)">设置调用渠道</span>';
-                    htmlStr += '<span type="button" class="cm-tblB" onclick="modelGroupModal.show(\'' + row.modelGroupId + '\')">查看模型</span>';
+                    /*htmlStr += '<span type="button" class="cm-tblB" onclick="modelGroupModal.show(\'' + row.modelGroupId + '\')">查看模型</span>';*/
+                    htmlStr += '<span type="button" class="cm-tblB" onclick="modelGroupModal.showModel(\'' + row.modelGroupId + '\')">查看模型</span>';
                     return htmlStr;
                 }
             }],
