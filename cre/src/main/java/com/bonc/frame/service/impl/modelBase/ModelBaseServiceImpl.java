@@ -5,6 +5,8 @@ import com.bonc.frame.entity.auth.Channel;
 import com.bonc.frame.entity.auth.Dept;
 import com.bonc.frame.entity.auth.DeptChannelTree;
 import com.bonc.frame.entity.commonresource.*;
+import com.bonc.frame.service.auth.DeptService;
+import com.bonc.frame.service.auth.RoleService;
 import com.bonc.frame.service.modelBase.ModelBaseService;
 import com.bonc.frame.util.*;
 import org.apache.commons.lang3.StringUtils;
@@ -32,14 +34,32 @@ public class ModelBaseServiceImpl implements ModelBaseService {
     @Autowired
     private DaoHelper daoHelper;
 
+    @Autowired
+    private RoleService roleService;
+
+    @Autowired
+    private DeptService deptService;
+
     // ------------------------ 模型组管理 ------------------------
 
     // 获取参数组列表
     @Override
     @Transactional
-    public ResponseResult getModelGroups(String modelGroupName) {
+    public ResponseResult getModelGroups(String modelGroupName,String loginUserId) {
+        // 验证是否全权
+        boolean b = roleService.checkAuthorityIsAll(loginUserId);
+        String channelId;
+        if (b) {
+            // 全权
+            channelId = null;
+        } else {
+            // 非全权只能看自己渠道关联的产品列表
+            channelId = deptService.getChannelIdByUserId(loginUserId);
+        }
+        deptService.getChannelIdByUserId(loginUserId);
         Map<String, Object> param = new HashMap<>();
         param.put("modelGroupName", modelGroupName);
+        param.put("channelId", channelId);
         final List<ModelGroup> list = daoHelper.queryForList(_MODEL_GROUP_MAPPER +
                 "getByGroupName", param);
         List<ModelGroupVo> voList = new ArrayList<>();
@@ -72,16 +92,32 @@ public class ModelBaseServiceImpl implements ModelBaseService {
 
     @Override
     @Transactional
-    public Map<String, Object> getModelGroupsPaged(String modelGroupName, String channelId, String start, String length) {
+    public Map<String, Object> getModelGroupsPaged(String loginUserId,String modelGroupName, String channelId, String start, String length) {
         // 验证默认分组-其他的存在，如果没有就插入一条，
         ModelGroup ch = ModelGroup.getDefaultGroup();
         List<ModelGroup> ls = daoHelper.queryForList(_MODEL_GROUP_MAPPER + "checkDefaultGroup", ch);
         if (ls.size() == 0) {
             daoHelper.insert(_MODEL_GROUP_MAPPER + "insertSelective", ch);
         }
+        // 验证是否全权
+        boolean b = roleService.checkAuthorityIsAll(loginUserId);
+        String chanId;
+        if (b) {
+            // 全权
+            chanId = null;
+        } else {
+            // 非全权只能看自己渠道关联的产品列表
+            chanId = deptService.getChannelIdByUserId(loginUserId);
+        }
         Map<String, Object> param = new HashMap<>();
         param.put("modelGroupName", modelGroupName);
-        param.put("channelId", channelId);
+        if (channelId == null || channelId.equals("")) {
+            // 接口未传选择的渠道id-根据权限来展示
+            param.put("channelId", chanId);
+        } else {
+            // 接口传了选择的渠道，则展示本渠道下的产品
+            param.put("channelId", channelId);
+        }
         final Map<String, Object> map = daoHelper.queryForPageList(_MODEL_GROUP_MAPPER +
                 "getByGroupName", param, start, length);
         List<ModelGroup> data = (List<ModelGroup>) map.get("data");
@@ -147,7 +183,9 @@ public class ModelBaseServiceImpl implements ModelBaseService {
         insertModelGroupDataPersistence(modelGroup);
 //        daoHelper.insert(_MODEL_GROUP_MAPPER + "insertSelective", modelGroup);
         // 建立产品与渠道的关联
-        this.groupAddChannel(modelGroup.getModelGroupId(), mg.getChannelList());
+//        if (mg.getChannelList().size() > 0) {
+//            this.groupAddChannel(modelGroup.getModelGroupId(), mg.getChannelList());
+//        }
         return ResponseResult.createSuccessInfo();
     }
 
@@ -236,7 +274,9 @@ public class ModelBaseServiceImpl implements ModelBaseService {
     public List<ModelGroupChannelVo> channelList(String loginUserId, String modelGroupId) {
         List<ModelGroupChannelVo> voList = new ArrayList<>();
         // 校验权限-获取全权数据或者本渠道数据
-        if (loginUserId != null) {
+        boolean b = roleService.checkAuthorityIsAll(loginUserId);
+        String channelId = deptService.getChannelIdByUserId(loginUserId);
+        if (b) {
             // 全权
             List<Dept> list = daoHelper.queryForList(_DEPT_PREFIX + "list");
             for(Dept d:list){
@@ -247,6 +287,17 @@ public class ModelBaseServiceImpl implements ModelBaseService {
             }
         } else {
             // 本机构下的渠道数据
+            ModelGroupChannelVo chan = (ModelGroupChannelVo) daoHelper.queryOne(_DEPT_PREFIX + "getChannelVoByChannelId", channelId);
+            String isSelected = "0";
+            Map<String,String> map = new HashMap<>();
+            map.put("modelGroupId", modelGroupId);
+            map.put("channelId", chan.getChannelId());
+            List<ModelGroupChannel> conList = daoHelper.queryForList(_MODEL_GROUP_MAPPER + "isConnected", map);
+            if (conList.size() > 0) {
+                isSelected = "1";
+            }
+            chan.setIsConnected(isSelected);
+            voList.add(chan);
             return voList;
         }
         return voList;

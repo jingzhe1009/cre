@@ -64,8 +64,7 @@ public class ModelBaseController {
         }
         // 验证数据权限
         final String loginUserId = ControllerUtil.getLoginUserId(request);
-
-        return modelBaseService.getModelGroups(modelGroupName);
+        return modelBaseService.getModelGroups(modelGroupName,loginUserId);
     }
 
     @RequestMapping("/group/paged")
@@ -80,7 +79,7 @@ public class ModelBaseController {
         // 验证数据权限
         final String loginUserId = ControllerUtil.getLoginUserId(request);
 
-        return modelBaseService.getModelGroupsPaged(modelGroupName,channelId, start, length);
+        return modelBaseService.getModelGroupsPaged(loginUserId,modelGroupName,channelId, start, length);
     }
 
     @RequestMapping("/group/create")

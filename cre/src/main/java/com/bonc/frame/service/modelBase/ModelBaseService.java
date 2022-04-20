@@ -19,13 +19,13 @@ public interface ModelBaseService {
 
     // ------------------------ 模型组管理 ------------------------
 
-    ResponseResult getModelGroups(String modelGroupName);
+    ResponseResult getModelGroups(String modelGroupName,String loginUserId);
 
     ModelGroup getModelGroupByModelId(String modelGroupId);
 
     ModelGroup getModelGroupByModelName(String modelGroupName);
 
-    Map<String, Object> getModelGroupsPaged(String modelGroupName, String channelId, String start, String length);
+    Map<String, Object> getModelGroupsPaged(String loginUserId, String modelGroupName, String channelId, String start, String length);
 
     ResponseResult createModelGroup(ModelGroupDto modelGroup, String userId);
 

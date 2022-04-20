@@ -18,16 +18,16 @@ public class ModelGroupDto extends ModelGroup {
 
     public static ModelGroup getMg(ModelGroupDto dto) {
         ModelGroup mg = new ModelGroup();
-        if (!dto.getModelGroupId().isEmpty() && dto.getModelGroupId() != null) {
+        if (dto.getModelGroupId() != null && !dto.getModelGroupId().isEmpty()) {
             mg.setModelGroupId(dto.getModelGroupId());
         }
-        if (!dto.getModelGroupName().isEmpty() && dto.getModelGroupName() != null) {
+        if (dto.getModelGroupName() != null &&!dto.getModelGroupName().isEmpty() ) {
             mg.setModelGroupName(dto.getModelGroupName());
         }
-        if (!dto.getModelGroupCode().isEmpty() && dto.getModelGroupCode() != null) {
+        if (dto.getModelGroupCode() != null && !dto.getModelGroupCode().isEmpty()) {
             mg.setModelGroupCode(dto.getModelGroupCode());
         }
-        if (!dto.getModelGroupDesc().isEmpty() && dto.getModelGroupDesc() != null) {
+        if (dto.getModelGroupDesc() != null && !dto.getModelGroupDesc().isEmpty()) {
             mg.setModelGroupDesc(dto.getModelGroupDesc());
         }
         if (dto.getCreatePerson() != null) {

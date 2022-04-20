@@ -1707,12 +1707,19 @@ public class RuleDetailServiceImpl implements RuleDetailService {
     @CuratorMutexLock(value = {"ruleName"})
     public ResponseResult commitWithVersion(RuleDetail ruleDetail,
                                             String data,
-                                            String userId) throws Exception {
+                                            String userId,
+                                            String isCommit) throws Exception {
         String oldRuleId = ruleDetail.getRuleId();
         RuleDetailWithBLOBs ruleDetailWithBLOBs = mergeHeaderInfo(ruleDetail);
         ruleDetailWithBLOBs.setUpdatePerson(userId);
         String version = generateVersion(ruleDetailWithBLOBs.getRuleName(), true, false);
-        initDetailAndAuth(ruleDetailWithBLOBs, userId, data, version, "insertSelective", ConstantUtil.RULE_STATUS_READY);
+        if (isCommit.equals("1")) {
+            // 修改当前版本
+            initDetailAndAuth(ruleDetailWithBLOBs, userId, data, version, "updateByPrimaryKeyForPublish", ConstantUtil.RULE_STATUS_READY);
+        } else {
+            // 提交生成新版本
+            initDetailAndAuth(ruleDetailWithBLOBs, userId, data, version, "insertSelective", ConstantUtil.RULE_STATUS_READY);
+        }
         Map result = afterLock(oldRuleId, data, version, ruleDetailWithBLOBs, ModelOperateLog.COMMIT_MODEL_TYPE, false);
         return ResponseResult.createSuccessInfo("提交成功", result);
     }

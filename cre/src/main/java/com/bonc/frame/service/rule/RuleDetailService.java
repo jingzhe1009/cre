@@ -359,7 +359,7 @@ public interface RuleDetailService {
 
 
     ResponseResult commitWithVersion(RuleDetail ruleDetail, String data,
-                                     String userId) throws Exception;
+                                     String userId,String isCommit) throws Exception;
 
     @Deprecated
     ResponseResult publishWithVersion(RuleDetail ruleDetail, String data,

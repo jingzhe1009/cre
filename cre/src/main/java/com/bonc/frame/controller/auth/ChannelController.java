@@ -50,8 +50,8 @@ public class ChannelController {
     @PermissionsRequires(value = "/chan/view", resourceType = ResourceType.BUTTON)
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> list(String channelName, String start, String length) {
-        Map<String, Object> result = channelService.list(channelName, start, length);
+    public Map<String, Object> list(HttpServletRequest request,String channelName, String start, String length) {
+        Map<String, Object> result = channelService.list(request,channelName, start, length);
         return result;
     }
 

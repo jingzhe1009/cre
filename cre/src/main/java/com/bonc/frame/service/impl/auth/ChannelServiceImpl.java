@@ -2,9 +2,13 @@ package com.bonc.frame.service.impl.auth;
 
 import com.bonc.frame.dao.DaoHelper;
 import com.bonc.frame.entity.auth.*;
+import com.bonc.frame.entity.commonresource.ModelGroupChannelVo;
 import com.bonc.frame.service.auth.ChannelPathService;
 import com.bonc.frame.service.auth.ChannelService;
+import com.bonc.frame.service.auth.DeptService;
+import com.bonc.frame.service.auth.RoleService;
 import com.bonc.frame.util.CollectionUtil;
+import com.bonc.frame.util.ControllerUtil;
 import com.bonc.frame.util.IdUtil;
 import com.bonc.frame.util.ResponseResult;
 
@@ -12,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @Service("channelService")
@@ -19,6 +24,12 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Autowired
     private DaoHelper daoHelper;
+
+    @Autowired
+    private RoleService roleService;
+
+    @Autowired
+    private DeptService deptService;
 
     @Autowired
     private ChannelPathService channelPathService;
@@ -58,9 +69,16 @@ public class ChannelServiceImpl implements ChannelService {
     }
     //新建渠道名单
     @Override
-    public Map<String, Object>  list(String channelName, String start, String size) {
+    public Map<String, Object>  list(HttpServletRequest request, String channelName, String start, String size) {
+        String loginUserId = ControllerUtil.getLoginUserId(request);
+        boolean b = roleService.checkAuthorityIsAll(loginUserId);
         Map<Object, Object> param = new HashMap<>();
         param.put("channelName",channelName);
+        if (!b) {
+            // 不是全权
+            String channelId = deptService.getChannelIdByUserId(loginUserId);
+            param.put("channelId", channelId);
+        }
         //根据渠道名称查找相关信息
         Map<String, Object> result=daoHelper.queryForPageList("com.bonc.frame.mapper.auth.ChannelMapper.listByChannelName",param,start,size);
         return result;
@@ -191,11 +209,23 @@ public class ChannelServiceImpl implements ChannelService {
     public List<ChannelDto> channelNameList(String loginUserId) {
         // 权限相关-非全权只能看自己的渠道
         String deptId = null;
-
-
-        List<DeptChannelTree> deptTree = new ArrayList<>();
-        // 全权：
-        List<ChannelDto> list = daoHelper.queryForList(_DEPT_PREFIX + "channelListWithDept",deptId);
+        boolean b = roleService.checkAuthorityIsAll(loginUserId);
+        List<ChannelDto> list;
+        if (b) {
+            // 全权-展示所有渠道数据
+             list= daoHelper.queryForList(_DEPT_PREFIX + "channelListWithDept", deptId);
+        } else {
+            // 只展示自己的渠道数据
+            ModelGroupChannelVo vo = (ModelGroupChannelVo) daoHelper.queryOne(_DEPT_PREFIX + "getChannelIdByUserId", loginUserId);
+            // 总行大数据平台人员也是全权的
+            if (vo.getChannelName().contains("大数据")) {
+                if (vo.getDeptName().contains("总行")) {
+                    return daoHelper.queryForList(_DEPT_PREFIX + "channelListWithDept", deptId);
+                }
+            }
+            list = new ArrayList<>();
+            list.add(new ChannelDto(vo.getChannelId(), vo.getChannelName(), vo.getChannelCode(),vo.getDeptName()));
+        }
         return list;
     }
 }

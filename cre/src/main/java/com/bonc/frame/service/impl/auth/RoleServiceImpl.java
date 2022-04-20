@@ -2,6 +2,7 @@ package com.bonc.frame.service.impl.auth;
 
 import com.bonc.frame.dao.DaoHelper;
 import com.bonc.frame.entity.auth.Role;
+import com.bonc.frame.service.auth.AuthorityService;
 import com.bonc.frame.service.auth.RoleService;
 import com.bonc.frame.service.auth.SubjectService;
 import com.bonc.frame.util.IdUtil;
@@ -119,4 +120,21 @@ public class RoleServiceImpl implements RoleService {
     public Role findByName(String roleName) {
         return (Role) daoHelper.queryOne(_ROLE_PREFIX + "findByName", roleName);
     }
+
+
+    @Autowired
+    private AuthorityService authorityService;
+    /**
+     * 验证当前用户是否全权
+     *
+     * @param loginUserId 用户id
+     * @return 全权返回true
+     */
+    @Override
+    public boolean checkAuthorityIsAll(String loginUserId) {
+        // 首先获取用户的角色，
+        String roleId = (String) daoHelper.queryOne(_ROLE_PREFIX + "getRoleIdByUserId", loginUserId);
+        return authorityService.isRoleHasAllPermits(roleId);
+    }
+
 }
