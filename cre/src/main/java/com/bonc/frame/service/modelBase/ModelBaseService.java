@@ -2,6 +2,7 @@ package com.bonc.frame.service.modelBase;
 
 import com.bonc.frame.entity.auth.DeptChannelTree;
 import com.bonc.frame.entity.commonresource.ModelGroup;
+import com.bonc.frame.entity.commonresource.ModelGroupChannelVo;
 import com.bonc.frame.entity.commonresource.ModelGroupDto;
 import com.bonc.frame.util.ResponseResult;
 
@@ -18,13 +19,13 @@ public interface ModelBaseService {
 
     // ------------------------ 模型组管理 ------------------------
 
-    ResponseResult getModelGroups(String modelGroupName);
+    ResponseResult getModelGroups(String modelGroupName,String loginUserId);
 
     ModelGroup getModelGroupByModelId(String modelGroupId);
 
     ModelGroup getModelGroupByModelName(String modelGroupName);
 
-    Map<String, Object> getModelGroupsPaged(String modelGroupName,String channelId, String start, String length);
+    Map<String, Object> getModelGroupsPaged(String loginUserId, String modelGroupName, String channelId, String start, String length);
 
     ResponseResult createModelGroup(ModelGroupDto modelGroup, String userId);
 
@@ -50,5 +51,5 @@ public interface ModelBaseService {
      * @param modelGroupId 当前产品id
      * @return 渠道树
      */
-    List<DeptChannelTree> channelTree(String loginUserId,String modelGroupId);
+    List<ModelGroupChannelVo> channelList(String loginUserId, String modelGroupId);
 }

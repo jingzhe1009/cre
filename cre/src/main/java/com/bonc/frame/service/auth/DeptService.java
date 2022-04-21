@@ -21,6 +21,13 @@ public interface DeptService {
 
     List<DepartmentVo> deptTree();
 
-    Map<String, Object> deptChannel(String deptId, String start, String size);
+    Map<String, Object> deptChannel(String channelName,String deptId, String start, String size);
+
+    /**
+     * 校验权限后获取当前用户的所属渠道的id
+     * @param userId 登录用户id
+     * @return 用户所属渠道id
+     */
+    String getChannelIdByUserId(String userId);
 
 }

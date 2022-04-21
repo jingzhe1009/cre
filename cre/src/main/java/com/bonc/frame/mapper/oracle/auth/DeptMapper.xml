@@ -43,6 +43,14 @@
         <result column="DEPT_NAME" property="deptName" jdbcType="VARCHAR"/>
     </resultMap>
 
+    <resultMap id="BaseResultMap6" type="com.bonc.frame.entity.commonresource.ModelGroupChannelVo">
+        <result column="CHANNEL_ID" property="channelId" jdbcType="VARCHAR"/>
+        <result column="CHANNEL_NAME" property="channelName" jdbcType="VARCHAR"/>
+        <result column="CHANNEL_CODE" property="channelCode" jdbcType="VARCHAR"/>
+        <result column="DEPT_NAME" property="deptName" jdbcType="VARCHAR"/>
+        <result column="DEPT_CODE" property="deptCode" jdbcType="VARCHAR"/>
+    </resultMap>
+
     <sql id="Base_Column_List">
       DEPT_ID,DEPT_NAME, DEPT_DESC, DEPT_CODE, PARENT_ID,USER_NUM,CREATE_DATE, UPDATE_DATE, CREATE_PERSON,UPDATE_PERSON
     </sql>
@@ -244,11 +252,16 @@
     </select>
 
 
-    <select id="getChannelByDept" resultMap="BaseResultMap4" parameterType="java.lang.String">
+    <select id="getChannelByDept" resultMap="BaseResultMap6" parameterType="java.lang.String">
         select
-        <include refid="Base_Column_List4"/>
-        from CRE_AUTH_CHANNEL
-        where DEPT_ID = #{deptId,jdbcType=VARCHAR}
+               a.CHANNEL_ID,
+               a.CHANNEL_NAME,
+               a.CHANNEL_CODE,
+               b.DEPT_NAME,
+               b.DEPT_CODE
+        from CRE_AUTH_CHANNEL a
+        left join CRE_AUTH_DEPT b on a.DEPT_ID = b.DEPT_ID
+        where a.DEPT_ID = #{deptId,jdbcType=VARCHAR}
     </select>
 
     <select id="channelListWithDept" resultMap="BaseResultMap5" parameterType="java.lang.String">
@@ -262,6 +275,29 @@
         </if>
     </select>
 
+    <select id="getChannelIdByUserId" resultMap="BaseResultMap6" parameterType="java.lang.String">
+        select
+               a.CHANNEL_ID,
+               a.CHANNEL_NAME,
+               a.CHANNEL_CODE,
+               c.DEPT_NAME,
+               c.DEPT_CODE
+        from CRE_AUTH_CHANNEL a
+        left join CRE_AUTH_USER_CHAN b on b.CHAN_ID = a.CHANNEL_ID
+        left join CRE_AUTH_DEPT c on a.DEPT_ID = c.DEPT_ID
+        where b.USER_ID = #{userId,jdbcType=VARCHAR}
+    </select>
 
+    <select id="getChannelVoByChannelId" parameterType="java.lang.String" resultMap="BaseResultMap6">
+        select
+               a.CHANNEL_ID,
+               a.CHANNEL_NAME,
+               a.CHANNEL_CODE,
+               b.DEPT_NAME,
+               b.DEPT_CODE
+        from CRE_AUTH_CHANNEL a
+        left join CRE_AUTH_DEPT b on a.DEPT_ID = b.DEPT_ID
+        where a.CHANNEL_ID = #{channelId,jdbcType=VARCHAR}
+    </select>
 
 </mapper>

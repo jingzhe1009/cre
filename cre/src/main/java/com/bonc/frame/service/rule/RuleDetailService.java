@@ -1,5 +1,6 @@
 package com.bonc.frame.service.rule;
 
+import com.bonc.frame.entity.commonresource.ModelGroupInfo;
 import com.bonc.frame.entity.model.ModelContentInfo;
 import com.bonc.frame.entity.modelImportAndExport.modelImport.importEntity.ImportAdjustObject;
 import com.bonc.frame.entity.rule.RuleDetail;
@@ -365,7 +366,7 @@ public interface RuleDetailService {
 
 
     ResponseResult commitWithVersion(RuleDetail ruleDetail, String data,
-                                     String userId) throws Exception;
+                                     String userId,String isCommit) throws Exception;
 
     @Deprecated
     ResponseResult publishWithVersion(RuleDetail ruleDetail, String data,
@@ -392,4 +393,20 @@ public interface RuleDetailService {
 
     ResponseResult getVersionListWithDraftByStatus(String ruleName);
 
+    /**
+     * 产品（模型组），通过id获取其下模型的集合
+     * @param modelGroupId 产品id
+     * @param loginUserId 用户id
+     * @return 数据集合
+     */
+    ModelGroupInfo getModelByGroupId(String modelGroupId, String loginUserId);
+
+    /**
+     * 产品中添加（其他）分类中的模型到本产品
+     * 直接将对应模型的所属产品id切换
+     * @param modelList 要添加的模型集合
+     * @param modelGroupId 要添加到的产品的id
+     * @return 结果
+     */
+    ResponseResult groupAddModel(List<RuleDetailHeader> modelList, String modelGroupId);
 }

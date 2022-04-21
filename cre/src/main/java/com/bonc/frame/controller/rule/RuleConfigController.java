@@ -765,7 +765,7 @@ public class RuleConfigController {
     @ApiOperation("提交模型带版本")
     @RequestMapping(value = "/version/commit", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseResult commitWithVersion(RuleDetail ruleDetail, String data, String isFirst,
+    public ResponseResult commitWithVersion(RuleDetail ruleDetail, String data, String isFirst, String isCommit,
                                             HttpServletRequest request) {
         String moduleName = ruleDetail.getModuleName();
         if (StringUtils.isBlank(moduleName)) {
@@ -806,7 +806,7 @@ public class RuleConfigController {
         }
 
         try {
-            return ruleDetailService.commitWithVersion(ruleDetail, data, loginUserId);
+            return ruleDetailService.commitWithVersion(ruleDetail, data, loginUserId,isCommit);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseResult.createFailInfo("提交失败");

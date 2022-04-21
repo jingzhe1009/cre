@@ -381,6 +381,11 @@ function insertRule () {
 	$('#insertModelAlert').modal();
 }
 
+// 添加产品（其他）中的模型
+function addRule () {
+    var id = 'defaultGroup';
+}
+
 // 模型设为公有
 function setCommon ( ruleId, folderId ) {
 	if ( !ruleId || !folderId ) {

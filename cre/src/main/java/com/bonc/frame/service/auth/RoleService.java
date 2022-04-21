@@ -18,4 +18,11 @@ public interface RoleService {
     ResponseResult delete(String roleId);
 
     ResponseResult update(Role role, String loginUserId);
+
+    /**
+     * 验证当前用户是否全权
+     * @param loginUserId 用户id
+     * @return 全权返回true
+     */
+    boolean checkAuthorityIsAll(String loginUserId);
 }

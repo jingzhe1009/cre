@@ -194,7 +194,7 @@
         from CRE_PUB_MODEL_GROUP_CHANNEL
         where
             MODEL_GROUP_ID = #{modelGroupId,jdbcType=VARCHAR}
-            CHANNEL_ID = #{channelId,jdbcType=VARCHAR}
+            and CHANNEL_ID = #{channelId,jdbcType=VARCHAR}
     </select>
 
     <select id="checkDefaultGroup" parameterType="com.bonc.frame.entity.commonresource.ModelGroup" resultMap="BaseResultMap">
@@ -209,7 +209,7 @@
 
     <update id="deleteByUpdate" parameterType="java.lang.String">
         update CRE_RULE_DETAIL
-        set MODEL_GROUP_ID = "defaultGroup", IS_PUBLIC = '1'
+        set MODEL_GROUP_ID = 'defaultGroup', IS_PUBLIC = '1'
         where MODEL_GROUP_ID = #{modelGroupId,jdbcType=VARCHAR}
     </update>
 

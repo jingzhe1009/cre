@@ -652,7 +652,7 @@ var modelGroupModal = {
                 if (data.status === 0) {
                     var htmlStr = '';
                     for (var i = 0; i < data.data.length; i++) {
-                        htmlStr += '<option channel-id=\'' + data.data[i].channelId + '\'>' + data.data[i].channelName+'--'+ data.data[i].deptName + '</option>';
+                        htmlStr += '<option channelId=\'' + data.data[i].channelId + '\'>' + data.data[i].channelName+'--'+ data.data[i].deptName + '</option>';
                     }
                    $('#channelSelector').empty().html(htmlStr);
                 } else {
@@ -713,8 +713,8 @@ var modelGroupModal = {
         }
         if (handleType == 1) { //修改需要加上组id
             obj['modelGroupId'] = $('#modelBaseGroupAlert').attr('groupId');
-            obj['channelList'] = $('#modelBaseGroupAlert .channelSelector option:selected').attr('channel-id');
         }
+        obj['channelList'] = $('#modelBaseGroupAlert .channelSelector option:selected').attr('channelId');
         return obj;
     },
     // 删除模型集组
@@ -752,6 +752,12 @@ var modelGroupModal = {
                 }
             });
         }
+    },
+    //查看模型
+    showModel: function(groupId){
+    	var url = webpath + "/ruleFolder/rulePackageMgr?folderId=" + groupId+'&childOpen=c';
+    	alert(url);
+        creCommon.loadHtml(url);
     }
 }
 
@@ -934,8 +940,8 @@ function initModelBaseGroupTable(obj) {
                     htmlStr += '<span type="button" class="cm-tblB" onclick="modelGroupModal.show(1, this)">修改</span>';
                     htmlStr += '<span type="button" class="cm-tblB" onclick="exportModal.initExportPage(1, 1, getExportParams(\'' + row.modelGroupId + '\', \'' + row.modelGroupName + '\'))">导出</span>';
                     htmlStr += '<span type="button" class="cm-tblC delBtn" onclick="modelGroupModal.deleteGroup(\'' + row.modelGroupId + '\')">删除</span>';
-                    htmlStr += '<span type="button" class="cm-tblB" onclick="modelGroupModal.show(1, this)">设置调用渠道</span>';
-                    htmlStr += '<span type="button" class="cm-tblB" onclick="modelGroupModal.show(\'' + row.modelGroupId + '\')">查看模型</span>';
+                    htmlStr += '<span type="button" class="cm-tblB" onclick="modelGroupModal.show(3, this)">设置调用渠道</span>';
+                    htmlStr += '<span type="button" class="cm-tblB" onclick="modelGroupModal.showModel(\'' + row.modelGroupId + '\')">查看模型</span>';
                     return htmlStr;
                 }
             }],
