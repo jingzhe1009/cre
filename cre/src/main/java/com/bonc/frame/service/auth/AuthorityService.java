@@ -7,6 +7,7 @@ import com.bonc.frame.security.ResourceType;
 import com.bonc.frame.util.ResponseResult;
 
 import javax.annotation.Nullable;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -40,15 +41,28 @@ public interface AuthorityService {
                                                           String variableTypeId,
                                                           String startDate, String endDate,
                                                           String start, String length);
-
+    // 参数组
+    Map<String, Object> getPubVariableGroupsResourcesAndPermits(String roleId,String variableGroupId,
+                                                                String  variableGroupName, Date createDate, Date updateDate,
+                                                                String start, String length);
     // 公共接口
     Map<String, Object> getPubApiResourcesAndPermits(String roleId,
                                                      String apiName, String apiGroupName,
                                                      String startDate, String endDate,
                                                      String start, String length);
-    // 规则集
+    // 接口组
+    Map<String, Object> getPubApiGroupsResourcesAndPermits(String roleId,
+                                                     String  apiGroupId, String apiGroupName,
+                                                     String startDate, String endDate,
+                                                     String start, String length);
+    // 规则库
     Map<String, Object> getPubRuleSetResourcesAndPermits(String roleId,
                                                          String ruleSetName, String ruleSetGroupName,
+                                                         String startDate, String endDate,
+                                                         String start, String length);
+    // 规则集组
+    Map<String, Object> getPubRuleSetGroupsResourcesAndPermits(String roleId,
+                                                         String ruleSetGroupId, String ruleSetGroupName,
                                                          String startDate, String endDate,
                                                          String start, String length);
     // 模型库
@@ -57,6 +71,11 @@ public interface AuthorityService {
                                                             String startDate, String endDate,
                                                             String start, String length);
 
+    // 产品
+    Map<String, Object> getPubModelGroupsResourcesAndPermits(String roleId ,
+                                                            String moduleGroupId, String ruleType,String modelGroupName,
+                                                            String startDate, String endDate,
+                                                            String start, String length);
     /**
      * 离线任务
      * @param roleId
@@ -79,6 +98,11 @@ public interface AuthorityService {
                                                   @Nullable String kpiGroupName,
                                                   @Nullable String kpiType,
                                                   @Nullable String fetchType,
+                                                  String start, String length);
+    //指标组
+    Map<String, Object> getKpiGroupResourcesAndPermits(String roleId,
+                                                  @Nullable String kpiGroupName,
+                                                  String startDate, String endDate,
                                                   String start, String length);
     //场景
     Map<String, Object> getFolderResourcesAndPermits(String roleId, String folderName,
@@ -196,6 +220,8 @@ public interface AuthorityService {
     ResponseResult grant(GrantAuthRequest grantAuthRequest, String currentUser, String resourceTypeId);
 
     void updatePubVariableAuthList(GrantAuthRequest grantAuthRequest);
+
+//    void updatePubVariableGroupsAuthList(GrantAuthRequest grantAuthRequest);
 
     /**
      * 授权

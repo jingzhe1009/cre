@@ -27,6 +27,7 @@ import com.bonc.framework.rule.executor.context.impl.ExecutorRequest;
 import com.bonc.framework.rule.kpi.KpiResult;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.NoUniqueBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -143,6 +144,12 @@ public class KpiServiceImpl implements KpiService {
         return list;
     }
 
+    @Override
+    public List<Object> getRuleSetGroupByKpiId(String KpiId){
+        final List<Object> list=daoHelper.queryForList(_KPI_DEFINITION + "getRuleSetGroupByKpiId", KpiId);
+        return list;
+    }
+
     /**
      * 需要保证指标名称不重复且与变量名称不重复
      *
@@ -247,6 +254,20 @@ public class KpiServiceImpl implements KpiService {
         return daoHelper.queryForPageList(_KPI_DEFINITION +
                 "pagedKpiBaseInfo", param, start, length);
     }
+
+    @Override
+    public Map<String, Object> pagedKpiGroupBaseInfo(
+                                                @Nullable String kpiGroupName,
+                                                String startDate,String endDate,
+                                                String start, String length) {
+        Map<String, String> param = new HashMap<>(4);
+        param.put("kpiGroupName", kpiGroupName);
+        param.put("startDate", startDate);
+        param.put("endDate", endDate);
+        return daoHelper.queryForPageList(_KPI_GROUP +
+                "pagedKpiGroupBaseInfo", param, start, length);
+    }
+
 
     @Override
     public Map<String, Object> getKpiBaseInfo(@Nullable String kpiName,

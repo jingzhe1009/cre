@@ -8,7 +8,9 @@ import com.bonc.frame.entity.variableentity.VariableEntity;
 import com.bonc.frame.entity.variableentityrelation.VariableEntityRelation;
 import com.bonc.frame.util.ResponseResult;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -145,6 +147,12 @@ public interface VariableService {
                                                   String variableTypeId,
                                                   String startDate, String endDate,
                                                   String start, String size);
+
+    Map<String, Object> pagedPubVariableGroupsResources(  @Nullable String variableGroupId,
+                                                          @Nullable String variableGroupName,
+                                                          @Nullable Date updateDate,
+                                                          @Nullable Date createDate,
+                                                        String start, String size);
 
     List<VariableGroupExt> pubSelectFlatVariables(String variableAlias,
                                                   String variableGroupName,

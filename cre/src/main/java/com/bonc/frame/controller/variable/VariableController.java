@@ -329,12 +329,14 @@ public class VariableController {
         return variableService.pubInsertVariableGroup(variableGroup, ControllerUtil.getLoginUserId(request));
     }
 
+    @PermissionsRequires(value = "/pub/variableGroup/update?variableGroupId", resourceType = ResourceType.DATA_PUB_VARIABLE_GROUP)
     @RequestMapping(value = "/pub/group/update", method = RequestMethod.POST)
     @ResponseBody
     public ResponseResult pubUpdateVariableGroup(VariableGroup variableGroup, HttpServletRequest request) {
         return variableService.pubUpdateVariableGroup(variableGroup, ControllerUtil.getLoginUserId(request));
     }
 
+    @PermissionsRequires(value = "/pub/variableGroup/delete?variableGroupId", resourceType = ResourceType.DATA_PUB_VARIABLE_GROUP)
     @RequestMapping(value = "/pub/group/delete", method = RequestMethod.POST)
     @ResponseBody
     public ResponseResult pubDeleteVariableGroup(String variableGroupId) {
@@ -381,5 +383,18 @@ public class VariableController {
         return ResponseResult.createSuccessInfo();
     }
 
+    @PermissionsRequires(value = "/pub/variableGroup/update?variableGroupId", resourceType = ResourceType.DATA_PUB_VARIABLE_GROUP)
+    @RequestMapping(value = "group/update/checkAuth", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseResult updateGroup(String variableGroupId) {
+        return ResponseResult.createSuccessInfo();
+    }
+
+    @PermissionsRequires(value = "/pub/variableGroup/delete?variableGroupId", resourceType = ResourceType.DATA_PUB_VARIABLE_GROUP)
+    @RequestMapping(value = "group/delete/checkAuth", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseResult deleteGroup(String variableGroupId) {
+        return ResponseResult.createSuccessInfo();
+    }
 
 }

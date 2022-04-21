@@ -39,7 +39,7 @@ public enum ResourceType {
     DATA_PUB_API("6"),
 
     /**
-     * 数据-规则库
+     * 数据-规则库下规则集
      */
     DATA_PUB_RULE_SET("7"),
 
@@ -66,7 +66,32 @@ public enum ResourceType {
     /**
      * 数据-场景
      */
-    DATA_FOLDER("12");
+    DATA_FOLDER("12"),
+
+    /**
+     * 数据-公共参数下参数组
+     * */
+    DATA_PUB_VARIABLE_GROUP("13"),
+
+    /**
+     * 数据-公共接口下接口组
+     * */
+    DATA_PUB_API_GROUP("14"),
+
+    /**
+     * 数据-指标组
+     */
+    DATA_KPI_GROUP("15"),
+
+    /**
+     * 数据-规则库下规则集组
+     */
+    DATA_PUB_RULE_SET_GROUP("16"),
+
+    /**
+     * 数据-产品（原来的模型组）
+     */
+    DATA_PUB_MODEL_GROUP("17");
 
     private String type;
 

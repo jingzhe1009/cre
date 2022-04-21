@@ -6,15 +6,27 @@ var metaTableCache = {}; // 元数据缓存 {dataRowResourceId: checkedUrlStr}
 var ruleCacheOld = [];
 var ruleCache = {}; // 模型缓存 {dataRowResourceId: checkedUrlStr}
 
+var modelGroupCacheOld = [];
+var modelGroupCache = {}; // 产品缓存 {dataRowResourceId: checkedUrlStr}
+
 var paramCacheOld = [];
 var paramCache = {}; // 公共参数缓存 {dataRowResourceId: checkedUrlStr}
 var entityCache = {}; // 对象参数entityId缓存 {dataRowResourceId: entityId}
 
+var paramGroupCacheOld = [];
+var paramGroupCache = {};  // 公共参数组缓存 {dataRowResourceId: checkedUrlStr}
+
 var apiCacheOld = [];
 var apiCache = {}; // 公共接口缓存 {dataRowResourceId: checkedUrlStr}
 
+var apiGroupCacheOld =[];
+var apiGroupCache = {}; // 接口组缓存
+
 var ruleSetCacheOld = [];
 var ruleSetCache = {}; // 规则集缓存 {dataRowResourceId: checkedUrlStr}
+
+var ruleSetGroupCacheOld = [];
+var ruleSetGroupCache = {}; // 规则集组缓存 {dataRowResourceId: checkedUrlStr}
 
 var modelCacheOld = [];
 var modelCache = {}; // 模型库缓存 {dataRowResourceId: checkedUrlStr}
@@ -27,6 +39,9 @@ var taskCache = {}; // 离线任务缓存 {dataRowResourceId: checkedUrlStr}
 
 var kpiCacheOld = [];
 var kpiCache = {}; // 指标缓存 {dataRowResourceId: checkedUrlStr}
+
+var kpiGroupCacheOld = [];
+var kpiGroupCache = {}; // 指标组缓存 {dataRowResourceId: checkedUrlStr}
 
 var folderCacheOld = [];
 var folderCache = {}; // 场景缓存 {dataRowResourceId: checkedUrlStr}
@@ -491,6 +506,16 @@ var authorityMgrModal = {
             return kpiCache;
         } else if (tableId == '11') { // 场景table
             return folderCache;
+        } else if (tableId == '13') { // 接口组table
+            return apiGroupCache;
+        } else if (tableId == '14') { // 指标组table
+            return kpiGroupCache;
+        } else if (tableId == '15') { // 规则集组table
+            return ruleSetGroupCache;
+        } else if (tableId == '12') { //  参数组table
+            return paramGroupCache;
+        } else if (tableId == '16') { //  产品table
+            return modelGroupCache;
         } else {
             return;
         }
@@ -517,6 +542,16 @@ var authorityMgrModal = {
             return kpiCacheOld;
         } else if (tableId == '11') { // 场景table
             return folderCacheOld;
+        } else if (tableId == '12') { // 参数组table
+                return paramGroupCacheOld;
+        } else if (tableId == "13") { // 接口组table
+            return apiGroupCacheOld;
+        } else if (tableId == '14') { // 指标组table
+            return kpiGroupCacheOld;
+        } else if (tableId == '15') { // 规则集组table
+            return ruleSetGroupCacheOld;
+        } else if (tableId == '16') { //  产品table
+            return modelGroupCacheOld;
         } else {
             return;
         }
@@ -543,6 +578,16 @@ var authorityMgrModal = {
             return '11';
         } else if (grantType == '11') { // 场景table
             return '12';
+        } else if (grantType == '12') { // 参数组table
+            return '13';
+        } else if (grantType == '13') { // 接口组table
+            return '14';
+        } else if (grantType == '14') { // 指标组table
+            return '15';
+        } else if (grantType == '15') { // 规则集组table
+            return '16';
+        }else if (grantType == '16') { // 产品table
+            return '17';
         } else {
             return;
         }
@@ -628,6 +673,11 @@ var authorityMgrModal = {
             initAuthorityTable(9, $('#taskTable'), taskTitle, '/auth/task/view', objStr, true);
             initAuthorityTable(10, $('#kpiTable'), kpiTitle, '/auth/kpi/view', objStr, true);
             initAuthorityTable(11, $('#folderTable'), folderTitle, '/auth/folder/view', objStr, true);
+            initAuthorityTable(12, $('#paramGroupTable'), paramGroupTitle, '/auth/pub/variableGroup/view', objStr, true);
+            initAuthorityTable(13, $('#apiGroupTable'), apiGroupTitle, '/auth/pub/apiGroup/view', objStr, true);
+            initAuthorityTable(14, $('#kpiGroupTable'), kpiGroupTitle, '/auth/kpiGroup/view', objStr, true);
+            initAuthorityTable(15, $('#ruleSetGroupTable'), ruleSetGroupTitle, '/auth/pub/ruleSetGroup/view', objStr, true);
+            initAuthorityTable(16, $('#modelGroupTable'), modelGroupTitle, '/auth/pub/modelGroup/view', objStr, true);
         } else if (grantType == '1') { // 菜单
             initAuthorityTable(1, $('#menuTable'), menuTitle, '/auth/menu/view', objStr, false);
         } else if (grantType == '2') { // 元数据
@@ -650,6 +700,16 @@ var authorityMgrModal = {
             initAuthorityTable(10, $('#kpiTable'), kpiTitle, '/auth/kpi/view', objStr, true);
         } else if (grantType == '11') { // 场景
             initAuthorityTable(11, $('#folderTable'), folderTitle, '/auth/folder/view', objStr, true);
+        } else if (grantType == '12') { // 参数组
+            initAuthorityTable(12, $('#paramGroupTable'), paramGroupTitle, '/auth/pub/variableGroup/view', objStr, true);
+        } else if (grantType == '13') { // 接口组
+            initAuthorityTable(13, $('#apiGroupTable'), apiGroupTitle, '/auth/pub/apiGroup/view', objStr, true);
+        } else if (grantType == '14') { // 指标组
+            initAuthorityTable(14, $('#kpiGroupTable'), kpiGroupTitle, '/auth/kpiGroup/view', objStr, true);
+        } else if (grantType == '15') { // 规则集组
+            initAuthorityTable(15, $('#ruleSetGroupTable'), ruleSetGroupTitle, '/auth/pub/ruleSetGroup/view', objStr, true);
+        } else if (grantType == '16') { // 产品
+            initAuthorityTable(16, $('#modelGroupTable'), modelGroupTitle, '/auth/pub/modelGroup/view', objStr, true);
         }
         authorityMgrModal.checkIsGrantedAll(roleId); // 是否全权check
     },
@@ -660,23 +720,33 @@ var authorityMgrModal = {
             metaTableCache = {};
             ruleCache = {};
             paramCache = {};
+            paramGroupCache = {};
             apiCache = {};
+            apiGroupCache = {};
             ruleSetCache = {};
+            ruleSetGroupCache = {};
             modelCache = {};
+            modelGroupCache = {};
             dataSourceCache = {};
             taskCache = {};
             kpiCache = {};
+            kpiGroupCache ={};
             folderCache = {};
 
             metaTableCacheOld = [];
             ruleCacheOld = [];
             paramCacheOld = [];
+            paramGroupCacheOld = [];
             apiCacheOld = [];
+            apiGroupCacheOld = [];
             ruleSetCacheOld = [];
+            ruleSetGroupCacheOld = [];
             modelCacheOld = [];
+            modelGroupCacheOld = [];
             dataSourceCacheOld = [];
             taskCacheOld = [];
             kpiCacheOld = [];
+            kpiGroupCacheOld = [];
             folderCacheOld = [];
         } else if (grantType == '1') { // 菜单
             menuCache = {};
@@ -710,6 +780,21 @@ var authorityMgrModal = {
         } else if (grantType == '11') { // 场景
             folderCache = {};
             folderCacheOld = [];
+        } else if (grantType == '12') { // 参数组
+            paramGroupCache = {};
+            paramGroupCacheOld = [];
+        } else if (grantType == '13') { // 接口组
+            apiGroupCache = {};
+            apiGroupCacheOld =[];
+        } else if (grantType == '14') { // 指标组
+            kpiGroupCache = {};
+            kpiGroupCacheOld = [];
+        } else if (grantType == '15') { // 规则集组
+            ruleSetGroupCache = {};
+            ruleSetGroupCacheOld = [];
+        } else if (grantType == '16') { // 产品
+            modelGroupCache = {};
+            modelGroupCacheOld = [];
         }
     },
     // 授权保存
@@ -741,6 +826,16 @@ var authorityMgrModal = {
                 url = '/auth/kpi/grant?roleId=' + roleId;
             } else if (grantType == '11') { // 场景
                 url = '/auth/folder/grant?roleId=' + roleId;
+            } else if (grantType == '12') { // 参数组
+                url = '/auth/pub/variableGroup/grant?roleId=' + roleId;
+            } else if (grantType == '13') { // 接口组
+                url = '/auth/pub/apiGroup/grant?roleId=' + roleId;
+            } else if (grantType == '14') { // 指标组
+                url = '/auth/kpiGroup/grant?roleId=' + roleId;
+            } else if (grantType == '15') { // 规则集组
+                url = '/auth/pub/ruleSetGroup/grant?roleId=' + roleId;
+            } else if (grantType == '16') { // 产品
+                url = '/auth/pub/modelGroup/grant?roleId=' + roleId;
             } else {
                 return;
             }
@@ -1539,6 +1634,36 @@ var ruleTitle = [
     }
 ];
 
+// 产品title
+var modelGroupTitle = [
+    {"title": "产品名称", "data": "modelGroupName"},
+    {
+        "title": function () {
+            var htmlStr = '<div class="resourceCheckBoxContainer checkAllContainer">';
+            htmlStr += '<div class="checkbox"><label><input urlStr="/pub/modelGroup/view" class="verticalCheckbox" type="checkbox">查看</label></div>';
+            htmlStr += '<div class="checkbox"><label><input urlStr="/pub/modelGroup/update" class="verticalCheckbox" type="checkbox">修改</label></div>';
+            htmlStr += '<div class="checkbox"><label><input urlStr="/pub/modelGroup/delete" class="verticalCheckbox" type="checkbox">删除</label></div>';
+            htmlStr += '<div class="checkbox"><label><input urlStr="*" class="acrossCheckbox verticalCheckbox" type="checkbox">全选</label></div>';
+            htmlStr += '</div>';
+            return htmlStr;
+        },
+        "data": "",
+        "render": function (data, type, row) {
+            var resourcesArr = row.resources;
+            var rowResourceId = row.resourceId;
+            var htmlStr = '<div resourceId=\'' + rowResourceId + '\' class="resourceCheckBoxContainer">';
+            for (var i = 0; i < resourcesArr.length; i++) {
+                htmlStr += '<div class="checkbox"><label><input resourceId=\'' + row.resourceId + '\' urlStr=\'' + resourcesArr[i].resourceUrl + '\' class="resourceCheckBox" type="checkbox">';
+                htmlStr += resourcesArr[i].resourceName
+                htmlStr += '</label></div>';
+            }
+            htmlStr += '<div class="checkbox"><label><input urlStr="*" class="acrossCheckbox" type="checkbox">全选</label></div>';
+            htmlStr += '</div>';
+            return htmlStr;
+        }
+    }
+];
+
 // 公共参数title
 var paramTitle = [
     {"title": "参数组", "data": "variableGroupName"},
@@ -1551,6 +1676,39 @@ var paramTitle = [
             htmlStr += '<div class="checkbox"><label><input urlStr="/pub/variable/view" class="verticalCheckbox" type="checkbox">查看</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/pub/variable/update" class="verticalCheckbox" type="checkbox">修改</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/pub/variable/delete" class="verticalCheckbox" type="checkbox">删除</label></div>';
+            htmlStr += '<div class="checkbox"><label><input urlStr="*" class="acrossCheckbox verticalCheckbox" type="checkbox">全选</label></div>';
+            htmlStr += '</div>';
+            return htmlStr;
+        },
+        "data": null,
+        "render": function (data, type, row) {
+            var resourcesArr = row.resources;
+            var rowResourceId = row.resourceId;
+            var kindId = row.kindId;
+            var entityId = row.entityId;
+            var htmlStr = '<div resourceId=\'' + rowResourceId + '\' class="resourceCheckBoxContainer">';
+            for (var i = 0; i < resourcesArr.length; i++) {
+                htmlStr += '<div class="checkbox"><label><input resourceId=\'' + rowResourceId + '\' urlStr=\'' + resourcesArr[i].resourceUrl + '\' kindId=\'' + kindId + '\' entityId=\'' + entityId + '\' class="resourceCheckBox" type="checkbox">';
+                htmlStr += resourcesArr[i].resourceName;
+                htmlStr += '</label></div>';
+            }
+            htmlStr += '<div class="checkbox"><label><input urlStr="*" class="acrossCheckbox" type="checkbox">全选</label></div>';
+            htmlStr += '</div>';
+            return htmlStr;
+        }
+    }
+];
+
+
+// 公共参数组title
+var paramGroupTitle = [
+    {"title": "参数组", "data": "variableGroupName"},
+    {
+        "title": function () {
+            var htmlStr = '<div class="resourceCheckBoxContainer checkAllContainer">';
+            htmlStr += '<div class="checkbox"><label><input urlStr="/pub/variableGroup/view" class="verticalCheckbox" type="checkbox">查看</label></div>';
+            htmlStr += '<div class="checkbox"><label><input urlStr="/pub/variableGroup/update" class="verticalCheckbox" type="checkbox">修改</label></div>';
+            htmlStr += '<div class="checkbox"><label><input urlStr="/pub/variableGroup/delete" class="verticalCheckbox" type="checkbox">删除</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="*" class="acrossCheckbox verticalCheckbox" type="checkbox">全选</label></div>';
             htmlStr += '</div>';
             return htmlStr;
@@ -1606,6 +1764,36 @@ var apiTitle = [
     }
 ];
 
+// 公共接口组title
+var apiGroupTitle = [
+    {"title": "接口组名称", "data": "apiGroupName"},
+    {
+        "title": function () {
+            var htmlStr = '<div class="resourceCheckBoxContainer checkAllContainer">';
+            htmlStr += '<div class="checkbox"><label><input urlStr="/pub/apiGroup/view" class="verticalCheckbox" type="checkbox">查看</label></div>';
+            htmlStr += '<div class="checkbox"><label><input urlStr="/pub/apiGroup/update" class="verticalCheckbox" type="checkbox">修改</label></div>';
+            htmlStr += '<div class="checkbox"><label><input urlStr="/pub/apiGroup/delete" class="verticalCheckbox" type="checkbox">删除</label></div>';
+            htmlStr += '<div class="checkbox"><label><input urlStr="*" class="acrossCheckbox verticalCheckbox" type="checkbox">全选</label></div>';
+            htmlStr += '</div>';
+            return htmlStr;
+        },
+        "data": null,
+        "render": function (data, type, row) {
+            var resourcesArr = row.resources;
+            var rowResourceId = row.resourceId;
+            var htmlStr = '<div resourceId=\'' + rowResourceId + '\' class="resourceCheckBoxContainer">';
+            for (var i = 0; i < resourcesArr.length; i++) {
+                htmlStr += '<div class="checkbox"><label><input resourceId=\'' + rowResourceId + '\' urlStr=\'' + resourcesArr[i].resourceUrl + '\' class="resourceCheckBox" type="checkbox">';
+                htmlStr += resourcesArr[i].resourceName;
+                htmlStr += '</label></div>';
+            }
+            htmlStr += '<div class="checkbox"><label><input urlStr="*" class="acrossCheckbox" type="checkbox">全选</label></div>';
+            htmlStr += '</div>';
+            return htmlStr;
+        }
+    }
+];
+
 // 规则库title
 var ruleSetTitle = [
     {"title": "规则集组名称", "data": "ruleSetGroupName"},
@@ -1618,6 +1806,38 @@ var ruleSetTitle = [
             htmlStr += '<div class="checkbox"><label><input urlStr="/pub/ruleSet/update" class="verticalCheckbox" type="checkbox">修改</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/pub/ruleSet/delete" class="verticalCheckbox" type="checkbox">删除</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/pub/ruleSet/version/enable" class="verticalCheckbox" type="checkbox">启用/停用</label></div>';
+            // htmlStr += '<div class="checkbox"><label><input urlStr="/pub/ruleSet" class="verticalCheckbox" type="checkbox">规则库</label></div>';
+            htmlStr += '<div class="checkbox"><label><input urlStr="*" class="acrossCheckbox verticalCheckbox" type="checkbox">全选</label></div>';
+            htmlStr += '</div>';
+            return htmlStr;
+        },
+        "data": "",
+        "render": function (data, type, row) {
+            var resourcesArr = row.resources;
+            var rowResourceId = row.resourceId;
+            var htmlStr = '<div resourceId=\'' + rowResourceId + '\' class="resourceCheckBoxContainer">';
+            for (var i = 0; i < resourcesArr.length; i++) {
+                htmlStr += '<div class="checkbox"><label><input resourceId=\'' + row.resourceId + '\' urlStr=\'' + resourcesArr[i].resourceUrl + '\' class="resourceCheckBox" type="checkbox">';
+                htmlStr += resourcesArr[i].resourceName
+                htmlStr += '</label></div>';
+            }
+            htmlStr += '<div class="checkbox"><label><input urlStr="*" class="acrossCheckbox" type="checkbox">全选</label></div>';
+            htmlStr += '</div>';
+            return htmlStr;
+        }
+    }
+];
+
+// 规则集组title
+var ruleSetGroupTitle = [
+    {"title": "规则集组名称", "data": "ruleSetGroupName"},
+    {
+        "title": function () {
+            var htmlStr = '<div class="resourceCheckBoxContainer checkAllContainer">';
+            htmlStr += '<div class="checkbox"><label><input urlStr="/pub/ruleSetGroup/view" class="verticalCheckbox" type="checkbox">查看</label></div>';
+            htmlStr += '<div class="checkbox"><label><input urlStr="/pub/ruleSetGroup/update" class="verticalCheckbox" type="checkbox">修改</label></div>';
+            htmlStr += '<div class="checkbox"><label><input urlStr="/pub/ruleSetGroup/delete" class="verticalCheckbox" type="checkbox">删除</label></div>';
+            // htmlStr += '<div class="checkbox"><label><input urlStr="/pub/ruleSetGroup/version/enable" class="verticalCheckbox" type="checkbox">启用/停用</label></div>';
             // htmlStr += '<div class="checkbox"><label><input urlStr="/pub/ruleSet" class="verticalCheckbox" type="checkbox">规则库</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="*" class="acrossCheckbox verticalCheckbox" type="checkbox">全选</label></div>';
             htmlStr += '</div>';
@@ -1811,6 +2031,8 @@ var kpiTitle = [
                     return '数据源';
                 case '1':
                     return '接口';
+                case '2':
+                    return '输入指标';
                 default:
                     return '--';
             }
@@ -1823,6 +2045,38 @@ var kpiTitle = [
             htmlStr += '<div class="checkbox"><label><input urlStr="/kpi/view" class="verticalCheckbox" type="checkbox">查看</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/kpi/update" class="verticalCheckbox" type="checkbox">修改</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/kpi/delete" class="verticalCheckbox" type="checkbox">删除</label></div>';
+            htmlStr += '<div class="checkbox"><label><input urlStr="*" class="acrossCheckbox verticalCheckbox" type="checkbox">全选</label></div>';
+            htmlStr += '</div>';
+            return htmlStr;
+        },
+        "data": "",
+        "width": "20%",
+        "render": function (data, type, row) {
+            var resourcesArr = row.resources;
+            var rowResourceId = row.resourceId;
+            var htmlStr = '<div resourceId=\'' + rowResourceId + '\' class="resourceCheckBoxContainer">';
+            for (var i = 0; i < resourcesArr.length; i++) {
+                htmlStr += '<div class="checkbox"><label><input resourceId=\'' + row.resourceId + '\' urlStr=\'' + resourcesArr[i].resourceUrl + '\' class="resourceCheckBox" type="checkbox">';
+                htmlStr += resourcesArr[i].resourceName
+                htmlStr += '</label></div>';
+            }
+            htmlStr += '<div class="checkbox"><label><input urlStr="*" class="acrossCheckbox" type="checkbox">全选</label></div>';
+            htmlStr += '</div>';
+            return htmlStr;
+        }
+    }
+];
+
+//指标组title
+var kpiGroupTitle =[
+    {"title": "指标组", "data": "kpiGroupName", "width": "10%"},
+    {"title": "指标描述", "data": "kpiGroupDesc", "width": "20%"},
+    {
+        "title": function () {
+            var htmlStr = '<div class="resourceCheckBoxContainer checkAllContainer">';
+            htmlStr += '<div class="checkbox"><label><input urlStr="/kpi/group/view" class="verticalCheckbox" type="checkbox">查看</label></div>';
+            htmlStr += '<div class="checkbox"><label><input urlStr="/kpi/group/update" class="verticalCheckbox" type="checkbox">修改</label></div>';
+            htmlStr += '<div class="checkbox"><label><input urlStr="/kpi/group/delete" class="verticalCheckbox" type="checkbox">删除</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="*" class="acrossCheckbox verticalCheckbox" type="checkbox">全选</label></div>';
             htmlStr += '</div>';
             return htmlStr;

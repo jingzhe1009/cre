@@ -40,6 +40,7 @@ import org.assertj.core.util.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import scala.annotation.meta.param;
 
 import javax.annotation.Nullable;
 import javax.annotation.Resource;
@@ -52,6 +53,7 @@ public class VariableServiceImpl implements VariableService {
 
     private final String _MYBITSID_PREFIX = "com.bonc.frame.dao.variable.VariableMapper.";
     private final String _MYBITSID_KIND_PREFIX = "com.bonc.frame.mapper.oracle.variable.VariableKindMapper.";
+    private final String _MYBITSID_VARIABLE_GROUP_PREFIX = "com.bonc.frame.mapper.oracle.commonresource.VariableGroupMapper.";
 
     /**
      * 公共参数组
@@ -1517,6 +1519,21 @@ public class VariableServiceImpl implements VariableService {
         param.put("endDate", endDate);
         final Map<String, Object> result = daoHelper.queryForPageList(_MYBITSID_PREFIX +
                 "pagedPubVariableResources", param, start, size);
+        return result;
+    }
+     //公共参数组资源
+    @Override
+    public Map<String, Object> pagedPubVariableGroupsResources(  @Nullable String variableGroupName,
+                                                                 @Nullable String variableGroupId,
+                                                                 @Nullable Date createDate,  @Nullable Date updateDate,
+                                                               String start, String size) {
+        Map<String, Object> param = new HashMap<>(4);
+        param.put("variableGroupName", variableGroupName);
+        param.put("variableGroupId", variableGroupId);
+        param.put("createDate",createDate);
+        param.put("updateDate",updateDate);
+        final Map<String, Object> result = daoHelper.queryForPageList( _MYBITSID_VG_PREFIX +
+                "pagedPubVariableGroupsResources", param, start, size);
         return result;
     }
 

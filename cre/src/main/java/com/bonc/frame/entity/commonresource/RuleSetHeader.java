@@ -7,13 +7,12 @@ import com.bonc.frame.entity.BaseEntity;
  * @date 2019/9/3 15:54
  */
 public class RuleSetHeader extends BaseEntity {
-
+    //规则集头Id
     protected String ruleSetHeaderId;
-
+    //规则集名
     protected String ruleSetName;
-
+    //规则集组Id
     protected String ruleSetGroupId;
-
     // 规则集描述
     protected String ruleSetHeaderDesc;
 

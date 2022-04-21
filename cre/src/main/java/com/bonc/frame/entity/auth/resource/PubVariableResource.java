@@ -7,19 +7,28 @@ import java.util.Date;
  * @date 2019/8/23 11:18
  */
 public class PubVariableResource extends DataResource implements Cloneable {
-
+    //变量Id
     private String variableId;
     private String entityId;
+    //变量别名
     private String variableAlias;
+    //变量编码
     private String variableCode;
+    //类型Id
     private String typeId;
+    //变量类型
     private String typeValue;
+    //类型描述
     private String typeDesc;
+    //变量种类
     private String kindId;
+    //描述
     private String variableRemarks;
     private Date createDate;
     private Date updateDate;
+    //参数组Id
     private String varaibleGroupId;
+    //参数组名
     private String variableGroupName;
 
     public String getVariableId() {

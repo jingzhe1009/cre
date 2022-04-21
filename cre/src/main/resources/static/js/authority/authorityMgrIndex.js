@@ -142,6 +142,15 @@ var userModal = {
         // handleType: 0新增 1修改 2查看
         if (handleType == 0) {
             $('#addUserAlertModal .modal-footer .notView button').css('display', 'inline-block');
+            $('#userIdInput').attr('disabled', false);
+            $('#userNameInput').attr('disabled', false);
+            $('#jobNumberInput').attr('disabled', false);
+            $('#userSexInput').attr("disabled",false);
+            $('#emailInput').attr('disabled', false);
+            $('#phoneInput').attr('disabled', false);
+            $('#passwordInput').attr('disabled', false);
+            $('#passwordAgainInput').attr('disabled', false);
+            $('#channelList').attr('disabled', false);
             // 权限校验 authCheck
             $.ajax({
                 url: webpath + '/user/save/checkAuth',
@@ -164,6 +173,14 @@ var userModal = {
             $('#addUserAlertModal .modal-footer .notView button').css('display', 'inline-block');
             $('#addUserAlertModal .cron_msg').removeClass('hide');
             $('#userIdInput').attr('disabled', true);
+            $('#userNameInput').attr('disabled', false);
+            $('#jobNumberInput').attr('disabled', false);
+            $('#userSexInput').attr("disabled",false);
+            $('#emailInput').attr('disabled', false);
+            $('#phoneInput').attr('disabled', false);
+            $('#passwordInput').attr('disabled', false);
+            $('#passwordAgainInput').attr('disabled', false);
+            $('#channelList').attr('disabled', false);
             // 权限校验 authCheck
             $.ajax({
                 url: webpath + '/user/update/checkAuth',
@@ -622,6 +639,8 @@ var roleModal = {
         // handleType: 0新增 1修改 2查看
         if (handleType === 0) {
             $('#roleAlertModal .modal-footer .notView button').css('display', 'inline-block');
+            $('#roleAlert_name').attr('disabled',false);
+            $('#roleAlert_des').attr('disabled', false);
             // 权限校验 authCheck
             $.ajax({
                 url: webpath + '/role/save/checkAuth',
@@ -642,6 +661,8 @@ var roleModal = {
             });
         } else if (handleType === 1) {
             $('#roleAlertModal .modal-footer .notView button').css('display', 'inline-block');
+            $('#roleAlert_name').attr('disabled',false);
+            $('#roleAlert_des').attr('disabled', false);
             // 权限校验 authCheck
             $.ajax({
                 url: webpath + '/role/update/checkAuth',
@@ -805,6 +826,10 @@ var orgModal = {
         // handleType: 0新增 1修改 2查看
         if (handleType == 0) {
             $('#orgAlertModal .notView button').css('display', 'inline-block');
+            $('#orgAlert_name').attr('disabled', false);
+            $('#orgAlert_code').attr('disabled', false);
+            $('#orgAlertOrgSelector').attr('disabled', false);
+            $('#orgAlert_des').attr('disabled', false);
             // 权限校验 authCheck
             $.ajax({
                 url: webpath + '/dept/save/checkAuth',
@@ -825,6 +850,10 @@ var orgModal = {
             });
         } else if (handleType == 1) {
             $('#orgAlertModal .notView button').css('display', 'inline-block');
+            $('#orgAlert_name').attr('disabled', false);
+            $('#orgAlert_code').attr('disabled', false);
+            $('#orgAlertOrgSelector').attr('disabled', false);
+            $('#orgAlert_des').attr('disabled', false);
             // 权限校验 authCheck
             $.ajax({
                 url: webpath + '/dept/update/checkAuth',
@@ -1018,6 +1047,10 @@ var chanModal = {
         // handleType: 0新增 1修改 2查看
         if (handleType == 0) {
             $('#chanAlertModal .notView button').css('display', 'inline-block');
+            $('#chanAlert_name').attr('disabled', false);
+            $('#chanAlert_code').attr('disabled', false);
+            $('#chanAlert_des').attr('disabled', false);
+            $('#chanAlertChanSelector').attr('disabled', false);
             // 权限校验 authCheck
             // $('#chanAlertModal .modal-title').text('添加渠道');
             // $('#chanAlertModal').attr('handleType', handleType).modal({
@@ -1043,6 +1076,10 @@ var chanModal = {
                 });
         } else if (handleType == 1) {
             $('#chanAlertModal .notView button').css('display', 'inline-block');
+            $('#chanAlert_name').attr('disabled', false);
+            $('#chanAlert_code').attr('disabled', false);
+            $('#chanAlert_des').attr('disabled', false);
+            $('#chanAlertChanSelector').attr('disabled', false);
             // 权限校验 authCheck
             $.ajax({
                 url: webpath + '/channel/update/checkAuth',

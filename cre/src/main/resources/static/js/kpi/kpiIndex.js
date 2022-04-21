@@ -1,6 +1,5 @@
 /**
- * 指标库管理页面
- * data:2019/10/14
+ * 指标库管理页10/14
  * author:bambi
  */
 
@@ -818,24 +817,40 @@ var kpiGroupModal = {
             var curRow = $this.parentNode.parentNode;
             detail = $('#kpiGroupTable').DataTable().row(curRow).data();
         }
-        // handleType: 0新增 1修改
+        // handleType: 0新增 1修改 2查看
         $('#kpiGroupAlert form')[0].reset();
         $('#kpiGroupAlert .modal-footer button').css('display', 'none');
         $('#kpiGroupAlert .form-control').attr('disabled', false);
         if (handleType == 0) {
             $('#kpiGroupAlert .modal-footer .notView button').css('display', 'inline-block');
             $('#kpiGroupAlert .modal-title').text('').text('添加指标组');
-        } else if (handleType == 1) {
-            $('#kpiGroupAlert .modal-footer .notView button').css('display', 'inline-block');
-            $('#kpiGroupAlert .modal-title').text('').text('修改指标组');
+            $('#kpiGroupAlert').attr('handleType', handleType).modal({'show': 'center', "backdrop": "static"});
             kpiGroupModal.echoGroupData(detail);
+        } else if (handleType == 1) {
+            $.ajax({
+                url: webpath + '/kpi/group/update/checkAuth',
+                type: 'GET',
+                data: {'kpiGroupId': detail['kpiGroupId']? detail['kpiGroupId'] : ''},
+                dataType: "json",
+                success: function (data) {
+                    if (data.status === 0) {
+                        $('#kpiGroupAlert').attr('handleType', handleType).modal({'show': 'center', "backdrop": "static"});
+                        $('#kpiGroupAlert .modal-footer #closeViewKpiGroup').css('display', 'inline-block');
+                        $('#kpiGroupAlert .modal-title').text('').text('查看指标组');
+                        kpiGroupModal.echoGroupData(detail);
+                        $('#kpiGroupAlert .form-control').attr('disabled', false);
+                    } else {
+                        failedMessager.show(data.msg);
+                    }
+                }
+            });
         } else if (handleType == 2) {
             $('#kpiGroupAlert .modal-footer #closeViewKpiGroup').css('display', 'inline-block');
             $('#kpiGroupAlert .modal-title').text('').text('查看指标组');
+            $('#kpiGroupAlert').attr('handleType', handleType).modal({'show': 'center', "backdrop": "static"});
             $('#kpiGroupAlert .form-control').attr('disabled', true);
             kpiGroupModal.echoGroupData(detail);
         }
-        $('#kpiGroupAlert').attr('handleType', handleType).modal({'show': 'center', "backdrop": "static"});
     },
     // 关闭添加指标组弹框
     hiddenAddGroupAlert: function () {
@@ -912,24 +927,36 @@ var kpiGroupModal = {
     // 删除指标组
     deleteGroup: function (groupId) {
         if (groupId) {
-            confirmAlert.show('是否确认删除？', function () {
-                $.ajax({
-                    url: webpath + '/kpi/group/delete',
-                    type: 'POST',
-                    dataType: "json",
-                    data: {'kpiGroupId': groupId},
-                    success: function (data) {
-                        if (data.status === 0) {
-                            successMessager.show('删除成功');
-                            // initKpiGroupTable();
-                            // initKpiTable();
-                            $('.kpiSearch').trigger('click');
-                            initKpiGroup(); // 刷新模型组下拉框
-                        } else {
-                            failedMessager.show(data.msg);
-                        }
+            $.ajax({ // 删除权限校验
+                url: webpath + '/kpi/group/delete/checkAuth',
+                type: 'GET',
+                dataType: "json",
+                data: {'kpiGroupId': groupId},
+                success: function (data) {
+                    if (data.status === 0) {
+                        confirmAlert.show('是否确认删除？', function () {
+                            $.ajax({
+                                url: webpath + '/kpi/group/delete',
+                                type: 'POST',
+                                dataType: "json",
+                                data: {'kpiGroupId': groupId},
+                                success: function (data) {
+                                    if (data.status === 0) {
+                                        successMessager.show('删除成功');
+                                        // initKpiGroupTable();
+                                        // initKpiTable();
+                                        $('.kpiSearch').trigger('click');
+                                        initKpiGroup(); // 刷新指标组下拉框
+                                    } else {
+                                        failedMessager.show(data.msg);
+                                    }
+                                }
+                            });
+                        });
+                    } else {
+                        failedMessager.show(data.msg);
                     }
-                });
+                }
             });
         }
     }

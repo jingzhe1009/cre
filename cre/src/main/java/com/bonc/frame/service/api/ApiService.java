@@ -120,6 +120,11 @@ public interface ApiService {
                                             String startDate, String endDate,
                                             String start, String size);
 
+
+    Map<String, Object> pagedPubApiGroupResource(String apiGroupId, String apiGroupName,
+                                            String startDate, String endDate,
+                                            String start, String size);
+
     ResponseResult pubInsert(ApiConf apiConf, String userId);
 
     ResponseResult pubUpdateApi(ApiConf apiConf, String userId);

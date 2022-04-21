@@ -259,6 +259,28 @@ public class RuleSetBaseController {
         return ruleSetBaseService.getRuleSetGroups(ruleSetGroupName);
     }
 
+    //规则集查询指标信息
+    @RequestMapping("/getKpiByRuleSetId")
+    @ResponseBody
+    public  List<String>  getKpiByRuleSetId(String ruleSetId) {
+        List<String> list =ruleSetBaseService.getKpiByRuleSetId(ruleSetId);
+        return list;
+    }
+
+    @RequestMapping("/getRuleSetIdByHeader")
+    @ResponseBody
+    public List<Map<String,String>>getRuleSetIdByHeader(String ruleSetHeaderId){
+        return ruleSetBaseService.getRuleSetIdByHeader(ruleSetHeaderId);
+    }
+
+    //规则集查看模型信息
+    @RequestMapping("/getModelByRuleSetId")
+    @ResponseBody
+    public  List<String>  getModelByRuleSetId(String ruleSetId) {
+        List<String> list =ruleSetBaseService.getModelByRuleSetId(ruleSetId);
+        return list;
+    }
+
     @RequestMapping("/group/paged")
     @ResponseBody
     public Map<String, Object> getRuleSetGroupsPaged(String ruleSetGroupName,
@@ -276,6 +298,7 @@ public class RuleSetBaseController {
         return ruleSetBaseService.createRuleSetGroup(ruleSetGroup, loginUserId);
     }
 
+    @PermissionsRequires(value = "/pub/ruleSetGroup/update?ruleSetGroupId", resourceType = ResourceType.DATA_PUB_RULE_SET_GROUP)
     @RequestMapping(value = "/group/update", method = RequestMethod.POST)
     @ResponseBody
     public ResponseResult updateRuleSetGroup(RuleSetGroup ruleSetGroup, HttpServletRequest request) {
@@ -283,6 +306,7 @@ public class RuleSetBaseController {
         return ruleSetBaseService.updateRuleSetGroup(ruleSetGroup, loginUserId);
     }
 
+    @PermissionsRequires(value = "/pub/ruleSetGroup/delete?ruleSetGroupId", resourceType = ResourceType.DATA_PUB_RULE_SET_GROUP)
     @RequestMapping(value = "/group/delete")
     @ResponseBody
     public ResponseResult deleteRuleSetGroup(String ruleSetGroupId) {
@@ -319,5 +343,17 @@ public class RuleSetBaseController {
         return ResponseResult.createSuccessInfo();
     }
 
+    @PermissionsRequires(value = "/pub/ruleSetGroup/update?ruleSetGroupId", resourceType = ResourceType.DATA_PUB_RULE_SET_GROUP)
+    @RequestMapping(value = "/group/update/checkAuth", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseResult checkUpdateGroup(String ruleSetGroupId) {
+        return ResponseResult.createSuccessInfo();
+    }
 
+    @PermissionsRequires(value = "/pub/ruleSetGroup/delete?ruleSetGroupId", resourceType = ResourceType.DATA_PUB_RULE_SET_GROUP)
+    @RequestMapping(value = "/group/delete/checkAuth", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseResult checkDeleteGroup(String ruleSetGroupId) {
+        return ResponseResult.createSuccessInfo();
+    }
 }

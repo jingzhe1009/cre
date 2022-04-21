@@ -9,13 +9,13 @@ import com.bonc.frame.entity.BaseEntity;
 public class ModelHeader extends BaseEntity {
 
     protected String modelHeaderId;
-
+    //模型名称
     protected String ruleName;
-
+    //模型类型
     protected String ruleType;
-
+    //模型头部描述
     protected String ruleHeaderDesc;
-
+    //产品Id
     protected String modelGroupId;
 
     public String getModelHeaderId() {

@@ -15,6 +15,20 @@
         CREATE_DATE, UPDATE_DATE
     </sql>
 
+    <select id="pagedPubApiGroupResource" parameterType="java.util.Map"
+            resultType="com.bonc.frame.entity.auth.resource.PubApiGroupResource">
+        select
+        API_GROUP_NAME as "apiGroupName",
+        API_GROUP_ID as "apiGroupId"
+        FROM CRE_PUB_API_GROUP
+        where 1=1
+        <if test="apiGroupId != null">
+            and API_GROUP_ID != #{ruleSetGroupId,jdbcType=VARCHAR}
+        </if>
+        <if test="apiGroupName != null">
+            API_GROUP_NAME  = #{apiGroupName,jdbcType=VARCHAR},
+        </if>
+    </select>
     <!-- 检验 apiGroupName 唯一性 -->
     <select id="countByName" parameterType="java.util.Map" resultType="int">
         select count(*) as "count" from CRE_PUB_API_GROUP

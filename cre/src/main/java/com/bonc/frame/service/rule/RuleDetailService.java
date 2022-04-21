@@ -269,6 +269,13 @@ public interface RuleDetailService {
                                               @Nullable String endDate,
                                               String start, String length);
 
+    Map<String, Object> getGroupHeaderListResource(@Nullable String modelGroupId,
+                                              @Nullable String ruleType,
+                                              @Nullable String modelGroupName,
+                                              @Nullable String startDate,
+                                              @Nullable String endDate,
+                                              String start, String length);
+
     /**
      * 创建模型的同时创建新版本
      */

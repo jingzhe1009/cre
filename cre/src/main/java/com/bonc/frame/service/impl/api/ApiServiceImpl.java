@@ -383,6 +383,20 @@ public class ApiServiceImpl implements ApiService {
         return result;
     }
 
+    @Override
+    public Map<String, Object> pagedPubApiGroupResource(String apiGroupId, String apiGroupName,
+                                                   String startDate, String endDate,
+                                                   String start, String size) {
+        Map<String, Object> param = new HashMap<>();
+        param.put("apiGroupId", apiGroupId);
+        param.put("apiGroupName", apiGroupName);
+        param.put("startDate", startDate);
+        param.put("endDate", endDate);
+        final Map<String, Object> result = daoHelper.queryForPageList(_MYBITSID_AG_PREFIX +
+                "pagedPubApiGroupResource", param, start, size);
+        return result;
+    }
+
     // 插入接口-参数引用关系
     private void insertNewVariables(ApiConf apiConf) {
         final String apiContent = apiConf.getApiContent();

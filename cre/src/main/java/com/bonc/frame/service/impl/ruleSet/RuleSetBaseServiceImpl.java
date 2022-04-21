@@ -41,6 +41,8 @@ public class RuleSetBaseServiceImpl implements RuleSetBaseService {
 
     private static final String _RULE_SET_MAPPER = "com.bonc.frame.dao.resource.RuleSetMapper.";
 
+    private static final String _RULE_DETAIL = "com.bonc.frame.mapper.oracle.rule.RuleDetailMapper.";
+
     /**
      * 模型-规则库规则集引用中间表
      */
@@ -118,6 +120,22 @@ public class RuleSetBaseServiceImpl implements RuleSetBaseService {
         param.put("endDate", endDate);
         return daoHelper.queryForPageList(_RULE_SET_MAPPER +
                 "getHeaderListResource", param, start, size);
+    }
+
+    @Override
+    public Map<String, Object> getRuleSetGroupHeaderListResource(@Nullable String ruleSetGroupId,
+                                                     @Nullable String ruleSetGroupName,
+                                                     @Nullable String startDate,
+                                                     @Nullable String endDate,
+                                                     String start, String size) {
+        Map<String, String> param = new HashMap<>(4);
+        param.put("ruleSetGroupId", ruleSetGroupId);
+        param.put("ruleSetGroupName", ruleSetGroupName);
+        param.put("startDate", startDate);
+        param.put("endDate", endDate);
+        Map<String, Object> map = daoHelper.queryForPageList(_RULE_SET_GROUP_MAPPER +
+                "getRuleSetGroupHeaderListResource", param, start, size);
+        return map;
     }
 
 
@@ -553,6 +571,20 @@ public class RuleSetBaseServiceImpl implements RuleSetBaseService {
     }
 
     @Override
+    public List<String> getKpiByRuleSetId(String ruleSetId) {
+        final List<String> list = daoHelper.queryForList(_RULE_SET_GROUP_MAPPER +
+                "getKpiByRuleSetId", ruleSetId);
+        return list;
+    }
+
+    @Override
+    public List<String> getModelByRuleSetId(String ruleSetId){
+         final List<String> list = daoHelper.queryForList(_RULE_DETAIL +
+                "getModelByRuleSetId",  ruleSetId);
+        return list;
+    }
+
+    @Override
     public Map<String, Object> getRuleSetGroupsPaged(String ruleSetGroupName, String start, String length) {
         final Map<String, Object> map = daoHelper.queryForPageList(_RULE_SET_GROUP_MAPPER +
                 "getByGroupName", ruleSetGroupName, start, length);
@@ -640,6 +672,16 @@ public class RuleSetBaseServiceImpl implements RuleSetBaseService {
 
         daoHelper.delete(_RULE_SET_GROUP_MAPPER + "deleteByPrimaryKey", ruleSetGroupId);
         return ResponseResult.createSuccessInfo();
+    }
+
+    /**
+     * 根據ruleSetHeader获取版本信息
+     * @param ruleSetHeaderId id
+     * @return 键值对信息的list
+     */
+    @Override
+    public List<Map<String, String>> getRuleSetIdByHeader(String ruleSetHeaderId) {
+        return daoHelper.queryForList(_RULE_SET_MAPPER + "getRuleSetIdByHeader", ruleSetHeaderId);
     }
 
 }

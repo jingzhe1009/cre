@@ -15,6 +15,23 @@
         CREATE_DATE, UPDATE_DATE
     </sql>
 
+    <select id="pagedPubVariableGroupsResources" parameterType="java.util.Map"
+            resultType="com.bonc.frame.entity.auth.resource.PubVariableGroupsResource">
+        select
+        VARIABLE_GROUP_ID  as "variableGroupId",
+        VARIABLE_GROUP_NAME as "variableGroupName",
+        CREATE_DATE as "createDate",
+        UPDATE_DATE as "updateDate"
+        from  CRE_PUB_VARIABLE_GROUP
+        where 1=1
+        <if test="variableGroupName  != null">
+            AND VARIABLE_GROUP_NAME like CONCAT(CONCAT('%',#{variableGroupName,jdbcType=VARCHAR}),'%')
+        </if>
+        <if test="variableGroupId  != null">
+            AND VARIABLE_GROUP_ID like CONCAT(CONCAT('%',#{variableGroupId,jdbcType=VARCHAR}),'%')
+        </if>
+    </select>
+
     <!-- 检验 variableGroupName 唯一性 -->
     <select id="countByName" parameterType="java.util.Map" resultType="int">
         select count(*) as "count" from CRE_PUB_VARIABLE_GROUP

@@ -25,6 +25,20 @@
         </if>
     </select>
 
+    <select id="pagedKpiGroupBaseInfo" parameterType="java.util.Map"
+            resultType="com.bonc.frame.entity.auth.resource.KpiGroupDefinitionResource">
+        SELECT
+        KPI_GROUP_ID as "kpiGroupId",
+        KPI_GROUP_NAME as "kpiGroupName",
+        KPI_GROUP_DESC as "kpiGroupDesc"
+        FROM CRE_KPI_GROUP
+        WHERE 1=1
+        <if test="kpiGroupName != null">
+            AND KPI_GROUP_NAME like CONCAT(CONCAT('%',#{kpiGroupName,jdbcType=VARCHAR}),'%')
+        </if>
+        ORDER BY CREATE_DATE DESC
+    </select>
+
     <!-- 检查当前组是否被使用 -->
     <select id="countGroupUsed" parameterType="java.lang.String" resultType="int">
         SELECT COUNT(1) FROM CRE_KPI_DEFINITION

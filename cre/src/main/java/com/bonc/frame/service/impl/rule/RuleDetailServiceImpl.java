@@ -111,6 +111,7 @@ public class RuleDetailServiceImpl implements RuleDetailService {
     private ABTestService abTestService;
 
     private final String _MYBITSID_PREFIX = "com.bonc.frame.dao.rule.RuleDetailMapper.";
+    private final String _MYBITSID_MODEL_GROUP = "com.bonc.frame.mapper.resource.ModelGroupMapper.";
 
     /**
      * 模型-参数引用中间表
@@ -1115,6 +1116,25 @@ public class RuleDetailServiceImpl implements RuleDetailService {
         param.put("endDate", endDate);
         Map<String, Object> results = daoHelper.queryForPageList(_MYBITSID_PREFIX +
                 "getHeaderListResource", param, start, length);
+        return results;
+    }
+
+    @Override
+    public Map<String, Object> getGroupHeaderListResource(@Nullable String modelGroupId,
+                                                     @Nullable String ruleType,
+                                                     @Nullable String modelGroupName,
+                                                     @Nullable String startDate,
+                                                     @Nullable String endDate,
+                                                     String start, String length) {
+
+        Map<String, String> param = new HashMap<>(5);
+        param.put("modelGroupId", modelGroupId);
+        param.put("ruleType", ruleType);
+        param.put("modelGroupName", modelGroupName);
+        param.put("startDate", startDate);
+        param.put("endDate", endDate);
+        Map<String, Object> results = daoHelper.queryForPageList(_MYBITSID_MODEL_GROUP+
+                "getGroupHeaderListResource", param, start, length);
         return results;
     }
 

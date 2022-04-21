@@ -4,6 +4,7 @@ import com.bonc.frame.dao.DaoHelper;
 import com.bonc.frame.entity.auth.Authority;
 import com.bonc.frame.entity.auth.GrantAuthRequest;
 import com.bonc.frame.entity.auth.resource.*;
+import com.bonc.frame.entity.kpi.KpiGroup;
 import com.bonc.frame.security.ResourceType;
 import com.bonc.frame.security.SubjectType;
 import com.bonc.frame.service.api.ApiService;
@@ -286,6 +287,40 @@ public class AuthorityServiceImpl implements AuthorityService {
         return result;
     }
 
+    // 获取带权限的参数组列表
+    @Override
+    public Map<String, Object> getPubVariableGroupsResourcesAndPermits(String roleId,
+                                                                       @Nullable String variableGroupId,
+                                                                       @Nullable String variableGroupName,
+                                                                       @Nullable Date createDate,
+                                                                       @Nullable Date updateDate,
+                                                                       String start, String length) {
+        //获取当前用户的主体
+        final List<String> subjectIdUser = subjectService.selectSubjectsByCurrentUser();
+
+        // 获取主体
+        final String subjectIdRoleId = subjectService.selectByRoleId(roleId);
+
+        // 分页获取元数据
+        final Map<String, Object> pagedVariableGroups = variableService.pagedPubVariableGroupsResources( variableGroupName,
+              variableGroupId, createDate, updateDate, start, length);
+
+        List<PubVariableResource> resources = (List<PubVariableResource>) pagedVariableGroups.get("data");
+
+
+        List<Resource> displayHeadPermits = dataResourcesPermits(resources, subjectIdUser, subjectIdRoleId,
+                ResourceType.DATA_PUB_VARIABLE_GROUP.getType());
+
+        Map<String, Object> result = ImmutableMap.<String, Object>of(
+                "operatePermits", getOperatePermitsByResourceTypeAndAllPermits(
+                        subjectIdRoleId, ResourceType.DATA_PUB_VARIABLE_GROUP.getType()),
+                "permits", pagedVariableGroups,
+                "displayHeadPermits", displayHeadPermits
+        );
+
+        return result;
+    }
+
     // 获取带权限的公共接口列表
     @Override
     public Map<String, Object> getPubApiResourcesAndPermits(String roleId,
@@ -309,6 +344,35 @@ public class AuthorityServiceImpl implements AuthorityService {
                 "operatePermits", getOperatePermitsByResourceTypeAndAllPermits(
                         subjectId, ResourceType.DATA_PUB_API.getType()),
                 "permits", pagedApis,
+                "displayHeadPermits", displayHeadPermits
+        );
+
+        return result;
+    }
+
+    // 获取带权限的公共接口组列表
+    @Override
+    public Map<String, Object> getPubApiGroupsResourcesAndPermits(String roleId,
+                                                            String  apiGroupId, String apiGroupName,
+                                                            String startDate, String endDate,
+                                                            String start, String length) {
+        //获取当前用户的主体
+        final List<String> subjectIdUser = subjectService.selectSubjectsByCurrentUser();
+        // 获取主体
+        final String subjectId = subjectService.selectByRoleId(roleId);
+
+        // 分页获取数据
+        final Map<String, Object> pagedApiGroups = apiService.pagedPubApiGroupResource( apiGroupId, apiGroupName,
+                startDate, endDate, start, length);
+
+        List<PubApiGroupResource> resources = (List<PubApiGroupResource>) pagedApiGroups.get("data");
+
+        List<Resource> displayHeadPermits = dataResourcesPermits(resources, subjectIdUser, subjectId, ResourceType.DATA_PUB_API_GROUP.getType());
+
+        Map<String, Object> result = ImmutableMap.<String, Object>of(
+                "operatePermits", getOperatePermitsByResourceTypeAndAllPermits(
+                        subjectId, ResourceType.DATA_PUB_API_GROUP.getType()),
+                "permits", pagedApiGroups,
                 "displayHeadPermits", displayHeadPermits
         );
 
@@ -343,6 +407,34 @@ public class AuthorityServiceImpl implements AuthorityService {
         return result;
     }
 
+    //获取带权限的规则集组列表
+    @Override
+    public Map<String, Object> getPubRuleSetGroupsResourcesAndPermits(String roleId,
+                                                                      String ruleSetGroupId, String ruleSetGroupName,
+                                                                      String startDate, String endDate,
+                                                                      String start, String length) {
+        //获取当前用户的主体
+        final List<String> subjectIdUser = subjectService.selectSubjectsByCurrentUser();
+        // 获取主体
+        final String subjectId = subjectService.selectByRoleId(roleId);
+
+        // 分页获取数据
+        final Map<String, Object> pagedRuleSetGroups = ruleSetBaseService.getRuleSetGroupHeaderListResource(ruleSetGroupId, ruleSetGroupName,
+                startDate, endDate, start, length);
+
+        List<PubRuleSetGroupResource> resources = (List<PubRuleSetGroupResource>) pagedRuleSetGroups.get("data");
+
+        List<Resource> displayHeadPermits = dataResourcesPermits(resources, subjectIdUser, subjectId, ResourceType.DATA_PUB_RULE_SET_GROUP.getType());
+
+        Map<String, Object> result = ImmutableMap.<String, Object>of(
+                "operatePermits", getOperatePermitsByResourceTypeAndAllPermits(
+                        subjectId, ResourceType.DATA_PUB_API_GROUP.getType()),
+                "permits", pagedRuleSetGroups,
+                "displayHeadPermits", displayHeadPermits
+        );
+        return result;
+    }
+
     //获取带权限的模型库列表
     @Override
     public Map<String, Object> getPubModelBasesResourcesAndPermits(String roleId,
@@ -366,6 +458,34 @@ public class AuthorityServiceImpl implements AuthorityService {
                 "operatePermits", getOperatePermitsByResourceTypeAndAllPermits(
                         subjectId, ResourceType.DATA_PUB_API.getType()),
                 "permits", pagedModelBases,
+                "displayHeadPermits", displayHeadPermits
+        );
+        return result;
+    }
+
+    //获取带权限的产品列表
+    @Override
+    public Map<String, Object> getPubModelGroupsResourcesAndPermits(String roleId,
+                                                                   String moduleGroupId, String ruleType, String modelGroupName,
+                                                                   String startDate, String endDate,
+                                                                   String start, String length) {
+        //获取当前用户的主体
+        final List<String> subjectIdUser = subjectService.selectSubjectsByCurrentUser();
+        // 获取主体
+        final String subjectId = subjectService.selectByRoleId(roleId);
+
+        // 分页获取数据
+        final Map<String, Object> pagedModelGroupBases = ruleDetailService.getGroupHeaderListResource(moduleGroupId, ruleType, modelGroupName,
+                startDate, endDate, start, length);
+
+        List<PubModelBaseResource> resources = (List<PubModelBaseResource>) pagedModelGroupBases.get("data");
+
+        List<Resource> displayHeadPermits = dataResourcesPermits(resources, subjectIdUser, subjectId, ResourceType.DATA_PUB_MODEL_GROUP.getType());
+
+        Map<String, Object> result = ImmutableMap.<String, Object>of(
+                "operatePermits", getOperatePermitsByResourceTypeAndAllPermits(
+                        subjectId, ResourceType.DATA_PUB_API_GROUP.getType()),
+                "permits", pagedModelGroupBases,
                 "displayHeadPermits", displayHeadPermits
         );
         return result;
@@ -434,6 +554,35 @@ public class AuthorityServiceImpl implements AuthorityService {
                 "operatePermits", getOperatePermitsByResourceTypeAndAllPermits(
                         subjectId, ResourceType.DATA_KPI.getType()),
                 "permits", pagedKpiResource,
+                "displayHeadPermits", displayHeadPermits
+        );
+        return result;
+    }
+
+    /**
+     * 指标组
+     */
+    //获取带权限的指标组列表
+    @Override
+    public Map<String, Object> getKpiGroupResourcesAndPermits(String roleId,
+                                                         @Nullable String kpiGroupName,
+                                                         String startDate, String endDate,
+                                                         String start, String length) {
+        //获取当前用户的主体
+        final List<String> subjectIdUser = subjectService.selectSubjectsByCurrentUser();
+        // 获取主体
+        final String subjectId = subjectService.selectByRoleId(roleId);
+
+        // 分页获取数据
+        Map<String, Object> pagedKpiGroupResource = kpiService.pagedKpiGroupBaseInfo(kpiGroupName, startDate,endDate,start, length);
+
+        List<KpiGroupDefinitionResource> resources = (List<KpiGroupDefinitionResource>) pagedKpiGroupResource.get("data");
+        List<Resource> displayHeadPermits = dataResourcesPermits(resources, subjectIdUser, subjectId,
+                ResourceType.DATA_KPI_GROUP.getType());
+        Map<String, Object> result = ImmutableMap.<String, Object>of(
+                "operatePermits", getOperatePermitsByResourceTypeAndAllPermits(
+                        subjectId, ResourceType.DATA_KPI_GROUP.getType()),
+                "permits", pagedKpiGroupResource,
                 "displayHeadPermits", displayHeadPermits
         );
         return result;

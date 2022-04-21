@@ -23,6 +23,21 @@
         <result column="CHANNEL_NAME" property="channelName" jdbcType="VARCHAR"/>
     </resultMap>
 
+    <select id="getGroupHeaderListResource" parameterType="java.util.Map"
+            resultType="com.bonc.frame.entity.auth.resource.PubModelBaseResource">
+        select
+        MODEL_GROUP_NAME as "modelGroupName",
+        MODEL_GROUP_ID as "modelGroupId"
+        FROM CRE_PUB_MODEL_GROUP
+        where 1=1
+        <if test="modelGroupId != null">
+            and MODEL_GROUP_ID != #{modelGroupId,jdbcType=VARCHAR}
+        </if>
+        <if test="modelGroupName != null">
+            AND MODEL_GROUP_NAME != #{modelGroupName,jdbcType=VARCHAR},
+        </if>
+    </select>
+
     <sql id="Base_Column_List">
         MODEL_GROUP_ID, MODEL_GROUP_NAME,MODEL_GROUP_CODE,MODEL_GROUP_DESC, CREATE_PERSON, UPDATE_PERSON,
         CREATE_DATE, UPDATE_DATE
