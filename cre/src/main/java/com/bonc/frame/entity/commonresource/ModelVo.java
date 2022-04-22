@@ -1,6 +1,6 @@
 package com.bonc.frame.entity.commonresource;
 
-public class ModelVo extends Model{
+public class ModelVo extends Model {
     private  String ruleType;
 
     @Override

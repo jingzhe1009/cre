@@ -294,6 +294,60 @@
     </div>
 </div>-->
 
+<!--关联规则集 弹窗-->
+<div class="modal fade" id="modelRelevancyAlert">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">关联规则集</h4>
+            </div>
+            <div class="modal-body">
+                <div id="RelevancyContentWarp">
+                    <!-- 1 指标通用基础信息 -->
+                    <div class="RelevancyDefBase">
+                        <form class="form-horizontal" data-validator-option="{stopOnError:true}">
+                            <div class="form-group">
+                                <label class="col-xs-2 col-sm-2 col-md-2 col-lg-2">模型名称：</label>
+                                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                                    <input id="modelNameInput" col-name="modelName" type="text" class="form-control" disabled>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-xs-2 col-sm-2 col-md-2 col-lg-2">模型类型：</label>
+                                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                                    <select id="modelType" col-name="modelType" class="form-control" disabled>
+                                        <option ruleType="1">规则模型</option>
+                                        <option ruleType="0">评分模型</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-xs-2 col-sm-2 col-md-2 col-lg-2">模型版本：</label>
+                                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                                    <select id="modelVersion" col-name="modelVersion" class="form-control modelVersion"></select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-xs-2 col-sm-2 col-md-2 col-lg-2">模型描述：</label>
+                                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                                    <textarea id="modelDes" rows="3" style="width:100%" disabled></textarea>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div style="clear: both"></div>
+                    <div>
+                        <table id="RelevancyTable"></table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="closeViewRelevancyContent" type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <#include "ruleClone.html">
 <#include "/pages/migration/export.html">
 <#include "/pages/migration/import.html">

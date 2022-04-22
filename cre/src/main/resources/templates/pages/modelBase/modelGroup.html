@@ -22,12 +22,15 @@
                                 <ul class="dropdown-menu pull-right c"></ul>
                             </div>
                             <div class="input-group">
-                                <!--只有样式，内部未调，需要改相关接口-->
-                                <input data-col="channelName" type="text" class="form-control" placeholder="调用渠道">
-                                <label class="input-control-icon-right" data-toggle="dropdown">
-                                    <i class="icon icon-caret-down "></i>
-                                </label>
-                                <ul class="dropdown-menu pull-right channelNameList"></ul>
+                                <!--&lt;!&ndash;只有样式，内部未调，需要改相关接口&ndash;&gt;-->
+                                <!--<input data-col="channelName" type="text" class="form-control" placeholder="调用渠道">-->
+                                <!--<label class="input-control-icon-right" data-toggle="dropdown">-->
+                                    <!--<i class="icon icon-caret-down "></i>-->
+                                <!--</label>-->
+                                <!--<ul class="dropdown-menu pull-right channelNameList"></ul>-->
+                                <select col-name="channelGroupId" class="form-control chooseChannel">
+                                    <option disabled selected value>调用渠道</option>
+                                </select>
                             </div>
                             <div class="input-group date form-datetime" data-date=""
                                  data-date-format="dd MM yyyy - HH:ii:ss p" data-link-field="dtp_input1">
@@ -320,6 +323,40 @@
                     <button type="button" class="btn btn-minor" data-dismiss="modal">取消</button>
                 </div>
                 <button id="closeModelBaseGroup" type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--设置调用渠道 弹窗-->
+<div class="modal fade" id="channelAlert">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">设置调用渠道</h4>
+            </div>
+            <div class="modal-body">
+                <div id="channelContentWarp">
+                    <!-- 1 指标通用基础信息 -->
+                    <div class="channelDefBase">
+                        <form class="form-horizontal" data-validator-option="{stopOnError:true}">
+                            <div class="form-group">
+                                <label class="col-xs-2 col-sm-2 col-md-2 col-lg-2">调用渠道</label>
+                                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                                    <ul id="channel"></ul>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div style="clear: both"></div>
+                    <div>
+                        <table id="channelTable"></table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="saveChannel" type="button" class="btn btn-primary" data-dismiss="modal">保存</button>
+                <button id="closeChannel" type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
             </div>
         </div>
     </div>

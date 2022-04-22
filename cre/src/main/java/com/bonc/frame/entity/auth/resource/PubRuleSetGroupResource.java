@@ -2,6 +2,8 @@ package com.bonc.frame.entity.auth.resource;
 
 public class PubRuleSetGroupResource extends DataResource implements Cloneable{
 
+    private String ruleSetName;
+
     private String ruleSetGroupName;
 
     private String ruleSetGroupId;
@@ -10,19 +12,29 @@ public class PubRuleSetGroupResource extends DataResource implements Cloneable{
 
     private String endDate;
 
-    public void setRuleSetGroupId(String ruleSetGroupId) {
-        this.ruleSetGroupId = ruleSetGroupId;
-        super.resourceId =ruleSetGroupId;
-    }
-    public String getRuleSetGroupId() {
-        return ruleSetGroupId;
-    }
     public String getRuleSetGroupName() {
         return ruleSetGroupName;
     }
 
     public void setRuleSetGroupName(String ruleSetGroupName) {
         this.ruleSetGroupName = ruleSetGroupName;
+    }
+
+    public String getRuleSetName() {
+        return ruleSetName;
+    }
+
+    public void setRuleSetName(String ruleSetName) {
+        this.ruleSetName = ruleSetName;
+    }
+
+    public String getRuleSetGroupId() {
+        return ruleSetGroupId;
+    }
+
+    public void setRuleSetGroupId(String ruleSetGroupId) {
+        this.ruleSetGroupId = ruleSetGroupId;
+        super.resourceId =ruleSetGroupId;
     }
 
     public String getStartDate() {
@@ -44,7 +56,8 @@ public class PubRuleSetGroupResource extends DataResource implements Cloneable{
     @Override
     public String toString() {
         return "PubRuleSetGroupResource{" +
-                "ruleSetGroupName='" + ruleSetGroupName + '\'' +
+                "ruleSetName='" + ruleSetName + '\'' +
+                ", ruleSetGroupName='" + ruleSetGroupName + '\'' +
                 ", ruleSetGroupId='" + ruleSetGroupId + '\'' +
                 ", startDate='" + startDate + '\'' +
                 ", endDate='" + endDate + '\'' +

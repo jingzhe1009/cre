@@ -88,3 +88,31 @@
 #modelVersionTableAlertModal .switch>input {
     position: absolute;
 }
+
+/*2022/04/18 陈芳新增 设置调用渠道弹窗中表格的样式*/
+#channelTable_wrapper .dataTables_scrollHeadInner{
+    width: 100% !important;
+}
+#channelTable_wrapper .dataTables_scrollHeadInner table{
+    width: 100% !important;
+}
+#channelTable_filter{
+    width: 100% !important;
+}
+#channelTable_filter label{
+    display: flex !important;
+}
+#channelTable_filter label input{
+    flex-grow:1 !important;
+}
+
+.channelDefBase label{
+    font-size: 14px !important;
+    text-align: left !important;
+}
+#channel li{
+    list-style: none;
+    font-size: 14px;
+    border-bottom: 1px solid #666666;
+    margin-bottom: 3px;
+}

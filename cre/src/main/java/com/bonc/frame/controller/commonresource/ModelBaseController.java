@@ -1,11 +1,8 @@
 package com.bonc.frame.controller.commonresource;
 
-import com.bonc.frame.entity.auth.DeptChannelTree;
-import com.bonc.frame.entity.commonresource.ModelGroup;
+import com.bonc.frame.entity.commonresource.ModelChanIdDto;
 import com.bonc.frame.entity.commonresource.ModelGroupChannelVo;
 import com.bonc.frame.entity.commonresource.ModelGroupDto;
-import com.bonc.frame.security.ResourceType;
-import com.bonc.frame.security.aop.PermissionsRequires;
 import com.bonc.frame.entity.commonresource.ModelGroupInfo;
 import com.bonc.frame.entity.rule.RuleDetailHeader;
 import com.bonc.frame.service.modelBase.ModelBaseService;
@@ -16,6 +13,7 @@ import com.bonc.frame.util.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -66,7 +64,8 @@ public class ModelBaseController {
         }
         // 验证数据权限
         final String loginUserId = ControllerUtil.getLoginUserId(request);
-        return modelBaseService.getModelGroups(modelGroupName,loginUserId);
+
+        return modelBaseService.getModelGroups(modelGroupName);
     }
 
     @RequestMapping("/group/paged")
@@ -81,7 +80,7 @@ public class ModelBaseController {
         // 验证数据权限
         final String loginUserId = ControllerUtil.getLoginUserId(request);
 
-        return modelBaseService.getModelGroupsPaged(loginUserId,modelGroupName,channelId, start, length);
+        return modelBaseService.getModelGroupsPaged(modelGroupName,channelId, start, length);
     }
 
     @RequestMapping("/group/create")
@@ -91,7 +90,6 @@ public class ModelBaseController {
         return modelBaseService.createModelGroup(modelGroup, loginUserId);
     }
 
-    @PermissionsRequires(value = "/pub/modelGroup/update?modelGroupId", resourceType = ResourceType.DATA_PUB_MODEL_GROUP)
     @RequestMapping("/group/update")
     @ResponseBody
     public ResponseResult updateModelGroup(ModelGroupDto modelGroup, HttpServletRequest request) {
@@ -99,37 +97,21 @@ public class ModelBaseController {
         return modelBaseService.updateModelGroup(modelGroup, loginUserId);
     }
 
-    @PermissionsRequires(value = "/pub/modelGroup/delete?modelGroupId", resourceType = ResourceType.DATA_PUB_MODEL_GROUP)
     @RequestMapping("/group/delete")
     @ResponseBody
     public ResponseResult deleteRuleSetGroup(String modelGroupId) {
         return modelBaseService.deleteModelGroup(modelGroupId);
     }
 
-    @PermissionsRequires(value = "/pub/modelGroup/update?modelGroupId", resourceType = ResourceType.DATA_PUB_MODEL_GROUP)
-    @RequestMapping(value = "/group/update/checkAuth", method = RequestMethod.GET)
-    @ResponseBody
-    public ResponseResult checkUpdateGroup(String modelGroupId) {
-        return ResponseResult.createSuccessInfo();
-    }
-
-    @PermissionsRequires(value = "/pub/modelGroup/delete?modelGroupId", resourceType = ResourceType.DATA_PUB_MODEL_GROUP)
-    @RequestMapping(value = "/group/delete/checkAuth", method = RequestMethod.GET)
-    @ResponseBody
-    public ResponseResult checkDeleteGroup(String modelGroupId) {
-        return ResponseResult.createSuccessInfo();
-    }
-
     /**
      * 产品设置调用渠道
-     * @param modelGroupId  产品的id
-     * @param channelIds  渠道的id的集合
+     * @param dto  渠道的id的集合
      * @return 操作结果
      */
     @RequestMapping(value = "/addChannel", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseResult groupAddChannel(String modelGroupId, List<String> channelIds) {
-        return modelBaseService.groupAddChannel(modelGroupId, channelIds);
+    public ResponseResult groupAddChannel(@RequestBody ModelChanIdDto dto) {
+        return modelBaseService.groupAddChannel(dto.getModelGroupId(), dto);
     }
 
     /**
@@ -170,7 +152,7 @@ public class ModelBaseController {
      */
     @RequestMapping("/group/addModel")
     @ResponseBody
-    public ResponseResult groupAddModel(List<RuleDetailHeader> modelList,String modelGroupId) {
+    public ResponseResult groupAddModel(List<RuleDetailHeader> modelList, String modelGroupId) {
         return ruleDetailService.groupAddModel(modelList,modelGroupId);
     }
 

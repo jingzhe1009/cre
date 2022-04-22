@@ -90,6 +90,9 @@ function initPage() {
     $('#importBtn').on('click', function () {
         pageJumpObj.import();
     });
+
+    //调用渠道搜索下拉框
+    modelGroupModal.channelNameList();
 }
 
 var pageJumpObj = {
@@ -298,6 +301,58 @@ var modelBaseModal = {
             return;
         }
     },
+    //弹窗 点击查看关联规则集时弹出
+    showModelRuleSet: function(ruleName){
+        $('#modelRelevancyAlert').modal('show');
+        $('#RelevancyContentWarp').removeAttr('kpiId');
+        $('.RelevancyDefBase form')[0].reset();
+        $('.RelevancyDefBase form').validator('cleanUp');
+
+        var obj ={};
+        modelBaseModal.getDetail(ruleName);
+        modelBaseModal.initRelevancyTable(obj);
+    },
+    //接口 获取弹窗中的基本信息
+    getDetail: function(ruleName){
+        $.ajax({
+            url: webpath + '/rule/public/header/paged',
+            type: 'GET',
+            data:ruleName,
+            success: function (data) {
+                var detail = data.data.filter(function (item){
+                    return item.ruleName == ruleName
+                })
+                modelBaseModal.echoData(detail[0]);
+                console.log(detail[0]);
+            }
+        });
+    },
+    //初始化  查看关联规则集弹窗中的表格
+    initRelevancyTable:function(obj){
+        $('#RelevancyTable').width('100%').dataTable({
+            destroy:true, //是否每次都初始化
+            paging:false, //是否允许翻页
+            info:false, //是否显示当前1/100这样的信息
+            searching:false, //是否允许检索ing
+            ordering:false, //是否允许排序
+            "columns": [
+                {"title": "规则集组", "data": "ruleSetName"},
+                {"title": "规则集名称", "data": "ruleSetGroupName"},
+                {"title": "规则集描述", "data": "ruleSetHeaderDesc"},
+                {"title": "规则集版本", "data": "version"}],
+            // ajax:{
+            //     url: webpath + '/kpi/getRuleSetGroupByKpiId',
+            //     type: 'POST',
+            //     "data": function (d) { // 查询参数
+            //         return $.extend({}, d, obj);
+            //     },
+            // },
+            "fnDrawCallback": function (oSettings, json) {
+                $("#RelevancyTable th").css("text-align", "center");
+                $("#RelevancyTable td").css("text-align", "center");
+            },
+        });
+    },
     // 关闭弹框
     hidden: function () {
         $('#modelBaseAlertModal').modal('hide');
@@ -305,6 +360,7 @@ var modelBaseModal = {
     // 回显规则集基础信息
     echoData: function (detail) {
         var data = detail ? detail : {};
+        console.log(data);
         for (var key in data) {
             if (key === 'modelGroupId') { // 模型组单独处理
                 $('#modelBaseAlertModal .modelBaseGroupSelector option[group-id="' + data[key] + '"]').prop('selected', true);
@@ -312,6 +368,7 @@ var modelBaseModal = {
             }
             if (key === 'ruleType') { // 模型类型单独处理
                 $('#ruleTypeSelector option[ruleType="' + data[key] + '"]').prop('selected', true);
+                $('#modelType option[ruleType="' + data[key] + '"]').prop('selected', true);
                 continue;
             }
             if (key === 'ruleName') { // 记录模型名称(主键)
@@ -320,6 +377,12 @@ var modelBaseModal = {
             }
             if (key === 'moduleName') { // 记录模型展示名称
                 $('#modelBaseAlertModal').attr('oldModuleName', data[key]);
+                $('#modelNameInput').attr('value',data[key]);
+                continue;
+            }
+            if(key === 'ruleDesc'){
+                $('#modelDes').html(data[key]);
+                continue;
             }
             var target = $("#modelBaseAlertModal .form-control[col-name='" + key + "']");
             if (target.length > 0) {
@@ -589,32 +652,19 @@ var modelGroupModal = {
             $('#modelBaseGroupAlert .modal-title').text('').text('添加产品');
             modelGroupModal.channelNameList();
         } else if (handleType == 1) {
-            $.ajax({
-                url: webpath + '/modelBase/group/update/checkAuth',
-                type: 'GET',
-                data: {'modelGroupId': detail['modelGroupId']? detail['modelGroupId'] : ''},
-                dataType: "json",
-                success: function (data) {
-                    debugger;
-                    if (data.status === 0) {
-                        $('#modelBaseGroupAlert').attr('handleType', handleType).modal({'show': 'center', "backdrop": "static"});
-                        $('#modelBaseGroupAlert .modal-footer .notView button').css('display', 'inline-block');
-                        $('#modelBaseGroupAlert .modal-title').text('').text('修改产品');
-                        modelGroupModal.echoGroupData(detail);
-                        modelGroupModal.channelNameList();
-                    } else {
-                        failedMessager.show(data.msg);
-                    }
-                }
-            });
+            $('#modelBaseGroupAlert .modal-footer .notView button').css('display', 'inline-block');
+            $('#modelBaseGroupAlert .modal-title').text('').text('修改产品');
+            $('#modelBaseGroupAlert .form-group:eq(3)').hide();
+            modelGroupModal.echoGroupData(detail);
+            modelGroupModal.channelNameList();
         } else if (handleType == 2) {
-            $('#modelBaseGroupAlert').attr('handleType', handleType).modal({'show': 'center', "backdrop": "static"});
             $('#modelBaseGroupAlert .modal-footer #closeModelBaseGroup').css('display', 'inline-block');
             $('#modelBaseGroupAlert .modal-title').text('').text('查看产品');
             $('#modelBaseGroupAlert .form-control').attr('disabled', true);
             modelGroupModal.echoGroupData(detail);
             modelGroupModal.channelNameList();
         }
+        $('#modelBaseGroupAlert').attr('handleType', handleType).modal({'show': 'center', "backdrop": "static"});
     },
     // 关闭添加参数组弹框
     hiddenAddGroupAlert: function () {
@@ -641,8 +691,8 @@ var modelGroupModal = {
             }
         }
     },
+    //接口 获取渠道下拉框选项
     channelNameList: function () {
-        // 初始化渠道列表选择
         $.ajax({
             url: webpath + '/choose/channelNameList',
             type: 'GET',
@@ -654,7 +704,7 @@ var modelGroupModal = {
                     for (var i = 0; i < data.data.length; i++) {
                         htmlStr += '<option channelId=\'' + data.data[i].channelId + '\'>' + data.data[i].channelName+'--'+ data.data[i].deptName + '</option>';
                     }
-                   $('#channelSelector').empty().html(htmlStr);
+                   $('.chooseChannel').append(htmlStr);
                 } else {
                     failedMessager.show(data.msg);
                 }
@@ -663,6 +713,125 @@ var modelGroupModal = {
                 failedMessager.show(data.msg);
             },
         });
+    },
+    //弹窗 点击设置调用渠道时出现
+    showChannel: function(modelGroupId){
+        $('#channelAlert').modal({'show': 'center', "backdrop": "static"});
+        $('#channelContentWarp').removeAttr('kpiId');
+        $('.channelDefBase form')[0].reset();
+        $('.channelDefBase form').validator('cleanUp');
+
+        var obj ={'modelGroupId':modelGroupId};
+        modelGroupModal.initChannelTable(obj);
+
+        //点击保存
+        $('#saveChannel').unbind('click').on('click', {'modelGroupId':modelGroupId},function (event) {
+            var channelIds = [];
+            $('#channelTable').find(':checkbox').each(function(){
+                if ($(this).prop("checked")) {
+                    channelIds.push($(this).attr('group-id'));
+                }
+            });
+            modelGroupModal.saveChannel(event.data.modelGroupId,channelIds);
+        });
+        //点击关闭
+        $('#closeChannel').unbind('click').on('click',function () {
+            $('#channel li').remove();
+        });
+    },
+    //初始化  查看调用渠道中的表格
+    initChannelTable:function(obj){
+        $('#channelTable').width('100%').dataTable({
+            destroy:true, //是否每次都初始化
+            paging:false, //是否允许翻页
+            info:false, //是否显示当前1/100这样的信息
+            scrollY:true, // 是否显示竖行滚动条
+            searching:true, //是否允许检索
+            ordering:false, //是否允许排序
+            "columns": [
+                {"title": "机构编号", "data": "deptCode","targets":[0],"searchable":false},
+                {"title": "机构名称", "data": "deptName","targets":[1],"searchable":false},
+                {"title": "渠道编号", "data": "channelCode","targets":[2],"searchable":false},
+                {"title": "渠道名称", "data": "channelName"},
+                {
+                    "title": "是否绑定", "data": "isConnected","targets":[4],"searchable":false, "render": function (data, type, row) {
+                        var htmlStr = "";
+                        var li = "";
+                        if(data=='1'){
+                            htmlStr += '<input type="checkbox" onclick = modelGroupModal.bindSelector($(this),\'' + row.channelId +'\',\'' + row.channelName +'\',\'' + row.deptName +'\') group-id=\'' + row.channelId + '\' checked>';
+                        }else{
+                            htmlStr += '<input type="checkbox" onclick = modelGroupModal.bindSelector($(this),\'' + row.channelId +'\',\'' + row.channelName +'\',\'' + row.deptName +'\') group-id=\'' + row.channelId + '\'>';
+                        }
+                        return htmlStr;
+                    }
+                }],
+            ajax:{
+                url: webpath + '/modelBase/channelList',
+                type: 'POST',
+                "data": function (d) { // 查询参数
+                    return $.extend({}, d, obj);
+                },
+            },
+            "fnDrawCallback": function (oSettings, json) {
+                $(".dataTables_scroll th").css("text-align", "center");
+                $(".dataTables_scroll td").css("text-align", "center");
+            },
+            "initComplete": function( settings, json ) {
+                var li = ''
+                for(var i = 0; i < json.data.length; i++){
+                    if(json.data[i].isConnected == 1){
+                        li += '<li li-id=\''+json.data[i].channelId+'\'>'+json.data[i].channelName+'--'+json.data[i].deptName+'</li>';
+                    }else{
+                        var isLi = $('li[li-id=\''+json.data[i].channelId+'\']')
+                        if(isLi.length < 1){
+                            isLi.remove();
+                        }
+                    }
+                }
+                $('#channel').append(li);
+                $('#channelTable_filter input').prop('placeholder','请输入渠道名称');
+            }
+        });
+    },
+    //渠道调用 绑定/取消绑定
+    bindSelector:function(_this,channelId,channelName,deptName){
+        if(_this.prop('checked')){
+            var li = '<li li-id=\'' + channelId + '\'>'+channelName+'--'+deptName+'</li>';
+            $('#channel').append(li);
+        }else{
+            $('li[li-id=\'' + channelId + '\']').remove();
+        }
+    },
+    //保存渠道调用的修改
+    saveChannel:function(modelGroupId,channelIds){
+        var obj = {
+            'modelGroupId':modelGroupId,
+            'idList':channelIds,
+        }
+        var json = JSON.stringify(obj);
+        $.ajax({
+            url: webpath + '/modelBase/addChannel',
+            type: 'POST',
+            contentType:"application/json;charset=UTF-8",
+            data: json,
+            success: function (data) {
+                if (data.status === 0) {
+                    successMessager.show('保存成功');
+                } else {
+                    failedMessager.show(data.msg);
+                }
+            },
+            error: function (data) {
+                failedMessager.show(data.msg);
+            }
+        });
+    },
+    showModel: function(){
+        var flagStr = '&childOpen=c';
+        var dataStr = '';
+        // var urlStr = window.location.origin + dataStr;
+        var urlStr = window.location.origin + dataStr + flagStr;
+        creCommon.loadHtml(urlStr);
     },
     // 保存组数据
     saveRuleSetGourp: function () {
@@ -690,7 +859,6 @@ var modelGroupModal = {
                     if (data.status === 0) {
                         successMessager.show('保存成功');
                         initModelBaseGroupTable();
-                        // initModelBaseTable();
                         $('.modelBaseSearch').trigger('click');
                         initModelBaseGroup(); // 刷新模型组下拉框
                         modelGroupModal.hiddenAddGroupAlert();
@@ -720,43 +888,31 @@ var modelGroupModal = {
     // 删除模型集组
     deleteGroup: function (groupId) {
         if (groupId) {
-            $.ajax({ // 删除权限校验
-                url: webpath + '/modelBase/group/delete/checkAuth',
-                type: 'GET',
-                dataType: "json",
-                data: {'modelGroupId': groupId},
-                success: function (data) {
-                    if (data.status === 0) {
-                        confirmAlert.show('删除产品后该产品下的模型将移动到其他分组,是否继续？', function () {
-                            $.ajax({
-                                url: webpath + '/modelBase/group/delete',
-                                type: 'POST',
-                                dataType: "json",
-                                data: {'modelGroupId': groupId},
-                                success: function (data) {
-                                    if (data.status === 0) {
-                                        successMessager.show('删除成功');
-                                        initModelBaseGroupTable();
-                                        // initModelBaseTable();
-                                        $('.modelBaseSearch').trigger('click');
-                                        initModelBaseGroup(); // 刷新模型组下拉框
-                                    } else {
-                                        failedMessager.show(data.msg);
-                                    }
-                                }
-                            });
-                        });
-                    } else {
-                        failedMessager.show(data.msg);
+            confirmAlert.show('删除产品后该产品下的模型将移动到其他分组,是否继续？', function () {
+                $.ajax({
+                    url: webpath + '/modelBase/group/delete',
+                    type: 'POST',
+                    dataType: "json",
+                    data: {'modelGroupId': groupId},
+                    success: function (data) {
+                        if (data.status === 0) {
+                            successMessager.show('删除成功');
+                            initModelBaseGroupTable();
+                            // initModelBaseTable();
+                            $('.modelBaseSearch').trigger('click');
+                            initModelBaseGroup(); // 刷新模型组下拉框
+                        } else {
+                            failedMessager.show(data.msg);
+                        }
                     }
-                }
+                });
             });
         }
     },
     //查看模型
     showModel: function(groupId){
-    	var url = webpath + "/ruleFolder/rulePackageMgr?folderId=" + groupId+'&childOpen=c';
-    	alert(url);
+        var url = webpath + "/ruleFolder/rulePackageMgr?folderId=" + groupId+'&childOpen=c';
+        alert(url);
         creCommon.loadHtml(url);
     }
 }
@@ -776,11 +932,11 @@ function initModelBaseTable(obj) {
         "serverSide": true,
         "pageLength": 10,
         "columns": [
-            {"title": "模型组", "data": "modelGroupName", "width": "10%"},
+            {"title": "模型组", "data": "modelGroupName"},
             // {"title": "模型名称", "data": "ruleName"},
-            {"title": "模型名称", "data": "moduleName", "width": "15%"},
+            {"title": "模型名称", "data": "moduleName"},
             {
-                "title": "模型类型", "data": "ruleType", "width": "9%", "render": function (data, type, row) {
+                "title": "模型类型", "data": "ruleType","render": function (data, type, row) {
                     switch (data) {
                         case '1':
                             return '规则模型';
@@ -791,11 +947,18 @@ function initModelBaseTable(obj) {
                     }
                 }
             },
-            {"title": "模型描述", "data": "ruleDesc", "width": "13%"},
-            {"title": "创建人", "data": "createPerson", "width": "8%"},
-            {"title": "创建时间", "data": "createDate", "width": "13%"},
+            {"title": "模型描述", "data": "ruleDesc"},
+            {"title": "创建人", "data": "createPerson"},
+            {"title": "创建时间", "data": "createDate"},
             {
-                "title": "操作", "data": null, "width": "32%", "render": function (data, type, row) {
+                "title": "关联规则集", "data": null, "render": function (data, type, row) {
+                    var htmlStr = "";
+                    htmlStr += '<span type="button" class="cm-tblB" onclick="modelBaseModal.showModelRuleSet(\'' + row.ruleName +'\')">查看</span>';
+                    return htmlStr;
+                }
+            },
+            {
+                "title": "操作", "data": null,"render": function (data, type, row) {
                     var htmlStr = "";
                     htmlStr += '<span type="button" class="cm-tblB detailBtn" onclick="modelBaseModal.showBase(2, this)">查看</span>';
                     htmlStr += '<span type="button" class="cm-tblB" onclick="modelBaseModal.showBase(1, this)">修改</span>';
@@ -813,9 +976,9 @@ function initModelBaseTable(obj) {
             }
         },
         "fnDrawCallback": function (oSettings, json) {
-            // $("tr:even").css("background-color", "#fbfbfd");
-            // $("table:eq(0) th").css("background-color", "#f6f7fb");
-        }
+            $("#modelBaseTable th").css("text-align", "center");
+            $("#modelBaseTable td").css("text-align", "center");
+        },
     });
 }
 
@@ -906,8 +1069,8 @@ function initVersionTable(obj) {
             }
         },
         "fnDrawCallback": function (oSettings, json) {
-            // $("tr:even").css("background-color", "#fbfbfd");
-            // $("table:eq(0) th").css("background-color", "#f6f7fb");
+            $("#modelVersionTable th").css("text-align", "center");
+            $("#modelVersionTable td").css("text-align", "center");
         }
     });
 }
@@ -930,9 +1093,9 @@ function initModelBaseGroupTable(obj) {
             {"title": "产品名称", "data": "modelGroupName", "width": "8%"},
             {"title": "产品编码", "data": "modelGroupCode", "width": "8%"},
             {"title": "产品描述", "data": "modelGroupDesc", "width": "12%"},
-            {"title": "调用渠道", "data": "modelGroupChannel", "width": "8%"},
-            {"title": "创建时间", "data": "createDate", "width": "12%"},
-            {"title": "创建人", "data": "createPerson", "width": "8%"},
+            {"title": "调用渠道", "data": "modelGroupChannel", "width": "12%"},
+            {"title": "创建时间", "data": "createDate", "width": "10%"},
+            {"title": "创建人", "data": "createPerson", "width": "10%"},
             {
                 "title": "操作", "data": null, "width": "40%", "render": function (data, type, row) {
                     var htmlStr = "";
@@ -940,7 +1103,7 @@ function initModelBaseGroupTable(obj) {
                     htmlStr += '<span type="button" class="cm-tblB" onclick="modelGroupModal.show(1, this)">修改</span>';
                     htmlStr += '<span type="button" class="cm-tblB" onclick="exportModal.initExportPage(1, 1, getExportParams(\'' + row.modelGroupId + '\', \'' + row.modelGroupName + '\'))">导出</span>';
                     htmlStr += '<span type="button" class="cm-tblC delBtn" onclick="modelGroupModal.deleteGroup(\'' + row.modelGroupId + '\')">删除</span>';
-                    htmlStr += '<span type="button" class="cm-tblB" onclick="modelGroupModal.show(3, this)">设置调用渠道</span>';
+                    htmlStr += '<span type="button" class="cm-tblB" onclick="modelGroupModal.showChannel(\'' + row.modelGroupId + '\')">设置调用渠道</span>';
                     htmlStr += '<span type="button" class="cm-tblB" onclick="modelGroupModal.showModel(\'' + row.modelGroupId + '\')">查看模型</span>';
                     return htmlStr;
                 }
@@ -953,8 +1116,8 @@ function initModelBaseGroupTable(obj) {
             }
         },
         "fnDrawCallback": function (oSettings, json) {
-            // $("tr:even").css("background-color", "#fbfbfd");
-            // $("table:eq(0) th").css("background-color", "#f6f7fb");
+            $("#modelBaseGroupTable th").css("text-align", "center");
+            $("#modelBaseGroupTable td").css("text-align", "center");
         }
     });
 }
