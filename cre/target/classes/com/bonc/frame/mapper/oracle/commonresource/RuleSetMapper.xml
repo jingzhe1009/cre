@@ -43,6 +43,17 @@
         a.CREATE_PERSON, a.UPDATE_PERSON
     </sql>
 
+    <resultMap id="VersionMap" type="com.bonc.frame.entity.commonresource.RuleSet">
+        <result column="RULE_SET_ID" property="ruleSetId" jdbcType="VARCHAR"/>
+        <result column="VERSION" property="version" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="getRuleSetIdByHeader" resultMap="VersionMap" parameterType="java.lang.String">
+        select RULE_SET_ID, VERSION
+        from CRE_PUB_RULE_SET
+        where RULE_SET_HEADER_ID = #{ruleSetHeaderId,jdbcType=VARCHAR}
+    </select>
+
     <!-- 检验 ruleSetName 唯一性 -->
     <select id="getRuleSetHeaderByPrimaryKey" parameterType="java.lang.String" resultMap="RuleSetHeaderMap">
         select   <include refid="RuleSetHeader_Column_List"/> from CRE_PUB_RULE_SET_HEADER

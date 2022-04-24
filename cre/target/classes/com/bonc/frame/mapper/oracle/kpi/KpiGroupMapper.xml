@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.bonc.frame.mapper.kpi.KpiGroupMapper">
+<mapper namespace="com.bonc.frame.dao.kpi.KpiGroupMapper">
     <resultMap id="BaseResultMap" type="com.bonc.frame.entity.kpi.KpiGroup">
         <result column="KPI_GROUP_ID" property="kpiGroupId" jdbcType="VARCHAR"/>
         <result column="KPI_GROUP_NAME" property="kpiGroupName" jdbcType="VARCHAR"/>
@@ -23,6 +23,20 @@
         <if test="kpiGroupId != null">
             and KPI_GROUP_ID != #{kpiGroupId,jdbcType=VARCHAR}
         </if>
+    </select>
+
+    <select id="pagedKpiGroupBaseInfo" parameterType="java.util.Map"
+            resultType="com.bonc.frame.entity.auth.resource.KpiGroupDefinitionResource">
+        SELECT
+        KPI_GROUP_ID as "kpiGroupId",
+        KPI_GROUP_NAME as "kpiGroupName",
+        KPI_GROUP_DESC as "kpiGroupDesc"
+        FROM CRE_KPI_GROUP
+        WHERE 1=1
+        <if test="kpiGroupName != null">
+            AND KPI_GROUP_NAME like CONCAT(CONCAT('%',#{kpiGroupName,jdbcType=VARCHAR}),'%')
+        </if>
+        ORDER BY CREATE_DATE DESC
     </select>
 
     <!-- 检查当前组是否被使用 -->

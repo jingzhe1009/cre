@@ -10,11 +10,11 @@
                 <!--Tab-->
                 <div id="tabContainer">
                     <ul class="nav nav-tabs" id="authorityTab">
+                        <li tab-id="2"><a data-toggle="tab">机构管理</a></li>
+                        <li tab-id="4"><a data-toggle="tab">渠道管理</a></li>
                         <li tab-id="0"><a data-toggle="tab">用户管理</a></li>
                         <li tab-id="1"><a data-toggle="tab">角色管理</a></li>
-                        <li tab-id="2"><a data-toggle="tab">机构管理</a></li>
                         <li tab-id="3"><a data-toggle="tab">权限管理</a></li>
-                        <li tab-id="4"><a data-toggle="tab">渠道管理</a></li>
                     </ul>
                 </div>
                 <!-- 展示内容 -->
@@ -49,6 +49,11 @@
                                         <div class="input-group orgMgr">
                                             <input data-col="deptName" type="text" class="form-control"
                                                    placeholder="机构名称">
+                                        </div>
+                                        <!--4 机构管理独有-->
+                                        <div class="input-group chanMgr">
+                                            <input data-col="channelName" type="text" class="form-control"
+                                                   placeholder="渠道名称">
                                         </div>
                                     </div>
                                     <!--公共搜索条件-->
@@ -162,7 +167,7 @@
                     <div class="form-group">
                         <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3">性别</label>
                         <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
-                            <select col-name="userSex" class="form-control sexSelector">
+                            <select id="userSexInput" col-name="userSex" class="form-control sexSelector">
                                 <option value="男">男</option>
                                 <option value="女">女</option>
                             </select>
@@ -197,18 +202,18 @@
                                    data-rule="确认密码:required;">
                         </div>
                     </div>
-                    <!--                    <div class="form-group">-->
-                    <!--                        <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3">角色</label>-->
-                    <!--                        <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">-->
-                    <!--                            <select col-name="roleId" class="form-control roleSelector" multiple></select>-->
-                    <!--                        </div>-->
-                    <!--                    </div>-->
-                    <!--                    <div class="form-group">-->
-                    <!--                        <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3">所属机构</label>-->
-                    <!--                        <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">-->
-                    <!--                            <select col-name="deptId" class="form-control orgSelector"></select>-->
-                    <!--                        </div>-->
-                    <!--                    </div>-->
+<!--                    <div class="form-group">-->
+<!--                        <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3">所属角色</label>-->
+<!--                        <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">-->
+<!--                            <select col-name="roleId" class="form-control roleSelector" multiple></select>-->
+<!--                        </div>-->
+<!--                    </div>-->
+                    <div class="form-group">
+                        <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                            <i class="mustIcon">*</i>所属渠道</label>
+                        <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                            <select id="channelList" col-name="channelId" class="form-control chanSelector"></select></div>
+                    </div>
                 </form>
             </div>
             <!--操作按钮-->
@@ -316,13 +321,19 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3">上级组织机构</label>
+                        <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3">机构编码</label>
+                        <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                            <input id="orgAlert_code" col-name="deptCode" type="text" class="form-control must" data-rule="机构编码:required;">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3">上级机构</label>
                         <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
                             <select id="orgAlertOrgSelector" col-name="parentId" class="form-control orgSelector"></select>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3">描述</label>
+                        <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3">机构描述</label>
                         <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
                             <textarea id="orgAlert_des" col-name="deptDesc" type="text" class="form-control" data-rule="描述:length[~255, true];"></textarea>
                         </div>
@@ -341,8 +352,57 @@
     </div>
 </div>
 
+<!--渠道弹框-->
+<div class="modal fade" id="chanAlertModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!--弹框标题-->
+            <div class="modal-header">
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" data-validator-option="{stopOnError:true}">
+                    <div class="form-group">
+                        <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3"><i class="mustIcon">*</i>渠道名称</label>
+                        <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                            <input id="chanAlert_name" col-name="channelName" type="text" class="form-control must" data-rule="渠道名称:required;">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3"><i class="mustIcon">*</i>渠道编码</label>
+                        <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                            <input id="chanAlert_code" col-name="channelCode" type="text" class="form-control must" data-rule="渠道编码:required;">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3">渠道描述</label>
+                        <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                            <textarea id="chanAlert_des" col-name="channelDesc" type="text" class="form-control" data-rule="渠道描述:length[~255, true];"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3"><i class="mustIcon">*</i>所属机构</label>
+                        <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                            <select id="chanAlertChanSelector" col-name="deptName" class="form-control orgSelector"></select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!--操作按钮-->
+            <div class="modal-footer">
+                <div class="notView">
+                    <button id="saveChan" type="button" class="btn btn-primary" >保存</button>
+                    <button id="closeChanModal" type="button" class="btn btn-minor" data-dismiss="modal">取消</button>
+                </div>
+                <button id="closeViewChan" type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <#include "/pages/authority/distribution.html">
 <#include "/pages/authority/orgUser.html">
+<#include "/pages/authority/chanUser.html">
 <#include "/pages/authority/chooseOrg.html">
 <#include "/pages/common/loading.html">
 <#include "/pages/common/confirmAlert.html">
@@ -354,7 +414,9 @@
 <script src="${ctx.contextPath}/static/js/authority/authorityMgr.js"></script>
 <script src="${ctx.contextPath}/static/js/authority/distribution.js"></script>
 <script src="${ctx.contextPath}/static/js/authority/orgUser.js"></script>
-<script src="${ctx.contextPath}/static/js/authority/chooseOrg.js"></script>
+<script src="${ctx.contextPath}/static/js/authority/chanUser.js"></script>
+<!--<script src="${ctx.contextPath}/static/js/authority/chooseOrg.js"></script>-->
+<script src="${ctx.contextPath}/static/js/authority/chooseChan.js"></script>
 <script src="${ctx.contextPath}/static/js/common/loading.js"></script>
 <script src="${ctx.contextPath}/static/js/common/confirmAlert.js"></script>
 </body>

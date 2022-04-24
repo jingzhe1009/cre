@@ -69,8 +69,14 @@ var kpiModal = {
             if (typeValueChecked === '0') { // DS
                 $('.kpiApiWrapper').addClass('hide');
                 $('.kpiDBWrapper').removeClass('hide');
+                $('.kpiKPIWrapper').addClass('hide');
             } else if (typeValueChecked === '1') { // API
                 $('.kpiApiWrapper').removeClass('hide');
+                $('.kpiDBWrapper').addClass('hide');
+                $('.kpiKPIWrapper').addClass('hide');
+            } else if ( typeValueChecked === '2') {// KPI
+                $('.kpiApiWrapper').addClass('hide');
+                $('.kpiKPIWrapper').removeClass('hide');
                 $('.kpiDBWrapper').addClass('hide');
             }
         });
@@ -116,6 +122,7 @@ var kpiModal = {
     },
     // 展开指标内容
     showKpi: function (handleType, kpiId, kpiGroupId) {
+        $('#editKpi').modal({'show': 'center', "backdrop": "static"});
         // handleType: 0新增 1修改 2查看
         kpiModal.data.handleType = handleType;
         $('#kpiDefContentWarp').removeAttr('kpiId').attr('handleType', handleType);
@@ -176,8 +183,48 @@ var kpiModal = {
             search_contains: true         // 从任意位置开始检索
         });
     },
+    //指标下查看规则集
+    showKpiRuleSet: function (kpiId, kpiGroupId){
+        console.log(kpiId,kpiGroupId)
+        $('#KpiRelevancyAlert').modal('show');
+        $('#RelevancyContentWarp').removeAttr('kpiId');
+        $('.RelevancyDefBase form')[0].reset();
+        $('.RelevancyDefBase form').validator('cleanUp');
+
+        kpiModal.getDetail(kpiId, kpiGroupId);
+         obj ={kpiId:kpiId};
+        kpiModal.initRelevancyTable(obj);
+    },
+    // 初始化 关联规则集弹窗表格
+    initRelevancyTable: function (obj) {
+        //此处用到datatable插件，参考https://blog.csdn.net/u014034656/article/details/80943299
+        $('#RelevancyTable').width('100%').dataTable({
+            destroy:true, //是否每次都初始化
+            paging:false, //是否允许翻页
+            info:false, //是否显示当前1/100这样的信息
+            searching:false, //是否允许检索ing
+            ordering:false, //是否允许排序
+            "columns": [
+                {"title": "规则集组", "data": "ruleSetName"},
+                {"title": "规则集名称", "data": "ruleSetGroupName"},
+                {"title": "规则集描述", "data": "ruleSetHeaderDesc"},
+                {"title": "规则集版本", "data": "version"}],
+            ajax:{
+                url: webpath + '/kpi/getRuleSetGroupByKpiId',
+                type: 'POST',
+                "data": function (d) { // 查询参数
+                    return $.extend({}, d, obj);
+                },
+            },
+            "fnDrawCallback": function (oSettings, json) {
+                $("#RelevancyTable th").css("text-align", "center");
+                $("#RelevancyTable td").css("text-align", "center");
+            },
+        });
+    },
+    //验证是否在引用状态
     getCheckKpi: function (kpiId, callback) {
-        $.ajax({ // 验证是否在引用状态
+        $.ajax({ // 修改弹窗中引用状态下不能修改
             url: webpath + '/kpi/check/kpiUsed', // 验证是否在引用状态
             type: 'POST',
             dataType: "json",
@@ -216,7 +263,7 @@ var kpiModal = {
             });
         });
     },
-    // 回显指标
+    // 查看/修改弹窗中回显指标
     echoKpiData: function (data, kpiGroupId) {
         // 回显组信息(详情没有该字段)
         $('.kpiDefBase .kpiGroupSelector option[group-id="' + kpiGroupId + '"]').prop('selected', true);
@@ -241,15 +288,23 @@ var kpiModal = {
             }
             if (key === 'kpiId') {
                 $('#kpiDefContentWarp').attr('kpiId', data[key]);
+                $('#RelevancyContentWarp').attr('kpiId', data[key]);
                 continue;
+            }
+            if(key == 'kpiName') {
+                $('#RelevancyNameInput').attr('value',data[key])
+            }
+            if(key == 'kpiCode'){
+                $('#RelevancyCodeInput').attr('value',data[key])
             }
             if (key === 'kpiType') { // 数据类型
                 $('#kpiTypeSel option[kpiType="' + data[key] + '"]').prop('selected', true);
+                $('#RelevancyTypeSel option[kpiType="' + data[key] + '"]').prop('selected', true);
                 continue;
             }
             if (key === 'fetchType') { // 取值方式
                 $("input[name='kpiSourceTypeRadio'][typeValue='" + data[key] + "']").prop('checked', true);
-                $('#kpiSourceTypeRadioDiv .kpiSourceTypeRadio').trigger('change');
+                $('#kpiSourceTypeRadioDiv .kpiSourceTypeRadio').trigger('change'); //trigger规定被选中元素要触发的事件
                 continue;
             }
             if (key === 'dbId') { // 数据源
@@ -270,7 +325,7 @@ var kpiModal = {
                 $(target).val(data[key]);
             }
         }
-        $('#editKpi').modal({'show': 'center', "backdrop": "static"});
+
     },
     // 保存指标
     saveKpi: function () {
@@ -450,7 +505,7 @@ var kpiModal = {
                 data: {'kpiId': kpiId},
                 success: function (data) {
                     if (data.status === 0) {
-                        confirmAlert.show('是否确认删除？', function () {
+                        confirmAlert.show('删除该指标后引用该指标的规则集也会失效，是否继续', function () {
                             $.ajax({
                                 url: webpath + '/kpi/delete',
                                 type: 'POST',
@@ -726,14 +781,23 @@ function initKpiTable(obj) {
                             return '数据源';
                         case '1':
                             return '接口';
+                        case '2':
+                            return '输入指标';
                         default:
                             return '--';
                     }
                 }
             },
             {"title": "指标描述", "data": "kpiDesc", "width": "11%"},
-            {"title": "创建人", "data": "createPerson", "width": "9%"},
-            {"title": "创建时间", "data": "createDate", "width": "10%"},
+            // {"title": "创建人", "data": "createPerson", "width": "9%"},
+            // {"title": "创建时间", "data": "createDate", "width": "10%"},
+            {
+                "title": "关联测试集", "data": null, "width": "10%", "render": function (data, type, row){
+                    var htmlStr = "";
+                    htmlStr += '<span type="button" class="cm-tblB" onclick="kpiModal.showKpiRuleSet(\'' + row.kpiId + '\', \'' + row.kpiGroupId + '\')">查看</span>';
+                    return htmlStr;
+                }
+            },
             {
                 "title": "操作", "data": null, "width": "20%", "render": function (data, type, row) {
                     var htmlStr = "";
@@ -752,12 +816,11 @@ function initKpiTable(obj) {
             }
         },
         "fnDrawCallback": function (oSettings, json) {
-            // $("tr:even").css("background-color", "#fbfbfd");
-            // $("table:eq(0) th").css("background-color", "#f6f7fb");
-        }
+            $("#kpiTable th").css("text-align", "center");
+            $("#kpiTable td").css("text-align", "center");
+        },
     });
 }
-
 /**
  * 指标组
  */
@@ -929,9 +992,9 @@ function initKpiGroupTable(obj) {
             }
         },
         "fnDrawCallback": function (oSettings, json) {
-            // $("tr:even").css("background-color", "#fbfbfd");
-            // $("table:eq(0) th").css("background-color", "#f6f7fb");
-        }
+            $("#kpiGroupTable th").css("text-align", "center");
+            $("#kpiGroupTable td").css("text-align", "center");
+        },
     });
 }
 
@@ -975,9 +1038,9 @@ function initKpiType() {
             htmlStr += '<option kpiType=\'' + kpiTypeList[i].key + '\'>' + kpiTypeList[i].text + '</option>';
         }
         $('#kpiTypeSel').html('').html(htmlStr);
+        $('#RelevancyTypeSel').html('').html(htmlStr);
     }
 }
-
 // 加载数据源下拉列表
 function initDSList() {
     $.ajax({

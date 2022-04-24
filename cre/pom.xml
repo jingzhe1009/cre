@@ -173,7 +173,7 @@
             <artifactId>ojdbc14</artifactId>
             <version>10.2.0.4.0</version>
             <scope>system</scope>
-            <systemPath>${basedir}/lib/ojdbc14-10.2.0.4.0.jar</systemPath>
+            <systemPath>D:\git\cre\cre\cre/lib/ojdbc14-10.2.0.4.0.jar</systemPath>
         </dependency>
 
         <dependency>
@@ -442,7 +442,7 @@
             <artifactId>hbase-client</artifactId>
             <version>0.98.6-cdh5.3.5</version>
             <scope>system</scope>
-            <systemPath>${basedir}/lib/hbase-client-0.98.6-cdh5.3.5.jar</systemPath>
+            <systemPath>D:\git\cre\cre\cre/lib/hbase-client-0.98.6-cdh5.3.5.jar</systemPath>
             <exclusions>
                 <exclusion>
                     <groupId>com.google.protobuf</groupId>
@@ -471,8 +471,8 @@
             <groupId>org.apache.hbase</groupId>
             <artifactId>hbase-common</artifactId>
             <version>0.98.6-cdh5.3.5</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/lib/hbase-common-0.98.6-cdh5.3.5.jar</systemPath>
+            <!-- --><scope>system</scope>
+            <systemPath>D:\git\cre\cre\cre/lib/hbase-common-0.98.6-cdh5.3.5.jar</systemPath>
             <exclusions>
                 <exclusion>
                     <groupId>org.mortbay.jetty</groupId>
@@ -490,7 +490,7 @@
             <artifactId>jetty</artifactId>
             <version>6.1.26.cloudera.4</version>
             <scope>system</scope>
-            <systemPath>${basedir}/lib/jetty-6.1.26.cloudera.4.jar</systemPath>
+            <systemPath>D:\git\cre\cre\cre/lib/jetty-6.1.26.cloudera.4.jar</systemPath>
         </dependency>
 
         <dependency>
@@ -498,7 +498,7 @@
             <artifactId>libthrift</artifactId>
             <version>0.9.0</version>
             <scope>system</scope>
-            <systemPath>${basedir}/lib/libthrift-0.9.0.jar</systemPath>
+            <systemPath>D:\git\cre\cre\cre/lib/libthrift-0.9.0.jar</systemPath>
         </dependency>
 
         <dependency>
@@ -506,7 +506,7 @@
             <artifactId>lz4</artifactId>
             <version>1.3.0</version>
             <scope>system</scope>
-            <systemPath>${basedir}/lib/lz4-1.3.0.jar</systemPath>
+            <systemPath>D:\git\cre\cre\cre/lib/lz4-1.3.0.jar</systemPath>
         </dependency>
 
         <dependency>
@@ -514,7 +514,7 @@
             <artifactId>XCloudJDBC</artifactId>
             <version>2.6.0.20</version>
             <scope>system</scope>
-            <systemPath>${basedir}/lib/XCloudJDBC-2.6.0.20.jar</systemPath>
+            <systemPath>D:\git\cre\cre\cre/lib/XCloudJDBC-2.6.0.20.jar</systemPath>
         </dependency>
 
         <dependency>
@@ -522,7 +522,7 @@
             <artifactId>XCloud_SP_Procedure_Parser</artifactId>
             <version>2.6.0.20</version>
             <scope>system</scope>
-            <systemPath>${basedir}/lib/XCloud_SP_Procedure_Parser.jar</systemPath>
+            <systemPath>D:\git\cre\cre\cre/lib/XCloud_SP_Procedure_Parser.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.assertj</groupId>

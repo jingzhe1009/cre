@@ -2,6 +2,7 @@ package com.bonc.frame.service.rule;
 
 import com.bonc.frame.entity.commonresource.ModelGroup;
 import com.bonc.frame.entity.commonresource.ModelGroupInfo;
+import com.bonc.frame.entity.commonresource.ModelRuleDetail;
 import com.bonc.frame.entity.model.ModelContentInfo;
 import com.bonc.frame.entity.modelImportAndExport.modelImport.importEntity.ImportAdjustObject;
 import com.bonc.frame.entity.rule.RuleDetail;
@@ -409,5 +410,5 @@ public interface RuleDetailService {
      * @param modelGroupId 要添加到的产品的id
      * @return 结果
      */
-    ResponseResult groupAddModel(List<RuleDetailHeader> modelList, String modelGroupId);
+    ResponseResult groupAddModel(List<ModelRuleDetail> modelList, String modelGroupId);
 }

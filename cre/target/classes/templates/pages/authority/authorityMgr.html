@@ -1,4 +1,4 @@
-<!--权限管理内容-->
+<!--权限管理内容   都是搜索框内容-->
 <link href="${ctx.contextPath}/static/css/authority/authorityMgr.css" rel="stylesheet"/>
 
 <div id="authorityMgr">
@@ -118,6 +118,38 @@
             </div>
         </div>
 
+        <!--公共参数下参数组权限管理-->
+        <div class="panel authorityMgrEle">
+            <div class="panel-heading">
+                <span><i class="icon icon-wrench"> </i>参数组权限管理</span>
+                <span grant-type="12"
+                      class="authorityMgrEle_saveButton checkAuth-update"
+                      type="button">
+                    <i class="icon icon-save"> </i>保存
+                </span>
+            </div>
+            <div class="panel-body">
+                <div>
+                    <div class="search_selfAdaptionLeft">
+                        <div>
+                            <div class="input-group">
+                                <input data-col="variableGroupName" type="text" class="form-control"
+                                       placeholder="参数组名称（请选择）">
+                                <label class="input-control-icon-right" data-toggle="dropdown">
+                                    <i class="icon icon-caret-down "></i>
+                                </label>
+                                <ul class="dropdown-menu pull-right paramGroupSelector"></ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="search_selfAdaptionRight">
+                        <button table-id="12" class="searchBtn btn btn-primary" type="button">搜索</button>
+                    </div>
+                </div>
+                <table table-id="12" class="dataLevelTable" id="paramGroupTable"></table>
+            </div>
+        </div>
+
         <!--公共接口权限管理-->
         <div class="panel authorityMgrEle">
             <div class="panel-heading">
@@ -149,6 +181,37 @@
                     </div>
                 </div>
                 <table table-id="5" class="dataLevelTable" id="apiTable"></table>
+            </div>
+        </div>
+
+        <!--公共接口下接口组权限管理-->
+        <div class="panel authorityMgrEle">
+            <div class="panel-heading">
+                <span><i class="icon icon-link"> </i>接口组权限管理</span>
+                <span grant-type="13" class="authorityMgrEle_saveButton checkAuth-update"
+                      type="button">
+                            <i class="icon icon-save"> </i>保存
+                        </span>
+            </div>
+            <div class="panel-body">
+                <div>
+                    <div class="search_selfAdaptionLeft">
+                        <div>
+                            <div class="input-group">
+                                <input data-col="apiGroupName" type="text" class="form-control"
+                                       placeholder="接口组名称（请选择）">
+                                <label class="input-control-icon-right" data-toggle="dropdown">
+                                    <i class="icon icon-caret-down "></i>
+                                </label>
+                                <ul class="dropdown-menu pull-right apiGroupSelector"></ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="search_selfAdaptionRight">
+                        <button table-id="13" class="searchBtn btn btn-primary" type="button">搜索</button>
+                    </div>
+                </div>
+                <table table-id="13" class="dataLevelTable" id="apiGroupTable"></table>
             </div>
         </div>
 
@@ -185,6 +248,7 @@
                                 <ul class="dropdown-menu pull-right kpiFetchTypeSelector">
                                     <li data-id="0"><a>数据源</a></li>
                                     <li data-id="1"><a>接口</a></li>
+                                    <li data-id="2"><a>输入指标</a></li>
                                 </ul>
                             </div>
                             <div class="input-group">
@@ -212,10 +276,41 @@
             </div>
         </div>
 
-        <!--规则库权限管理-->
+        <!--指标组权限管理-->
         <div class="panel authorityMgrEle">
             <div class="panel-heading">
-                <span><i class="icon icon-cube"> </i>规则库权限管理</span>
+                <span><i class="icon icon-cog"> </i>指标组权限管理</span>
+                <span grant-type="14" class="authorityMgrEle_saveButton checkAuth-update"
+                      type="button">
+                            <i class="icon icon-save"> </i>保存
+                        </span>
+            </div>
+            <div class="panel-body">
+                <div>
+                    <div class="search_selfAdaptionLeft">
+                        <div>
+                            <div class="input-group">
+                                <input data-col="kpiGroupName" type="text" class="form-control"
+                                       placeholder="指标组名称（请选择）">
+                                <label class="input-control-icon-right" data-toggle="dropdown">
+                                    <i class="icon icon-caret-down "></i>
+                                </label>
+                                <ul class="dropdown-menu pull-right kpiGroupSelector"></ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="search_selfAdaptionRight">
+                        <button table-id="14" class="searchBtn btn btn-primary" type="button">搜索</button>
+                    </div>
+                </div>
+                <table table-id="14" class="dataLevelTable" id="kpiGroupTable"></table>
+            </div>
+        </div>
+
+        <!--公共规则集权限管理-->
+        <div class="panel authorityMgrEle">
+            <div class="panel-heading">
+                <span><i class="icon icon-cube"> </i>公共规则集权限管理</span>
                 <span grant-type="6"
                       class="authorityMgrEle_saveButton checkAuth-update"
                       type="button">
@@ -247,10 +342,42 @@
             </div>
         </div>
 
-        <!--模型库权限管理-->
+        <!--规则集组权限管理-->
         <div class="panel authorityMgrEle">
             <div class="panel-heading">
-                <span><i class="icon icon-cube"> </i>模型库权限管理</span>
+                <span><i class="icon icon-cube"> </i>规则集组权限管理</span>
+                <span grant-type="15"
+                      class="authorityMgrEle_saveButton checkAuth-update"
+                      type="button">
+                            <i class="icon icon-save"> </i>保存
+                        </span>
+            </div>
+            <div class="panel-body">
+                <div>
+                    <div class="search_selfAdaptionLeft">
+                        <div>
+                            <div class="input-group">
+                                <input data-col="ruleSetGroupName" type="text" class="form-control"
+                                       placeholder="规则集组名称（请选择）">
+                                <label class="input-control-icon-right" data-toggle="dropdown">
+                                    <i class="icon icon-caret-down "></i>
+                                </label>
+                                <ul class="dropdown-menu pull-right ruleSetGroupSelector"></ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="search_selfAdaptionRight">
+                        <button table-id="15" class="searchBtn btn btn-primary" type="button">搜索</button>
+                    </div>
+                </div>
+                <table table-id="15" class="dataLevelTable" id="ruleSetGroupTable"></table>
+            </div>
+        </div>
+
+        <!--公共模型权限管理-->
+        <div class="panel authorityMgrEle">
+            <div class="panel-heading">
+                <span><i class="icon icon-cube"> </i>公共模型权限管理</span>
                 <span grant-type="7"
                       class="authorityMgrEle_saveButton checkAuth-update"
                       type="button">
@@ -293,6 +420,38 @@
             </div>
         </div>
 
+        <!--产品权限管理-->
+        <div class="panel authorityMgrEle">
+            <div class="panel-heading">
+                <span><i class="icon icon-cube"> </i>产品权限管理</span>
+                <span grant-type="16"
+                      class="authorityMgrEle_saveButton checkAuth-update"
+                      type="button">
+                            <i class="icon icon-save"> </i>保存
+                        </span>
+            </div>
+            <div class="panel-body">
+                <div>
+                    <div class="search_selfAdaptionLeft">
+                        <div>
+                            <div class="input-group">
+                                <input data-col="modelGroupName" type="text" class="form-control"
+                                       placeholder="产品名称（请选择）">
+                                <label class="input-control-icon-right" data-toggle="dropdown">
+                                    <i class="icon icon-caret-down "></i>
+                                </label>
+                                <ul class="dropdown-menu pull-right modelGroupSelector"></ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="search_selfAdaptionRight">
+                        <button table-id="16" class="searchBtn btn btn-primary" type="button">搜索</button>
+                    </div>
+                </div>
+                <table table-id="16" class="dataLevelTable" id="modelGroupTable"></table>
+            </div>
+        </div>
+
         <!--场景权限管理-->
         <div class="panel authorityMgrEle">
             <div class="panel-heading">
@@ -304,18 +463,7 @@
                         </span>
             </div>
             <div class="panel-body">
-                <div>
-                    <div class="search_selfAdaptionLeft">
-                        <div>
-                            <div class="input-group">
-                                <input data-col="folderName" type="text" class="form-control" placeholder="场景名称">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="search_selfAdaptionRight">
-                        <button table-id="11" class="searchBtn btn btn-primary" type="button">搜索</button>
-                    </div>
-                </div>
+
                 <table table-id="11" class="dataLevelTable" id="folderTable"></table>
             </div>
         </div>

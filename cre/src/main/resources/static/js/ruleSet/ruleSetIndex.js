@@ -103,13 +103,14 @@ function initPage() {
  * 规则集基础信息及操作
  */
 var ruleSetBaseModal = {
-    // 展开规则集基础信息弹框
+    // 主页面 展开规则集基础信息
     showBase: function (handleType, $this) {
         var detail = {};
         if ($this) {
             var curRow = $this.parentNode.parentNode;
             detail = $('#ruleSetTable').DataTable().row(curRow).data();
         }
+
         // handleType: 0新增 1修改 2查看
         $('#ruleSetBaseAlertModal form')[0].reset();
         $('#ruleSetName').removeAttr('disabled');
@@ -148,6 +149,8 @@ var ruleSetBaseModal = {
                                             'show': 'center',
                                             "backdrop": "static"
                                         });
+                                        $('#ruleSetName').val(detail.ruleSetName);
+                                        $('.ruleSetDes').val(detail.ruleSetHeaderDesc);
                                         if (data.status === -1) { // 有启用
                                             $('#ruleSetName').attr('disabled', true);
                                             $('#ruleSetBaseAlertModal .cron_msg').removeClass('hide');
@@ -169,11 +172,170 @@ var ruleSetBaseModal = {
             ruleSetBaseModal.echoData(detail);
             $('#ruleSetBaseAlertModal').attr('handleType', handleType).modal({'show': 'center', "backdrop": "static"});
             $('#ruleSetBaseAlertModal .form-control').attr('disabled', true);
+            $('#ruleSetName').val(detail.ruleSetName);
+            $('.ruleSetDes').val(detail.ruleSetHeaderDesc);
         } else {
             return;
         }
     },
-    // 关闭弹框
+    //弹窗 查看关联指标/关联模型时弹出
+    showRelevancy:function(handType,ruleSetHeaderId){
+        $('#KpiRelevancyAlert').modal({'show': 'center', "backdrop": "static"});
+        $('#kpiContentWarp form')[0].reset();
+        $('#KpiRelevancyAlert form').validator('cleanUp'); // 清除表单中的全部验证消息
+        $('#KpiRelevancyAlert').attr('handType',handType);
+
+        ruleSetBaseModal.initRuleSetVersion(ruleSetHeaderId,handType);
+
+        $('#closeRelevancy').on('click', function () {
+            $('#KpiRelevancyAlert').modal({'hide': 'center'});
+        });
+    },
+    // 接口 规则集版本下拉框，动态获取下拉框选项
+    initRuleSetVersion:function(ruleSetHeaderId,handType) {
+        $.ajax({
+            url: webpath + '/ruleSet/getRuleSetIdByHeader',
+            type: 'POST',
+            data:{'ruleSetHeaderId':ruleSetHeaderId},
+            success: function (data) {
+                var htmlStr_selector = '';
+                if (data.length > 0) {
+                    for (var i = 0; i < data.length; i++) {
+                        htmlStr_selector += '<option group-id=\'' + data[i].ruleSetId + '\' value=\'' + data[i].version + '\'>' + data[i].version + '</option>';
+                    }
+                } else {
+                    htmlStr_selector += "<option group-id='empty'>无</option>";
+                }
+                $('.ruleSetVersionKpi').empty().html(htmlStr_selector);
+
+                ruleSetBaseModal.getDetail(ruleSetHeaderId,handType);
+
+            },
+            complete:function(){
+                $('.ruleSetVersionKpi').unbind('change').on('change',function () {
+                    var handType = $('#KpiRelevancyAlert').attr('handType');
+                    if(handType == 0){
+                        ruleSetBaseModal.initRelevancyKpiTable();
+                    }
+                    if(handType == 1){
+                        ruleSetBaseModal.initRelevancyModelTable();
+                    }
+                });
+            }
+        });
+    },
+    //初始化 关联指标弹窗中的表格
+    initRelevancyKpiTable: function(){
+        var versionSelector = $('.ruleSetVersionKpi').val();
+        //debugger;
+        var ruleSetId = $('.ruleSetVersionKpi option[value="' + versionSelector + '"]').attr('group-id');
+        if(versionSelector==null||versionSelector=='undefined'){
+            ruleSetId = $('.ruleSetVersionKpi option[value="1.0"]').attr('group-id');
+        }
+
+        $('#RelevancyKpiTable').width('100%').dataTable({
+            destroy:true, //是否每次都初始化
+            paging:false, //是否允许翻页
+            info:false, //是否显示当前1/100这样的信息
+            searching:false, //是否允许检索ing
+            ordering:false, //是否允许排序
+            "columns": [
+                {"title": "指标组", "data": "kpiGroupName"},
+                {"title": "指标名称", "data": "kpiName"},
+                {"title": "指标编码", "data": "kpiCode"},
+                {"title": "指标类型", "data": "kpiType"}],
+            //待修改
+            ajax:{
+                url: webpath + '/ruleSet/getKpiByRuleSetId',
+                type: 'GET',
+                "data": {'ruleSetId':ruleSetId},
+                "dataSrc": function ( data ) {
+                    for(var i = 0; i < data.data.length; i++){
+                        if(data.data[i].kpiType == 1){
+                            data.data[i].kpiType = '字符串';
+                        }
+                        if(data.data[i].kpiType == 2){
+                            data.data[i].kpiType = '整型';
+                        }
+                        if(data.data[i].kpiType == 4){
+                            data.data[i].kpiType = '浮点型';
+                        }
+                    }
+                    return data.data;
+                }
+            },
+            "fnDrawCallback": function (oSettings, json) {
+                $("#RelevancyKpiTable th").css("text-align", "center");
+                $("#RelevancyKpiTable td").css("text-align", "center");
+            },
+        });
+    },
+    //初始化 关联模型弹窗中的表格
+    initRelevancyModelTable: function(){
+        var versionSelector = $('.ruleSetVersionKpi').val()
+        var ruleSetId = $('.ruleSetVersionKpi option[value="' + versionSelector + '"]').attr('group-id');
+        $('#RelevancyModelTable').width('100%').dataTable({
+            destroy:true, //是否每次都初始化
+            paging:false, //是否允许翻页
+            info:false, //是否显示当前1/100这样的信息
+            searching:false, //是否允许检索ing
+            ordering:false, //是否允许排序
+            "columns": [
+                {"title": "产品模型", "data": "modelGroupId"},
+                {"title": "模型名称", "data": "ruleName"},
+                {"title": "模型类型", "data": "ruleType"},
+                {"title": "模型版本", "data": "version"}],
+            ajax:{
+                url: webpath + '/ruleSet/getModelByRuleSetId',
+                type: 'GET',
+                "data": {'ruleSetId':ruleSetId},
+                "dataSrc": function ( data ) {
+                    for(var i = 0; i < data.data.length; i++){
+                        if(data.data[i].ruleType == 0){
+                            data.data[i].ruleType = '评分模型';
+                        }
+                        if(data.data[i].ruleType == 1){
+                            data.data[i].ruleType = '规则模型';
+                        }
+                    }
+                    return data.data;
+                }
+            },
+            "fnDrawCallback": function (oSettings, json) {
+                $("#RelevancyModelTable th").css("text-align", "center");
+                $("#RelevancyModelTable td").css("text-align", "center");
+            },
+        });
+    },
+    //接口 获取关联指标和关联模型弹窗中 不可修改的文本框内容
+    getDetail:function(ruleSetHeaderId,handType){
+        $.ajax({
+            url: webpath + '/ruleSet/header/paged',
+            type: 'GET',
+            data: ruleSetHeaderId,
+            success: function (data) {
+                var detail = data.data.filter(function(item){
+                    return item.ruleSetHeaderId == ruleSetHeaderId
+                })
+                ruleSetBaseModal.echoData(detail[0]);
+
+                if(handType == 0){
+                    $('#KpiRelevancyAlert .modal-title').html('关联指标');
+                    $('#RelevancyKpiTable').show();
+                    $('#RelevancyModelTable').hide();
+                    ruleSetBaseModal.initRelevancyKpiTable();
+
+                }
+                if(handType == 1){
+                    $('#KpiRelevancyAlert .modal-title').html('关联模型');
+                    $('#RelevancyModelTable').show();
+                    $('#RelevancyKpiTable').hide();
+                    ruleSetBaseModal.initRelevancyModelTable();
+                }
+            }
+        });
+    },
+    // 关闭添加/修改规则集弹框
     hidden: function () {
         $('#ruleSetBaseAlertModal').modal('toggle', 'center');
     },
@@ -184,6 +346,20 @@ var ruleSetBaseModal = {
         for (var key in data) {
             if (key === 'ruleSetGroupId') { // 规则集组单独处理
                 $('#ruleSetBaseAlertModal .ruleSetGroupSelector option[group-id="' + data[key] + '"]').prop('selected', true);
+                continue;
+            }
+            if(key === 'ruleSetName') { //规则集名称
+                $('#kpiGroupNameInput').attr('value',data[key]);
+                $('#modelGroupNameInput').attr('value',data[key]);
+                continue;
+            }
+            if(key === 'ruleSetGroupName') { //规则集组
+                $('.ruleSetGroupSelector option[group-id="' + data[key] + '"]').prop('selected', true);
+                continue;
+            }
+            if(key === "ruleSetHeaderDesc"){ //规则集描述
+                $('#kpiGroupDes').html(data[key]);
+                $('#modelGroupDes').html(data[key]);
                 continue;
             }
             if (key === 'ruleSetHeaderId') { // 规则集id
@@ -358,9 +534,9 @@ var ruleSetVersionTableModal = {
                 }
             },
             "fnDrawCallback": function (oSettings, json) {
-                // $("tr:even").css("background-color", "#fbfbfd");
-                // $("table:eq(0) th").css("background-color", "#f6f7fb");
-            }
+                $("#ruleSetVersionTable th").css("text-align", "center");
+                $("#ruleSetVersionTable td").css("text-align", "center");
+            },
         });
     },
     // 版本修改权限校验
@@ -512,32 +688,18 @@ var ruleSetGroupModal = {
             $('#ruleSetGroupAlert .modal-footer .notView button').css('display', 'inline-block');
             $('#ruleSetGroupAlert .modal-title').text('').text('添加规则集组');
             $('#ruleSetGroupAlert .form-control').removeAttr('disabled');
-            ruleSetGroupModal.echoGroupData(detail);
         } else if (handleType === 1) {
-            $.ajax({
-                url: webpath + '/ruleSet/group/update/checkAuth',
-                type: 'GET',
-                data: {'ruleSetGroupId': detail['ruleSetGroupId']? detail['ruleSetGroupId'] : ''},
-                dataType: "json",
-                success: function (data) {
-                    if (data.status === 0) {
-                        $('#ruleSetGroupAlert').attr('handleType', handleType).modal({'show': 'center', "backdrop": "static"});
-                        $('#ruleSetGroupAlert .modal-footer .notView button').css('display', 'inline-block');
-                        $('#ruleSetGroupAlert .modal-title').text('').text('修改规则集组');
-                        ruleSetGroupModal.echoGroupData(detail);
-                        $('#ruleSetGroupAlert .form-control').removeAttr('disabled');
-                    } else {
-                        failedMessager.show(data.msg);
-                    }
-                }
-            });
+            $('#ruleSetGroupAlert .modal-footer .notView button').css('display', 'inline-block');
+            $('#ruleSetGroupAlert .modal-title').text('').text('修改规则集组');
+            ruleSetGroupModal.echoGroupData(detail);
+            $('#ruleSetGroupAlert .form-control').removeAttr('disabled');
         } else if (handleType === 2) {
-            $('#ruleSetGroupAlert').attr('handleType', handleType).modal({'show': 'center', "backdrop": "static"});
             $('#ruleSetGroupAlert .modal-footer #closeViewRuleSetGroup').css('display', 'inline-block');
             $('#ruleSetGroupAlert .modal-title').text('').text('查看规则集组');
             ruleSetGroupModal.echoGroupData(detail);
             $('#ruleSetGroupAlert .form-control').attr('disabled', true);
         }
+        $('#ruleSetGroupAlert').attr('handleType', handleType).modal({'show': 'center', "backdrop": "static"});
     },
     // 关闭添加参数组弹框
     hiddenAddGroupAlert: function () {
@@ -614,36 +776,24 @@ var ruleSetGroupModal = {
     // 删除规则集组
     deleteGroup: function (groupId) {
         if (groupId) {
-            $.ajax({ // 删除权限校验
-                url: webpath + '/ruleSet/group/delete/checkAuth',
-                type: 'GET',
-                dataType: "json",
-                data: {'ruleSetGroupId': groupId},
-                success: function (data) {
-                    if (data.status === 0) {
-                        confirmAlert.show('是否确认删除？', function () {
-                            $.ajax({
-                                url: webpath + '/ruleSet/group/delete',
-                                type: 'POST',
-                                dataType: "json",
-                                data: {'ruleSetGroupId': groupId},
-                                success: function (data) {
-                                    if (data.status === 0) {
-                                        successMessager.show('删除成功');
-                                        // initRuleSetTable();
-                                        initRuleSetGroupTable();
-                                        $('.ruleSetSearch').trigger('click');
-                                        initRuleSetGroup(); // 刷新规则集组下拉框
-                                    } else {
-                                        failedMessager.show(data.msg);
-                                    }
-                                }
-                            });
-                        });
-                    } else {
-                        failedMessager.show(data.msg);
+            confirmAlert.show('是否确认删除？', function () {
+                $.ajax({
+                    url: webpath + '/ruleSet/group/delete',
+                    type: 'POST',
+                    dataType: "json",
+                    data: {'ruleSetGroupId': groupId},
+                    success: function (data) {
+                        if (data.status === 0) {
+                            successMessager.show('删除成功');
+                            // initRuleSetTable();
+                            initRuleSetGroupTable();
+                            $('.ruleSetSearch').trigger('click');
+                            initRuleSetGroup(); // 刷新规则集组下拉框
+                        } else {
+                            failedMessager.show(data.msg);
+                        }
                     }
-                }
+                });
             });
         }
     }
@@ -694,12 +844,24 @@ function initRuleSetTable(obj) {
         "pageLength": 10,
         "columns": [
             {"title": "规则集组", "data": "ruleSetGroupName", "width": "10%"},
-            {"title": "规则集名称", "data": "ruleSetName", "width": "10%"},
-            {"title": "规则集描述", "data": "ruleSetHeaderDesc", "width": "10%"},
+            {"title": "规则集名称", "data": "ruleSetName", "width": "20%"},
+            {"title": "规则集描述", "data": "ruleSetHeaderDesc", "width": "20%"},
             {"title": "创建人", "data": "createPerson", "width": "10%"},
             {"title": "创建时间", "data": "createDate", "width": "15%"},
-            // {"title": "关联指标", "data":"getKpiByRuleSetId","width": "15"},
-            // {"title": "关联模型", "data":"getModelByRuleSetId","width": "15"},
+            {
+                "title": "关联指标", "data": null, "render": function (data, type, row) {
+                    var htmlStr = "";
+                    htmlStr += '<span type="button" class="cm-tblB" onclick="ruleSetBaseModal.showRelevancy(0,\'' + row.ruleSetHeaderId +'\')">查看</span>';
+                    return htmlStr;
+                }
+            },
+            {
+                "title": "关联模型", "data": null, "render": function (data, type, row) {
+                    var htmlStr = "";
+                    htmlStr += '<span type="button" class="cm-tblB" onclick="ruleSetBaseModal.showRelevancy(1,\'' + row.ruleSetHeaderId +'\')">查看</span>';
+                    return htmlStr;
+                }
+            },
             {
                 "title": "操作", "data": null, "width": "25%", "render": function (data, type, row) {
                     var htmlStr = "";
@@ -718,9 +880,9 @@ function initRuleSetTable(obj) {
             }
         },
         "fnDrawCallback": function (oSettings, json) {
-            // $("tr:even").css("background-color", "#fbfbfd");
-            // $("table:eq(0) th").css("background-color", "#f6f7fb");
-        }
+            $("#ruleSetTable th").css("text-align", "center");
+            $("#ruleSetTable td").css("text-align", "center");
+        },
     });
 }
 
@@ -759,9 +921,9 @@ function initRuleSetGroupTable(obj) {
             }
         },
         "fnDrawCallback": function (oSettings, json) {
-            // $("tr:even").css("background-color", "#fbfbfd");
-            // $("table:eq(0) th").css("background-color", "#f6f7fb");
-        }
+            $("#ruleSetTypeTable th").css("text-align", "center");
+            $("#ruleSetTypeTable td").css("text-align", "center");
+        },
     });
 }
 

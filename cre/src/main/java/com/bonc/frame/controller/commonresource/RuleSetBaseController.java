@@ -4,6 +4,7 @@ import com.bonc.frame.entity.commonresource.RuleSet;
 import com.bonc.frame.entity.commonresource.RuleSetGroup;
 import com.bonc.frame.entity.commonresource.RuleSetHeader;
 import com.bonc.frame.entity.commonresource.RuleSetReferenceExt;
+import com.bonc.frame.entity.rule.RuleSetWithModel;
 import com.bonc.frame.security.ResourceType;
 import com.bonc.frame.security.aop.PermissionsRequires;
 import com.bonc.frame.service.kpi.KpiService;
@@ -18,6 +19,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -233,7 +235,7 @@ public class RuleSetBaseController {
     @PermissionsRequires(value = "/pub/ruleSet/delete?ruleSetHeaderId", resourceType = ResourceType.DATA_PUB_RULE_SET)
     @RequestMapping(value = "/delete")
     @ResponseBody
-    public ResponseResult deleteRuleSet(String ruleSetHeaderId,String ruleSetId) {
+    public ResponseResult deleteRuleSet(String ruleSetHeaderId, String ruleSetId) {
         return ruleSetBaseService.deleteRuleSet(ruleSetId);
     }
 
@@ -262,23 +264,23 @@ public class RuleSetBaseController {
     //规则集查询指标信息
     @RequestMapping("/getKpiByRuleSetId")
     @ResponseBody
-    public  List<String>  getKpiByRuleSetId(String ruleSetId) {
-        List<String> list =ruleSetBaseService.getKpiByRuleSetId(ruleSetId);
-        return list;
+    public ResponseResult getKpiByRuleSetId(String ruleSetId) {
+        List<Map<String,String>> list =ruleSetBaseService.getKpiByRuleSetId(ruleSetId);
+        return ResponseResult.createSuccessInfo("success",list);
     }
 
-    @RequestMapping("/getRuleSetIdByHeader")
+    @PostMapping("/getRuleSetIdByHeader")
     @ResponseBody
-    public List<Map<String,String>>getRuleSetIdByHeader(String ruleSetHeaderId){
+    public List<Map<String,String>> getRuleSetIdByHeader(String ruleSetHeaderId){
         return ruleSetBaseService.getRuleSetIdByHeader(ruleSetHeaderId);
     }
 
     //规则集查看模型信息
     @RequestMapping("/getModelByRuleSetId")
     @ResponseBody
-    public  List<String>  getModelByRuleSetId(String ruleSetId) {
-        List<String> list =ruleSetBaseService.getModelByRuleSetId(ruleSetId);
-        return list;
+    public ResponseResult getModelByRuleSetId(String ruleSetId) {
+        List<RuleSetWithModel> list =ruleSetBaseService.getModelByRuleSetId(ruleSetId);
+        return ResponseResult.createSuccessInfo("success",list);
     }
 
     @RequestMapping("/group/paged")
@@ -298,7 +300,6 @@ public class RuleSetBaseController {
         return ruleSetBaseService.createRuleSetGroup(ruleSetGroup, loginUserId);
     }
 
-    @PermissionsRequires(value = "/pub/ruleSetGroup/update?ruleSetGroupId", resourceType = ResourceType.DATA_PUB_RULE_SET_GROUP)
     @RequestMapping(value = "/group/update", method = RequestMethod.POST)
     @ResponseBody
     public ResponseResult updateRuleSetGroup(RuleSetGroup ruleSetGroup, HttpServletRequest request) {
@@ -306,7 +307,6 @@ public class RuleSetBaseController {
         return ruleSetBaseService.updateRuleSetGroup(ruleSetGroup, loginUserId);
     }
 
-    @PermissionsRequires(value = "/pub/ruleSetGroup/delete?ruleSetGroupId", resourceType = ResourceType.DATA_PUB_RULE_SET_GROUP)
     @RequestMapping(value = "/group/delete")
     @ResponseBody
     public ResponseResult deleteRuleSetGroup(String ruleSetGroupId) {
@@ -343,17 +343,5 @@ public class RuleSetBaseController {
         return ResponseResult.createSuccessInfo();
     }
 
-    @PermissionsRequires(value = "/pub/ruleSetGroup/update?ruleSetGroupId", resourceType = ResourceType.DATA_PUB_RULE_SET_GROUP)
-    @RequestMapping(value = "/group/update/checkAuth", method = RequestMethod.GET)
-    @ResponseBody
-    public ResponseResult checkUpdateGroup(String ruleSetGroupId) {
-        return ResponseResult.createSuccessInfo();
-    }
 
-    @PermissionsRequires(value = "/pub/ruleSetGroup/delete?ruleSetGroupId", resourceType = ResourceType.DATA_PUB_RULE_SET_GROUP)
-    @RequestMapping(value = "/group/delete/checkAuth", method = RequestMethod.GET)
-    @ResponseBody
-    public ResponseResult checkDeleteGroup(String ruleSetGroupId) {
-        return ResponseResult.createSuccessInfo();
-    }
 }

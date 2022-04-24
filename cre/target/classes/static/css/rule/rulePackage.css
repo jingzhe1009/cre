@@ -349,3 +349,15 @@ button.butD1:focus, button.butD1:active{
 	color: #02BABC;
 }
 
+/*2022/04/22 陈芳新增 设置产品相关信息*/
+#pageInformation {
+	font-size: 14px;
+	background-color: #fff;
+	border-radius: 5px;
+	margin: 10px;
+	padding: 20px;
+	align-items: center;
+}
+#pageInformation p{
+	margin: 10px 0;
+}
