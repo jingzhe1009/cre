@@ -87,7 +87,7 @@ public class ChannelController {
         return ResponseResult.createSuccessInfo();
     }
     //修改渠道权限
-    @PermissionsRequires(value = "/placce/update", resourceType = ResourceType.BUTTON)
+    @PermissionsRequires(value = "/place/update", resourceType = ResourceType.BUTTON)
     @RequestMapping(value = "/update/checkAuth", method = RequestMethod.GET)
     @ResponseBody
     public ResponseResult update() {

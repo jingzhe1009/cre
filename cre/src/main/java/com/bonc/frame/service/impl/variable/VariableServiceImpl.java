@@ -58,7 +58,7 @@ public class VariableServiceImpl implements VariableService {
     /**
      * 公共参数组
      */
-    private final String _MYBITSID_VG_PREFIX = "com.bonc.frame.mapper.resource.VariableGroupMapper.";
+    private final String _MYBITSID_VG_PREFIX = "com.bonc.frame.dao.variable.VariableGroupMapper.";
 
     @Autowired
     private DaoHelper daoHelper;

@@ -45,7 +45,7 @@ public class ApiServiceImpl implements ApiService {
     private SysLogService sysLogService;
 
     private final String _MYBITSID_PREFIX = "com.bonc.frame.dao.api.ApiMapper.";
-    private final String _MYBITSID_AG_PREFIX = "com.bonc.frame.mapper.resource.ApiGroupMapper.";
+    private final String _MYBITSID_AG_PREFIX = "com.bonc.frame.dao.apiGroup.ApiGroupMapper.";
 
     /**
      * 接口-变量中间表
@@ -721,6 +721,8 @@ public class ApiServiceImpl implements ApiService {
 
     @Override
     public Map<String, Object> pubApiGroupsPaged(String apiGroupName, String start, String length) {
+        Map<String, Object> param = new HashMap<>();
+        param.put("apiGroupName", apiGroupName);
         Map<String, Object> map = daoHelper.queryForPageList(_MYBITSID_AG_PREFIX + "select",
                 apiGroupName, start, length);
         return map;

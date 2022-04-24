@@ -37,7 +37,7 @@ import java.util.*;
 @Service
 public class RuleSetBaseServiceImpl implements RuleSetBaseService {
 
-    private static final String _RULE_SET_GROUP_MAPPER = "com.bonc.frame.mapper.resource.RuleSetGroupMapper.";
+    private static final String _RULE_SET_GROUP_MAPPER = "com.bonc.frame.dao.resource.RuleSetGroupMapper.";
 
     private static final String _RULE_SET_MAPPER = "com.bonc.frame.dao.resource.RuleSetMapper.";
 
