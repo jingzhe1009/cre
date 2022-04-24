@@ -1,9 +1,6 @@
 package com.bonc.frame.controller.commonresource;
 
-import com.bonc.frame.entity.commonresource.ModelChanIdDto;
-import com.bonc.frame.entity.commonresource.ModelGroupChannelVo;
-import com.bonc.frame.entity.commonresource.ModelGroupDto;
-import com.bonc.frame.entity.commonresource.ModelGroupInfo;
+import com.bonc.frame.entity.commonresource.*;
 import com.bonc.frame.entity.rule.RuleDetailHeader;
 import com.bonc.frame.service.modelBase.ModelBaseService;
 import com.bonc.frame.service.rule.RuleDetailService;
@@ -64,23 +61,28 @@ public class ModelBaseController {
         }
         // 验证数据权限
         final String loginUserId = ControllerUtil.getLoginUserId(request);
-
-        return modelBaseService.getModelGroups(modelGroupName);
+        return modelBaseService.getModelGroups(modelGroupName,loginUserId);
     }
 
     @RequestMapping("/group/paged")
     @ResponseBody
-    public Map<String, Object> getModelGroupsPaged(String modelGroupName,String channelId, String start, String length,HttpServletRequest request) {
+    public Map<String, Object> getModelGroupsPaged(String modelGroupName,
+                                                   String channelId,
+                                                   String start,
+                                                   String length,
+                                                   String startDate,
+                                                   String endDate,
+                                                   HttpServletRequest request) {
         if (modelGroupName == null) {
             modelGroupName = "";
         }
         if (channelId == null || channelId.equals("")) {
             channelId = null;
         }
-        // 验证数据权限
+// 验证数据权限
         final String loginUserId = ControllerUtil.getLoginUserId(request);
 
-        return modelBaseService.getModelGroupsPaged(modelGroupName,channelId, start, length);
+        return modelBaseService.getModelGroupsPaged(loginUserId,modelGroupName,channelId, start, length,startDate,endDate);
     }
 
     @RequestMapping("/group/create")
@@ -146,14 +148,50 @@ public class ModelBaseController {
     /**
      * 产品中添加（其他）分类中的模型到本产品
      * 直接将对应模型的所属产品id切换
-     * @param modelList 要添加的模型集合
-     * @param modelGroupId 要添加到的产品的id
+     * @param info 要添加的模型集合
      * @return 结果
      */
     @RequestMapping("/group/addModel")
     @ResponseBody
-    public ResponseResult groupAddModel(List<RuleDetailHeader> modelList, String modelGroupId) {
-        return ruleDetailService.groupAddModel(modelList,modelGroupId);
+    public ResponseResult groupAddModel(@RequestBody ModelGroupInfo info) {
+        return ruleDetailService.groupAddModel(info.getModelList(),info.getModelGroupId());
+    }
+
+    /**
+     * 根据id获取产品信息
+     * @param modelGroupId 产品id
+     * @return 产品信息
+     */
+    @RequestMapping("/group/getGroupInfoById")
+    @ResponseBody
+    public ResponseResult getGroupInfoById(String modelGroupId) {
+        // 验证数据权限
+        ModelGroup mg = modelBaseService.getGroupInfoById(modelGroupId);
+        return ResponseResult.createSuccessInfo("success", mg);
+    }
+
+    /**
+     * 根据模型头id获取版本号及对应id
+     * @param modelId 模型id
+     * @return id及版本号
+     */
+    @RequestMapping("/group/modelGetVersion")
+    @ResponseBody
+    public ResponseResult modelGetVersion(String modelId) {
+        List<ModelVersion> list = modelBaseService.modelGetVersion(modelId);
+        return ResponseResult.createSuccessInfo("success", list);
+    }
+
+    /**
+     * 根据模型版本id获取关联的规则集
+     * @param modelId 模型id
+     * @return 规则集数据
+     */
+    @RequestMapping("/group/modelVersionWithRuleSet")
+    @ResponseBody
+    public ResponseResult modelVersionWithRuleSet(String modelId) {
+        List<RuleSetForModel> list = modelBaseService.modelVersionWithRuleSet(modelId);
+        return ResponseResult.createSuccessInfo("success", list);
     }
 
 }

@@ -47,7 +47,7 @@
 .modelBaseContainer .selfAdaptionLeft>div{
     margin-right: 165px;
 }
-.modelBaseWrapper .selfAdaptionRight{
+#modelBasePageContent .selfAdaptionRight{
     position: relative;
     float: right;
     width: 220px;
@@ -115,4 +115,7 @@
     font-size: 14px;
     border-bottom: 1px solid #666666;
     margin-bottom: 3px;
+}
+.channelList li:hover{
+    background-color: #02babc;
 }

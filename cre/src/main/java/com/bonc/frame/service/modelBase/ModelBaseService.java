@@ -1,9 +1,6 @@
 package com.bonc.frame.service.modelBase;
 
-import com.bonc.frame.entity.commonresource.ModelChanIdDto;
-import com.bonc.frame.entity.commonresource.ModelGroup;
-import com.bonc.frame.entity.commonresource.ModelGroupChannelVo;
-import com.bonc.frame.entity.commonresource.ModelGroupDto;
+import com.bonc.frame.entity.commonresource.*;
 import com.bonc.frame.util.ResponseResult;
 
 import java.util.List;
@@ -19,13 +16,14 @@ public interface ModelBaseService {
 
     // ------------------------ 模型组管理 ------------------------
 
-    ResponseResult getModelGroups(String modelGroupName);
+    ResponseResult getModelGroups(String modelGroupName,String loginUserId);
 
     ModelGroup getModelGroupByModelId(String modelGroupId);
 
     ModelGroup getModelGroupByModelName(String modelGroupName);
 
-    Map<String, Object> getModelGroupsPaged(String modelGroupName, String channelId, String start, String length);
+    Map<String, Object> getModelGroupsPaged(String loginUserId,String modelGroupName, String channelId, String start, String length,String startDate,
+                                            String endDate);
 
     ResponseResult createModelGroup(ModelGroupDto modelGroup, String userId);
 
@@ -52,4 +50,10 @@ public interface ModelBaseService {
      * @return 渠道树
      */
     List<ModelGroupChannelVo> channelList(String loginUserId, String modelGroupId);
+
+    ModelGroup getGroupInfoById(String modelGroupId);
+
+    List<ModelVersion> modelGetVersion(String modelId);
+
+    List<RuleSetForModel> modelVersionWithRuleSet(String modelId);
 }

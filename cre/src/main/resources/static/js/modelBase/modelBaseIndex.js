@@ -19,7 +19,7 @@ function initPage() {
 
     // 搜索功能
     $('.modelBaseSearch').click(function () {
-        // tableType: 0模型列表 1组列表 2版本展示列表
+        // tableType: 0模型列表 1产品列表 2版本展示列表
         var tableType = $(this).attr('tableType');
         var inputs;
         if (tableType == '0') {
@@ -36,7 +36,13 @@ function initPage() {
             if ($.trim($(inputs[i]).val()) == '') {
                 continue;
             }
-            obj[$(inputs[i]).attr('data-col')] = $.trim($(inputs[i]).val());
+            if (tableType == '1' && i == 1) {
+                var channelId = $('.channelList li[channelName=' + $(inputs[i]).val() + ']').attr('channelId');
+                obj[$(inputs[i]).attr('data-col')] = channelId;
+            }else{
+                obj[$(inputs[i]).attr('data-col')] = $.trim($(inputs[i]).val());
+            }
+
         }
         if (tableType == '0') { // 0模型列表
             initModelBaseTable(obj);
@@ -284,6 +290,8 @@ var modelBaseModal = {
                             "backdrop": "static"
                         });
                         $('#modelBaseAlertModal .form-control').removeAttr('disabled');
+                        $('#ruleName').val(detail.moduleName);
+                        $('#modelBase_ruleDesc').val(detail.ruleDesc);
                     } else {
                         failedMessager.show(data.msg);
                     }
@@ -297,38 +305,58 @@ var modelBaseModal = {
             modelBaseModal.echoData(detail); // 数据回显
             $('#modelBaseAlertModal').attr('handleType', handleType).modal({'show': 'center', "backdrop": "static"});
             $('#modelBaseAlertModal .form-control').attr('disabled', true);
+            $('#ruleName').val(detail.moduleName);
+            $('#modelBase_ruleDesc').val(detail.ruleDesc);
         } else {
             return;
         }
     },
     //弹窗 点击查看关联规则集时弹出
-    showModelRuleSet: function(ruleName){
+    showModelRuleSet: function($this,ruleName){
         $('#modelRelevancyAlert').modal('show');
         $('#RelevancyContentWarp').removeAttr('kpiId');
         $('.RelevancyDefBase form')[0].reset();
         $('.RelevancyDefBase form').validator('cleanUp');
 
-        var obj ={};
-        modelBaseModal.getDetail(ruleName);
-        modelBaseModal.initRelevancyTable(obj);
+        var detail = {};
+        if ($this) {
+            var curRow = $this.parentNode.parentNode;
+            detail = $('#modelBaseTable').DataTable().row(curRow).data();
+        }
+
+
+        modelBaseModal.initRuleSetVersion(ruleName);
+        modelBaseModal.echoData(detail);
     },
-    //接口 获取弹窗中的基本信息
-    getDetail: function(ruleName){
+    // 接口 规则集版本下拉框，动态获取下拉框选项
+    initRuleSetVersion:function(ruleName) {
         $.ajax({
-            url: webpath + '/rule/public/header/paged',
-            type: 'GET',
-            data:ruleName,
+            url: webpath + '/modelBase/group/modelGetVersion',
+            type: 'POST',
+            data:{'modelId':ruleName},
             success: function (data) {
-                var detail = data.data.filter(function (item){
-                    return item.ruleName == ruleName
-                })
-                modelBaseModal.echoData(detail[0]);
-                console.log(detail[0]);
+                var htmlStr_selector = '';
+                if (data.data.length > 0) {
+                    for (var i = 0; i < data.data.length; i++) {
+                        htmlStr_selector += '<option group-id=\'' + data.data[i].ruleId + '\' value=\'' + data.data[i].version + '\'>' + data.data[i].version + '</option>';
+                    }
+                } else {
+                    htmlStr_selector += "<option group-id='empty'>无</option>";
+                }
+                $('#modelVersion').empty().html(htmlStr_selector);
+                modelBaseModal.initRelevancyTable();
+            },
+            complete:function(){
+                $('#modelVersion').unbind('change').on('change',function () {
+                    modelBaseModal.initRelevancyTable();
+                });
             }
         });
     },
     //初始化  查看关联规则集弹窗中的表格
-    initRelevancyTable:function(obj){
+    initRelevancyTable:function(){
+        var versionSelector = $('#modelVersion').val()
+        var modelId = $('#modelVersion option[value="' + versionSelector + '"]').attr('group-id');
         $('#RelevancyTable').width('100%').dataTable({
             destroy:true, //是否每次都初始化
             paging:false, //是否允许翻页
@@ -338,15 +366,13 @@ var modelBaseModal = {
             "columns": [
                 {"title": "规则集组", "data": "ruleSetName"},
                 {"title": "规则集名称", "data": "ruleSetGroupName"},
-                {"title": "规则集描述", "data": "ruleSetHeaderDesc"},
+                {"title": "规则集描述", "data": "ruleSetDesc"},
                 {"title": "规则集版本", "data": "version"}],
-            // ajax:{
-            //     url: webpath + '/kpi/getRuleSetGroupByKpiId',
-            //     type: 'POST',
-            //     "data": function (d) { // 查询参数
-            //         return $.extend({}, d, obj);
-            //     },
-            // },
+            ajax:{
+                url: webpath + '/modelBase/group/modelVersionWithRuleSet',
+                type: 'POST',
+                "data": {'modelId':modelId},
+            },
             "fnDrawCallback": function (oSettings, json) {
                 $("#RelevancyTable th").css("text-align", "center");
                 $("#RelevancyTable td").css("text-align", "center");
@@ -702,12 +728,18 @@ var modelGroupModal = {
                 if (data.status === 0) {
                     var htmlStr = '';
                     for (var i = 0; i < data.data.length; i++) {
-                        htmlStr += '<option channelId=\'' + data.data[i].channelId + '\'>' + data.data[i].channelName+'--'+ data.data[i].deptName + '</option>';
+                        htmlStr += '<li channelId=\'' + data.data[i].channelId + '\' channelName=\'' + data.data[i].channelName + '\'>' + data.data[i].channelName+'</li>';
                     }
-                   $('.chooseChannel').append(htmlStr);
+                   $('.channelList').empty().html(htmlStr);
                 } else {
                     failedMessager.show(data.msg);
                 }
+            },
+            complete: function () {
+                // 绑定事件
+                $('#modelBasePageContent .channelList>li').unbind('click').on('click', function () {
+                    $(this).parent().siblings('.form-control').val($(this).first().text());
+                });
             },
             error: function (data) {
                 failedMessager.show(data.msg);
@@ -812,8 +844,8 @@ var modelGroupModal = {
         $.ajax({
             url: webpath + '/modelBase/addChannel',
             type: 'POST',
-            contentType:"application/json;charset=UTF-8",
             data: json,
+            contentType:"application/json;charset=UTF-8",
             success: function (data) {
                 if (data.status === 0) {
                     successMessager.show('保存成功');
@@ -826,13 +858,13 @@ var modelGroupModal = {
             }
         });
     },
-    showModel: function(){
-        var flagStr = '&childOpen=c';
-        var dataStr = '';
-        // var urlStr = window.location.origin + dataStr;
-        var urlStr = window.location.origin + dataStr + flagStr;
-        creCommon.loadHtml(urlStr);
-    },
+    // showModel: function(){
+    //     var flagStr = '&childOpen=c';
+    //     var dataStr = '';
+    //     // var urlStr = window.location.origin + dataStr;
+    //     var urlStr = window.location.origin + dataStr + flagStr;
+    //     creCommon.loadHtml(urlStr);
+    // },
     // 保存组数据
     saveRuleSetGourp: function () {
         // 表单验证
@@ -910,9 +942,14 @@ var modelGroupModal = {
         }
     },
     //查看模型
-    showModel: function(groupId){
+    showModel: function($this,groupId){
+        var detail = {};
+        if ($this) {
+            var curRow = $this.parentNode.parentNode;
+            detail = $('#modelBaseGroupTable').DataTable().row(curRow).data();
+        }
+        sessionStorage.setItem('detail',JSON.stringify(detail));
         var url = webpath + "/ruleFolder/rulePackageMgr?folderId=" + groupId+'&childOpen=c';
-        alert(url);
         creCommon.loadHtml(url);
     }
 }
@@ -932,7 +969,7 @@ function initModelBaseTable(obj) {
         "serverSide": true,
         "pageLength": 10,
         "columns": [
-            {"title": "模型组", "data": "modelGroupName"},
+            {"title": "所属产品", "data": "modelGroupName"},
             // {"title": "模型名称", "data": "ruleName"},
             {"title": "模型名称", "data": "moduleName"},
             {
@@ -953,7 +990,7 @@ function initModelBaseTable(obj) {
             {
                 "title": "关联规则集", "data": null, "render": function (data, type, row) {
                     var htmlStr = "";
-                    htmlStr += '<span type="button" class="cm-tblB" onclick="modelBaseModal.showModelRuleSet(\'' + row.ruleName +'\')">查看</span>';
+                    htmlStr += '<span type="button" class="cm-tblB" onclick="modelBaseModal.showModelRuleSet(this,\'' + row.ruleName +'\')">查看</span>';
                     return htmlStr;
                 }
             },
@@ -1104,7 +1141,7 @@ function initModelBaseGroupTable(obj) {
                     htmlStr += '<span type="button" class="cm-tblB" onclick="exportModal.initExportPage(1, 1, getExportParams(\'' + row.modelGroupId + '\', \'' + row.modelGroupName + '\'))">导出</span>';
                     htmlStr += '<span type="button" class="cm-tblC delBtn" onclick="modelGroupModal.deleteGroup(\'' + row.modelGroupId + '\')">删除</span>';
                     htmlStr += '<span type="button" class="cm-tblB" onclick="modelGroupModal.showChannel(\'' + row.modelGroupId + '\')">设置调用渠道</span>';
-                    htmlStr += '<span type="button" class="cm-tblB" onclick="modelGroupModal.showModel(\'' + row.modelGroupId + '\')">查看模型</span>';
+                    htmlStr += '<span type="button" class="cm-tblB" onclick="modelGroupModal.showModel(this,\'' + row.modelGroupId + '\')">查看模型</span>';
                     return htmlStr;
                 }
             }],
@@ -1144,8 +1181,8 @@ function initModelBaseGroup() {
                     htmlStr_selector += "<option group-id='empty'>无</option>";
                 }
             }
-            $('#modelBasePageContent .modelBaseGroupList').empty().html(htmlStr_list); // 下拉框
-            $('.modelBaseGroupSelector').empty().html(htmlStr_selector); // 表单
+            $('#modelBasePageContent .modelBaseGroupList').empty().html(htmlStr_list);
+            $('.modelBaseGroupSelector').empty().html(htmlStr_selector);
         },
         complete: function () {
             // 绑定事件

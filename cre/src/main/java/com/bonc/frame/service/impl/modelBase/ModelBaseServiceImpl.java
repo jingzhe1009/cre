@@ -4,6 +4,9 @@ import com.bonc.frame.dao.DaoHelper;
 import com.bonc.frame.entity.auth.Channel;
 import com.bonc.frame.entity.auth.Dept;
 import com.bonc.frame.entity.commonresource.*;
+import com.bonc.frame.entity.rule.RuleDetail;
+import com.bonc.frame.service.auth.DeptService;
+import com.bonc.frame.service.auth.RoleService;
 import com.bonc.frame.service.modelBase.ModelBaseService;
 import com.bonc.frame.util.*;
 import org.apache.commons.lang3.StringUtils;
@@ -31,14 +34,32 @@ public class ModelBaseServiceImpl implements ModelBaseService {
     @Autowired
     private DaoHelper daoHelper;
 
+    @Autowired
+    private DeptService deptService;
+
+    @Autowired
+    private RoleService roleService;
+
     // ------------------------ 模型组管理 ------------------------
 
     // 获取参数组列表
     @Override
     @Transactional
-    public ResponseResult getModelGroups(String modelGroupName) {
+    public ResponseResult getModelGroups(String modelGroupName,String loginUserId) {
+        // 验证是否全权
+        boolean b = roleService.checkAuthorityIsAll(loginUserId);
+        String channelId;
+        if (b) {
+            // 全权
+            channelId = null;
+        } else {
+            // 非全权只能看自己渠道关联的产品列表
+            channelId = deptService.getChannelIdByUserId(loginUserId);
+        }
+        deptService.getChannelIdByUserId(loginUserId);
         Map<String, Object> param = new HashMap<>();
         param.put("modelGroupName", modelGroupName);
+        param.put("channelId", channelId);
         final List<ModelGroup> list = daoHelper.queryForList(_MODEL_GROUP_MAPPER +
                 "getByGroupName", param);
         List<ModelGroupVo> voList = new ArrayList<>();
@@ -71,16 +92,37 @@ public class ModelBaseServiceImpl implements ModelBaseService {
 
     @Override
     @Transactional
-    public Map<String, Object> getModelGroupsPaged(String modelGroupName, String channelId, String start, String length) {
+    public Map<String, Object> getModelGroupsPaged(String loginUserId,
+                                                   String modelGroupName, String channelId,
+                                                   String start, String length,
+                                                   String startDate, String endDate) {
         // 验证默认分组-其他的存在，如果没有就插入一条，
         ModelGroup ch = ModelGroup.getDefaultGroup();
         List<ModelGroup> ls = daoHelper.queryForList(_MODEL_GROUP_MAPPER + "checkDefaultGroup", ch);
         if (ls.size() == 0) {
             daoHelper.insert(_MODEL_GROUP_MAPPER + "insertSelective", ch);
         }
+// 验证是否全权
+        boolean b = roleService.checkAuthorityIsAll(loginUserId);
+        String chanId;
+        if (b) {
+            // 全权
+            chanId = null;
+        } else {
+            // 非全权只能看自己渠道关联的产品列表
+            chanId = deptService.getChannelIdByUserId(loginUserId);
+        }
         Map<String, Object> param = new HashMap<>();
         param.put("modelGroupName", modelGroupName);
-        param.put("channelId", channelId);
+        param.put("startDate", startDate);
+        param.put("endDate", endDate);
+        if (channelId == null || channelId.equals("")) {
+            // 接口未传选择的渠道id-根据权限来展示
+            param.put("channelId", chanId);
+        } else {
+            // 接口传了选择的渠道，则展示本渠道下的产品
+            param.put("channelId", channelId);
+        }
         final Map<String, Object> map = daoHelper.queryForPageList(_MODEL_GROUP_MAPPER +
                 "getByGroupName", param, start, length);
         List<ModelGroup> data = (List<ModelGroup>) map.get("data");
@@ -226,6 +268,39 @@ public class ModelBaseServiceImpl implements ModelBaseService {
             daoHelper.insert(_MODEL_GROUP_MAPPER + "groupConnectChannel", mo);
         }
         return ResponseResult.createSuccessInfo("success");
+    }
+    /**
+     * 根据id获取产品信息
+     * @param modelGroupId 产品id
+     * @return 产品信息
+     */
+    @Override
+    public ModelGroup getGroupInfoById(String modelGroupId) {
+        ModelGroup mg = (ModelGroup) daoHelper.queryOne(_MODEL_GROUP_MAPPER + "getGroupInfoById", modelGroupId);
+        return mg;
+    }
+
+    /**
+     * 根据模型头id获取版本号及对应id
+     * @param modelId 模型id
+     * @return id及版本号
+     */
+    @Override
+    public List<ModelVersion> modelGetVersion(String modelId) {
+        HashMap<String,String> result = (HashMap<String, String>) daoHelper.queryOne(_MODEL_GROUP_MAPPER + "getModelInfoById", modelId);
+        List<ModelVersion> list = daoHelper.queryForList(_MODEL_GROUP_MAPPER + "modelGetVersion", result);
+        return list;
+    }
+
+    /**
+     * 根据模型版本id获取关联的规则集
+     * @param modelId 模型id
+     * @return 规则集数据
+     */
+    @Override
+    public List<RuleSetForModel> modelVersionWithRuleSet(String modelId) {
+        List<RuleSetForModel> list = daoHelper.queryForList(_MODEL_GROUP_MAPPER + "modelGetRuleSet", modelId);
+        return list;
     }
 
     /**
