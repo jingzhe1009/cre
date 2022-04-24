@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.bonc.frame.mapper.resource.ApiGroupMapper">
+<mapper namespace="com.bonc.frame.dao.apiGroup.ApiGroupMapper">
     <resultMap id="BaseResultMap" type="com.bonc.frame.entity.commonresource.ApiGroup">
         <result column="API_GROUP_ID" property="apiGroupId" jdbcType="VARCHAR"/>
         <result column="API_GROUP_NAME" property="apiGroupName" jdbcType="VARCHAR"/>

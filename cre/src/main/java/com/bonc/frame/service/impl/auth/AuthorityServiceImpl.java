@@ -1606,9 +1606,13 @@ public class AuthorityServiceImpl implements AuthorityService {
         needInsertAuthorities.addAll(selectAllMetaTableToAuthority(null, null, null, start, length));
         needInsertAuthorities.addAll(selectAllModleToAuthority(null, null, null, start, length));
         needInsertAuthorities.addAll(selectAllPubApisToAuthority(null, null, null, null, start, length));
+        needInsertAuthorities.addAll(selectAllPubApiGroupsToAuthority(null, null, null, null, start, length));
         needInsertAuthorities.addAll(selectAllPubModelBasesToAuthority(null, null, null, null, null, start, length));
+        needInsertAuthorities.addAll(selectAllPubModelGroupToAuthority(null, null, null, null, null, start, length));
         needInsertAuthorities.addAll(selectAllPubruleSetToAuthority(null, null, null, null, start, length));
+        needInsertAuthorities.addAll(selectAllPubruleSetGroupToAuthority(null, null, null, null, start, length));
         needInsertAuthorities.addAll(selectAllPubVariablesToAuthority(null, null, null, null, null, start, length));
+        needInsertAuthorities.addAll(selectAllPubVariableGroupsToAuthority(null, null, null, null, start, length));
         needInsertAuthorities.addAll(selectAllDataSourcesToAuthority(null, null, null, start, length));
         needInsertAuthorities.addAll(selectAllTasksToAuthority(null, null, null, null, start, length));
 
@@ -1689,6 +1693,26 @@ public class AuthorityServiceImpl implements AuthorityService {
     }
 
     /**
+     * 获取所有的 公共参数组  转换成Authority 用于赋予所有权限
+     */
+    public List<Authority> selectAllPubVariableGroupsToAuthority( String variableGroupId,
+                                                                  String variableGroupName,
+                                                                  Date updateDate,
+                                                                  Date createDate,
+                                                                  String start, String length) {
+
+        // 分页获取元数据
+        final Map<String, Object> pagedVariableGroups = variableService.pagedPubVariableGroupsResources(variableGroupName,
+                variableGroupId, createDate, updateDate, start, length);
+
+        List<PubVariableResource> resources = (List<PubVariableResource>) pagedVariableGroups.get("data");
+
+        List<Authority> authorities = paseDataResourceToAuthority(resources, ResourceType.DATA_PUB_VARIABLE_GROUP.getType(), "*");
+
+        return authorities;
+    }
+
+    /**
      * 获取所有的 公共接口  转换成Authority  用于赋予所有权限
      */
     public List<Authority> selectAllPubApisToAuthority(String apiName, String apiGroupName,
@@ -1703,6 +1727,24 @@ public class AuthorityServiceImpl implements AuthorityService {
 
         List<Authority> authorities = paseDataResourceToAuthority(resources, ResourceType.DATA_PUB_API.getType(), "*");
 
+
+        return authorities;
+    }
+
+    /**
+     * 获取所有的 公共接口组  转换成Authority  用于赋予所有权限
+     */
+    public List<Authority> selectAllPubApiGroupsToAuthority(String apiGroupId, String apiGroupName,
+                                                                                    String startDate, String endDate,
+                                                                                    String start, String size) {
+
+        // 分页获取数据
+        final Map<String, Object> pagedApiGroups = apiService.pagedPubApiGroupResource( apiGroupId, apiGroupName,
+                startDate, endDate, start, size);
+
+        List<PubApiGroupResource> resources = (List<PubApiGroupResource>) pagedApiGroups.get("data");
+
+        List<Authority> authorities = paseDataResourceToAuthority(resources, ResourceType.DATA_PUB_API_GROUP.getType(), "*");
 
         return authorities;
     }
@@ -1726,6 +1768,24 @@ public class AuthorityServiceImpl implements AuthorityService {
         return authorities;
     }
 
+    /**
+     * 获取所有的 规则集组 转换成Authority 用于赋予所有权限
+     */
+    public List<Authority> selectAllPubruleSetGroupToAuthority(String ruleSetGroupId, String ruleSetGroupName,
+                                                          String startDate, String endDate,
+                                                          String start, String length) {
+
+
+        // 分页获取数据
+        final Map<String, Object> pagedRuleSetGroups = ruleSetBaseService.getRuleSetGroupHeaderListResource(ruleSetGroupId, ruleSetGroupName,
+                startDate, endDate, start, length);
+        List<PubRuleSetGroupResource> resources = (List<PubRuleSetGroupResource>) pagedRuleSetGroups.get("data");
+
+        List<Authority> authorities = paseDataResourceToAuthority(resources, ResourceType.DATA_PUB_RULE_SET_GROUP.getType(), "*");
+
+        return authorities;
+    }
+
 
     /**
      * 获取所有的 模型库  转换成Authority 用于赋予所有权限
@@ -1739,6 +1799,23 @@ public class AuthorityServiceImpl implements AuthorityService {
         List<PubModelBaseResource> resources = (List<PubModelBaseResource>) pagedModelBases.get("data");
 
         List<Authority> authorities = paseDataResourceToAuthority(resources, ResourceType.DATA_PUB_MODEL.getType(), "*");
+
+        return authorities;
+    }
+
+    /**
+     * 获取所有的 产品  转换成Authority 用于赋予所有权限
+     */
+    public List<Authority> selectAllPubModelGroupToAuthority(String moduleGroupId, String ruleType, String modelGroupName,
+                                                             String startDate, String endDate,
+                                                             String start, String length) {
+        // 分页获取数据
+        final Map<String, Object> pagedModelGroupBases = ruleDetailService.getGroupHeaderListResource(moduleGroupId, ruleType, modelGroupName,
+                startDate, endDate, start, length);
+
+        List<PubModelBaseResource> resources = (List<PubModelBaseResource>) pagedModelGroupBases.get("data");
+
+        List<Authority> authorities = paseDataResourceToAuthority(resources, ResourceType.DATA_PUB_MODEL_GROUP.getType(), "*");
 
         return authorities;
     }

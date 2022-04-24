@@ -265,7 +265,7 @@ public class UserServiceImpl implements UserService {
 //        deleteMiddleTable("deleteByUserIdRole", userId);
         deleteMiddleTable("deleteByUserIdGroup", userId);
 //        deleteMiddleTable("deleteByUserIdDept", userId);
-//        deleteMiddleTable("deleteByUserIdChannel", userId);
+        deleteMiddleTable("deleteByUserIdChannel", userId);
         List<Role> roleList = user.getRoleList();
         List<Group> groupList = user.getGroupList();
         List<Dept> deptList = user.getDeptList();
@@ -273,7 +273,7 @@ public class UserServiceImpl implements UserService {
         saveMiddleTableByList(groupList, "insertBatchUserGroup", userId, UserGroup.class);
 //        saveMiddleTableByList(roleList, "insertBatchUserRole", userId, UserRole.class);
 //        saveMiddleTableByList(deptList, "insertBatchUserDept", userId, UserDept.class);
-//        saveMiddleTableByList(channelList, "insertBatchUserChannel", userId, UserChannel.class);
+        saveMiddleTableByList(channelList, "insertBatchUserChannel", userId, UserChannel.class);
         ResponseResult result = ResponseResult.createSuccessInfo();
         return result;
     }
