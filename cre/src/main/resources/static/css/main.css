@@ -8,7 +8,7 @@ body{
 	background-size: 100% 100%;
 	background-position: center;
 	color: #333;
-	height: 435px;
+	height: 315px;
 	line-height: 60px;
 	position: fixed;
 	top: 0;
@@ -123,7 +123,7 @@ body{
 	color: #333;
 	padding: 5px 8px;
 }
-/*菜单文字不可选中*/
+/*鑿滃崟鏂囧瓧涓嶅彲閫変腑*/
 #sysMenuList>li>a, #folderMenuWrap>li, #menusWrap>li{
 	user-select: none;
 	-moz-user-select: none;
@@ -134,7 +134,7 @@ body{
 	color: #2855ED;
 	background-color: #fff;
 }
-/*左侧菜单*/
+/*宸︿晶鑿滃崟*/
 #leftMenu{
 	/*background:#131722;*/
 	background:url(../imgs/mainNew/bg_daohang.png);
@@ -220,7 +220,7 @@ body{
 #folderMenuWrap .folderNameSpan {
 	padding-right: 40px;
 }
-/*创建向导的不展示*/
+/*鍒涘缓鍚戝鐨勪笉灞曠ず*/
 .menusWrap .addFolderLi>i{
 	display: none;
 }
@@ -267,7 +267,7 @@ body{
 	background: -webkit-linear-gradient(#9C42FC,#045BE9); /* Safari 5.1 to 6.0 */
 	background: -o-linear-gradient(#9C42FC,#045BE9); /* Opera 11.1 to 12.0 */
 	background: -moz-linear-gradient(#9C42FC,#045BE9); /* Firefox 3.6 to 15 */
-	background: linear-gradient(#9C42FC,#045BE9); /* 标准语法 (必须在最后) */
+	background: linear-gradient(#9C42FC,#045BE9); /* 鏍囧噯璇硶 (蹇呴』鍦ㄦ渶鍚�) */
 }
 #page {
 	position: fixed;
@@ -399,7 +399,7 @@ body{
 	display:none;
 }
 .miniMenu #page{
-	left: 55px; /* 随着左侧mini menu的宽度变化 */
+	left: 55px; /* 闅忕潃宸︿晶mini menu鐨勫搴﹀彉鍖� */
 }
 .miniMenu .menusWrap li > span{
 	position: absolute;
@@ -426,7 +426,7 @@ body{
 	transform:rotate(90deg);
 	-ms-transform:rotate(90deg); /* Internet Explorer */
 	-moz-transform:rotate(90deg); /* Firefox */
-	-webkit-transform:rotate(90deg); /* Safari 和 Chrome */
+	-webkit-transform:rotate(90deg); /* Safari 鍜� Chrome */
 	-o-transform:rotate(90deg); /* Opera */
 }
 .miniMenu .ctrlBtn>i{
@@ -444,7 +444,7 @@ body{
 	margin-left: 0px;
 }
 
-/* 新目录(左侧)样式 */
+/* 鏂扮洰褰�(宸︿晶)鏍峰紡 */
 .menuImg{
 	width: 40px;
 	height: 100%;
@@ -471,7 +471,7 @@ body{
 	box-shadow: none;
 }
 
-/*创建向导*/
+/*鍒涘缓鍚戝*/
 .addFolder{
 	width: 100%;
 	height: 37px;
@@ -492,7 +492,7 @@ body{
 	color: #C4C6CC;
 }
 
-/* 个人详细信息   */
+/* 涓汉璇︾粏淇℃伅   */
 #userDetail .modal-dialog { width:344px;}
 .detail_line { border-bottom:none; padding-bottom:0px;}
 .title-detail { text-align: center; padding-top:29px; padding-bottom:10px; }
@@ -547,6 +547,16 @@ body{
 	position:absolute;
 	right:220px;
 	top:10px;
+	outline: none;
+	z-index: 100;
+	font-size: 14px !important;
+}
+.selBoxLjz{
+	width:150px;
+	height:30px;
+	line-height:30px;
+	border:1px solid #e7eaef;
+	border-radius:5px;
 	outline: none;
 	z-index: 100;
 	font-size: 14px !important;
@@ -693,4 +703,33 @@ body{
 	font-size: 24px;
 	font-weight: bold;
 	vertical-align: middle;
+}
+
+
+.gatherItemLjz{
+	flex-grow: 1;
+	height: 800px;
+	padding:15px;
+	border-radius: 15px;
+	font-size: 16px;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-color: #ffffff;
+}
+.gatherItemLjz:nth-child(1){
+	margin-right: 30px;
+	background-image:url(../imgs/mainNew/bg_mxhz.png);
+}
+.gatherItemLjz:nth-child(2){
+	margin-right: 30px;
+	background-image:url(../imgs/mainNew/bg_mxqy.png);
+}
+.gatherItemLjz:nth-child(3){
+	background-image:url(../imgs/mainNew/bg_lxrw.png);
+}
+#yearMonthDay>li> {
+    position: relative;
+    display: block;
+    padding: 8px 15px;
+    color: #353535;
 }
