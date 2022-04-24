@@ -1,5 +1,6 @@
 package com.bonc.frame.service.rule;
 
+import com.bonc.frame.entity.commonresource.ModelGroup;
 import com.bonc.frame.entity.commonresource.ModelGroupInfo;
 import com.bonc.frame.entity.model.ModelContentInfo;
 import com.bonc.frame.entity.modelImportAndExport.modelImport.importEntity.ImportAdjustObject;

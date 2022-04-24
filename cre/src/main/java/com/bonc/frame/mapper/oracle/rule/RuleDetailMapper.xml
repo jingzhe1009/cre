@@ -28,7 +28,8 @@
 
     <resultMap id="BaseResultMap" type="com.bonc.frame.entity.rule.RuleDetail"
                extends="RuleDetailHeaderMap">
-        <id column="RULE_ID" property="ruleId" jdbcType="VARCHAR"/>
+        <id column="
+" property="ruleId" jdbcType="VARCHAR"/>
         <result column="IS_DEL" property="isDel" jdbcType="VARCHAR"/>
         <result column="IS_LOG" property="isLog" jdbcType="VARCHAR"/>
         <result column="RULE_STATUS" property="ruleStatus" jdbcType="VARCHAR"/>
@@ -248,7 +249,7 @@
         CRE_RULE_DETAIL
         WHERE 1=1
         <if test="folderId != null and '' != folderId">
-            AND FOLDER_ID = #{folderId,jdbcType=VARCHAR}
+            AND MODEL_GROUP_ID = #{folderId,jdbcType=VARCHAR}
         </if>
         <if test="ruleName != null and '' != ruleName">
             AND RULE_NAME = #{ruleName,jdbcType=VARCHAR}
@@ -266,7 +267,7 @@
         from CRE_RULE_DETAIL_DRAFT
         WHERE 1=1
         <if test="folderId != null and '' != folderId">
-            AND FOLDER_ID = #{folderId,jdbcType=VARCHAR}
+            AND MODEL_GROUP_ID = #{folderId,jdbcType=VARCHAR}
         </if>
         <if test="ruleName != null and '' != ruleName">
             AND RULE_NAME = #{ruleName,jdbcType=VARCHAR}
@@ -288,7 +289,7 @@
         CRE_RULE_DETAIL_DRAFT
         WHERE 1=1
         <if test="folderId != null and '' != folderId">
-            AND FOLDER_ID = #{folderId,jdbcType=VARCHAR}
+            AND MODEL_GROUP_ID = #{folderId,jdbcType=VARCHAR}
         </if>
         <if test="ruleName != null and '' != ruleName">
             AND RULE_NAME = #{ruleName,jdbcType=VARCHAR}

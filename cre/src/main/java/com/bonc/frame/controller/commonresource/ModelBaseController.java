@@ -1,12 +1,10 @@
 package com.bonc.frame.controller.commonresource;
 
 import com.bonc.frame.entity.auth.DeptChannelTree;
-import com.bonc.frame.entity.commonresource.ModelGroup;
-import com.bonc.frame.entity.commonresource.ModelGroupChannelVo;
-import com.bonc.frame.entity.commonresource.ModelGroupDto;
+import com.bonc.frame.entity.commonresource.*;
+import com.bonc.frame.entity.rule.RuleDetail;
 import com.bonc.frame.security.ResourceType;
 import com.bonc.frame.security.aop.PermissionsRequires;
-import com.bonc.frame.entity.commonresource.ModelGroupInfo;
 import com.bonc.frame.entity.rule.RuleDetailHeader;
 import com.bonc.frame.service.modelBase.ModelBaseService;
 import com.bonc.frame.service.rule.RuleDetailService;
@@ -173,5 +171,43 @@ public class ModelBaseController {
     public ResponseResult groupAddModel(List<RuleDetailHeader> modelList,String modelGroupId) {
         return ruleDetailService.groupAddModel(modelList,modelGroupId);
     }
+
+    /**
+     * 根据id获取产品信息
+     * @param modelGroupId 产品id
+     * @return 产品信息
+     */
+    @RequestMapping("/group/getGroupInfoById")
+    @ResponseBody
+    public ResponseResult getGroupInfoById(String modelGroupId) {
+        // 验证数据权限
+        ModelGroup mg = modelBaseService.getGroupInfoById(modelGroupId);
+        return ResponseResult.createSuccessInfo("success", mg);
+    }
+
+    /**
+     * 根据模型头id获取版本号及对应id
+     * @param modelId 模型id
+     * @return id及版本号
+     */
+    @RequestMapping("/group/modelGetVersion")
+    @ResponseBody
+    public ResponseResult modelGetVersion(String modelId) {
+        List<ModelVersion> list = modelBaseService.modelGetVersion(modelId);
+        return ResponseResult.createSuccessInfo("success", list);
+    }
+
+    /**
+     * 根据模型版本id获取关联的规则集
+     * @param modelId 模型id
+     * @return 规则集数据
+     */
+    @RequestMapping("/group/modelVersionWithRuleSet")
+    @ResponseBody
+    public ResponseResult modelVersionWithRuleSet(String modelId) {
+        List<RuleSetForModel> list = modelBaseService.modelVersionWithRuleSet(modelId);
+        return ResponseResult.createSuccessInfo("success", list);
+    }
+
 
 }

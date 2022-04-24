@@ -5,6 +5,7 @@ import com.bonc.frame.entity.auth.Channel;
 import com.bonc.frame.entity.auth.Dept;
 import com.bonc.frame.entity.auth.DeptChannelTree;
 import com.bonc.frame.entity.commonresource.*;
+import com.bonc.frame.entity.rule.RuleDetail;
 import com.bonc.frame.service.auth.DeptService;
 import com.bonc.frame.service.auth.RoleService;
 import com.bonc.frame.service.modelBase.ModelBaseService;
@@ -301,6 +302,43 @@ public class ModelBaseServiceImpl implements ModelBaseService {
             return voList;
         }
         return voList;
+    }
+
+    /**
+     * 根据id获取产品信息
+     * @param modelGroupId 产品id
+     * @return 产品信息
+     */
+    @Override
+    public ModelGroup getGroupInfoById(String modelGroupId) {
+        ModelGroup mg = (ModelGroup) daoHelper.queryOne(_MODEL_GROUP_MAPPER + "getGroupInfoById", modelGroupId);
+        return mg;
+    }
+
+    /**
+     * 根据模型头id获取版本号及对应id
+     * @param modelId 模型id
+     * @return id及版本号
+     */
+    @Override
+    public List<ModelVersion> modelGetVersion(String modelId) {
+        RuleDetail ruleDetail = (RuleDetail) daoHelper.queryOne(_MODEL_GROUP_MAPPER + "getModelInfoById", modelId);
+        HashMap<String, String> map = new HashMap<>();
+        map.put("ruleName", ruleDetail.getRuleName());
+        map.put("ruleStatus", ruleDetail.getRuleStatus());
+        List<ModelVersion> list = daoHelper.queryForList(_MODEL_GROUP_MAPPER + "modelGetVersion", map);
+        return list;
+    }
+
+    /**
+     * 根据模型版本id获取关联的规则集
+     * @param modelId 模型id
+     * @return 规则集数据
+     */
+    @Override
+    public List<RuleSetForModel> modelVersionWithRuleSet(String modelId) {
+        List<RuleSetForModel> list = daoHelper.queryForList(_MODEL_GROUP_MAPPER + "modelGetRuleSet", modelId);
+        return list;
     }
 
     /**
