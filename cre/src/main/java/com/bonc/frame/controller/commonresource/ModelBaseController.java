@@ -125,10 +125,23 @@ public class ModelBaseController {
      * @param channelIds  渠道的id的集合
      * @return 操作结果
      */
+
+    @PermissionsRequires(value = "/pub/modelGroup/channel?modelGroupId", resourceType = ResourceType.DATA_PUB_MODEL_GROUP)
     @RequestMapping(value = "/addChannel", method = RequestMethod.POST)
     @ResponseBody
     public ResponseResult groupAddChannel(String modelGroupId, List<String> channelIds) {
         return modelBaseService.groupAddChannel(modelGroupId, channelIds);
+    }
+    /**
+     *
+     * 设置调用渠道校验
+     *
+     * */
+    @PermissionsRequires(value = "/pub/modelGroup/channel?modelGroupId", resourceType = ResourceType.DATA_PUB_MODEL_GROUP)
+    @RequestMapping(value = "/group/channel/checkAuth", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseResult checkGroup(String modelGroupId) {
+        return ResponseResult.createSuccessInfo();
     }
 
     /**
@@ -151,6 +164,7 @@ public class ModelBaseController {
      * @param request 区分权限
      * @return 模型结果集
      */
+    @PermissionsRequires(value = "/pub/modelGroup/modelView?modelGroupId", resourceType = ResourceType.DATA_PUB_MODEL_GROUP)
     @RequestMapping("/group/getModel")
     @ResponseBody
     public ResponseResult getModelByGroupId(String modelGroupId, HttpServletRequest request) {
@@ -159,6 +173,18 @@ public class ModelBaseController {
         ModelGroupInfo info = ruleDetailService.getModelByGroupId(modelGroupId, loginUserId);
         return ResponseResult.createSuccessInfo("success", info);
     }
+    /**
+     *
+     * 查看模型权限校验
+     * */
+
+    @PermissionsRequires(value = "/pub/modelGroup/modelView?modelGroupId", resourceType = ResourceType.DATA_PUB_MODEL_GROUP)
+    @RequestMapping(value = "/group/modelView/checkAuth", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseResult checkModelGroup(String modelGroupId) {
+        return ResponseResult.createSuccessInfo();
+    }
+
 
     /**
      * 产品中添加（其他）分类中的模型到本产品
