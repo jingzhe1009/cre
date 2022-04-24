@@ -231,7 +231,7 @@
         </if>
     </select>
 
-    <select id="deptChannel" resultMap="DeptChannelMap" parameterType="java.lang.String">
+    <select id="deptChannel" resultMap="DeptChannelMap" parameterType="map">
         SELECT
         ur.CHANNEL_ID,
         ur.CHANNEL_NAME,
@@ -240,6 +240,10 @@
         LEFT JOIN CRE_AUTH_DEPT uc ON ur.DEPT_ID = uc.DEPT_ID
         WHERE
         ur.DEPT_ID= #{deptId,jdbcType=VARCHAR}
+        <if test="channelName != null">
+            <bind name="channelNamePattern" value="'%' + _parameter.channelName + '%'"/>
+            AND ur.CHANNEL_NAME like #{channelNamePattern}
+        </if>
     </select>
 
     <select id="listUserForChannelHad" resultMap="UserMap" parameterType="map">

@@ -7,7 +7,7 @@ import java.util.Objects;
  * @author yedunyao
  * @date 2019/7/22 16:01
  */
-public class ApiGroup {
+public class ApiGroup  {
 
     private String apiGroupId;
 

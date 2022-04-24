@@ -256,7 +256,8 @@ public class ApiController {
         return apiService.pubInsertApiGroup(apiGroup, ControllerUtil.getLoginUserId(request));
     }
 
-    @RequestMapping(value = "/pub/group/update", method = RequestMethod.POST)
+    @PermissionsRequires(value = "/pub/apiGroup/update?apiGroupId", resourceType = ResourceType.DATA_PUB_API_GROUP)
+    @RequestMapping(value = "/group/update", method = RequestMethod.POST)
     @ResponseBody
     public ResponseResult pubUpdateApiGroup(ApiGroup apiGroup, HttpServletRequest request) {
         if (apiGroup == null) {
@@ -265,7 +266,8 @@ public class ApiController {
         return apiService.pubUpdateApiGroup(apiGroup, ControllerUtil.getLoginUserId(request));
     }
 
-    @RequestMapping(value = "/pub/group/delete", method = RequestMethod.POST)
+    @PermissionsRequires(value = "/pub/apiGroup/delete?apiGroupId", resourceType = ResourceType.DATA_PUB_API_GROUP)
+    @RequestMapping(value = "/group/delete", method = RequestMethod.POST)
     @ResponseBody
     public ResponseResult pubDeleteApiGroup(String apiGroupId) {
         return apiService.pubDeleteApiGroup(apiGroupId);
@@ -311,4 +313,17 @@ public class ApiController {
         return ResponseResult.createSuccessInfo();
     }
 
+    @PermissionsRequires(value = "/pub/apiGroup/update?apiGroupId", resourceType = ResourceType.DATA_PUB_API_GROUP)
+    @RequestMapping(value = "/group/update/checkAuth", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseResult updateGroup(String apiGroupId) {
+        return ResponseResult.createSuccessInfo();
+    }
+
+    @PermissionsRequires(value = "/pub/apiGroup/delete?apiGroupId", resourceType = ResourceType.DATA_PUB_API_GROUP)
+    @RequestMapping(value = "/group/delete/checkAuth", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseResult deleteGroup(String apiGroupId){
+        return ResponseResult.createSuccessInfo();
+    }
 }

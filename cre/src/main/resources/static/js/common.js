@@ -469,6 +469,7 @@ function bindCommonBtnClick() {
             var flagStr = '&childOpen=c';
             var dataStr = $(this).attr('data');
             // var urlStr = window.location.origin + dataStr;
+            console.log(flagStr + "hhh" + dataStr);
             var urlStr = window.location.origin + dataStr + flagStr;
             creCommon.loadHtml(urlStr);
         }

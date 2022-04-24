@@ -7,13 +7,14 @@ import com.bonc.frame.entity.auth.PlaceVo;
 import com.bonc.frame.util.ResponseResult;
 
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
 public interface ChannelService {
     ResponseResult save(Channel channel, String loginUserId);
 
-    Map<String, Object> list(String channelName, String start, String size);
+    Map<String, Object> list(HttpServletRequest request, String channelName, String start, String size);
 
     ResponseResult delete(String channelId);
 

@@ -40,6 +40,8 @@ public interface KpiService {
 
     List<Map<String, Object>> getKpiType();
 
+    List<Object> getRuleSetGroupByKpiId(String KpiId);
+
     boolean checkNameIsExist(String kpiName, @Nullable String kpiHeaderId);
 
     boolean checkCodeIsExist(String kpiCode, @Nullable String kpiId);
@@ -51,6 +53,10 @@ public interface KpiService {
                                          @Nullable String kpiType,
                                          @Nullable String fetchType,
                                          String start, String length);
+
+    Map<String,Object> pagedKpiGroupBaseInfo(@Nullable String kpiGroupName,
+                                             String startDate, String endDate,
+                                             String start,String length);
 
     ResponseResult getKpiBaseInfo(@Nullable String kpiName,
                                   @Nullable String kpiGroupName,

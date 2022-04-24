@@ -142,4 +142,9 @@
         where ROLE_ID = #{roleId,jdbcType=VARCHAR}
     </update>
 
+    <select id="getRoleIdByUserId" parameterType="java.lang.String" resultType="java.lang.String">
+        select ROLE_ID from CRE_AUTH_USER_ROLE
+        where USER_ID = #{userId,jdbcType=VARCHAR}
+    </select>
+
 </mapper>

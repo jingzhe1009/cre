@@ -1,5 +1,6 @@
 package com.bonc.frame.service.rule;
 
+import com.bonc.frame.entity.commonresource.ModelGroup;
 import com.bonc.frame.entity.commonresource.ModelGroupInfo;
 import com.bonc.frame.entity.model.ModelContentInfo;
 import com.bonc.frame.entity.modelImportAndExport.modelImport.importEntity.ImportAdjustObject;
@@ -270,6 +271,13 @@ public interface RuleDetailService {
                                               @Nullable String endDate,
                                               String start, String length);
 
+    Map<String, Object> getGroupHeaderListResource(@Nullable String modelGroupId,
+                                              @Nullable String ruleType,
+                                              @Nullable String modelGroupName,
+                                              @Nullable String startDate,
+                                              @Nullable String endDate,
+                                              String start, String length);
+
     /**
      * 创建模型的同时创建新版本
      */
@@ -359,7 +367,7 @@ public interface RuleDetailService {
 
 
     ResponseResult commitWithVersion(RuleDetail ruleDetail, String data,
-                                     String userId) throws Exception;
+                                     String userId,String isCommit) throws Exception;
 
     @Deprecated
     ResponseResult publishWithVersion(RuleDetail ruleDetail, String data,

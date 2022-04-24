@@ -115,6 +115,7 @@ public class RuleDetailServiceImpl implements RuleDetailService {
     private ABTestService abTestService;
 
     private final String _MYBITSID_PREFIX = "com.bonc.frame.dao.rule.RuleDetailMapper.";
+    private final String _MYBITSID_MODEL_GROUP = "com.bonc.frame.mapper.resource.ModelGroupMapper.";
 
     private static final String _MODEL_GROUP_MAPPER = "com.bonc.frame.mapper.resource.ModelGroupMapper.";
 
@@ -1029,7 +1030,7 @@ public class RuleDetailServiceImpl implements RuleDetailService {
 
         param.put("startDate", startDate);
         param.put("endDate", endDate);
-        List<RuleDetailHeader> ruleDetailHeaders = daoHelper.queryForList(_MYBITSID_PREFIX +
+        List<RuleDetailHeader> ruleDetailHeaders = daoHelper.queryForList(_MYBITSID_PREFIX  +
                 "getHeaderList", param);
         return ruleDetailHeaders;
     }
@@ -1123,6 +1124,25 @@ public class RuleDetailServiceImpl implements RuleDetailService {
         param.put("endDate", endDate);
         Map<String, Object> results = daoHelper.queryForPageList(_MYBITSID_PREFIX +
                 "getHeaderListResource", param, start, length);
+        return results;
+    }
+
+    @Override
+    public Map<String, Object> getGroupHeaderListResource(@Nullable String modelGroupId,
+                                                     @Nullable String ruleType,
+                                                     @Nullable String modelGroupName,
+                                                     @Nullable String startDate,
+                                                     @Nullable String endDate,
+                                                     String start, String length) {
+
+        Map<String, String> param = new HashMap<>(5);
+        param.put("modelGroupId", modelGroupId);
+        param.put("ruleType", ruleType);
+        param.put("modelGroupName", modelGroupName);
+        param.put("startDate", startDate);
+        param.put("endDate", endDate);
+        Map<String, Object> results = daoHelper.queryForPageList(_MYBITSID_MODEL_GROUP+
+                "getGroupHeaderListResource", param, start, length);
         return results;
     }
 
@@ -1707,12 +1727,19 @@ public class RuleDetailServiceImpl implements RuleDetailService {
     @CuratorMutexLock(value = {"ruleName"})
     public ResponseResult commitWithVersion(RuleDetail ruleDetail,
                                             String data,
-                                            String userId) throws Exception {
+                                            String userId,
+                                            String isCommit) throws Exception {
         String oldRuleId = ruleDetail.getRuleId();
         RuleDetailWithBLOBs ruleDetailWithBLOBs = mergeHeaderInfo(ruleDetail);
         ruleDetailWithBLOBs.setUpdatePerson(userId);
         String version = generateVersion(ruleDetailWithBLOBs.getRuleName(), true, false);
-        initDetailAndAuth(ruleDetailWithBLOBs, userId, data, version, "insertSelective", ConstantUtil.RULE_STATUS_READY);
+        if (isCommit.equals("1")) {
+            // 修改当前版本
+            initDetailAndAuth(ruleDetailWithBLOBs, userId, data, version, "updateByPrimaryKeyForPublish", ConstantUtil.RULE_STATUS_READY);
+        } else {
+            // 提交生成新版本
+            initDetailAndAuth(ruleDetailWithBLOBs, userId, data, version, "insertSelective", ConstantUtil.RULE_STATUS_READY);
+        }
         Map result = afterLock(oldRuleId, data, version, ruleDetailWithBLOBs, ModelOperateLog.COMMIT_MODEL_TYPE, false);
         return ResponseResult.createSuccessInfo("提交成功", result);
     }

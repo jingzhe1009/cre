@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -100,18 +101,31 @@ public class AuthController {
         result.put("pubVariables", authorityService.getPubVariableResourcesAndPermits(roleId,
                 null, null, null, null,
                 null, "0", "10"));
+        // 参数组
+        result.put("pubVariableGroups", authorityService.getPubVariableGroupsResourcesAndPermits(roleId,
+                null, null,null,null,  "0", "10"));
         // 公共接口
         result.put("pubApis", authorityService.getPubApiResourcesAndPermits(roleId,
                 null, null, null, null,
                 "0", "10"));
-
+        // 接口组
+        result.put("pubApiGroups", authorityService.getPubApiGroupsResourcesAndPermits(roleId,
+                null, null, null, null,
+                "0", "10"));
         //模型库
         result.put("pubRules", authorityService.getPubModelBasesResourcesAndPermits(roleId,
                 null, null, null, null,null,
+                "0", "10"));//模型库
+        // 产品
+        result.put("pubRuleGroups", authorityService.getPubModelGroupsResourcesAndPermits(roleId,
+                null, null, null, null,null,
                 "0", "10"));
-
         //规则库
         result.put("pubRuleSets", authorityService.getPubRuleSetResourcesAndPermits(roleId,
+                null, null, null, null,
+                "0", "10"));
+        //规则集组
+        result.put("pubRuleSetGroups", authorityService.getPubRuleSetGroupsResourcesAndPermits(roleId,
                 null, null, null, null,
                 "0", "10"));
 
@@ -236,6 +250,31 @@ public class AuthController {
         return ResponseResult.createSuccessInfo("", variablesResourcesAndPermits);
     }
 
+//     ---------------------------------- 参数组 ----------------------------------
+
+    @PermissionsRequires(value = "/auth/update", resourceType = ResourceType.BUTTON)
+    @RequestMapping(value = "/pub/variableGroup/grant", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseResult grantPubVariableGroups(@RequestBody GrantAuthRequest grantAuthRequest,
+                                            HttpServletRequest request) {
+        final String currentUser = ControllerUtil.getLoginUserId(request);
+//        authorityService.updatePubVariableGroupsAuthList(grantAuthRequest);
+        return authorityService.grant(grantAuthRequest, currentUser, ResourceType.DATA_PUB_VARIABLE_GROUP.getType());
+    }
+
+    @PermissionsRequires(value = "/auth/view", resourceType = ResourceType.BUTTON)
+    @RequestMapping("/pub/variableGroup/view")
+    @ResponseBody
+    public ResponseResult viewPubVariableGroups(String roleId,
+                                                String variableGroupId,
+                                                String variableGroupName,
+                                                Date createDate, Date updateDate,
+                                                String start, String length) {
+        final Map<String, Object> variableGroupsResourcesAndPermits = authorityService.getPubVariableGroupsResourcesAndPermits(
+                roleId, variableGroupId,variableGroupName, createDate, updateDate, start, length);
+        return ResponseResult.createSuccessInfo("", variableGroupsResourcesAndPermits);
+    }
+
     // ---------------------------------- 公共接口 ----------------------------------
 
     @PermissionsRequires(value = "/auth/update", resourceType = ResourceType.BUTTON)
@@ -259,6 +298,28 @@ public class AuthController {
         return ResponseResult.createSuccessInfo("", apisResourcesAndPermits);
     }
 
+    // ---------------------------------- 接口组 ----------------------------------
+//
+    @PermissionsRequires(value = "/auth/update", resourceType = ResourceType.BUTTON)
+    @RequestMapping(value = "/pub/apiGroup/grant", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseResult grantPubApiGroups(@RequestBody GrantAuthRequest grantAuthRequest,
+                                       HttpServletRequest request) {
+        final String currentUser = ControllerUtil.getLoginUserId(request);
+        return authorityService.grant(grantAuthRequest, currentUser, ResourceType.DATA_PUB_API_GROUP.getType());
+    }
+
+    @PermissionsRequires(value = "/auth/view", resourceType = ResourceType.BUTTON)
+    @RequestMapping("/pub/apiGroup/view")
+    @ResponseBody
+    public ResponseResult viewPubApiGroups(String roleId,
+                                      String apiGroupId, String apiGroupName,
+                                      String startDate, String endDate,
+                                      String start, String length) {
+        final Map<String, Object> apiGroupsResourcesAndPermits = authorityService.getPubApiGroupsResourcesAndPermits(
+                roleId,  apiGroupId, apiGroupName, startDate, endDate, start, length);
+        return ResponseResult.createSuccessInfo("", apiGroupsResourcesAndPermits);
+    }
 
     // ------------------------------- 规则库 ----------------------------------
     @PermissionsRequires(value = "/auth/update", resourceType = ResourceType.BUTTON)
@@ -282,6 +343,28 @@ public class AuthController {
         return ResponseResult.createSuccessInfo("", apisResourcesAndPermits);
     }
 
+    // ------------------------------- 规则集组 ----------------------------------
+    @PermissionsRequires(value = "/auth/update", resourceType = ResourceType.BUTTON)
+    @RequestMapping(value = "/pub/ruleSetGroup/grant", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseResult grantPubRuleSetGroups(@RequestBody GrantAuthRequest grantAuthRequest,
+                                           HttpServletRequest request) {
+        final String currentUser = ControllerUtil.getLoginUserId(request);
+        return authorityService.grant(grantAuthRequest, currentUser, ResourceType.DATA_PUB_RULE_SET_GROUP.getType());
+    }
+
+    @PermissionsRequires(value = "/auth/view", resourceType = ResourceType.BUTTON)
+    @RequestMapping("/pub/ruleSetGroup/view")
+    @ResponseBody
+    public ResponseResult viewPubRuleSetGroups(String roleId,
+                                         String ruleSetGroupId, String ruleSetGroupName,
+                                         String startDate, String endDate,
+                                         String start, String length) {
+        final Map<String, Object> ruleSetGroupsResourcesAndPermits = authorityService.getPubRuleSetGroupsResourcesAndPermits(
+                roleId, ruleSetGroupId, ruleSetGroupName,  startDate, endDate, start, length);
+        return ResponseResult.createSuccessInfo("", ruleSetGroupsResourcesAndPermits);
+    }
+
     // ------------------------------- 模型库 ----------------------------------
     @PermissionsRequires(value = "/auth/update", resourceType = ResourceType.BUTTON)
     @RequestMapping(value = "/pub/modelBase/grant", method = RequestMethod.POST)
@@ -302,6 +385,29 @@ public class AuthController {
         final Map<String, Object> apisResourcesAndPermits = authorityService.getPubModelBasesResourcesAndPermits(roleId ,
                 moduleName, ruleType, modelGroupName, startDate, endDate, start, length);
         return ResponseResult.createSuccessInfo("", apisResourcesAndPermits);
+    }
+
+    // ------------------------------- 产品 ----------------------------------
+
+    @PermissionsRequires(value = "/auth/update", resourceType = ResourceType.BUTTON)
+    @RequestMapping(value = "/pub/modelGroup/grant", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseResult grantPubGroup(@RequestBody GrantAuthRequest grantAuthRequest,
+                                             HttpServletRequest request) {
+        final String currentUser = ControllerUtil.getLoginUserId(request);
+        return authorityService.grant(grantAuthRequest, currentUser, ResourceType.DATA_PUB_MODEL_GROUP.getType());
+    }
+
+    @PermissionsRequires(value = "/auth/view", resourceType = ResourceType.BUTTON)
+    @RequestMapping("/pub/modelGroup/view")
+    @ResponseBody
+    public ResponseResult viewPubModel(String roleId,
+                                            String moduleGroupId, String ruleType,String modelGroupName,
+                                            String startDate, String endDate,
+                                            String start, String length) {
+        final Map<String, Object> modelGroupsResourcesAndPermits = authorityService.getPubModelGroupsResourcesAndPermits(roleId ,
+                moduleGroupId, ruleType, modelGroupName, startDate, endDate, start, length);
+        return ResponseResult.createSuccessInfo("", modelGroupsResourcesAndPermits);
     }
 
     // ---------------------------------- 离线任务 ----------------------------------
@@ -350,6 +456,29 @@ public class AuthController {
         final Map<String, Object> kpiResourcesAndPermits = authorityService.getKpiResourcesAndPermits(
                 roleId, kpiName, kpiGroupName, kpiType, fetchType, start, length);
         return ResponseResult.createSuccessInfo("", kpiResourcesAndPermits);
+    }
+
+    // ---------------------------------- 指标组 ----------------------------------
+
+    @PermissionsRequires(value = "/auth/update", resourceType = ResourceType.BUTTON)
+    @RequestMapping(value = "/kpiGroup/grant", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseResult grantKpiGroups(@RequestBody GrantAuthRequest grantAuthRequest,
+                                    HttpServletRequest request) {
+        final String currentUser = ControllerUtil.getLoginUserId(request);
+        return authorityService.grant(grantAuthRequest, currentUser, ResourceType.DATA_KPI_GROUP.getType());
+    }
+
+    @PermissionsRequires(value = "/auth/view", resourceType = ResourceType.BUTTON)
+    @RequestMapping("/kpiGroup/view")
+    @ResponseBody
+    public ResponseResult viewKpiGroups(String roleId,
+                                   @Nullable String kpiGroupName,
+                                   String startDate, String endDate,
+                                   String start, String length) {
+        final Map<String, Object> kpiGroupResourcesAndPermits = authorityService.getKpiGroupResourcesAndPermits(
+                roleId,  kpiGroupName,startDate,endDate,start, length);
+        return ResponseResult.createSuccessInfo("", kpiGroupResourcesAndPermits);
     }
 
     // ---------------------------------- 场景 ----------------------------------

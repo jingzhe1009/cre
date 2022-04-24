@@ -372,8 +372,8 @@ public class ChooseController {
      */
     @RequestMapping(value = "/deptChannel",method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> DeptChannel(String deptId, String start,String length){
-        Map<String, Object> result = deptService.deptChannel(deptId,start,length);
+    public Map<String, Object> DeptChannel(String channelName,String deptId, String start,String length){
+        Map<String, Object> result = deptService.deptChannel(channelName,deptId,start,length);
         return result;
     }
 

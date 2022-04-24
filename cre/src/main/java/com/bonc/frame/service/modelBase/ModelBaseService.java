@@ -1,9 +1,8 @@
 package com.bonc.frame.service.modelBase;
 
 import com.bonc.frame.entity.auth.DeptChannelTree;
-import com.bonc.frame.entity.commonresource.ModelGroup;
-import com.bonc.frame.entity.commonresource.ModelGroupChannelVo;
-import com.bonc.frame.entity.commonresource.ModelGroupDto;
+import com.bonc.frame.entity.commonresource.*;
+import com.bonc.frame.entity.rule.RuleDetail;
 import com.bonc.frame.util.ResponseResult;
 
 import java.util.List;
@@ -19,13 +18,13 @@ public interface ModelBaseService {
 
     // ------------------------ 模型组管理 ------------------------
 
-    ResponseResult getModelGroups(String modelGroupName);
+    ResponseResult getModelGroups(String modelGroupName,String loginUserId);
 
     ModelGroup getModelGroupByModelId(String modelGroupId);
 
     ModelGroup getModelGroupByModelName(String modelGroupName);
 
-    Map<String, Object> getModelGroupsPaged(String modelGroupName, String channelId, String start, String length);
+    Map<String, Object> getModelGroupsPaged(String loginUserId, String modelGroupName, String channelId, String start, String length);
 
     ResponseResult createModelGroup(ModelGroupDto modelGroup, String userId);
 
@@ -52,4 +51,25 @@ public interface ModelBaseService {
      * @return 渠道树
      */
     List<ModelGroupChannelVo> channelList(String loginUserId, String modelGroupId);
+
+    /**
+     * 根据id获取产品信息
+     * @param modelGroupId 产品id
+     * @return 产品信息
+     */
+    ModelGroup getGroupInfoById(String modelGroupId);
+
+    /**
+     * 根据模型头id获取版本号及对应id
+     * @param modelId 模型id
+     * @return id及版本号
+     */
+    List<ModelVersion> modelGetVersion(String modelId);
+
+    /**
+     * 根据模型版本id获取关联的规则集
+     * @param modelId 模型id
+     * @return 规则集数据
+     */
+    List<RuleSetForModel> modelVersionWithRuleSet(String modelId);
 }

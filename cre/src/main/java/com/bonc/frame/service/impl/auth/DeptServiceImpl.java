@@ -4,6 +4,7 @@ import com.bonc.frame.dao.DaoHelper;
 import com.bonc.frame.entity.auth.Channel;
 import com.bonc.frame.entity.auth.DepartmentVo;
 import com.bonc.frame.entity.auth.Dept;
+import com.bonc.frame.entity.commonresource.ModelGroupChannelVo;
 import com.bonc.frame.service.auth.DeptPathService;
 import com.bonc.frame.service.auth.DeptService;
 import com.bonc.frame.util.IdUtil;
@@ -72,9 +73,29 @@ public class DeptServiceImpl implements DeptService {
     }
 
     @Override
-    public Map<String, Object> deptChannel(String deptId,  String start, String size) {
-        Map<String, Object> result= daoHelper.queryForPageList(_MIDDLE_TABLE_PREFIX + "deptChannel", deptId);
+    public Map<String, Object> deptChannel(String channelName,String deptId,  String start, String size) {
+        Map<String, String> map = new HashMap<>();
+        map.put("channelName", channelName);
+        map.put("deptId", deptId);
+        Map<String, Object> result= daoHelper.queryForPageList(_MIDDLE_TABLE_PREFIX + "deptChannel", map);
         return result;
+    }
+
+    /**
+     * 校验权限后获取当前用户的所属机构id
+     * 如果该渠道是总行大数据渠道，则返回null
+     * @param userId 登录用户id
+     * @return 用户所属机构id
+     */
+    @Override
+    public String getChannelIdByUserId(String userId) {
+        ModelGroupChannelVo vo = (ModelGroupChannelVo) daoHelper.queryOne(_DEPT_PREFIX + "getChannelIdByUserId", userId);
+        if (vo.getChannelName().contains("大数据")) {
+            if (vo.getDeptName().contains("总行")) {
+                return null;
+            }
+        }
+        return vo.getChannelId();
     }
 
     @Override

@@ -5,17 +5,17 @@ package com.bonc.frame.entity.commonresource;
  * @date 2019/9/23 17:11
  */
 public class Model extends ModelHeader {
-
+    //模型Id
     protected String ruleId;
-
+    //模型状态
     protected String ruleStatus;
-
+    //模型描述
     protected String ruleDesc;
-
+    //是否有日志
     protected String isLog;
-
+    //产品id
     protected String modelGroupId;
-
+    //模型版本
     protected String version;
 
     public String getRuleId() {

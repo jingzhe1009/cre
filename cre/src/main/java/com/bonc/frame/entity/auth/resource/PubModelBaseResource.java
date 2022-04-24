@@ -79,6 +79,7 @@ public class PubModelBaseResource extends DataResource implements Cloneable {
 
     public void setModelGroupId(String modelGroupId) {
         this.modelGroupId = modelGroupId;
+        super.resourceId = modelGroupId;
     }
 
     public Date getCreateDate() {

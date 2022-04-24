@@ -273,7 +273,7 @@ public class ABTestServiceImpl implements ABTestService {
                 throw new RuntimeException("B模型不存在");
             }
 
-            ResponseResult responseResult = ruleDetailService.commitWithVersion(bRuleDetail, bRuleDetail.getRuleContent(), loginUserId);
+            ResponseResult responseResult = ruleDetailService.commitWithVersion(bRuleDetail, bRuleDetail.getRuleContent(), loginUserId,null);
             if (ResponseResult.SUCCESS_STAUS == responseResult.getStatus()) {
                 Map data = (Map) responseResult.getData();
                 String newRuleId = (String) data.get("ruleId");

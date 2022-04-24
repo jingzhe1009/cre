@@ -9,9 +9,9 @@ import com.bonc.frame.entity.BaseEntity;
  * @date 2019/9/2 10:54
  */
 public class RuleSetGroup extends BaseEntity {
-
+    //规则集组Id
     private String ruleSetGroupId;
-
+    //规则集组名
     private String ruleSetGroupName;
 
     public String getRuleSetGroupId() {

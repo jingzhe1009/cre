@@ -27,6 +27,7 @@ import com.bonc.framework.rule.executor.context.impl.ExecutorRequest;
 import com.bonc.framework.rule.kpi.KpiResult;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.NoUniqueBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,7 +42,7 @@ import java.util.*;
 @Service("kpiService")
 public class KpiServiceImpl implements KpiService {
 
-    private static final String _KPI_GROUP = "com.bonc.frame.mapper.kpi.KpiGroupMapper.";
+    private static final String _KPI_GROUP = "com.bonc.frame.dao.kpi.KpiGroupMapper.";
     private static final String _KPI_DEFINITION = "com.bonc.frame.dao.kpi.KpiMapper.";
 
     @Autowired
@@ -140,6 +141,12 @@ public class KpiServiceImpl implements KpiService {
     @Override
     public List<Map<String, Object>> getKpiType() {
         List<Map<String, Object>> list = this.daoHelper.queryForList(_KPI_DEFINITION + "selectKpiType", null);
+        return list;
+    }
+
+    @Override
+    public List<Object> getRuleSetGroupByKpiId(String KpiId){
+        final List<Object> list=daoHelper.queryForList(_KPI_DEFINITION + "getRuleSetGroupByKpiId", KpiId);
         return list;
     }
 
@@ -247,6 +254,20 @@ public class KpiServiceImpl implements KpiService {
         return daoHelper.queryForPageList(_KPI_DEFINITION +
                 "pagedKpiBaseInfo", param, start, length);
     }
+
+    @Override
+    public Map<String, Object> pagedKpiGroupBaseInfo(
+                                                @Nullable String kpiGroupName,
+                                                String startDate,String endDate,
+                                                String start, String length) {
+        Map<String, String> param = new HashMap<>(4);
+        param.put("kpiGroupName", kpiGroupName);
+        param.put("startDate", startDate);
+        param.put("endDate", endDate);
+        return daoHelper.queryForPageList(_KPI_GROUP +
+                "pagedKpiGroupBaseInfo", param, start, length);
+    }
+
 
     @Override
     public Map<String, Object> getKpiBaseInfo(@Nullable String kpiName,
