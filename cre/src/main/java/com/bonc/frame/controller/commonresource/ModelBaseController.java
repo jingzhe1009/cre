@@ -1,7 +1,8 @@
 package com.bonc.frame.controller.commonresource;
 
 import com.bonc.frame.entity.commonresource.*;
-import com.bonc.frame.entity.rule.RuleDetailHeader;
+import com.bonc.frame.security.ResourceType;
+import com.bonc.frame.security.aop.PermissionsRequires;
 import com.bonc.frame.service.modelBase.ModelBaseService;
 import com.bonc.frame.service.rule.RuleDetailService;
 import com.bonc.frame.service.rule.RuleFolderService;
@@ -20,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ *
  * 模型库
  *
  * @author yedunyao
@@ -81,7 +83,6 @@ public class ModelBaseController {
         }
 // 验证数据权限
         final String loginUserId = ControllerUtil.getLoginUserId(request);
-
         return modelBaseService.getModelGroupsPaged(loginUserId,modelGroupName,channelId, start, length,startDate,endDate);
     }
 
@@ -99,10 +100,25 @@ public class ModelBaseController {
         return modelBaseService.updateModelGroup(modelGroup, loginUserId);
     }
 
+    @PermissionsRequires(value = "/pub/modelGroup/delete?modelGroupId", resourceType = ResourceType.DATA_PUB_MODEL_GROUP)
     @RequestMapping("/group/delete")
     @ResponseBody
     public ResponseResult deleteRuleSetGroup(String modelGroupId) {
         return modelBaseService.deleteModelGroup(modelGroupId);
+    }
+
+    @PermissionsRequires(value = "/pub/modelGroup/update?modelGroupId", resourceType = ResourceType.DATA_PUB_MODEL_GROUP)
+    @RequestMapping(value = "/group/update/checkAuth", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseResult checkUpdateGroup(String modelGroupId) {
+        return ResponseResult.createSuccessInfo();
+    }
+
+    @PermissionsRequires(value = "/pub/modelGroup/delete?modelGroupId", resourceType = ResourceType.DATA_PUB_MODEL_GROUP)
+    @RequestMapping(value = "/group/delete/checkAuth", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseResult checkDeleteGroup(String modelGroupId) {
+        return ResponseResult.createSuccessInfo();
     }
 
     /**

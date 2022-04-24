@@ -442,7 +442,6 @@ var exportModal = {
             }
         }
         var dataArr = [];
-        debugger;
         if (pageType === 0) { // 0全局
             // 模型库组数据
             var publicFolderId = $("#exportTree .exportTree_folderNode[isPublic='1']").eq(0).attr('data-id');
@@ -497,7 +496,7 @@ var exportModal = {
                 var modelCheckBoxArr = $('#exportTree .exportTree_modelNode');
                 var data = {
                     "folderId": folderId,
-                    "modelGroupId": "",
+                    "modelGroupId": folderId,
                     "type": "part",
                     "modelHeader": exportModal.getModelData(modelCheckBoxArr)
                 };

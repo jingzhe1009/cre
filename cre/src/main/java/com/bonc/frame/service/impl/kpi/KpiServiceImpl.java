@@ -42,7 +42,7 @@ import java.util.*;
 @Service("kpiService")
 public class KpiServiceImpl implements KpiService {
 
-    private static final String _KPI_GROUP = "com.bonc.frame.mapper.kpi.KpiGroupMapper.";
+    private static final String _KPI_GROUP = "com.bonc.frame.dao.kpi.KpiGroupMapper.";
     private static final String _KPI_DEFINITION = "com.bonc.frame.dao.kpi.KpiMapper.";
 
     @Autowired

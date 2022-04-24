@@ -450,19 +450,33 @@ var paramModule = {
             $('#paramGroupAlertModal .modal-footer .notView button').css('display', 'inline-block');
             $('#paramGroupAlertModal .modal-title').text('').text('添加参数组');
             $('#paramGroupAlertModal .form-control').removeAttr('disabled');
-        } else if (handleType == 1) {
-            $('#paramGroupAlertModal .modal-footer .notView button').css('display', 'inline-block');
-            $('#paramGroupAlertModal .modal-title').text('').text('修改参数组');
-            $('#paramGroupAlertModal .form-control').removeAttr('disabled');
             paramModule.echoGroupData(detail);
+        } else if (handleType == 1) {
+            $.ajax({
+                url: webpath + '/variable/group/update/checkAuth',
+                type: 'GET',
+                data: {'variableGroupId': detail['variableGroupId']? detail['variableGroupId']:''},
+                dataType: "json",
+                success: function (data) {
+                    if (data.status === 0) {
+                        $('#paramGroupAlertModal').modal({'show': 'center', "backdrop": "static"});
+                        $('#paramGroupAlertModal .modal-footer .notView button').css('display', 'inline-block');
+                        $('#paramGroupAlertModal .modal-title').text('').text('修改参数组');
+                        $('#paramGroupAlertModal .form-control').removeAttr('disabled');
+                        paramModule.echoGroupData(detail);
+                    } else {
+                        failedMessager.show(data.msg);
+                    }
+                }
+            });
         } else if (handleType == 2) {
+            $('#paramGroupAlertModal').modal({'show': 'center', "backdrop": "static"});
+            $('#paramGroupAlertModal').attr('handleType', handleType);
             $('#paramGroupAlertModal .modal-footer #closeViewParamGroup').css('display', 'inline-block');
             $('#paramGroupAlertModal .modal-title').text('').text('查看参数组');
             $('#paramGroupAlertModal .form-control').attr('disabled', true);
             paramModule.echoGroupData(detail);
         }
-        $('#paramGroupAlertModal').modal({'show': 'center', "backdrop": "static"});
-        $('#paramGroupAlertModal').attr('handleType', handleType);
     },
     // 关闭添加参数组弹框
     hiddenAddGroupAlert: function () {
@@ -544,28 +558,38 @@ var paramModule = {
     // 删除参数组
     deleteGroup: function (variableGroupId) {
         if (variableGroupId) {
-            confirmAlert.show('是否确认删除？', function () {
-                $.ajax({
-                    url: webpath + '/variable/pub/group/delete',
-                    type: 'POST',
-                    dataType: "json",
-                    data: {'variableGroupId': variableGroupId},
-                    success: function (data) {
-                        if (data.status === 0) {
-                            successMessager.show('删除成功');
-                            // initGroupTable('0');
-                            // initTable('0');
-                            $('.searchBtn').trigger('click');
-                            paramModule.initParamGroup(); // 刷新参数组下拉框: 搜索栏*2/弹框
-                            paramModule.initVariable(); // 刷新弹框变量类型
-                        } else {
-                            failedMessager.show(data.msg);
-                        }
-                    },
-                    error: function (data) {
+            $.ajax({ // 删除权限校验
+                url: webpath + '/variable/group/delete/checkAuth',
+                type: 'GET',
+                dataType: "json",
+                data: {'variableGroupId': variableGroupId},
+                success: function (data) {
+                    debugger;
+                    if (data.status === 0) {
+                        confirmAlert.show('是否确认删除？', function () {
+                            $.ajax({
+                                url: webpath + '/variable/pub/group/delete',
+                                type: 'POST',
+                                dataType: "json",
+                                data: {'variableGroupId': variableGroupId},
+                                success: function (data) {
+                                    if (data.status === 0) {
+                                        successMessager.show('删除成功');
+                                        // initGroupTable('0');
+                                        // initTable('0');
+                                        $('.searchBtn').trigger('click');
+                                        paramModule.initParamGroup(); // 刷新参数组下拉框: 搜索栏*2/弹框
+                                        paramModule.initVariable(); // 刷新弹框变量类型
+                                    } else {
+                                        failedMessager.show(data.msg);
+                                    }
+                                },
+                            });
+                        });
+                    } else {
                         failedMessager.show(data.msg);
                     }
-                });
+                }
             });
         }
     },
@@ -1289,22 +1313,39 @@ var apiModule = {
         $('#apiTypeAlertModal form')[0].reset();
         $('#apiTypeAlertModal .modal-footer button').css('display', 'none');
         if (handleType == 0) {
+            $('#apiTypeAlertModal').attr('handleType', handleType);
+            $('#apiTypeAlertModal').modal({'show': 'center', "backdrop": "static"});
             $('#apiTypeAlertModal .modal-footer .notView button').css('display', 'inline-block');
             $('#apiTypeAlertModal .modal-title').empty().text('添加接口组');
             $('#apiTypeAlertModal .form-control').removeAttr('disabled');
         } else if (handleType == 1) {
-            $('#apiTypeAlertModal .modal-footer .notView button').css('display', 'inline-block');
-            $('#apiTypeAlertModal .modal-title').empty().text('修改接口组');
-            $('#apiTypeAlertModal .form-control').removeAttr('disabled');
-            apiModule.echoGroupData(detail);
+            $.ajax({
+                url: webpath + '/api/group/update/checkAuth',
+                type: 'GET',
+                data: {'apiGroupId': detail['apiGroupId']? detail['apiGroupId'] : ''},
+                dataType: "json",
+                success: function (data) {
+                    debugger;
+                    if (data.status === 0) {
+                        $('#apiTypeAlertModal').attr('handleType', handleType);
+                        $('#apiTypeAlertModal').modal({'show': 'center', "backdrop": "static"});
+                        $('#apiTypeAlertModal .modal-footer .notView button').css('display', 'inline-block');
+                        $('#apiTypeAlertModal .modal-title').empty().text('修改接口组');
+                        $('#apiTypeAlertModal .form-control').removeAttr('disabled');
+                        apiModule.echoGroupData(detail);
+                    } else {
+                        failedMessager.show(data.msg);
+                    }
+                }
+            });
         } else if (handleType == 2) {
+            $('#apiTypeAlertModal').attr('handleType', handleType);
+            $('#apiTypeAlertModal').modal({'show': 'center', "backdrop": "static"});
             $('#apiTypeAlertModal .modal-footer #closeViewApiGroup').css('display', 'inline-block');
             $('#apiTypeAlertModal .modal-title').empty().text('查看接口组');
             $('#apiTypeAlertModal .form-control').attr('disabled', true);
             apiModule.echoGroupData(detail);
         }
-        $('#apiTypeAlertModal').attr('handleType', handleType);
-        $('#apiTypeAlertModal').modal({'show': 'center', "backdrop": "static"});
     },
     // 关闭添加接口组弹框
     hiddenAddTypeAlert: function () {
@@ -1325,7 +1366,7 @@ var apiModule = {
         if (handleType == '0') {
             urlStr = '/api/pub/group/save';
         } else if (handleType == '1') {
-            urlStr = '/api/pub/group/update';
+            urlStr = '/api/group/update';
         } else {
             return;
         }
@@ -1386,28 +1427,40 @@ var apiModule = {
     // 删除接口组
     deleteApiGroup: function (groupId) {
         if (groupId) {
-            confirmAlert.show('是否确认删除？', function () {
-                $.ajax({
-                    url: webpath + '/api/pub/group/delete',
-                    type: 'POST',
-                    dataType: "json",
-                    data: {'apiGroupId': groupId},
-                    success: function (data) {
-                        if (data.status === 0) {
-                            successMessager.show('删除成功');
-                            // initGroupTable('2');
-                            // initTable('2');
-                            $('.searchBtn').trigger('click');
-                            apiModule.initApiGroup(); // 刷新接口组下拉框
-                            apiModule.initApiType(); // 刷新接口类型下拉框
-                        } else {
-                            failedMessager.show(data.msg);
-                        }
-                    },
-                    error: function (data) {
+            $.ajax({ // 删除权限校验
+                url: webpath + '/api/group/delete/checkAuth',
+                type: 'GET',
+                dataType: "json",
+                data: {'apiGroupId': groupId},
+                success: function (data) {
+                    if (data.status === 0) {
+                        confirmAlert.show('是否确认删除？', function () {
+                            $.ajax({
+                                url: webpath + '/api/group/delete',
+                                type: 'POST',
+                                dataType: "json",
+                                data: {'apiGroupId': groupId},
+                                success: function (data) {
+                                    if (data.status === 0) {
+                                        successMessager.show('删除成功');
+                                        // initGroupTable('2');
+                                        // initTable('2');
+                                        $('.searchBtn').trigger('click');
+                                        apiModule.initApiGroup(); // 刷新接口组下拉框
+                                        apiModule.initApiType(); // 刷新接口类型下拉框
+                                    } else {
+                                        failedMessager.show(data.msg);
+                                    }
+                                },
+                                error: function (data) {
+                                    failedMessager.show(data.msg);
+                                }
+                            });
+                        });
+                    } else {
                         failedMessager.show(data.msg);
                     }
-                });
+                }
             });
         }
     }

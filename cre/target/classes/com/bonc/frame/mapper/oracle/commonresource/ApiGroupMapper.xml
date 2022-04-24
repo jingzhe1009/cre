@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.bonc.frame.mapper.resource.ApiGroupMapper">
+<mapper namespace="com.bonc.frame.dao.apiGroup.ApiGroupMapper">
     <resultMap id="BaseResultMap" type="com.bonc.frame.entity.commonresource.ApiGroup">
         <result column="API_GROUP_ID" property="apiGroupId" jdbcType="VARCHAR"/>
         <result column="API_GROUP_NAME" property="apiGroupName" jdbcType="VARCHAR"/>
@@ -15,6 +15,20 @@
         CREATE_DATE, UPDATE_DATE
     </sql>
 
+    <select id="pagedPubApiGroupResource" parameterType="java.util.Map"
+            resultType="com.bonc.frame.entity.auth.resource.PubApiGroupResource">
+        select
+        API_GROUP_NAME as "apiGroupName",
+        API_GROUP_ID as "apiGroupId"
+        FROM CRE_PUB_API_GROUP
+        where 1=1
+        <if test="apiGroupId != null">
+            and API_GROUP_ID != #{ruleSetGroupId,jdbcType=VARCHAR}
+        </if>
+        <if test="apiGroupName != null">
+            API_GROUP_NAME  = #{apiGroupName,jdbcType=VARCHAR},
+        </if>
+    </select>
     <!-- 检验 apiGroupName 唯一性 -->
     <select id="countByName" parameterType="java.util.Map" resultType="int">
         select count(*) as "count" from CRE_PUB_API_GROUP

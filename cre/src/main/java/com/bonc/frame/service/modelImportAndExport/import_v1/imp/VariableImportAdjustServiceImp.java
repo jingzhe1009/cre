@@ -55,7 +55,7 @@ public class VariableImportAdjustServiceImp extends AbstractImportAdjustServiceI
         String success = null;
         do {
 //            success = adjustVariable(type, ExportConstant.VARIABLE_CODE, true, importAdjustObject, suffix, toFolderId, importParam, context);
-            success = checkAdjustObjectProperty(type, ExportConstant.VARIABLE_ID, true, true, importAdjustObject, suffix, toFolderId, importParam, context);
+            success = checkAdjustObjectProperty(type, ExportConstant.VARIABLE_CODE, true, true, importAdjustObject, suffix, toFolderId, importParam, context);
             suffix = getNextSuffix(suffix);
         } while (success == null || "-1".equals(success));
         return success;

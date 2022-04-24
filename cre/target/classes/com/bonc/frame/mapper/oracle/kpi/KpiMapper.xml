@@ -60,6 +60,13 @@
         </collection>
     </resultMap>
 
+    <resultMap id="getRuleSetGroupByKpiIdList" type="com.bonc.frame.entity.commonresource.RuleSetHeaderVo">
+        <result column="RULE_SET_NAME" property="ruleSetName" jdbcType="VARCHAR"/>
+        <result column="VERSION" property="version" jdbcType="VARCHAR"/>
+        <result column="RULE_SET_GROUP_NAME" property="ruleSetGroupName" jdbcType="VARCHAR"/>
+        <result column="RULE_SET_HEADER_DESC" property="ruleSetHeaderDesc" jdbcType="VARCHAR"/>
+    </resultMap>
+
     <sql id="Kpi_Column_List">
         KPI_ID,KPI_GROUP_ID, KPI_NAME, KPI_CODE, KPI_TYPE, KPI_DEFAULT_VALUE, KPI_DESC,
         FETCH_TYPE, KPI_VALUE_SOURCE, KPI_VALUE_SOURCE_NAME,KPI_VALUE_SOURCE_CODE,
@@ -75,6 +82,19 @@
 
     <select id="selectKpiType" resultType="map">
         SELECT TYPE_ID "key", TYPE_VALUE "text" FROM CRE_KPI_TYPE ORDER BY TYPE_ID
+    </select>
+
+    <select id="getRuleSetGroupByKpiId" parameterType="java.lang.String" resultMap="getRuleSetGroupByKpiIdList">
+        SELECT
+          b.RULE_SET_NAME as RULE_SET_NAME,
+          a.VERSION as VERSION,
+          f.RULE_SET_GROUP_NAME as RULE_SET_GROUP_NAME,
+          b.RULE_SET_HEADER_DESC as RULE_SET_HEADER_DESC
+        FROM CRE_PUB_RULE_SET a
+        left join CRE_KPI_RULE_SET k ON a.RULE_SET_ID = k.RULE_SET_ID
+        LEFT JOIN CRE_PUB_RULE_SET_HEADER b ON b.RULE_SET_HEADER_ID = a.RULE_SET_HEADER_ID
+        LEFT JOIN CRE_PUB_RULE_SET_GROUP f ON  f.RULE_SET_GROUP_ID = b.RULE_SET_GROUP_ID
+        WHERE k.KPI_ID = #{kpiId,jdbcType=VARCHAR}
     </select>
 
     <!-- 检验 名称 唯一性 -->

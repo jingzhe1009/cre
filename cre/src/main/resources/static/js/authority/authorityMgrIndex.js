@@ -327,7 +327,7 @@ var userModal = {
         delete obj.groupId;
         // delete obj.roleId;
         // delete obj.deptId;
-        // delete obj.channelId;
+       delete obj.channelId;
 
         var groupArr = $('#addUserAlertModal .userGroupSelector option:selected'); // groupList
         var groupList = new Array();
@@ -348,6 +348,12 @@ var userModal = {
         // var deptList = new Array();
         // deptList.push({'deptId': $('#addUserAlertModal .orgSelector option:selected').attr('org-id')});
         // obj['deptList'] = deptList;
+        var channelArr=$('#addUserAlertModal .chanSelector option:selected');
+        var channelList = new Array();
+        for (var i = 0; i < channelArr.length;  i++) {
+            channelList.push({"channelId":$(channelArr[i]).attr('channelId')});
+        }
+        obj['channelList'] = channelList;
 
         return obj;
     },
@@ -367,13 +373,13 @@ var userModal = {
                     $("#addUserAlertModal .sexSelector option[value='" + data[key] + "']").prop('selected', true);
                     continue;
                 }
-                // if (key === 'channelList'){ //所属渠道
-                //     var dataArr2 = data[key];
-                //     for (var q = 0; q < dataArr2.length; q++) {
-                //         $("#addUserAlertModal .channelSelector option[data-id='" + dataArr2[q].channelId + "']").prop('selected', true);
-                //     }
-                //     continue;
-                // }
+                if (key === 'channelList'){ //所属渠道
+                    var dataArr2 = data[key];
+                    for (var q = 0; q < dataArr2.length; q++) {
+                        $("#addUserAlertModal .chanSelector option[data-id='" + dataArr2[q].channelId + "']").prop('selected', true);
+                    }
+                    continue;
+                }
                 var target = $("#addUserAlertModal .form-control[col-name='" + key + "']");
                 if (target.length > 0) {
                     target.val(data[key]);

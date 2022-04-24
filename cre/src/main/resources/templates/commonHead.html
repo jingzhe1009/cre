@@ -50,7 +50,7 @@
 				<li idx="11" data="${ctx.contextPath}/dept/view?idx=11&tabId=2"><a><img src="${ctx.contextPath}/static/imgs/mainNew/icon_jggl.png"/>机构管理</a></li>
 				<!--                        <li idx="12" data="${ctx.contextPath}/main?idx=0"><a><img src="${ctx.contextPath}/static/imgs/mainNew/"/>资源管理</a></li>-->
 				<li idx="6" data="${ctx.contextPath}/auth/view?idx=6&tabId=3"><a><img src="${ctx.contextPath}/static/imgs/mainNew/icon_qxgl.png"/>权限管理</a></li>
-				<li idx="8" data="${ctx.contextPath}/auth/view?idx=8&tabId=4"><a><img src="${ctx.contextPath}/static/imgs/mainNew/icon_qdgl.png"/>渠道管理</a></li>
+				<li idx="8" data="${ctx.contextPath}/auth/view?idx=8&tabId=4"><a><img src="${ctx.contextPath}/static/imgs/mainNew/icon_qxgl.png"/>渠道管理</a></li>
 				<li idx="17" data="${ctx.contextPath}/model/importAndExport/view?idx=17"><a><img src="${ctx.contextPath}/static/imgs/mainNew/icon_lxrwgl_normal.png"/>导入导出</a></li>
 			</ul>
 		</div>
@@ -62,6 +62,11 @@
 
 			<div class="ctrlBtn"><i class="icon icon-bars"></i></div>
 			<ul id="menusWrap" class="menusWrap">
+				<#if idx! == "28">
+					 <li idx="28" data="${ctx.contextPath}/monitor/indexView?idx=28" class="active"><div class="menuImg"><img class="ck" src="${ctx.contextPath}/static/imgs/mainNew/icon_sy_ckecked.png"/><img class="nck" src="${ctx.contextPath}/static/imgs/mainNew/icon_sy_normal.png"/></div><span>监控管理</span></li>
+				<#else>
+					 <li idx="28" data="${ctx.contextPath}/monitor/indexView?idx=28"><div class="menuImg"><img src="${ctx.contextPath}/static/imgs/mainNew/icon_sy_normal.png"/></div><span>监控管理</span></li>
+				</#if>
 				<#if idx! == "0">
 					 <li idx="0" data="${ctx.contextPath}/main?idx=0" class="active"><div class="menuImg"><img class="ck" src="${ctx.contextPath}/static/imgs/mainNew/icon_sy_ckecked.png"/><img class="nck" src="${ctx.contextPath}/static/imgs/mainNew/icon_sy_normal.png"/></div><span>首页</span></li>
 				<#else>

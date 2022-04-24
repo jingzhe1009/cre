@@ -1031,7 +1031,7 @@ public class RuleDetailServiceImpl implements RuleDetailService {
 
         param.put("startDate", startDate);
         param.put("endDate", endDate);
-        List<RuleDetailHeader> ruleDetailHeaders = daoHelper.queryForList(_MYBITSID_PREFIX +
+        List<RuleDetailHeader> ruleDetailHeaders = daoHelper.queryForList(_MYBITSID_PREFIX  +
                 "getHeaderList", param);
         return ruleDetailHeaders;
     }
