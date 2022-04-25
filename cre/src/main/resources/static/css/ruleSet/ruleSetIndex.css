@@ -5,7 +5,7 @@
     border: 1px solid transparent;
 }
 #pageContent {
-    height:calc( 100% - 11px);
+    height:calc( 100%-11px);
     width: 100%;
 }
 #ruleSetPageContent{
@@ -40,7 +40,7 @@
 }
 /*规则集列表搜索栏 两栏布局*/
 .ruleSetContainer .selfAdaptionLeft .input-group{
-    width: 180px;
+    width: 250px;
     float: left;
     margin: 0 10px 10px 0;
 }

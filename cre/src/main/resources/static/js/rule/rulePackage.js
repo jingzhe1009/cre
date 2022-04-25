@@ -383,94 +383,7 @@ function insertRule () {
 
 // 添加产品（其他）中的模型
 function addRule () {
-	$('#addModel').modal({'show': 'center', "backdrop": "static"});
-    initModelTable();
-
-    $('#saveModel').unbind('click').on('click',function() {
-        var modelList = [];
-        $('#modelTable').find(':checkbox').each(function(){
-            var detail = {};
-            if ($(this).prop("checked")) {
-                var curRow = this.parentNode.parentNode;
-                detail = $('#modelTable').DataTable().row(curRow).data();
-                modelList.push(detail);
-            }
-        });
-        var obj = {
-            'modelGroupId': folderId,
-            'modelList':modelList,
-			'channelList':'',
-		}
-		var json = JSON.stringify(obj);
-        $.ajax({
-            url: webpath + '/modelBase/group/addModel',
-            type: 'POST',
-            dataType: "json",
-            data: json,
-            contentType:"application/json;charset=UTF-8",
-            success: function (data) {
-                if (data.status === 0) {
-                    successMessager.show('保存成功');
-                } else {
-                    failedMessager.show(data.msg);
-                }
-            }
-        });
-	})
-}
-
-// 初始化 添加模型弹窗中的表格
-function initModelTable(){
-	$('#modelTable').width('100%').dataTable({
-        destroy:true,
-        paging:false,
-        info:false,
-        searching:false,
-        ordering:false,
-        "columns": [
-            {"title": "模型名称", "data": "ruleName"},
-            {"title": "模型类型", "data": "ruleType","targets":[1],"searchable":false},
-            {"title": "模型描述", "data": "ruleDesc","targets":[2],"searchable":false},
-            {"title": "是否添加","render": function (row) {
-            	var htmlStr = '';
-            	htmlStr += '<input type="checkbox" />';
-            	return htmlStr;
-                }
-            }],
-        ajax:{
-            url: webpath + '/modelBase/group/getModel',
-            type: 'POST',
-            "dataSrc": function ( data ) {
-            	var baseData = data.data.modelList;
-                for(var i = 0; i < baseData.length; i++){
-                    if(baseData[i].ruleType == 0){
-                        baseData[i].ruleType = '评分模型';
-                    }
-                    if(baseData[i].ruleType == 1){
-                        baseData[i].ruleType = '规则模型';
-                    }
-                }
-                return baseData;
-            },
-            "data": {
-                'modelGroupId':'defaultGroup',
-			}
-        },
-        "fnDrawCallback": function (oSettings, json) {
-            $("#modelTable th").css("text-align", "center");
-            $("#modelTable td").css("text-align", "center");
-        },
-    });
-}
-
-//接口 产品相关信息
-function initInformation() {
-	var detail = JSON.parse(sessionStorage.getItem('detail'));
-	console.log(detail);
-    $('#pageInformation p:eq(0)').html('创建人：'+detail.createPerson+'&nbsp;&nbsp;&nbsp;创建时间：'+detail.createDate);
-    $('#pageInformation p:eq(1)').html('产品名称：'+detail.modelGroupName+'&nbsp;&nbsp;&nbsp;产品编码：'+detail.modelGroupCode);
-    $('#pageInformation p:eq(2)').html('产品描述：'+detail.modelGroupDesc);
-    $('#pageInformation p:eq(3)').html('调用渠道：'+detail.modelGroupChannel);
+    var id = 'defaultGroup';
 }
 
 // 模型设为公有
@@ -577,9 +490,6 @@ function serviceApi( ruleId ){
 $( function () {
 	// 模型启停用
 	rulePackageObj.changeStatusBind();
-
-    initModelTable();
-    initInformation();
 
 	// 添加模型-下一步
 	$('#insertModal').click(function () {

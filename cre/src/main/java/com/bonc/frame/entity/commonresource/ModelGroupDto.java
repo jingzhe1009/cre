@@ -1,12 +1,14 @@
 package com.bonc.frame.entity.commonresource;
 
+import java.util.List;
+
 /**
  * 新增模型传的实体类
  */
 public class ModelGroupDto extends ModelGroup {
-    private ModelChanIdDto channelList;
+    private List<String> channelList;
 
-    public ModelGroupDto(String modelGroupName, String modelGroupCode, String modelGroupDesc, ModelChanIdDto channelList) {
+    public ModelGroupDto(String modelGroupName, String modelGroupCode, String modelGroupDesc, List<String> channelList) {
         super(modelGroupName, modelGroupCode, modelGroupDesc);
         this.channelList = channelList;
     }
@@ -43,15 +45,15 @@ public class ModelGroupDto extends ModelGroup {
         return mg;
     }
 
-    public ModelChanIdDto getChannelList() {
+    public List<String> getChannelList() {
         return channelList;
     }
 
-    public void setChannelList(ModelChanIdDto channelList) {
+    public void setChannelList(List<String> channelList) {
         this.channelList = channelList;
     }
 
-    public ModelGroupDto(ModelChanIdDto channelList) {
+    public ModelGroupDto(List<String> channelList) {
         this.channelList = channelList;
     }
 }
