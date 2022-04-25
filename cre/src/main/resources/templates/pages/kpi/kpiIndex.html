@@ -281,30 +281,30 @@
                     <!-- 2-3 输入指标类型 -->
                     <div class="kpiSourceWrapper kpiKPIWrapper">
                         <form class="form-horizontal" data-validator-option="{stopOnError:true}">
-<!--                            <div class="form-group">-->
-<!--                                <label class="col-xs-2 col-sm-2 col-md-2 col-lg-2">接口：</label>-->
-<!--                            </div>-->
-<!--                            <div class="form-group">-->
-<!--                                <label class="col-xs-2 col-sm-2 col-md-2 col-lg-2">取值字段：</label>-->
-<!--                                <div class="input-control has-icon-right col-xs-8 col-sm-8 col-md-8 col-lg-8">-->
-<!--                                    &lt;!&ndash;                                <input id="kpiDef_apiReturnInput" col-name="kpiValueSource" class="form-control">&ndash;&gt;-->
-<!--                                    <div id="actRuleConnSel" data-rule="取值字段:required;"></div>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                            <div class="form-group">-->
-<!--                                <label class="col-xs-2 col-sm-2 col-md-2 col-lg-2">限定字段：</label>-->
-<!--                                <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">-->
-<!--                                    <div id="" class="panel kpiLimitColsPanel">-->
-<!--                                        <div class="panel-heading">-->
-<!--                                            <div class="topTxt"><span>接口参数列表</span></div>-->
-<!--                                        </div>-->
-<!--                                        <div class="panel-body">-->
-<!--                                            <p id="apiKpiLimitP">请先选择接口</p>-->
-<!--                                            <table id="kpiDef_apiParamsTable"></table>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                            </div>-->
+                            <!--                            <div class="form-group">-->
+                            <!--                                <label class="col-xs-2 col-sm-2 col-md-2 col-lg-2">接口：</label>-->
+                            <!--                            </div>-->
+                            <!--                            <div class="form-group">-->
+                            <!--                                <label class="col-xs-2 col-sm-2 col-md-2 col-lg-2">取值字段：</label>-->
+                            <!--                                <div class="input-control has-icon-right col-xs-8 col-sm-8 col-md-8 col-lg-8">-->
+                            <!--                                    &lt;!&ndash;                                <input id="kpiDef_apiReturnInput" col-name="kpiValueSource" class="form-control">&ndash;&gt;-->
+                            <!--                                    <div id="actRuleConnSel" data-rule="取值字段:required;"></div>-->
+                            <!--                                </div>-->
+                            <!--                            </div>-->
+                            <!--                            <div class="form-group">-->
+                            <!--                                <label class="col-xs-2 col-sm-2 col-md-2 col-lg-2">限定字段：</label>-->
+                            <!--                                <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">-->
+                            <!--                                    <div id="" class="panel kpiLimitColsPanel">-->
+                            <!--                                        <div class="panel-heading">-->
+                            <!--                                            <div class="topTxt"><span>接口参数列表</span></div>-->
+                            <!--                                        </div>-->
+                            <!--                                        <div class="panel-body">-->
+                            <!--                                            <p id="apiKpiLimitP">请先选择接口</p>-->
+                            <!--                                            <table id="kpiDef_apiParamsTable"></table>-->
+                            <!--                                        </div>-->
+                            <!--                                    </div>-->
+                            <!--                                </div>-->
+                            <!--                            </div>-->
                         </form>
                     </div>
                 </div>
@@ -355,6 +355,56 @@
     </div>
 </div>
 
+<!--关联规则集 弹框-->
+<div class="modal fade" id="KpiRelevancyAlert">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">关联规则集</h4>
+            </div>
+            <div class="modal-body">
+                <div id="RelevancyContentWarp">
+                    <!-- 1 指标通用基础信息 -->
+                    <div class="RelevancyDefBase">
+                        <form class="form-horizontal" data-validator-option="{stopOnError:true}">
+                            <div class="form-group">
+                                <label class="col-xs-2 col-sm-2 col-md-2 col-lg-2">指标组：</label>
+                                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                                    <select col-name="kpiGroupId" class="form-control kpiGroupSelector" disabled></select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-xs-2 col-sm-2 col-md-2 col-lg-2">指标名称：</label>
+                                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                                    <input id="RelevancyNameInput" col-name="kpiName" type="text" class="form-control" disabled>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-xs-2 col-sm-2 col-md-2 col-lg-2">指标编码：</label>
+                                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                                    <input id="RelevancyCodeInput" col-name="kpiCode" type="text" class="form-control" disabled>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-xs-2 col-sm-2 col-md-2 col-lg-2">数据类型：</label>
+                                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                                    <select id="RelevancyTypeSel" col-name="kpiType" class="form-control" disabled></select>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div style="clear: both"></div>
+                    <div>
+                        <table id="RelevancyTable"></table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="closeViewRelevancyContent" type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
 <#include "/pages/common/confirmAlert.html">
 <#include "/commonFoot.html">
 <script>

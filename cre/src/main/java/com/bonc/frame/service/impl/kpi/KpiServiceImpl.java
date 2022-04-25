@@ -2,6 +2,7 @@ package com.bonc.frame.service.impl.kpi;
 
 import com.bonc.frame.config.Config;
 import com.bonc.frame.dao.DaoHelper;
+import com.bonc.frame.entity.commonresource.RuleSetHeaderVo;
 import com.bonc.frame.entity.datasource.DataSource;
 import com.bonc.frame.entity.kpi.KpiDefinition;
 import com.bonc.frame.entity.kpi.KpiFetchLimiters;
@@ -27,7 +28,6 @@ import com.bonc.framework.rule.executor.context.impl.ExecutorRequest;
 import com.bonc.framework.rule.kpi.KpiResult;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.NoUniqueBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,7 +42,7 @@ import java.util.*;
 @Service("kpiService")
 public class KpiServiceImpl implements KpiService {
 
-    private static final String _KPI_GROUP = "com.bonc.frame.dao.kpi.KpiGroupMapper.";
+    private static final String _KPI_GROUP = "com.bonc.frame.mapper.kpi.KpiGroupMapper.";
     private static final String _KPI_DEFINITION = "com.bonc.frame.dao.kpi.KpiMapper.";
 
     @Autowired
@@ -145,8 +145,8 @@ public class KpiServiceImpl implements KpiService {
     }
 
     @Override
-    public List<Object> getRuleSetGroupByKpiId(String KpiId){
-        final List<Object> list=daoHelper.queryForList(_KPI_DEFINITION + "getRuleSetGroupByKpiId", KpiId);
+    public List<RuleSetHeaderVo> getRuleSetGroupByKpiId(String kpiId){
+        List<RuleSetHeaderVo> list = daoHelper.queryForList(_KPI_DEFINITION + "getRuleSetGroupByKpiId", kpiId);
         return list;
     }
 
@@ -257,9 +257,9 @@ public class KpiServiceImpl implements KpiService {
 
     @Override
     public Map<String, Object> pagedKpiGroupBaseInfo(
-                                                @Nullable String kpiGroupName,
-                                                String startDate,String endDate,
-                                                String start, String length) {
+            @Nullable String kpiGroupName,
+            String startDate,String endDate,
+            String start, String length) {
         Map<String, String> param = new HashMap<>(4);
         param.put("kpiGroupName", kpiGroupName);
         param.put("startDate", startDate);
@@ -404,10 +404,6 @@ public class KpiServiceImpl implements KpiService {
             // 为数据源
             convertKpiSql(kpiDefinition, metaDataTable, dataSource);
 
-        }
-        if ("2".equals(kpiDefinition.getFetchType())) {
-            kpiDefinition.setKpiValueSourceCode(kpiCode);
-            kpiDefinition.setKpiValueSourceName(kpiName);
         }
 
 //        daoHelper.insert(_KPI_DEFINITION + "insertKpiDefinition", kpiDefinition);
