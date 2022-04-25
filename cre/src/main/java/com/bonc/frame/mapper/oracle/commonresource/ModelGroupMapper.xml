@@ -23,17 +23,6 @@
         <result column="CHANNEL_NAME" property="channelName" jdbcType="VARCHAR"/>
     </resultMap>
 
-    <resultMap id="ModelGroupMap" type="com.bonc.frame.entity.commonresource.ModelGroup">
-        <result column="MODEL_GROUP_ID" property="modelGroupId" jdbcType="VARCHAR"/>
-        <result column="MODEL_GROUP_NAME" property="modelGroupName" jdbcType="VARCHAR"/>
-        <result column="MODEL_GROUP_CODE" property="modelGroupCode" jdbcType="VARCHAR"/>
-        <result column="MODEL_GROUP_DESC" property="modelGroupDesc" jdbcType="VARCHAR"/>
-        <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
-        <result column="CREATE_PERSON" property="createPerson" jdbcType="VARCHAR"/>
-        <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP"/>
-        <result column="UPDATE_PERSON" property="updatePerson" jdbcType="VARCHAR"/>
-    </resultMap>
-
     <select id="getGroupHeaderListResource" parameterType="java.util.Map"
             resultType="com.bonc.frame.entity.auth.resource.PubModelBaseResource">
         select
@@ -87,12 +76,6 @@
         </if>
         <if test="channelId != null">
             and b.CHANNEL_ID = #{channelId,jdbcType=VARCHAR}
-        </if>
-        <if test="startDate != null and '' != startDate">
-            and a.CREATE_DATE &gt;= to_date(#{startDate,jdbcType=TIMESTAMP} ,'yyyy-mm-dd hh24:mi:ss')
-        </if>
-        <if test="endDate != null and '' != endDate">
-            and a.CREATE_DATE &lt;= to_date(#{endDate,jdbcType=TIMESTAMP} ,'yyyy-mm-dd hh24:mi:ss')
         </if>
         ORDER BY a.CREATE_DATE DESC
     </select>
@@ -237,60 +220,47 @@
         where b.MODEL_GROUP_ID = #{modelGroupId,jdbcType=VARCHAR}
     </select>
 
-    <select id="getGroupById" parameterType="java.lang.String" resultMap="ModelGroupMap">
-        select MODEL_GROUP_ID, MODEL_GROUP_NAME, MODEL_GROUP_CODE,MODEL_GROUP_DESC,CREATE_DATE,CREATE_PERSON,UPDATE_DATE,UPDATE_PERSON
-        from CRE_PUB_MODEL_GROUP
-        where MODEL_GROUP_ID = #{modelGroupId,jdbcType=VARCHAR}
-        order by UPDATE_DATE desc
-    </select>
-
-    <select id="getModelListByGroup" parameterType="java.lang.String" resultType="com.bonc.frame.entity.commonresource.ModelRuleDetail">
-        select
-        RULE_ID as ruleId,
-        RULE_NAME as ruleName,
-        RULE_DESC as ruleDesc,
-        RULE_TYPE as ruleType
-        from CRE_RULE_DETAIL
-        where IS_HEADER = '1'
-        and  MODEL_GROUP_ID = #{modelGroupId,jdbcType=VARCHAR}
-        order by UPDATE_DATE desc
-    </select>
-
-    <select id="getModelInfoById" parameterType="java.lang.String" resultType="map">
-    select
-    RULE_NAME as ruleName, RULE_STATUS as ruleStatus
-    from CRE_RULE_DETAIL
-    where RULE_ID = #{modelId,jdbcType=VARCHAR} and IS_HEADER = '1'
-</select>
-
-    <select id="getGroupInfoById" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <select id="getGroupInfoById" parameterType="java.lang.String" resultType="com.bonc.frame.entity.commonresource.ModelGroup">
         select <include refid="Base_Column_List"></include>
         from CRE_PUB_MODEL_GROUP
         where MODEL_GROUP_ID = #{modelGroupId,jdbcType=VARCHAR}
     </select>
 
+    <select id="getModelInfoById" parameterType="java.lang.String" resultType="com.bonc.frame.entity.rule.RuleDetail">
+        select
+        RULE_ID, FOLDER_ID, RULE_NAME,RULE_DESC, RULE_TYPE,IS_PUBLIC,
+        IS_DEL,IS_LOG,IS_HEADER, CREATE_PERSON, CREATE_DATE, UPDATE_PERSON,
+        UPDATE_DATE, MODEL_GROUP_ID, RULE_STATUS,DEPT_ID,DEPT_NAME,PARTNER_CODE,
+        PARTNER_NAME,PRODUCT_CODE,PRODUCT_NAME ,SYSTEM_CODE ,SYSTEM_NAME,MODULE_NAME,
+        CREATE_USER_JOB_NUMBER,UPDATE_USER_JOB_NUMBER, VERSION, VERSION_DESC,
+        VERSION_CREATE_PERSON,VERSION_CREATE_DATE, VERSION_UPDATE_PERSON, VERSION_UPDATE_DATE
+        from CRE_RULE_DETAIL
+        where RULE_ID = #{modelId,jdbcType=VARCHAR} and IS_HEADER = '1'
+    </select>
     <select id="modelGetVersion" resultType="com.bonc.frame.entity.commonresource.ModelVersion" parameterType="map">
-    SELECT
-      RULE_ID as ruleId, VERSION as version
-    FROM CRE_RULE_DETAIL
-    WHERE
-      IS_DEL = '0'
-      AND IS_HEADER = '0'
-      AND RULE_NAME = #{RULENAME,jdbcType=VARCHAR}
-      ORDER BY to_number(VERSION) DESC ,VERSION_CREATE_DATE DESC
-</select>
+        SELECT
+          RULE_ID as ruleId, VERSION as version
+        FROM CRE_RULE_DETAIL
+        WHERE
+          IS_DEL = '0'
+          AND IS_HEADER = '0'
+          AND RULE_NAME = #{ruleName,jdbcType=VARCHAR}
+          AND IS_PUBLIC = '0'
+          AND RULE_STATUS = #{ruleStatus,jdbcType=VARCHAR}
+          ORDER BY to_number(VERSION) DESC ,VERSION_CREATE_DATE DESC
+    </select>
 
     <select id="modelGetRuleSet" parameterType="java.lang.String" resultType="com.bonc.frame.entity.commonresource.RuleSetForModel">
-    select
-    c.RULE_SET_GROUP_NAME as ruleSetGroupName,
-    b.RULE_SET_NAME as ruleSetName,
-    b.RULE_SET_HEADER_DESC as ruleSetDesc,
-    a.VERSION as version
-    from CRE_PUB_RULE_SET a
-    left join CRE_PUB_RULE_SET_HEADER b on a.RULE_SET_HEADER_ID = b.RULE_SET_HEADER_ID
-    left join CRE_PUB_RULE_SET_GROUP c on b.RULE_SET_GROUP_ID = c.RULE_SET_GROUP_ID
-    left join CRE_PUB_RULE_SET_RULE d on a.RULE_SET_ID = d.RULE_SET_ID
-    where d.RULE_ID = #{modelId,jdbcType=VARCHAR}
-</select>
+        select
+        c.RULE_SET_GROUP_NAME as ruleSetGroupName,
+        b.RULE_SET_NAME as ruleSetName,
+        b.RULE_SET_HEADER_DESC as ruleSetDesc,
+        a.VERSION as version
+        from CRE_PUB_RULE_SET a
+        left join CRE_PUB_RULE_SET_HEADER b on a.RULE_SET_HEADER_ID = b.RULE_SET_HEADER_ID
+        left join CRE_PUB_RULE_SET_GROUP c on b.RULE_SET_GROUP_ID = c.RULE_SET_GROUP_ID
+        left join CRE_PUB_RULE_SET_RULE d on a.RULE_SET_ID = d.RULE_SET_ID
+        where d.RULE_ID = #{modelId,jdbcType=VARCHAR}
+    </select>
 
 </mapper>

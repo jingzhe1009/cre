@@ -1,6 +1,5 @@
 package com.bonc.frame.service.kpi;
 
-import com.bonc.frame.entity.commonresource.RuleSetHeaderVo;
 import com.bonc.frame.entity.datasource.DataSource;
 import com.bonc.frame.entity.kpi.KpiDefinition;
 import com.bonc.frame.entity.kpi.KpiGroup;
@@ -41,7 +40,7 @@ public interface KpiService {
 
     List<Map<String, Object>> getKpiType();
 
-    List<RuleSetHeaderVo> getRuleSetGroupByKpiId(String KpiId);
+    List<Object> getRuleSetGroupByKpiId(String KpiId);
 
     boolean checkNameIsExist(String kpiName, @Nullable String kpiHeaderId);
 
@@ -57,7 +56,7 @@ public interface KpiService {
 
     Map<String,Object> pagedKpiGroupBaseInfo(@Nullable String kpiGroupName,
                                              String startDate, String endDate,
-                                             String start, String length);
+                                             String start,String length);
 
     ResponseResult getKpiBaseInfo(@Nullable String kpiName,
                                   @Nullable String kpiGroupName,

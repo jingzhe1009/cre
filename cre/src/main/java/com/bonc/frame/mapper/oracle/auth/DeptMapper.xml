@@ -275,37 +275,29 @@
         </if>
     </select>
 
-    <select id="getDeptIdByUserId" resultType="java.lang.String" parameterType="java.lang.String">
-        select a.DEPT_ID
-        from
-        CRE_AUTH_CHANNEL a
+    <select id="getChannelIdByUserId" resultMap="BaseResultMap6" parameterType="java.lang.String">
+        select
+               a.CHANNEL_ID,
+               a.CHANNEL_NAME,
+               a.CHANNEL_CODE,
+               c.DEPT_NAME,
+               c.DEPT_CODE
+        from CRE_AUTH_CHANNEL a
         left join CRE_AUTH_USER_CHAN b on b.CHAN_ID = a.CHANNEL_ID
+        left join CRE_AUTH_DEPT c on a.DEPT_ID = c.DEPT_ID
         where b.USER_ID = #{userId,jdbcType=VARCHAR}
     </select>
 
-    <select id="getChannelIdByUserId" resultMap="BaseResultMap6" parameterType="java.lang.String">
-    select
-           a.CHANNEL_ID,
-           a.CHANNEL_NAME,
-           a.CHANNEL_CODE,
-           c.DEPT_NAME,
-           c.DEPT_CODE
-    from CRE_AUTH_CHANNEL a
-    left join CRE_AUTH_USER_CHAN b on b.CHAN_ID = a.CHANNEL_ID
-    left join CRE_AUTH_DEPT c on a.DEPT_ID = c.DEPT_ID
-    where b.USER_ID = #{userId,jdbcType=VARCHAR}
-</select>
-
     <select id="getChannelVoByChannelId" parameterType="java.lang.String" resultMap="BaseResultMap6">
-    select
-           a.CHANNEL_ID,
-           a.CHANNEL_NAME,
-           a.CHANNEL_CODE,
-           b.DEPT_NAME,
-           b.DEPT_CODE
-    from CRE_AUTH_CHANNEL a
-    left join CRE_AUTH_DEPT b on a.DEPT_ID = b.DEPT_ID
-    where a.CHANNEL_ID = #{channelId,jdbcType=VARCHAR}
-</select>
+        select
+               a.CHANNEL_ID,
+               a.CHANNEL_NAME,
+               a.CHANNEL_CODE,
+               b.DEPT_NAME,
+               b.DEPT_CODE
+        from CRE_AUTH_CHANNEL a
+        left join CRE_AUTH_DEPT b on a.DEPT_ID = b.DEPT_ID
+        where a.CHANNEL_ID = #{channelId,jdbcType=VARCHAR}
+    </select>
 
 </mapper>

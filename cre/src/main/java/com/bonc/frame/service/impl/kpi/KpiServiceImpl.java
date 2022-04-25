@@ -2,7 +2,6 @@ package com.bonc.frame.service.impl.kpi;
 
 import com.bonc.frame.config.Config;
 import com.bonc.frame.dao.DaoHelper;
-import com.bonc.frame.entity.commonresource.RuleSetHeaderVo;
 import com.bonc.frame.entity.datasource.DataSource;
 import com.bonc.frame.entity.kpi.KpiDefinition;
 import com.bonc.frame.entity.kpi.KpiFetchLimiters;
@@ -28,6 +27,7 @@ import com.bonc.framework.rule.executor.context.impl.ExecutorRequest;
 import com.bonc.framework.rule.kpi.KpiResult;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.NoUniqueBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -145,8 +145,8 @@ public class KpiServiceImpl implements KpiService {
     }
 
     @Override
-    public List<RuleSetHeaderVo> getRuleSetGroupByKpiId(String kpiId){
-        List<RuleSetHeaderVo> list = daoHelper.queryForList(_KPI_DEFINITION + "getRuleSetGroupByKpiId", kpiId);
+    public List<Object> getRuleSetGroupByKpiId(String KpiId){
+        final List<Object> list=daoHelper.queryForList(_KPI_DEFINITION + "getRuleSetGroupByKpiId", KpiId);
         return list;
     }
 

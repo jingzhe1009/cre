@@ -4,7 +4,6 @@ import com.bonc.frame.entity.commonresource.RuleSet;
 import com.bonc.frame.entity.commonresource.RuleSetGroup;
 import com.bonc.frame.entity.commonresource.RuleSetHeader;
 import com.bonc.frame.entity.commonresource.RuleSetReferenceExt;
-import com.bonc.frame.entity.rule.RuleSetWithModel;
 import com.bonc.frame.util.ResponseResult;
 
 import javax.annotation.Nullable;
@@ -54,16 +53,16 @@ public interface RuleSetBaseService {
 
     /** 获取规则集头信息列表  用于权限管理查询 */
     public Map<String, Object> getHeaderListResource(@Nullable String ruleSetName,
-                                                     @Nullable String ruleSetGroupName,
-                                                     @Nullable String startDate,
-                                                     @Nullable String endDate,
-                                                     String start, String size);
+                                                   @Nullable String ruleSetGroupName,
+                                                   @Nullable String startDate,
+                                                   @Nullable String endDate,
+                                                   String start, String size);
 
-    Map<String, Object> getRuleSetGroupHeaderListResource(@Nullable String ruleSetName,
-                                                          @Nullable String ruleSetGroupName,
-                                                          @Nullable String startDate,
-                                                          @Nullable String endDate,
-                                                          String start, String size);
+    Map<String, Object> getRuleSetGroupHeaderListResource(@Nullable String ruleSetGroupId,
+                                                                 @Nullable String ruleSetGroupName,
+                                                                 @Nullable String startDate,
+                                                                 @Nullable String endDate,
+                                                                 String start, String size);
 
     ResponseResult createRuleSetHeader(RuleSetHeader ruleSetHeader, String userId);
 
@@ -130,9 +129,9 @@ public interface RuleSetBaseService {
 
     ResponseResult getRuleSetGroups(String ruleSetGroupName);
 
-    List<Map<String,String>> getKpiByRuleSetId(String ruleSetId);
+    List<String> getKpiByRuleSetId(String ruleSetId);
 
-    List<RuleSetWithModel> getModelByRuleSetId(String ruleSetId);
+    List<String> getModelByRuleSetId(String ruleSetId);
 
     Map<String, Object> getRuleSetGroupsPaged(String ruleSetGroupName, String start, String length);
 
@@ -145,7 +144,6 @@ public interface RuleSetBaseService {
     boolean isGroupUsed(String ruleSetGroupId);
 
     ResponseResult deleteRuleSetGroup(String ruleSetGroupId);
-
     /**
      * 根據ruleSetHeader获取版本信息
      * @param ruleSetHeaderId id

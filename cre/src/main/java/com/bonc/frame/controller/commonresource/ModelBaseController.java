@@ -1,8 +1,11 @@
 package com.bonc.frame.controller.commonresource;
 
+import com.bonc.frame.entity.auth.DeptChannelTree;
 import com.bonc.frame.entity.commonresource.*;
+import com.bonc.frame.entity.rule.RuleDetail;
 import com.bonc.frame.security.ResourceType;
 import com.bonc.frame.security.aop.PermissionsRequires;
+import com.bonc.frame.entity.rule.RuleDetailHeader;
 import com.bonc.frame.service.modelBase.ModelBaseService;
 import com.bonc.frame.service.rule.RuleDetailService;
 import com.bonc.frame.service.rule.RuleFolderService;
@@ -11,7 +14,6 @@ import com.bonc.frame.util.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -68,22 +70,17 @@ public class ModelBaseController {
 
     @RequestMapping("/group/paged")
     @ResponseBody
-    public Map<String, Object> getModelGroupsPaged(String modelGroupName,
-                                                   String channelId,
-                                                   String start,
-                                                   String length,
-                                                   String startDate,
-                                                   String endDate,
-                                                   HttpServletRequest request) {
+    public Map<String, Object> getModelGroupsPaged(String modelGroupName,String channelId, String start, String length,HttpServletRequest request) {
         if (modelGroupName == null) {
             modelGroupName = "";
         }
         if (channelId == null || channelId.equals("")) {
             channelId = null;
         }
-// 验证数据权限
+        // 验证数据权限
         final String loginUserId = ControllerUtil.getLoginUserId(request);
-        return modelBaseService.getModelGroupsPaged(loginUserId,modelGroupName,channelId, start, length,startDate,endDate);
+
+        return modelBaseService.getModelGroupsPaged(loginUserId,modelGroupName,channelId, start, length);
     }
 
     @RequestMapping("/group/create")
@@ -93,6 +90,7 @@ public class ModelBaseController {
         return modelBaseService.createModelGroup(modelGroup, loginUserId);
     }
 
+    @PermissionsRequires(value = "/pub/modelGroup/update?modelGroupId", resourceType = ResourceType.DATA_PUB_MODEL_GROUP)
     @RequestMapping("/group/update")
     @ResponseBody
     public ResponseResult updateModelGroup(ModelGroupDto modelGroup, HttpServletRequest request) {
@@ -123,15 +121,16 @@ public class ModelBaseController {
 
     /**
      * 产品设置调用渠道
-     * @param dto  渠道的id的集合
+     * @param modelGroupId  产品的id
+     * @param channelIds  渠道的id的集合
      * @return 操作结果
      */
 
     @PermissionsRequires(value = "/pub/modelGroup/channel?modelGroupId", resourceType = ResourceType.DATA_PUB_MODEL_GROUP)
     @RequestMapping(value = "/addChannel", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseResult groupAddChannel(@RequestBody ModelChanIdDto dto) {
-        return modelBaseService.groupAddChannel(dto.getModelGroupId(), dto);
+    public ResponseResult groupAddChannel(String modelGroupId, List<String> channelIds) {
+        return modelBaseService.groupAddChannel(modelGroupId, channelIds);
     }
     /**
      *
@@ -190,13 +189,14 @@ public class ModelBaseController {
     /**
      * 产品中添加（其他）分类中的模型到本产品
      * 直接将对应模型的所属产品id切换
-     * @param info 要添加的模型集合
+     * @param modelList 要添加的模型集合
+     * @param modelGroupId 要添加到的产品的id
      * @return 结果
      */
     @RequestMapping("/group/addModel")
     @ResponseBody
-    public ResponseResult groupAddModel(@RequestBody ModelGroupInfo info) {
-        return ruleDetailService.groupAddModel(info.getModelList(),info.getModelGroupId());
+    public ResponseResult groupAddModel(List<RuleDetailHeader> modelList,String modelGroupId) {
+        return ruleDetailService.groupAddModel(modelList,modelGroupId);
     }
 
     /**
@@ -235,5 +235,6 @@ public class ModelBaseController {
         List<RuleSetForModel> list = modelBaseService.modelVersionWithRuleSet(modelId);
         return ResponseResult.createSuccessInfo("success", list);
     }
+
 
 }

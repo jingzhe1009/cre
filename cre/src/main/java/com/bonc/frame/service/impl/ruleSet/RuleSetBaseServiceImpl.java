@@ -2,8 +2,8 @@ package com.bonc.frame.service.impl.ruleSet;
 
 import com.bonc.frame.config.Config;
 import com.bonc.frame.dao.DaoHelper;
+import com.bonc.frame.entity.auth.Authority;
 import com.bonc.frame.entity.commonresource.*;
-import com.bonc.frame.entity.rule.RuleSetWithModel;
 import com.bonc.frame.module.lock.distributed.curator.CuratorMutexLock;
 import com.bonc.frame.module.lock.distributed.curator.LockDataType;
 import com.bonc.frame.module.log.aop.operatorLog.OperatorLogDataPersistence;
@@ -41,7 +41,7 @@ public class RuleSetBaseServiceImpl implements RuleSetBaseService {
 
     private static final String _RULE_SET_MAPPER = "com.bonc.frame.dao.resource.RuleSetMapper.";
 
-    private static final String _RULE_DETAIL = "com.bonc.frame.dao.rule.RuleDetailMapper.";
+    private static final String _RULE_DETAIL = "com.bonc.frame.mapper.oracle.rule.RuleDetailMapper.";
 
     /**
      * 模型-规则库规则集引用中间表
@@ -123,13 +123,13 @@ public class RuleSetBaseServiceImpl implements RuleSetBaseService {
     }
 
     @Override
-    public Map<String, Object> getRuleSetGroupHeaderListResource(@Nullable String ruleSetName,
+    public Map<String, Object> getRuleSetGroupHeaderListResource(@Nullable String ruleSetGroupId,
                                                      @Nullable String ruleSetGroupName,
                                                      @Nullable String startDate,
                                                      @Nullable String endDate,
                                                      String start, String size) {
         Map<String, String> param = new HashMap<>(4);
-        param.put("ruleSetName", ruleSetName);
+        param.put("ruleSetGroupId", ruleSetGroupId);
         param.put("ruleSetGroupName", ruleSetGroupName);
         param.put("startDate", startDate);
         param.put("endDate", endDate);
@@ -571,16 +571,16 @@ public class RuleSetBaseServiceImpl implements RuleSetBaseService {
     }
 
     @Override
-    public List<Map<String,String>> getKpiByRuleSetId(String ruleSetId) {
-        final List<Map<String,String>> list = daoHelper.queryForList(_RULE_SET_GROUP_MAPPER +
+    public List<String> getKpiByRuleSetId(String ruleSetId) {
+        final List<String> list = daoHelper.queryForList(_RULE_SET_GROUP_MAPPER +
                 "getKpiByRuleSetId", ruleSetId);
         return list;
     }
 
     @Override
-    public List<RuleSetWithModel> getModelByRuleSetId(String ruleSetId){
-        List<RuleSetWithModel> list = daoHelper.queryForList(_RULE_DETAIL +
-                "getModelByRuleSetId", ruleSetId);
+    public List<String> getModelByRuleSetId(String ruleSetId){
+         final List<String> list = daoHelper.queryForList(_RULE_DETAIL +
+                "getModelByRuleSetId",  ruleSetId);
         return list;
     }
 
@@ -681,8 +681,7 @@ public class RuleSetBaseServiceImpl implements RuleSetBaseService {
      */
     @Override
     public List<Map<String, String>> getRuleSetIdByHeader(String ruleSetHeaderId) {
-        List<Map<String, String>> objects = daoHelper.queryForList(_RULE_SET_MAPPER + "getRuleSetIdByHeader", ruleSetHeaderId);
-        return objects;
+        return daoHelper.queryForList(_RULE_SET_MAPPER + "getRuleSetIdByHeader", ruleSetHeaderId);
     }
 
 }
