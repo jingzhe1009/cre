@@ -61,11 +61,10 @@
     </resultMap>
 
     <resultMap id="getRuleSetGroupByKpiIdList" type="com.bonc.frame.entity.commonresource.RuleSetHeaderVo">
-        <result column="RULE_SET_ID" property="ruleSetId" jdbcType="VARCHAR"/>
         <result column="RULE_SET_NAME" property="ruleSetName" jdbcType="VARCHAR"/>
-        <result column="RULE_SET_HEADER_DESC" property="ruleSetHeaderDesc" jdbcType="VARCHAR"/>
-        <result column="RULE_SET_GROUP_NAME" property="ruleSetGroupName" jdbcType="VARCHAR"/>
         <result column="VERSION" property="version" jdbcType="VARCHAR"/>
+        <result column="RULE_SET_GROUP_NAME" property="ruleSetGroupName" jdbcType="VARCHAR"/>
+        <result column="RULE_SET_HEADER_DESC" property="ruleSetHeaderDesc" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="Kpi_Column_List">
@@ -87,15 +86,15 @@
 
     <select id="getRuleSetGroupByKpiId" parameterType="java.lang.String" resultMap="getRuleSetGroupByKpiIdList">
         SELECT
-        B.RULE_SET_NAME,
-        A.VERSION,
-        F.RULE_SET_GROUP_NAME,
-        B.RULE_SET_HEADER_DESC
-        FROM  CRE_KPI_RULE_SET AS K
-        LEFT JOIN CRE_PUB_RULE_SET AS A ON A.RULE_SET_ID =K.RULE_SET_ID,
-        LEFT JOIN CRE_PUB_RULE_SET_HEADER AS B ON B.RULE_SET_HEADER_ID = A.RULE_SET_HEADER_ID
-        LEFT JOIN CRE_PUB_RULE_SET_GROUP AS F ON  F.RULE_SET_HEARER_ID = B.RULE_SET_HEADER_ID
-        WHERE K.KPI_ID = #{kpiId,jdbcType=VARCHAR}
+          b.RULE_SET_NAME as RULE_SET_NAME,
+          a.VERSION as VERSION,
+          f.RULE_SET_GROUP_NAME as RULE_SET_GROUP_NAME,
+          b.RULE_SET_HEADER_DESC as RULE_SET_HEADER_DESC
+        FROM CRE_PUB_RULE_SET a
+        left join CRE_KPI_RULE_SET k ON a.RULE_SET_ID = k.RULE_SET_ID
+        LEFT JOIN CRE_PUB_RULE_SET_HEADER b ON b.RULE_SET_HEADER_ID = a.RULE_SET_HEADER_ID
+        LEFT JOIN CRE_PUB_RULE_SET_GROUP f ON  f.RULE_SET_GROUP_ID = b.RULE_SET_GROUP_ID
+        WHERE k.KPI_ID = #{kpiId,jdbcType=VARCHAR}
     </select>
 
     <!-- 检验 名称 唯一性 -->

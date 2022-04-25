@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.bonc.frame.mapper.resource.RuleSetGroupMapper">
+<mapper namespace="com.bonc.frame.dao.resource.RuleSetGroupMapper">
     <resultMap id="BaseResultMap" type="com.bonc.frame.entity.commonresource.RuleSetGroup">
         <result column="RULE_SET_GROUP_ID" property="ruleSetGroupId" jdbcType="VARCHAR"/>
         <result column="RULE_SET_GROUP_NAME" property="ruleSetGroupName" jdbcType="VARCHAR"/>
@@ -10,10 +10,34 @@
         <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP"/>
     </resultMap>
 
+    <resultMap id="BaseResultMap2" type="com.bonc.frame.entity.kpi.KpiDefinition">
+        <result column="KPI_NAME" property="kpiName" jdbcType="VARCHAR"/>
+        <result column="KPI_CODE" property="kpiCode" jdbcType="VARCHAR"/>
+        <result column="KPI_TYPE" property="kpiType" jdbcType="VARCHAR"/>
+        <result column="KPI_GROUP_NAME" property="kpiGroupName" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="getRuleSetGroupHeaderListResource" type="com.bonc.frame.entity.auth.resource.PubRuleSetGroupResource">
+        <result column="RULE_SET_GROUP_NAME" property="ruleSetGroupName" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
     <sql id="Base_Column_List">
         RULE_SET_GROUP_ID, RULE_SET_GROUP_NAME, CREATE_PERSON, UPDATE_PERSON,
         CREATE_DATE, UPDATE_DATE
     </sql>
+
+    <select id="getRuleSetGroupHeaderListResource" parameterType="java.util.Map"
+            resultMap="getRuleSetGroupHeaderListResource">
+        select
+        RULE_SET_GROUP_NAME
+        from CRE_PUB_RULE_SET_GROUP
+        where 1=1
+        <if test="ruleSetGroupName != null">
+            AND RULE_SET_GROUP_NAME like CONCAT(CONCAT('%',#{ruleSetGroupName,jdbcType=VARCHAR}),'%')
+        </if>
+        ORDER BY CREATE_DATE DESC
+    </select>
 
     <!-- 检验 ruleSetGroupName 唯一性 -->
     <select id="countByName" parameterType="java.util.Map" resultType="int">
@@ -40,6 +64,18 @@
         FROM CRE_PUB_RULE_SET_GROUP
         WHERE RULE_SET_GROUP_NAME like CONCAT(CONCAT('%',#{ruleSetGroupName,jdbcType=VARCHAR}),'%')
         ORDER BY CREATE_DATE DESC
+    </select>
+
+    <select id="getKpiByRuleSetId" parameterType="java.lang.String" resultMap="BaseResultMap2">
+        SELECT
+          b.KPI_GROUP_NAME,
+          a.KPI_NAME,
+          a.KPI_CODE,
+          a.KPI_TYPE
+        FROM CRE_KPI_RULE_SET k
+        LEFT JOIN CRE_KPI_DEFINITION a ON a.KPI_ID = k.KPI_ID
+        LEFT JOIN CRE_KPI_GROUP b on b.KPI_GROUP_ID = a.KPI_GROUP_ID
+        WHERE k.RULE_SET_ID = #{ruleSetId,jdbcType=VARCHAR}
     </select>
 
     <insert id="insertSelective" parameterType="com.bonc.frame.entity.commonresource.RuleSetGroup">

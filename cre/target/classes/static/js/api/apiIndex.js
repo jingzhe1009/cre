@@ -175,7 +175,6 @@ function modifyRow(apiId, type) {
     $('#modifyApiDiv').removeAttr('usedFlag'); // 清除usedCheck状态标识
     $('#modApiName').removeAttr('disabled');
     $('#cron_msg').addClass('hide');
-
     $('#modifyApiDiv .modal-footer button').css('display', 'inline-block');
     $('#apiIndex_addReturnParam, #addApiParam').css('display', 'inline-block');
     $('#returnValueFormatSelect, #httpTypeSelect, #redisTypeSelect, ' +

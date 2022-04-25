@@ -1,4 +1,4 @@
-<!--机构下人员查看弹框-->
+<!--机构下查看渠道弹框-->
 <link href="${ctx.contextPath}/static/css/authority/orgUser.css" rel="stylesheet"/>
 
 <div class="modal fade" id="orgUserAlertModal">
@@ -10,25 +10,25 @@
                     <span aria-hidden="true">×</span>
                     <span class="sr-only">关闭</span>
                 </button>
-                <h4 class="modal-title">查看机构下用户</h4>
+                <h4 class="modal-title">查看渠道</h4>
             </div>
             <div class="modal-body">
                 <!--组织信息-->
                 <div class="orgMsgContainer">
                     <div>
                         <span class="resourceTableIcon"><i class="icon icon-sitemap"></i> 机构名称</span>
-                        <input onfocus="this.blur()" data-col="deptName" type="text" class="form-control"
-                               placeholder="机构名称">
+                        <input  id="orgUser_deptName" onfocus="this.blur()" ata-col="deptName" class="form-control" placeholder="机构名称"
+                                 type="text">
                     </div>
                 </div>
                 <!--内容-->
                 <div class="orgUserContent">
                     <div class="selfAdaptionLeft">
                         <div class="input-group">
-                            <input data-col="userName" type="text" class="form-control"
-                                   placeholder="用户名">
+                            <input data-col="channelName" type="text" class="form-control"
+                                   placeholder="渠道名称">
                             <label class="input-control-icon-right">
-                                <i class="icon icon-user"></i>
+                                <i class="icon icon-channel"></i>
                             </label>
                         </div>
                     </div>
@@ -36,7 +36,7 @@
                         <button class="btn btn-primary" type="button">查询</button>
                     </div>
                     <div style="clear:both;"></div>
-                    <table id="orgPersonTable"></table>
+                    <table id="chanOrgTable"></table>
                 </div>
             </div>
             <!--操作按钮-->

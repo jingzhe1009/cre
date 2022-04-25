@@ -1698,6 +1698,10 @@ var initFlowObj = {
         htmlStr += '</div>';
         (new $.zui.ModalTrigger({title: "提示", custom: htmlStr})).show();
     },
+    //修改旧版本
+    oldVersion: function(sendObj) {
+        sendObj["isCommit"] = 1;
+    },
     // 离开页面触发是否保存提示，防止误点丢失数据
     beforeLeave: function () {
         function beforeLoadHtml(url) {
@@ -1745,7 +1749,7 @@ var initFlowObj = {
             'versionDesc': $.trim($('#modelVersionDes').val()),
             "data": data,
             "optMode": optMode,
-            "isFirst": 0
+            "isFirst": 0,
         };
 
         // insert[0场景下新建模型 1模型库模型第一版本 2模型库新增版本(无)]
@@ -1782,6 +1786,72 @@ var initFlowObj = {
                     failedMessager.show('模型组无效！');
                     return;
                 }
+            }else if(pageType === '4') {
+                var isCommit = '1';
+                var htmlStr = '<p class="saveAskTxt">是否生成为新的版本？</p>';
+                htmlStr += '<div class="modal-footer">';
+                htmlStr += '<button type="button" class="oldVersion btn btn-minor" data-dismiss="modal" onclick="initFlowObj.oldVersion(sendObj)">取消</button>';
+                htmlStr += '<button type="button" class="newVersion btn btn-primary">确定</button>';
+                htmlStr += '</div>';
+                (new $.zui.ModalTrigger({title: "提示", custom: htmlStr})).show();
+                $('.newVersion').unbind('click').on('click',{'sendObj':sendObj},function(e){
+                    var sendObj = e.data.sendObj;
+                    sendObj.isCommit = '0';
+                    $('#triggerModal').modal('hide');
+                    $.ajax({
+                        url: webpath + '/rule/version/commit',
+                        data: sendObj,
+                        dataType: "json",
+                        type: "post",
+                        success: function (data) {
+                            //判断是否成功跳转页面
+                            if (data.status === 0) {
+                                initFlowObj.saveRuleSuccess = true;
+                                initFlowObj.jumpFlag = true;
+                                var message = '保存成功并添加了新版本';
+                                successMessager.show(message);
+                                $('#editRuleName').modal('hide');
+                                var url = webpath + "/rule/updateRule?ruleId=" + data.data.ruleId + "&folderId=" + folderId + "&childOpen=" + flagName + "&pageType=" + newPageType;
+                                creCommon.loadHtml(url);
+                            } else {
+                                failedMessager.show('保存失败--' + data.msg);
+                            }
+                        },
+                        complete: function () {
+                            initFlowObj.refreshFlag = true;
+                        }
+                    });
+                })
+                $('.oldVersion').unbind('click').on('click',{'sendObj':sendObj},function(e){
+                    var sendObj = e.data.sendObj;
+                    sendObj.isCommit = '1';
+                    $('#triggerModal').modal('hide');
+                    $.ajax({
+                        url: webpath + '/rule/version/commit',
+                        data: sendObj,
+                        dataType: "json",
+                        type: "post",
+                        success: function (data) {
+                            //判断是否成功跳转页面
+                            if (data.status === 0) {
+                                initFlowObj.saveRuleSuccess = true;
+                                initFlowObj.jumpFlag = true;
+                                var message = '成功修改了版本';
+                                successMessager.show(message);
+                                $('#editRuleName').modal('hide');
+                                var url = webpath + "/rule/updateRule?ruleId=" + data.data.ruleId + "&folderId=" + folderId + "&childOpen=" + flagName + "&pageType=" + newPageType;
+                                creCommon.loadHtml(url);
+                            } else {
+                                failedMessager.show('保存失败--' + data.msg);
+                            }
+                        },
+                        complete: function () {
+                            initFlowObj.refreshFlag = true;
+                        }
+                    });
+                })
+
+                return
             }
         } else {
             failedMessager.show('[pageType]参数无效');
@@ -1812,6 +1882,7 @@ var initFlowObj = {
                             // var url = webpath + "/modelBase/view?idx=16" + flagStr;
                             // creCommon.loadHtml(url);
                         } else if (pageType === '2' || pageType === '4') { // 2新版本 & 4修改版本(更新/新版本)
+
                             // var jumpRuleName = sendObj.ruleName || ruleName;
                             // var url = webpath + "/modelBase/view?idx=16" + flagStr + '&jumpRuleName=' + jumpRuleName;
                             // creCommon.loadHtml(url);

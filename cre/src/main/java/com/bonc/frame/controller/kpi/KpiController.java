@@ -1,6 +1,7 @@
 package com.bonc.frame.controller.kpi;
 
 import com.bonc.frame.config.Config;
+import com.bonc.frame.entity.commonresource.RuleSetHeaderVo;
 import com.bonc.frame.entity.kpi.KpiDefinition;
 import com.bonc.frame.entity.kpi.KpiGroup;
 import com.bonc.frame.security.ResourceType;
@@ -69,9 +70,9 @@ public class KpiController {
     //指标下查看关联规则集组信息
     @RequestMapping("/getRuleSetGroupByKpiId")
     @ResponseBody
-    public List<Object> getRuleSetGroupByKpiId(String KpiId) {
-        List<Object> List = kpiService.getRuleSetGroupByKpiId(KpiId);
-        return List;
+    public ResponseResult getRuleSetGroupByKpiId(String kpiId) {
+        List<RuleSetHeaderVo> list = kpiService.getRuleSetGroupByKpiId(kpiId);
+        return ResponseResult.createSuccessInfo("success",list);
     }
 
     @RequestMapping("/check/kpiName")
@@ -168,21 +169,6 @@ public class KpiController {
         return ResponseResult.createSuccessInfo();
     }
 
-    @PermissionsRequires(value = "/kpi/group/update?kpiGroupId", resourceType = ResourceType.DATA_KPI_GROUP)
-    @RequestMapping(value = "/group/update/checkAuth", method = RequestMethod.GET)
-    @ResponseBody
-    public ResponseResult updateGroup(String kpiGroupId) {
-        return ResponseResult.createSuccessInfo();
-    }
-
-    @PermissionsRequires(value = "/kpi/group/delete?kpiGroupId", resourceType = ResourceType.DATA_KPI_GROUP)
-    @RequestMapping(value = "/group/delete/checkAuth", method = RequestMethod.GET)
-    @ResponseBody
-    public ResponseResult deleteGroup(String kpiGroupId) {
-        return ResponseResult.createSuccessInfo();
-    }
-
-
     // ------------------------ 指标组管理 ------------------------
 
     @RequestMapping(value = "/group/list")
@@ -204,14 +190,14 @@ public class KpiController {
         String loginUserId = ControllerUtil.getLoginUserId(request);
         return kpiService.createKpiGroup(kpiGroup, loginUserId);
     }
-    @PermissionsRequires(value = "/kpi/group/update?kpiGroupId", resourceType = ResourceType.DATA_KPI_GROUP)
+
     @RequestMapping(value = "/group/update", method = RequestMethod.POST)
     @ResponseBody
     public ResponseResult updateKpiGroup(KpiGroup kpiGroup, HttpServletRequest request) {
         String loginUserId = ControllerUtil.getLoginUserId(request);
         return kpiService.updateKpiGroup(kpiGroup, loginUserId);
     }
-    @PermissionsRequires(value = "/kpi/group/delete?kpiGroupId", resourceType = ResourceType.DATA_KPI_GROUP)
+
     @RequestMapping(value = "/group/delete", method = RequestMethod.POST)
     @ResponseBody
     public ResponseResult deleteKpiGroup(String kpiGroupId) {
