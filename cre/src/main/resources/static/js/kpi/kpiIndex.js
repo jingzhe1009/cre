@@ -376,7 +376,7 @@ var kpiModal = {
             });
         }
     },
-    // 获取指标数据 handleType 0新增 1修改; fetchType 0数据源 1接口
+    // 获取指标数据 handleType 0新增 1修改; fetchType 0数据源 1接口 2输入
     getKpiData: function (handleType, fetchType, kpiFetchLimitersList) {
         var obj = {
             dbId: '',

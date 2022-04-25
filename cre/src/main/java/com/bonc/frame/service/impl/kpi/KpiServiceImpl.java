@@ -405,6 +405,10 @@ public class KpiServiceImpl implements KpiService {
             convertKpiSql(kpiDefinition, metaDataTable, dataSource);
 
         }
+        if ("2".equals(kpiDefinition.getFetchType())) {
+            kpiDefinition.setKpiValueSourceCode(kpiCode);
+            kpiDefinition.setKpiValueSourceName(kpiName);
+        }
 
 //        daoHelper.insert(_KPI_DEFINITION + "insertKpiDefinition", kpiDefinition);
 
