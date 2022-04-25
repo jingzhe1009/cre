@@ -28,8 +28,7 @@
 
     <resultMap id="BaseResultMap" type="com.bonc.frame.entity.rule.RuleDetail"
                extends="RuleDetailHeaderMap">
-        <id column="
-" property="ruleId" jdbcType="VARCHAR"/>
+        <id column="RULE_ID" property="ruleId" jdbcType="VARCHAR"/>
         <result column="IS_DEL" property="isDel" jdbcType="VARCHAR"/>
         <result column="IS_LOG" property="isLog" jdbcType="VARCHAR"/>
         <result column="RULE_STATUS" property="ruleStatus" jdbcType="VARCHAR"/>
@@ -56,12 +55,12 @@
         <result column="RULE_INTERCEPT" property="ruleIntercept" jdbcType="CLOB"/>
     </resultMap>
 
-    <resultMap id="getModelByRuleSetIdList" type="com.bonc.frame.entity.commonresource.ModelVo">
+    <resultMap id="getModelByRuleSetIdList" type="com.bonc.frame.entity.rule.RuleSetWithModel">
         <result column="RULE_ID"  property="ruleId" jdbcType="VARCHAR"/>
-        <result column="RULE_NAME"  property="ruleName" jdbcType="VARCHAR"/>
-        <result column="MODEL_GROUP_ID"  property="modelGroupId" jdbcType="VARCHAR"/>
-        <result column="VERSION"  property="version" jdbcType="VARCHAR"/>
         <result column="RULE_TYPE"  property="ruleType" jdbcType="VARCHAR"/>
+        <result column="RULE_NAME"  property="ruleName" jdbcType="VARCHAR"/>
+        <result column="VERSION"  property="version" jdbcType="VARCHAR"/>
+        <result column="MODEL_GROUP_NAME"  property="modelGroupName" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -86,15 +85,15 @@
 
     <select id="getModelByRuleSetId" parameterType="java.lang.String" resultMap="getModelByRuleSetIdList">
         SELECT
-        A.RULE_ID,
-        A.RULE_TYPE,
-        A.RULE_NAME,
-        A.RULE_VERSION,
-        K.MODEL_GROUP_NAME
-        FROM CRE_PUB_MODEL_GROUP AS K
-        LEFT JOIN CRE_RULE_DETAIL AS A  ON A.MODEL_GROUP_ID = K.MODEL_GROUP_ID,
-        LEFT JOIN CRE_MODEL_RULE_SET AS B ON B.RULE_ID = A.RULE_ID
-        WHERE B.RULE_SET_ID = #{ruleSetId,jdbcType=VARCHAR}
+          a.RULE_ID,
+          a.RULE_TYPE,
+          a.RULE_NAME,
+          a.VERSION,
+          k.MODEL_GROUP_NAME
+        FROM CRE_RULE_DETAIL a
+        LEFT JOIN CRE_PUB_MODEL_GROUP k ON a.MODEL_GROUP_ID = k.MODEL_GROUP_ID
+        LEFT JOIN CRE_PUB_RULE_SET_RULE b ON b.RULE_ID = a.RULE_ID
+        WHERE b.RULE_SET_ID = #{ruleSetId,jdbcType=VARCHAR}
     </select>
 
     <select id="pagedByRuleNameFolderNameRuleType" resultType="com.bonc.frame.entity.auth.resource.RuleResource"
@@ -266,9 +265,9 @@
         <include refid="Version_Column_List_DRAFT"/>
         from CRE_RULE_DETAIL_DRAFT
         WHERE 1=1
-        <if test="folderId != null and '' != folderId">
-            AND MODEL_GROUP_ID = #{folderId,jdbcType=VARCHAR}
-        </if>
+        <!--<if test="folderId != null and '' != folderId">-->
+        <!--AND MODEL_GROUP_ID = #{folderId,jdbcType=VARCHAR}-->
+        <!--</if>-->
         <if test="ruleName != null and '' != ruleName">
             AND RULE_NAME = #{ruleName,jdbcType=VARCHAR}
         </if>
@@ -288,9 +287,9 @@
         FROM
         CRE_RULE_DETAIL_DRAFT
         WHERE 1=1
-        <if test="folderId != null and '' != folderId">
-            AND MODEL_GROUP_ID = #{folderId,jdbcType=VARCHAR}
-        </if>
+        <!--<if test="folderId != null and '' != folderId">-->
+        <!--AND MODEL_GROUP_ID = #{folderId,jdbcType=VARCHAR}-->
+        <!--</if>-->
         <if test="ruleName != null and '' != ruleName">
             AND RULE_NAME = #{ruleName,jdbcType=VARCHAR}
         </if>
@@ -1615,5 +1614,11 @@
           AND A.RULE_NAME = #{ruleName,jdbcType=VARCHAR}
           AND A.RULE_STATUS = #{ruleStatus,jdbcType=VARCHAR}
     </select>
+
+    <update id="groupAddModel" parameterType="map">
+        update CRE_RULE_DETAIL
+        set MODEL_GROUP_ID = #{modelGroupId,jdbcType=VARCHAR}
+        where RULE_ID = #{ruleId,jdbcType=VARCHAR}
+    </update>
 
 </mapper>
