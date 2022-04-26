@@ -1,0 +1,105 @@
+/*2022/04/25  监控管理 陈芳*/
+.cm-selectPeacock {
+    float: left;
+}
+.cm-underlineIpt {
+    border-bottom: 1px solid #dbdbdb;
+    border-top: 0px;
+    border-left: 0px;
+    border-right: 0px;
+    outline: none;
+}
+.row-css {
+    margin: 0 0 0 21px;
+}
+.row-css > div {
+    margin: 10px 0;
+}
+.nav-tabs{
+    border-bottom: 0;
+}
+#monitorTab{
+    display: flex;
+    flex-flow: wrap;
+}
+#monitorTab .tab12{
+    display: flex;
+    flex-flow: wrap;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-basis: 100%;
+}
+#monitorTab .nav-header{
+    border-bottom: 1px solid #DDDDDD;
+    display: flex;
+    justify-content: space-between;
+    flex-basis: 100%;
+    align-items: center;
+}
+#monitorTab .nav-selects,.tab3{
+    margin: 10px 0;
+}
+button{
+    background-color: #02babc;
+    height: 30px;
+    width: 70px;
+    color: #fff;
+    padding: 0 10px;
+    font-size: 14px;
+    border-radius: 4px;
+    border:none;
+}
+.download,.back{
+    background-color: #A4ADB3;
+    float: right;
+}
+.nav-primary>li.active>a, .nav-primary>li.active>a:focus, .nav-primary>li.active>a:hover {
+    color: #fff;
+    background-color: #02babc !important;
+    border-color: #ddd !important;
+    border:1px solid #ddd;
+}
+.nav>li>a:focus, .nav>li>a:hover {
+    color: var( --colorNormal );
+    background-color: transparent;
+    border-color: transparent;
+    border-bottom: 1px solid transparent;
+}
+.numBox div{
+    flex-grow: 0 !important;
+}
+#desc{
+    margin:20px;
+    display: flex;
+    justify-content: center;
+}
+.infoItem{
+    padding: 0px 25px;
+    display: flex;
+    justify-content: space-between;
+    flex-basis: 100%;
+    color: rgba(255,255,255,.7);
+    font-size: 16px;
+}
+.executeInfo{
+    padding: 0 15px;
+    flex: 1;
+}
+.gatherItem{
+    display: flex;
+    flex-grow: 1;
+}
+.gatherItem ul>li>span{
+    width: 100% !important;
+}
+.gatherItem ul{
+    display: flex;
+    flex-grow: 1;
+}
+.gatherItem ul>li{
+    flex-grow: 1;
+}
+.gatherItem:nth-child(2) li:nth-child(2){
+    flex-direction: column;
+}

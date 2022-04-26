@@ -26,8 +26,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>2.3.2</version>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
@@ -471,7 +471,7 @@
             <groupId>org.apache.hbase</groupId>
             <artifactId>hbase-common</artifactId>
             <version>0.98.6-cdh5.3.5</version>
-            <scope>system</scope>
+            <!-- --><scope>system</scope>
             <systemPath>${basedir}/lib/hbase-common-0.98.6-cdh5.3.5.jar</systemPath>
             <exclusions>
                 <exclusion>
