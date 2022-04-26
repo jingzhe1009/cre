@@ -18,7 +18,7 @@ import java.util.Map;
 @Repository
 public interface RuleSetGroupMapper {
 
-    @PermissibleData(value = "RULE_SET_GROUP_ID", requiresPermission = "/pub/ruleSetGroup/view",
-            resourceType = ResourceType.DATA_PUB_RULE_SET_GROUP, isPageHelper = true)
+//    @PermissibleData(value = "RULE_SET_GROUP_ID", requiresPermission = "/pub/ruleSetGroup/view",
+//            resourceType = ResourceType.DATA_PUB_RULE_SET_GROUP, isPageHelper = true)
     List<RuleSetHeaderGroupExt> getByGroupName(Map map);
 }

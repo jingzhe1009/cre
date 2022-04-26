@@ -19,16 +19,16 @@ import java.util.Map;
 @Repository
 public interface ApiMapper {
 
-    @PermissibleData(value = "API_ID", requiresPermission = "/pub/api/view",
-            resourceType = ResourceType.DATA_PUB_API, isPageHelper = true)
+//    @PermissibleData(value = "API_ID", requiresPermission = "/pub/api/view",
+//            resourceType = ResourceType.DATA_PUB_API, isPageHelper = true)
     List<ApiConfGroup> pubGetApiList(Map map);
-
-    @PermissibleData(value = "API_ID", requiresPermission = "/pub/api/view",
-            resourceType = ResourceType.DATA_PUB_API)
+//
+//    @PermissibleData(value = "API_ID", requiresPermission = "/pub/api/view",
+//            resourceType = ResourceType.DATA_PUB_API)
     List<ApiConf> pubGetAllApiList(Map map);
-
-    @PermissibleData(value = "\"apiId\"", requiresPermission = "/pub/api/view",
-            resourceType = ResourceType.DATA_PUB_API, isPageHelper = true)
+//
+//    @PermissibleData(value = "\"apiId\"", requiresPermission = "/pub/api/view",
+//            resourceType = ResourceType.DATA_PUB_API, isPageHelper = true)
     List<PubApiResource> pagedPubApiResource(Map map);
 
 }

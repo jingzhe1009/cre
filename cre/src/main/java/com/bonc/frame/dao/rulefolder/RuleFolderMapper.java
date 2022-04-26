@@ -9,12 +9,12 @@ import java.util.Map;
 
 public interface RuleFolderMapper {
 
-	@PermissibleData(value = "\"key\"", requiresPermission = "/folder/view",
-			resourceType = ResourceType.DATA_FOLDER, isPageHelper = true)
+//	@PermissibleData(value = "\"key\"", requiresPermission = "/folder/view",
+//			resourceType = ResourceType.DATA_FOLDER, isPageHelper = true)
 	Map<String, Object> selectRuleFolder();
-
-    @PermissibleData(value = "\"folderId\"", requiresPermission = "/folder/view",
-            resourceType = ResourceType.DATA_FOLDER, isPageHelper = true)
+//
+//    @PermissibleData(value = "\"folderId\"", requiresPermission = "/folder/view",
+//            resourceType = ResourceType.DATA_FOLDER, isPageHelper = true)
     List<RuleFolderResource> pagedRuleFolder(Map map);
 	
 }

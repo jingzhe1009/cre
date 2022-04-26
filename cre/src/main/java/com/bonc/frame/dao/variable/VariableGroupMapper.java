@@ -18,8 +18,8 @@ import java.util.Map;
 public interface VariableGroupMapper {
 
 
-    @PermissibleData(value = "VARIABLE_GROUP_ID", requiresPermission = "/pub/variableGroup/view",
-            resourceType = ResourceType.DATA_PUB_VARIABLE_GROUP, isPageHelper = true)
+//    @PermissibleData(value = "VARIABLE_GROUP_ID", requiresPermission = "/pub/variableGroup/view",
+//            resourceType = ResourceType.DATA_PUB_VARIABLE_GROUP, isPageHelper = true)
     List<VariableGroupExt> select(Map map);
 
 

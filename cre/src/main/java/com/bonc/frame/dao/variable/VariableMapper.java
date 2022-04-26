@@ -20,40 +20,40 @@ import java.util.Map;
 @Repository
 public interface VariableMapper {
 
-    @PermissibleData(value = "VARIABLE_ID", requiresPermission = "/pub/variable/view",
-            resourceType = ResourceType.DATA_PUB_VARIABLE, isPageHelper = true)
+//    @PermissibleData(value = "VARIABLE_ID", requiresPermission = "/pub/variable/view",
+//            resourceType = ResourceType.DATA_PUB_VARIABLE, isPageHelper = true)
     List<VariableExt> pubSelectVariables(Map map);
-
-    @PermissibleData(value = "VARIABLE_ID", requiresPermission = "/pub/variable/view",
-            resourceType = ResourceType.DATA_PUB_VARIABLE, isPageHelper = true)
+//
+//    @PermissibleData(value = "VARIABLE_ID", requiresPermission = "/pub/variable/view",
+//            resourceType = ResourceType.DATA_PUB_VARIABLE, isPageHelper = true)
     List<VariableGroupExt> pubSelectFlatVariables(Map map);
-
-    @PermissibleData(value = "\"variableId\"", requiresPermission = "/pub/variable/view",
-            resourceType = ResourceType.DATA_PUB_VARIABLE, isPageHelper = true)
+//
+//    @PermissibleData(value = "\"variableId\"", requiresPermission = "/pub/variable/view",
+//            resourceType = ResourceType.DATA_PUB_VARIABLE, isPageHelper = true)
     List<PubVariableResource> pagedPubVariableResources(Map map);
-
-    @PermissibleData(value = "VARIABLE_ID", requiresPermission = "/pub/variable/view",
-            resourceType = ResourceType.DATA_PUB_VARIABLE)
+//
+//    @PermissibleData(value = "VARIABLE_ID", requiresPermission = "/pub/variable/view",
+//            resourceType = ResourceType.DATA_PUB_VARIABLE)
     List<Variable> selectPubByVariableGroupIdIsNull();
-
-    @PermissibleData(value = "VARIABLE_ID", requiresPermission = "/pub/variable/view",
-            resourceType = ResourceType.DATA_PUB_VARIABLE)
+//
+//    @PermissibleData(value = "VARIABLE_ID", requiresPermission = "/pub/variable/view",
+//            resourceType = ResourceType.DATA_PUB_VARIABLE)
     List<Map<String, String>> selectPubEntityByVariableGroupIdIsNull2();
-
-    @PermissibleData(value = "\"variableId\"", requiresPermission = "/pub/variable/view",
-            resourceType = ResourceType.DATA_PUB_VARIABLE)
+//
+//    @PermissibleData(value = "\"variableId\"", requiresPermission = "/pub/variable/view",
+//            resourceType = ResourceType.DATA_PUB_VARIABLE)
     List<Map<String, String>> selectPubEntityRefByVariableGroupIdIsNull();
-
-    @PermissibleData(value = "VARIABLE_ID", requiresPermission = "/pub/variable/view",
-            resourceType = ResourceType.DATA_PUB_VARIABLE)
+//
+//    @PermissibleData(value = "VARIABLE_ID", requiresPermission = "/pub/variable/view",
+//            resourceType = ResourceType.DATA_PUB_VARIABLE)
     List<Variable> pubSelectVariablesByGroupId(String variableGroupId);
-
-    @PermissibleData(value = "VARIABLE_ID", requiresPermission = "/pub/variable/view",
-            resourceType = ResourceType.DATA_PUB_VARIABLE)
+//
+//    @PermissibleData(value = "VARIABLE_ID", requiresPermission = "/pub/variable/view",
+//            resourceType = ResourceType.DATA_PUB_VARIABLE)
     List<Map<String, String>> selectEntityByVariableGroupId2(String variableGroupId);
-
-    @PermissibleData(value = "\"variableId\"", requiresPermission = "/pub/variable/view",
-            resourceType = ResourceType.DATA_PUB_VARIABLE)
+//
+//    @PermissibleData(value = "\"variableId\"", requiresPermission = "/pub/variable/view",
+//            resourceType = ResourceType.DATA_PUB_VARIABLE)
     List<Map<String, String>> selectEntityRefByVariableGroupId(String variableGroupId);
 
 }
