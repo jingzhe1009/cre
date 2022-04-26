@@ -69,3 +69,4 @@ public class RuleSetWithModel {
         this.ruleType = ruleType;
     }
 }
+
