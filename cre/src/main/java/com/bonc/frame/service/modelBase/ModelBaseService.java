@@ -1,9 +1,6 @@
 package com.bonc.frame.service.modelBase;
 
 import com.bonc.frame.entity.commonresource.*;
-import com.bonc.frame.entity.auth.DeptChannelTree;
-import com.bonc.frame.entity.commonresource.*;
-import com.bonc.frame.entity.rule.RuleDetail;
 import com.bonc.frame.util.ResponseResult;
 
 import java.util.List;

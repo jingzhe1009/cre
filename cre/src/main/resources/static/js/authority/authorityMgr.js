@@ -1642,7 +1642,10 @@ var modelGroupTitle = [
             var htmlStr = '<div class="resourceCheckBoxContainer checkAllContainer">';
             htmlStr += '<div class="checkbox"><label><input urlStr="/pub/modelGroup/view" class="verticalCheckbox" type="checkbox">查看</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/pub/modelGroup/update" class="verticalCheckbox" type="checkbox">修改</label></div>';
+            htmlStr += '<div class="checkbox"><label><input urlStr="/pub/modelGroup/export" class="verticalCheckbox" type="checkbox">导出</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/pub/modelGroup/delete" class="verticalCheckbox" type="checkbox">删除</label></div>';
+            htmlStr += '<div class="checkbox"><label><input urlStr="/pub/modelGroup/channel" class="verticalCheckbox" type="checkbox">设置调用渠道</label></div>';
+            htmlStr += '<div class="checkbox"><label><input urlStr="/pub/modelGroup/modelView" class="verticalCheckbox" type="checkbox">查看模型</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="*" class="acrossCheckbox verticalCheckbox" type="checkbox">全选</label></div>';
             htmlStr += '</div>';
             return htmlStr;

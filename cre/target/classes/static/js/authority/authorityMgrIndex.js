@@ -1197,7 +1197,7 @@ var chanModal = {
             obj[$(inputs[i]).attr('col-name')] = $.trim($(inputs[i]).val());
         }
          // 单独处理一下
-        obj['deptId'] = $.trim($('#chanAlertModal .chanSelector option:selected').attr('channelId'));
+        obj['deptId'] = $.trim($('#chanAlertModal .orgSelector option:selected').attr('deptId'));
         if (handleType === '1') { // 修改参数多传varId
             if (channelId) {
                 obj['channelId'] = channelId;

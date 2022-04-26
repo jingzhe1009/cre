@@ -1,6 +1,5 @@
 package com.bonc.frame.service.rule;
 
-import com.bonc.frame.entity.commonresource.ModelGroup;
 import com.bonc.frame.entity.commonresource.ModelGroupInfo;
 import com.bonc.frame.entity.commonresource.ModelRuleDetail;
 import com.bonc.frame.entity.model.ModelContentInfo;
@@ -273,11 +272,11 @@ public interface RuleDetailService {
                                               String start, String length);
 
     Map<String, Object> getGroupHeaderListResource(@Nullable String modelGroupId,
-                                              @Nullable String ruleType,
-                                              @Nullable String modelGroupName,
-                                              @Nullable String startDate,
-                                              @Nullable String endDate,
-                                              String start, String length);
+                                                   @Nullable String ruleType,
+                                                   @Nullable String modelGroupName,
+                                                   @Nullable String startDate,
+                                                   @Nullable String endDate,
+                                                   String start, String length);
 
     /**
      * 创建模型的同时创建新版本

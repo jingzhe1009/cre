@@ -192,7 +192,7 @@ var kpiModal = {
         $('.RelevancyDefBase form').validator('cleanUp');
 
         kpiModal.getDetail(kpiId, kpiGroupId);
-         obj ={kpiId:kpiId};
+        obj ={kpiId:kpiId};
         kpiModal.initRelevancyTable(obj);
     },
     // 初始化 关联规则集弹窗表格

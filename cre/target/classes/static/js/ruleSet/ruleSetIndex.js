@@ -108,9 +108,10 @@ var ruleSetBaseModal = {
         var detail = {};
         if ($this) {
             var curRow = $this.parentNode.parentNode;
+            console.log(curRow);
             detail = $('#ruleSetTable').DataTable().row(curRow).data();
+            console.log(detail);
         }
-
         // handleType: 0新增 1修改 2查看
         $('#ruleSetBaseAlertModal form')[0].reset();
         $('#ruleSetName').removeAttr('disabled');
@@ -149,8 +150,6 @@ var ruleSetBaseModal = {
                                             'show': 'center',
                                             "backdrop": "static"
                                         });
-                                        $('#ruleSetName').val(detail.ruleSetName);
-                                        $('.ruleSetDes').val(detail.ruleSetHeaderDesc);
                                         if (data.status === -1) { // 有启用
                                             $('#ruleSetName').attr('disabled', true);
                                             $('#ruleSetBaseAlertModal .cron_msg').removeClass('hide');
@@ -172,8 +171,6 @@ var ruleSetBaseModal = {
             ruleSetBaseModal.echoData(detail);
             $('#ruleSetBaseAlertModal').attr('handleType', handleType).modal({'show': 'center', "backdrop": "static"});
             $('#ruleSetBaseAlertModal .form-control').attr('disabled', true);
-            $('#ruleSetName').val(detail.ruleSetName);
-            $('.ruleSetDes').val(detail.ruleSetHeaderDesc);
         } else {
             return;
         }

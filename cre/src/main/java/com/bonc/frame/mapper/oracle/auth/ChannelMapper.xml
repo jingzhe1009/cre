@@ -65,9 +65,6 @@
             <if test="parentId != null">
                 PARENT_ID,
             </if>
-            <if test="userNum != null">
-                USER_NUM,
-            </if>
             <if test="createDate != null">
                 CREATE_DATE,
             </if>
@@ -82,9 +79,6 @@
             </if>
             <if test="deptId != null">
                 DEPT_ID,
-            </if>
-            <if test="userId != null">
-                USER_ID,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -103,9 +97,6 @@
             <if test="parentId != null">
                 #{parentId,jdbcType=VARCHAR},
             </if>
-            <if test="userNum != null">
-                #{userNum,jdbcType=INTEGER},
-            </if>
             <if test="createDate != null">
                 #{createDate,jdbcType=TIMESTAMP},
             </if>
@@ -120,9 +111,6 @@
             </if>
             <if test="deptId != null">
                 #{deptId,jdbcType=VARCHAR},
-            </if>
-            <if test="userId != null">
-                #{userId,jdbcType=VARCHAR},
             </if>
         </trim>
 

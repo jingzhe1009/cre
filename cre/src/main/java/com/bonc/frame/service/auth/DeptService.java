@@ -1,5 +1,6 @@
 package com.bonc.frame.service.auth;
 
+import com.bonc.frame.entity.auth.Channel;
 import com.bonc.frame.entity.auth.DepartmentVo;
 import com.bonc.frame.entity.auth.Dept;
 import com.bonc.frame.util.ResponseResult;

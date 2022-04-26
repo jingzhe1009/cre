@@ -1,12 +1,12 @@
 #pageContent {
-    height:calc( 100% - 11px);
-    width: 100%;
+	height:calc( 100% - 11px);
+	width: 100%;
 }
 #pageBody {
-    width: 100%;
-    height:80%;
-    height: calc(100% - 34px);
-    border: 1px solid transparent;
+	width: 100%;
+	height:80%;
+	height: calc(100% - 34px);
+	border: 1px solid transparent;
 }
 .operation{
 	display: flex;
@@ -14,17 +14,17 @@
 }
 
 .magement { float:left;}
-.magement a { 
+.magement a {
 	line-height:30px;
 	/*color:#3780f1; */
 	color: var(--colorNormal);
 	margin-right:40px;
 }
 
-.ruleContent li { 
-	list-style:none; 
+.ruleContent li {
+	list-style:none;
 	padding:0;
-	
+
 }
 .ruleContent {
 	padding-left:0px;
@@ -33,11 +33,11 @@
 
 .ruleContent dl {
 	position:relative;
-	height:180px;		
+	height:180px;
 	margin:10px;
 	/* width:calc(95%/6); */
 	border-radius:5px;
-	
+
 	background:#fff;
 	margin-bottom:0;
 	box-shadow: 0 4px 6px 0 rgba(73, 138, 248, 0.13);
@@ -51,16 +51,16 @@
 	top:80px;
 	left:0;
 	padding:0 13px;
-	border-radius:5px;	
+	border-radius:5px;
 }
 .ruleContent dl dd .addS {
 	width:100%;
-	background:#fff; 
-	overflow:visible; 
+	background:#fff;
+	overflow:visible;
 	box-shadow:0 4px 6px 0 rgba(73, 138, 248, 0.13);
 }
-.ruleContent dl dd .addPs { 
-	height:auto; 
+.ruleContent dl dd .addPs {
+	height:auto;
 	overflow:visible;
 }
 
@@ -68,7 +68,7 @@
 
 .ruleContent dl dd p {min-height:49px; text-indent:28px; line-height:24px; height:48px; overflow:hidden;}
 
-.ruleContent dl:nth-child(6n){ 
+.ruleContent dl:nth-child(6n){
 	margin-right:0;
 }
 .ruleContent dl dt {
@@ -89,64 +89,64 @@
 .row { text-align:right;margin-bottom:5px;}
 
 .ruleContent input[type="checkbox"] {
-    display: none;
+	display: none;
 }
 .ruleContent input[type="checkbox"] + label {
-    display: inline-block;
-    width: 40px;
-    height: 20px;
-    position: relative;
-    -webkit-transition: 0.3s;
-    transition: 0.3s;
-    margin: 0px 20px;
-    box-sizing: border-box;
-    box-shadow: 0 4px 6px 0 rgba(23,116, 239, 0.11);
+	display: inline-block;
+	width: 40px;
+	height: 20px;
+	position: relative;
+	-webkit-transition: 0.3s;
+	transition: 0.3s;
+	margin: 0px 20px;
+	box-sizing: border-box;
+	box-shadow: 0 4px 6px 0 rgba(23,116, 239, 0.11);
 }
 .ruleContent input[type="checkbox"] + label:after {
-    content: '';
-    display: block;
-    position: absolute;
-    -webkit-transition: 0.3s;
-    transition: 0.3s;
-    cursor: pointer;
+	content: '';
+	display: block;
+	position: absolute;
+	-webkit-transition: 0.3s;
+	transition: 0.3s;
+	cursor: pointer;
 }
 
 .inset_3:checked + label.blue {
-    background: #02BABC;
+	background: #02BABC;
 }
 
 .inset_3:checked + label.blue:after {
-    background: #fff;
+	background: #fff;
 }
 
 .inset_3:checked + label:after {
-    left: calc(100% - 18px);
+	left: calc(100% - 18px);
 }
 
 .inset_3 + label {
-    background: #ddd;
-    border-radius: 20px;
+	background: #ddd;
+	border-radius: 20px;
 }
 
 .inset_3 + label:after {
-    background: #fff;
-    border-radius: 50%;
-    width: 16px;
-    height: 16px;
-    top: 2px;
-    left: 2px;
+	background: #fff;
+	border-radius: 50%;
+	width: 16px;
+	height: 16px;
+	top: 2px;
+	left: 2px;
 }
 @media only screen and (min-width:1366px) and (max-width: 1920px){
 	.ruleContent li {
-	list-style:none; 
-	padding:0;
-	/*width:20%;*/
+		list-style:none;
+		padding:0;
+		/*width:20%;*/
 	}
 }
 
 
 /* 白底蓝border按钮    */
-.butD1 { 
+.butD1 {
 	font-size:14px;
 	color:#02BABC;
 	border:1px solid #02BABC;
@@ -159,7 +159,7 @@
 	text-align: center;
 }
 
-.butD1:hover { 
+.butD1:hover {
 	background:#02BABC;
 	color:#fff;
 }
@@ -167,11 +167,11 @@ button.butD1:focus, button.butD1:active{
 	border:1px solid #02BABC;
 }
 
-.no-rule { 
+.no-rule {
 	margin: 10px;
-    background: white;
-    text-align: center;
-    line-height: 45px;
+	background: white;
+	text-align: center;
+	line-height: 45px;
 }
 
 /*!* 提示弹窗   *!*/

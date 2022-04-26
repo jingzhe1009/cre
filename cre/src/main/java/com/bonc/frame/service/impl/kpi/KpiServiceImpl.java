@@ -42,7 +42,7 @@ import java.util.*;
 @Service("kpiService")
 public class KpiServiceImpl implements KpiService {
 
-    private static final String _KPI_GROUP = "com.bonc.frame.dao.kpi.KpiGroupMapper.";
+    private static final String _KPI_GROUP = "com.bonc.frame.mapper.kpi.KpiGroupMapper.";
     private static final String _KPI_DEFINITION = "com.bonc.frame.dao.kpi.KpiMapper.";
 
     @Autowired
@@ -257,9 +257,9 @@ public class KpiServiceImpl implements KpiService {
 
     @Override
     public Map<String, Object> pagedKpiGroupBaseInfo(
-                                                @Nullable String kpiGroupName,
-                                                String startDate,String endDate,
-                                                String start, String length) {
+            @Nullable String kpiGroupName,
+            String startDate,String endDate,
+            String start, String length) {
         Map<String, String> param = new HashMap<>(4);
         param.put("kpiGroupName", kpiGroupName);
         param.put("startDate", startDate);

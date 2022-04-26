@@ -1031,7 +1031,7 @@ public class RuleDetailServiceImpl implements RuleDetailService {
 
         param.put("startDate", startDate);
         param.put("endDate", endDate);
-        List<RuleDetailHeader> ruleDetailHeaders = daoHelper.queryForList(_MYBITSID_PREFIX  +
+        List<RuleDetailHeader> ruleDetailHeaders = daoHelper.queryForList(_MYBITSID_PREFIX +
                 "getHeaderList", param);
         return ruleDetailHeaders;
     }
@@ -1130,11 +1130,11 @@ public class RuleDetailServiceImpl implements RuleDetailService {
 
     @Override
     public Map<String, Object> getGroupHeaderListResource(@Nullable String modelGroupId,
-                                                     @Nullable String ruleType,
-                                                     @Nullable String modelGroupName,
-                                                     @Nullable String startDate,
-                                                     @Nullable String endDate,
-                                                     String start, String length) {
+                                                          @Nullable String ruleType,
+                                                          @Nullable String modelGroupName,
+                                                          @Nullable String startDate,
+                                                          @Nullable String endDate,
+                                                          String start, String length) {
 
         Map<String, String> param = new HashMap<>(5);
         param.put("modelGroupId", modelGroupId);
@@ -2704,7 +2704,7 @@ public class RuleDetailServiceImpl implements RuleDetailService {
                 System.out.println("valueName="+valueName);
                 System.out.println("variableDefault="+variableDefault);
                 if(variableDefault!=null) {
-                	endValue = endValue.replaceFirst("\\[" + valueName + "\\]", variableDefault);
+                    endValue = endValue.replaceFirst("\\[" + valueName + "\\]", variableDefault);
                 }
             }
 

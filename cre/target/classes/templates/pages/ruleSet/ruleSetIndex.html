@@ -109,7 +109,7 @@
                     <div class="form-group">
                         <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3">规则集描述</label>
                         <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
-                            <textarea col-name="ruleSetHeaderDesc" type="text" class="form-control ruleSetDes" data-rule="规则集描述:length[~255, true]"></textarea>
+                            <textarea col-name="ruleSetHeaderDesc" type="text" class="form-control" data-rule="规则集描述:length[~255, true]"></textarea>
                         </div>
                     </div>
                 </form>
@@ -273,10 +273,10 @@
 <#include "/commonFoot.html">
 
 <script type="text/javascript">
-    var inVariableTree = ${variableAndKpiTree!}; // 公共参数tree + 选择指标
-    var outVariableTree = ${outVariableTree!}; // 公共参数tree
-    var isPublicRuleSet = true; // 场景下false / 规则集true (expRuleConfig.js用)
-    var kpiTypeList = ${kpiTypeList!};
+	var inVariableTree = ${variableAndKpiTree!}; // 公共参数tree + 选择指标
+	var outVariableTree = ${outVariableTree!}; // 公共参数tree
+	var isPublicRuleSet = true; // 场景下false / 规则集true (expRuleConfig.js用)
+	var kpiTypeList = ${kpiTypeList!};
     var token = null;
 </script>
 

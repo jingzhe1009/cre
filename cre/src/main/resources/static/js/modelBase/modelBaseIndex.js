@@ -730,7 +730,7 @@ var modelGroupModal = {
                     for (var i = 0; i < data.data.length; i++) {
                         htmlStr += '<li channelId=\'' + data.data[i].channelId + '\' channelName=\'' + data.data[i].channelName + '\'>' + data.data[i].channelName+'</li>';
                     }
-                   $('.channelList').empty().html(htmlStr);
+                    $('.channelList').empty().html(htmlStr);
                 } else {
                     failedMessager.show(data.msg);
                 }

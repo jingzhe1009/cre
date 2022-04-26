@@ -28,16 +28,20 @@
     </sql>
 
     <select id="getRuleSetGroupHeaderListResource" parameterType="java.util.Map"
-            resultMap="getRuleSetGroupHeaderListResource">
-        select
-        RULE_SET_GROUP_NAME
-        from CRE_PUB_RULE_SET_GROUP
-        where 1=1
-        <if test="ruleSetGroupName != null">
-            AND RULE_SET_GROUP_NAME like CONCAT(CONCAT('%',#{ruleSetGroupName,jdbcType=VARCHAR}),'%')
-        </if>
-        ORDER BY CREATE_DATE DESC
-    </select>
+        resultType="com.bonc.frame.entity.auth.resource.PubRuleSetGroupResource">
+	    select
+	    RULE_SET_GROUP_NAME as "ruleSetGroupName",
+	    RULE_SET_GROUP_ID as "ruleSetGroupId",
+	    CREATE_DATE as "createDate"
+	    FROM CRE_PUB_RULE_SET_GROUP
+	    where 1=1
+	    <if test="ruleSetGroupId != null">
+	        and RULE_SET_GROUP_ID != #{ruleSetGroupId,jdbcType=VARCHAR}
+	    </if>
+	    <if test="ruleSetGroupName != null">
+	        AND RULE_SET_GROUP_NAME = #{ruleSetGroupName,jdbcType=VARCHAR},
+	    </if>
+	</select>
 
     <!-- 检验 ruleSetGroupName 唯一性 -->
     <select id="countByName" parameterType="java.util.Map" resultType="int">

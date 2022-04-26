@@ -37,7 +37,7 @@ import java.util.*;
 @Service
 public class RuleSetBaseServiceImpl implements RuleSetBaseService {
 
-    private static final String _RULE_SET_GROUP_MAPPER = "com.bonc.frame.dao.resource.RuleSetGroupMapper.";
+    private static final String _RULE_SET_GROUP_MAPPER = "com.bonc.frame.mapper.resource.RuleSetGroupMapper.";
 
     private static final String _RULE_SET_MAPPER = "com.bonc.frame.dao.resource.RuleSetMapper.";
 
@@ -124,10 +124,10 @@ public class RuleSetBaseServiceImpl implements RuleSetBaseService {
 
     @Override
     public Map<String, Object> getRuleSetGroupHeaderListResource(@Nullable String ruleSetName,
-                                                     @Nullable String ruleSetGroupName,
-                                                     @Nullable String startDate,
-                                                     @Nullable String endDate,
-                                                     String start, String size) {
+                                                                 @Nullable String ruleSetGroupName,
+                                                                 @Nullable String startDate,
+                                                                 @Nullable String endDate,
+                                                                 String start, String size) {
         Map<String, String> param = new HashMap<>(4);
         param.put("ruleSetName", ruleSetName);
         param.put("ruleSetGroupName", ruleSetGroupName);

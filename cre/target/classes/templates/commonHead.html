@@ -73,7 +73,7 @@
 					 <li idx="0" data="${ctx.contextPath}/main?idx=0"><div class="menuImg"><img src="${ctx.contextPath}/static/imgs/mainNew/icon_sy_normal.png"/></div><span>首页</span></li>
 				</#if>
 				<!--添加场景按钮-->
-				<#if idx! == "2">
+				<!-- <#if idx! == "2">
 					<li class="active" idx="2" data="${ctx.contextPath}/create?idx=2">
 						<div class="menuImg"><img class="ck" src="${ctx.contextPath}/static/imgs/mainNew/icon_cjxd_checked.png"/><img class="nck" src="${ctx.contextPath}/static/imgs/mainNew/icon_cjxd_normal.png"/></div><span>创建向导</span>
 					</li>
@@ -81,29 +81,23 @@
 					<li class="" idx="2" data="${ctx.contextPath}/create?idx=2">
 						<div class="menuImg"><img src="${ctx.contextPath}/static/imgs/mainNew/icon_cjxd_normal.png"/></div><span>创建向导</span>
 					</li>
-				</#if>
+				</#if> -->
 
-				<#--
-					<#if idx! == "1">
+					<!-- <#if idx! == "1">
 						 <li idx="1" data="${ctx.contextPath}/main?idx=1" class="active"><i class="micon monitoringIcon"></i><span>实时监控</span><i class="arr"></i></li>
 					<#else>
 						 <li idx="1" data="${ctx.contextPath}/main?idx=1"><i class="micon monitoringIcon"></i><span>实时监控</span><i class="arr"></i></li>
-					</#if>
-				-->
-				<#--
-					<#if idx! == "4">
+					</#if> -->
+					<!-- <#if idx! == "4">
 						<li idx="4" data="${ctx.contextPath}/log/view?idx=4" class="active"><div class="menuBorder menuBorder_active"></div><div class="menuImg"><img src="${ctx.contextPath}/static/imgs/mainNew/logIcon_checked.png"/></div><span>日志管理</span><i class="arr"></i></li>
 						<#else>
 						<li idx="4" data="${ctx.contextPath}/log/view?idx=4"><div class="menuBorder"></div><div class="menuImg"><img src="${ctx.contextPath}/static/imgs/mainNew/logIcon.png"/></div><span>日志管理</span><i class="arr"></i></li>
-					</#if>
-				-->
-				<#--
-					<#if idx! == "6">
+					</#if> -->
+					<!-- <#if idx! == "6">
 						<li idx="6" data="${ctx.contextPath}/auth/view?idx=6" class="active"><div class="menuBorder menuBorder_active"></div><div class="menuImg"><img src="${ctx.contextPath}/static/imgs/mainNew/authorityIcon_checked.png"/></div><span>权限管理</span><i class="arr"></i></li>
 						<#else>
 						<li idx="6" data="${ctx.contextPath}/auth/view?idx=6"><div class="menuBorder"></div><div class="menuImg"><img src="${ctx.contextPath}/static/imgs/mainNew/authorityIcon.png"/></div><span>权限管理</span><i class="arr"></i></li>
-					</#if>
-				-->
+					</#if> -->
 
 				<#if idx! == "7">
 					<li idx="7" data="${ctx.contextPath}/datasource/view?idx=7" class="active"><div class="menuImg"><img class="ck" src="${ctx.contextPath}/static/imgs/mainNew/icon_sjygl_checked.png"/><img class="nck" src="${ctx.contextPath}/static/imgs/mainNew/icon_sjygl_normal.png"/></div><span>数据源管理</span></li>
@@ -139,18 +133,15 @@
 				</#if>
 
 				<!--场景卡片页-->
-				<#--
-				<#if idx! == "18">
+				<!-- <#if idx! == "18">
 					<li idx="18" data="${ctx.contextPath}/ruleFolder/foldersIndex?idx=18" class="active"><div class="menuImg"><img class="ck" src="${ctx.contextPath}/static/imgs/mainNew/icon_ywcj_checked.png"/><img class="nck" src="${ctx.contextPath}/static/imgs/mainNew/icon_ywcj_normal.png"/></div><span>卡片</span></li>
 				<#else>
 					<li idx="18" data="${ctx.contextPath}/ruleFolder/foldersIndex?idx=18"><div class="menuImg"><img  src="${ctx.contextPath}/static/imgs/mainNew/icon_ywcj_normal.png"/></div><span>卡片</span></li>
-				</#if>
-				-->
+				</#if> -->
 
 
 				<!--场景列表（废弃）-->
-				<#--
-					<#list Session.folderMeun as folder>
+					<!-- <#list Session.folderMeun as folder>
 						<#if idx! == folder.key>
 							<li abc="${folderId!}" idx="${folder.key}" class="active" data="${ctx.contextPath}/ruleFolder/rulePackageMgr?folderId=${folder.key}" style="padding-left:40px"
 								data-toggle="tooltip" data-tip-class="tooltip-mytooltip" data-placement="bottom" title="${folder.text}">
@@ -165,8 +156,7 @@
 								<span class="folderNameSpan">${folder.text}</span>
 							</li>
 						</#if>
-					</#list>
-				-->
+					</#list> -->
 
 				<!--场景目录菜单-->
 				<#if  childOpen! == "o">
@@ -177,17 +167,17 @@
 				<!--场景列表-->
 				<div class="${childOpen!}" id="folderMenuWrap"></div>
 
-				<#if idx! == "8">
+				<!-- <#if idx! == "8">
 					<li idx="8" data="${ctx.contextPath}/task/view?idx=8" class="active"><div class="menuImg"><img class="ck" src="${ctx.contextPath}/static/imgs/mainNew/icon_lxrwgl_checked.png"/><img class="nck" src="${ctx.contextPath}/static/imgs/mainNew/icon_lxrwgl_normal.png"/></div><span>离线任务管理</span></li>
 				<#else>
 					<li idx="8" data="${ctx.contextPath}/task/view?idx=8"><div class="menuImg"><img src="${ctx.contextPath}/static/imgs/mainNew/icon_lxrwgl_normal.png"/></div></i><span>离线任务管理</span></li>
-				</#if>
+				</#if> -->
 
-				<#if idx! == "17">
+				<!-- <#if idx! == "17">
 					<li idx="17" data="${ctx.contextPath}/aBTest/index?idx=17" class="active"><div class="menuImg"><img class="ck" src="${ctx.contextPath}/static/imgs/mainNew/icon_lxrwgl_checked.png"/><img class="nck" src="${ctx.contextPath}/static/imgs/mainNew/icon_lxrwgl_normal.png"/></div><span>AB Test</span></li>
 				<#else>
 					<li idx="17" data="${ctx.contextPath}/aBTest/index?idx=17"><div class="menuImg"><img src="${ctx.contextPath}/static/imgs/mainNew/icon_lxrwgl_normal.png"/></div></i><span>AB Test</span></li>
-				</#if>
+				</#if> -->
 
 			</ul>
 		</div>
