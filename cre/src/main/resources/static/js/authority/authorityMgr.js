@@ -1532,7 +1532,7 @@ var menuTitle = [
         "render": function (data, type, row) {
             var resourcesArr = row.resources;
             var checkAllFlag = 0;
-            var htmlStr = '<div class="resourceCheckBoxContai  ner" resourceId=\'' + row.resourceId + '\' resourceUrl=\'' + row.resourceUrl + '\'>';
+            var htmlStr = '<div class="resourceCheckBoxContainer" resourceId=\'' + row.resourceId + '\' resourceUrl=\'' + row.resourceUrl + '\'>';
             for (var i = 0; i < resourcesArr.length; i++) {
                 var checkStr = '';
                 if (resourcesArr[i].choosed) {
