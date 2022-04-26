@@ -252,7 +252,7 @@
     </select>
 
 
-    <select id="getChannelByDept" resultMap="BaseResultMap6" parameterType="java.lang.String">
+    <select id="getChannelByDept" resultMap="BaseResultMap6">
         select
                a.CHANNEL_ID,
                a.CHANNEL_NAME,
@@ -261,7 +261,7 @@
                b.DEPT_CODE
         from CRE_AUTH_CHANNEL a
         left join CRE_AUTH_DEPT b on a.DEPT_ID = b.DEPT_ID
-        where a.DEPT_ID = #{deptId,jdbcType=VARCHAR}
+        order by a.CREATE_DATE desc
     </select>
 
     <select id="channelListWithDept" resultMap="BaseResultMap5" parameterType="java.lang.String">
@@ -273,6 +273,7 @@
         <if test="deptId != null">
             and a.DEPT_ID = #{deptId,jdbcType=VARCHAR}
         </if>
+        order by a.CREATE_DATE desc
     </select>
 
     <select id="getDeptIdByUserId" resultType="java.lang.String" parameterType="java.lang.String">

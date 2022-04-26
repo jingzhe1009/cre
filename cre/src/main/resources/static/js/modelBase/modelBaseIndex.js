@@ -728,7 +728,7 @@ var modelGroupModal = {
                 if (data.status === 0) {
                     var htmlStr = '';
                     for (var i = 0; i < data.data.length; i++) {
-                        htmlStr += '<li channelId=\'' + data.data[i].channelId + '\' channelName=\'' + data.data[i].channelName + '\'>' + data.data[i].channelName+'</li>';
+                        htmlStr += '<li channelId=\'' + data.data[i].channelId + '\' channelName=\'' + data.data[i].channelName + '-' + data.data[i].deptName + '\'>' + data.data[i].channelName+ '-' + data.data[i].deptName + '</li>';
                     }
                     $('.channelList').empty().html(htmlStr);
                 } else {
