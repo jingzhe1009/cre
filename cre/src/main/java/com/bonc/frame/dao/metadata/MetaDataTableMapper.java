@@ -17,14 +17,14 @@ import java.util.Map;
 @Repository
 public interface MetaDataTableMapper {
 
-    @PermissibleData(value = "TABLEID", requiresPermission = "/metaTable/view", resourceType = ResourceType.DATA_METADATA)
+//    @PermissibleData(value = "TABLEID", requiresPermission = "/metaTable/view", resourceType = ResourceType.DATA_METADATA)
     List<Map<String, Object>> findMetaTable(Map<String, String> param);
-
-    @PermissibleData(value = "TABLEID", requiresPermission = "/metaTable/view", resourceType = ResourceType.DATA_METADATA)
+//
+//    @PermissibleData(value = "TABLEID", requiresPermission = "/metaTable/view", resourceType = ResourceType.DATA_METADATA)
     List<Map<String, Object>> findMetaTableByPage(Map<String, String> param);
-
-    @PermissibleData(value = "\"tableId\"", requiresPermission = "/metaTable/view",
-            resourceType = ResourceType.DATA_METADATA, isPageHelper = true)
+//
+//    @PermissibleData(value = "\"tableId\"", requiresPermission = "/metaTable/view",
+//            resourceType = ResourceType.DATA_METADATA, isPageHelper = true)
     List<MetadataResource> pagedMetaTablesByDsNameTableNamePackageName(Map<String, String> param);
 
 }

@@ -15,8 +15,8 @@ import java.util.Map;
  */
 public interface KpiGroupMapper {
 
-    @PermissibleData(value = "KPI_GROUP_ID", requiresPermission = "/kpi/group/view",
-            resourceType = ResourceType.DATA_KPI_GROUP, isPageHelper = true)
+//    @PermissibleData(value = "KPI_GROUP_ID", requiresPermission = "/kpi/group/view",
+//            resourceType = ResourceType.DATA_KPI_GROUP, isPageHelper = true)
     List<KpiDefinition> getByGroupName(Map map);
 
 }

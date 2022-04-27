@@ -299,15 +299,14 @@ public class RuleSetBaseController {
         final String loginUserId = ControllerUtil.getLoginUserId(request);
         return ruleSetBaseService.createRuleSetGroup(ruleSetGroup, loginUserId);
     }
-
+    @PermissionsRequires(value = "/pub/ruleSetGroup/update?ruleSetGroupId", resourceType = ResourceType.DATA_PUB_RULE_SET_GROUP)
     @RequestMapping(value = "/group/update", method = RequestMethod.POST)
     @ResponseBody
     public ResponseResult updateRuleSetGroup(RuleSetGroup ruleSetGroup, HttpServletRequest request) {
         final String loginUserId = ControllerUtil.getLoginUserId(request);
         return ruleSetBaseService.updateRuleSetGroup(ruleSetGroup, loginUserId);
     }
-
-    @RequestMapping(value = "/group/delete")
+    @PermissionsRequires(value = "/pub/ruleSetGroup/delete?ruleSetGroupId", resourceType = ResourceType.DATA_PUB_RULE_SET_GROUP)    @RequestMapping(value = "/group/delete")
     @ResponseBody
     public ResponseResult deleteRuleSetGroup(String ruleSetGroupId) {
         return ruleSetBaseService.deleteRuleSetGroup(ruleSetGroupId);
@@ -343,5 +342,17 @@ public class RuleSetBaseController {
         return ResponseResult.createSuccessInfo();
     }
 
+    @PermissionsRequires(value = "/pub/ruleSetGroup/update?ruleSetGroupId", resourceType = ResourceType.DATA_PUB_RULE_SET_GROUP)
+    @RequestMapping(value = "/group/update/checkAuth", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseResult checkUpdateGroup(String ruleSetGroupId) {
+        return ResponseResult.createSuccessInfo();
+    }
 
+    @PermissionsRequires(value = "/pub/ruleSetGroup/delete?ruleSetGroupId", resourceType = ResourceType.DATA_PUB_RULE_SET_GROUP)
+    @RequestMapping(value = "/group/delete/checkAuth", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseResult checkDeleteGroup(String ruleSetGroupId) {
+        return ResponseResult.createSuccessInfo();
+    }
 }

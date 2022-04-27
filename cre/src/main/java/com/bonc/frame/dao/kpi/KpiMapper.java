@@ -15,21 +15,21 @@ import java.util.Map;
  */
 public interface KpiMapper {
 
-    @PermissibleData(value = "\"kpiId\"", requiresPermission = "/kpi/view",
-            resourceType = ResourceType.DATA_KPI, isPageHelper = true)
+//    @PermissibleData(value = "\"kpiId\"", requiresPermission = "/kpi/view",
+//            resourceType = ResourceType.DATA_KPI, isPageHelper = true)
     List<KpiDefinitionResource> pagedKpiBaseInfo(Map map);
-
-    @PermissibleDataOffer(value = "KPI_ID", isPageHelper = true)
-    @PermissibleData(value = "KPI_ID", requiresPermission = "/kpi/view",
-            resourceType = ResourceType.DATA_KPI, isPageHelper = true)
+//
+//    @PermissibleDataOffer(value = "KPI_ID", isPageHelper = true)
+//    @PermissibleData(value = "KPI_ID", requiresPermission = "/kpi/view",
+//            resourceType = ResourceType.DATA_KPI, isPageHelper = true)
     List<KpiDefinition> getKpiBaseInfo(Map map);
-
-    @PermissibleData(value = "KPI_ID", requiresPermission = "/kpi/view",
-            resourceType = ResourceType.DATA_KPI, isPageHelper = true)
+//
+//    @PermissibleData(value = "KPI_ID", requiresPermission = "/kpi/view",
+//            resourceType = ResourceType.DATA_KPI, isPageHelper = true)
     List<KpiDefinition> getKpiBaseInfoByRuleId(Map map);
-
-    @PermissibleData(value = "KPI_ID", requiresPermission = "/kpi/view",
-            resourceType = ResourceType.DATA_KPI, isPageHelper = true)
+//
+//    @PermissibleData(value = "KPI_ID", requiresPermission = "/kpi/view",
+//            resourceType = ResourceType.DATA_KPI, isPageHelper = true)
     List<KpiDefinition> getKpiDetailBatch(List<String> list);
 
 
