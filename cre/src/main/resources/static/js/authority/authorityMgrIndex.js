@@ -360,6 +360,7 @@ var userModal = {
     // 回显用户
     echoData: function (userId) {
         if (userId) {
+            debugger;
             var data = JSON.parse($("#user_" + userId).text()); // 用户全部数据
             for (var key in data) {
                 if (key === 'groupList') { // 用户组回显
@@ -376,7 +377,7 @@ var userModal = {
                 if (key === 'channelList'){ //所属渠道
                     var dataArr2 = data[key];
                     for (var q = 0; q < dataArr2.length; q++) {
-                        $("#addUserAlertModal .chanSelector option[data-id='" + dataArr2[q].channelId + "']").prop('selected', true);
+                        $("#channelList").val(dataArr2[q].channelName);
                     }
                     continue;
                 }

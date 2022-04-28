@@ -89,6 +89,20 @@
         from CRE_AUTH_ROLE a INNER JOIN CRE_AUTH_USER_ROLE b ON a.ROLE_ID = b.ROLE_ID
         where 1=1 AND b.USER_ID = #{user}
     </select>
+
+    <select id="getRoleByUser2" resultType="com.bonc.frame.entity.auth.Role" parameterType="map">
+        select
+        a.ROLE_ID as roleId ,
+        a.ROLE_NAME as roleName ,
+        a.ROLE_DESC as roleDesc ,
+        a.CREATE_DATE as createDate ,
+        a.UPDATE_DATE as updateDate ,
+        a.CREATE_PERSON as createPerson ,
+        a.UPDATE_PERSON as updatePerson
+        from CRE_AUTH_ROLE a INNER JOIN CRE_AUTH_USER_ROLE b ON a.ROLE_ID = b.ROLE_ID
+        where 1=1 AND b.USER_ID = #{userId,jdbcType=VARCHAR}
+    </select>
+
     <select id="findByName" resultMap="BaseResultMap" parameterType="java.lang.String">
         select
         <include refid="Base_Column_List"/>

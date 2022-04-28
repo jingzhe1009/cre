@@ -1946,7 +1946,7 @@ var dataSourceTitle = [
     {
         "title": function () {
             var htmlStr = '<div class="resourceCheckBoxContainer checkAllContainer">';
-            // htmlStr += '<div class="checkbox"><label><input urlStr="/datasource/view" class="verticalCheckbox" type="checkbox">查看</label></div>';
+            htmlStr += '<div class="checkbox"><label><input urlStr="/datasource/view" class="verticalCheckbox" type="checkbox">查看</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/datasource/update" class="verticalCheckbox" type="checkbox">修改</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/datasource/delete" class="verticalCheckbox" type="checkbox">删除</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/datasource/metadataMgr" class="verticalCheckbox" type="checkbox">元数据管理</label></div>';

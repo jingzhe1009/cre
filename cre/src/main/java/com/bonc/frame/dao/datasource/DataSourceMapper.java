@@ -13,17 +13,17 @@ import java.util.Map;
  * @since 2020/3/17 17:31
  */
 public interface DataSourceMapper {
-//
-//    @PermissibleData(value = "DB_ID", requiresPermission = "/datasource/view",
-//            resourceType = ResourceType.DATA_DATASOURCE, isPageHelper = true)
+
+    @PermissibleData(value = "DB_ID", requiresPermission = "/datasource/view",
+            resourceType = ResourceType.DATA_DATASOURCE, isPageHelper = true)
     List<DataSource> findDataSourceByPage(String dbAlias);
-//
-//    @PermissibleData(value = "DBID", requiresPermission = "/datasource/view",
-//            resourceType = ResourceType.DATA_DATASOURCE, isPageHelper = true)
+
+    @PermissibleData(value = "DBID", requiresPermission = "/datasource/view",
+            resourceType = ResourceType.DATA_DATASOURCE, isPageHelper = true)
     Map getDataSourceList();
-//
-//    @PermissibleData(value = "\"dbId\"", requiresPermission = "/datasource/view",
-//            resourceType = ResourceType.DATA_DATASOURCE, isPageHelper = true)
+
+    @PermissibleData(value = "\"dbId\"", requiresPermission = "/datasource/view",
+            resourceType = ResourceType.DATA_DATASOURCE, isPageHelper = true)
     List<DataSourceResource> pagedDataSource(Map param);
 
 }

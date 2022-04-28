@@ -33,12 +33,25 @@ var paramModule = {
 
         // handleType: 0新增 1修改 2新增对象参数 3修改对象参数
         if (handleType === 0) {
-            $('#paramTitle').text('添加参数');
-            $('#addParamGroupDiv').parent().css('display', 'block'); // 展示参数组
-            // $('#variableAliasDiv').css('display', 'none'); // 隐藏编码别名
-            $('#paramAlertModal .variableKindFormGroup').removeClass('hide'); // 展示参数种类
-            $('#paramAlertModal .variableKindSelector').trigger('change');
-            $('#paramAlertModal').attr('handleType', handleType).modal({'show': 'center', "backdrop": "static"});
+            $.ajax({
+                url: webpath + '/createCheck/check',
+                type: 'GET',
+                dataType: "json",
+                // data: {variableId: JSON.parse(detail).variableId},
+                data: {variableId: detail.variableId},
+                success: function (data) {
+                    if (data.status === 0) {
+                        $('#paramTitle').text('添加参数');
+                        $('#addParamGroupDiv').parent().css('display', 'block'); // 展示参数组
+                        // $('#variableAliasDiv').css('display', 'none'); // 隐藏编码别名
+                        $('#paramAlertModal .variableKindFormGroup').removeClass('hide'); // 展示参数种类
+                        $('#paramAlertModal .variableKindSelector').trigger('change');
+                        $('#paramAlertModal').attr('handleType', handleType).modal({'show': 'center', "backdrop": "static"});
+                    } else {
+                        failedMessager.show(data.msg);
+                    }
+                }
+            });
         } else if (handleType === 1) {
             $('#paramAlertModal .variableKindFormGroup').removeClass('hide'); // 展示参数种类
             // 参数修改权限校验 authCheck
@@ -447,11 +460,23 @@ var paramModule = {
         $('#paramGroupAlertModal form')[0].reset();
         $('#paramGroupAlertModal .modal-footer button').css('display', 'none');
         if (handleType == 0) {
-            $('#paramGroupAlertModal').modal({'show': 'center', "backdrop": "static"});
-            $('#paramGroupAlertModal .modal-footer .notView button').css('display', 'inline-block');
-            $('#paramGroupAlertModal .modal-title').text('').text('添加参数组');
-            $('#paramGroupAlertModal .form-control').removeAttr('disabled');
-            paramModule.echoGroupData(detail);
+            $.ajax({
+                url: webpath + '/createCheck/check',
+                type: 'GET',
+                data: {'variableGroupId': detail['variableGroupId']? detail['variableGroupId']:''},
+                dataType: "json",
+                success: function (data) {
+                    if (data.status === 0) {
+                        $('#paramGroupAlertModal').modal({'show': 'center', "backdrop": "static"});
+                        $('#paramGroupAlertModal .modal-footer .notView button').css('display', 'inline-block');
+                        $('#paramGroupAlertModal .modal-title').text('').text('添加参数组');
+                        $('#paramGroupAlertModal .form-control').removeAttr('disabled');
+                        paramModule.echoGroupData(detail);
+                    } else {
+                        failedMessager.show(data.msg);
+                    }
+                }
+            });
         } else if (handleType == 1) {
             $.ajax({
                 url: webpath + '/variable/group/update/checkAuth',
@@ -828,11 +853,23 @@ var apiModule = {
 
         // 0新增 1修改 2查看
         if (handleType == 0) {
-            $("#apiAlertModal #closeViewApi").css('display', 'none');
-            $('#apiTitle').text('添加接口');
-            apiModule.initData(); // 初始化新增接口弹框
-            $('#apiAlertModal').attr('handleType', handleType).modal({'show': 'center', "backdrop": "static"});
-            $("#apiAlertModal .form-control").removeAttr('disabled');
+            $.ajax({
+                url: webpath + '/createCheck/check',
+                type: 'GET',
+                dataType: "json",
+                data: {'apiId': apiId},
+                success: function (data) {
+                    if (data.status === 0) {
+                        $("#apiAlertModal #closeViewApi").css('display', 'none');
+                        $('#apiTitle').text('添加接口');
+                        apiModule.initData(); // 初始化新增接口弹框
+                        $('#apiAlertModal').attr('handleType', handleType).modal({'show': 'center', "backdrop": "static"});
+                        $("#apiAlertModal .form-control").removeAttr('disabled');
+                    } else {
+                        failedMessager.show(data.msg);
+                    }
+                }
+            });
         } else if (handleType == 1) {
             $("#apiAlertModal #closeViewApi").css('display', 'none');
             $("#apiAlertModal .form-control").removeAttr('disabled');
@@ -1314,11 +1351,23 @@ var apiModule = {
         $('#apiTypeAlertModal form')[0].reset();
         $('#apiTypeAlertModal .modal-footer button').css('display', 'none');
         if (handleType == 0) {
-            $('#apiTypeAlertModal').attr('handleType', handleType);
-            $('#apiTypeAlertModal').modal({'show': 'center', "backdrop": "static"});
-            $('#apiTypeAlertModal .modal-footer .notView button').css('display', 'inline-block');
-            $('#apiTypeAlertModal .modal-title').empty().text('添加接口组');
-            $('#apiTypeAlertModal .form-control').removeAttr('disabled');
+            $.ajax({
+                url: webpath + '/createCheck/check',
+                type: 'GET',
+                data: {'apiGroupId': detail['apiGroupId']? detail['apiGroupId'] : ''},
+                dataType: "json",
+                success: function (data) {
+                    if (data.status === 0) {
+                        $('#apiTypeAlertModal').attr('handleType', handleType);
+                        $('#apiTypeAlertModal').modal({'show': 'center', "backdrop": "static"});
+                        $('#apiTypeAlertModal .modal-footer .notView button').css('display', 'inline-block');
+                        $('#apiTypeAlertModal .modal-title').empty().text('添加接口组');
+                        $('#apiTypeAlertModal .form-control').removeAttr('disabled');
+                    } else {
+                        failedMessager.show(data.msg);
+                    }
+                }
+            });
         } else if (handleType == 1) {
             $.ajax({
                 url: webpath + '/api/group/update/checkAuth',

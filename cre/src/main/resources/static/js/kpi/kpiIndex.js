@@ -122,7 +122,7 @@ var kpiModal = {
     },
     // 展开指标内容
     showKpi: function (handleType, kpiId, kpiGroupId) {
-        $('#editKpi').modal({'show': 'center', "backdrop": "static"});
+        //$('#editKpi').modal({'show': 'center', "backdrop": "static"});
         // handleType: 0新增 1修改 2查看
         kpiModal.data.handleType = handleType;
         $('#kpiDefContentWarp').removeAttr('kpiId').attr('handleType', handleType);
@@ -155,13 +155,26 @@ var kpiModal = {
         $('#kpiDefContentWarp #addKpiLimitColRow').removeClass('hide').addClass('show');
 
         if (handleType === 0) {
-            // $('#detailTitle').text('>指标定义');
-            $('#editKpi .modal-footer .notView button').css('display', 'inline-block');
-            $('#editKpi .modal-title').text('定义指标');
-            // 获取接口数据
-            initApiList();
-            $('#editKpi').modal({'show': 'center', "backdrop": "static"});
-            $('#editKpi .form-control').removeAttr('disabled');
+            $.ajax({
+                url: webpath + '/createCheck/check',
+                type: 'GET',
+                data: {'kpiId': kpiId},
+                dataType: "json",
+                success: function (data) {
+                    debugger;
+                    if (data.status === 0) {
+                        // $('#detailTitle').text('>指标定义');
+                        $('#editKpi .modal-footer .notView button').css('display', 'inline-block');
+                        $('#editKpi .modal-title').text('定义指标');
+                        // 获取接口数据
+                        initApiList();
+                        $('#editKpi').modal({'show': 'center', "backdrop": "static"});
+                        $('#editKpi .form-control').removeAttr('disabled');
+                    } else {
+                        failedMessager.show(data.msg);
+                    }
+                }
+            });
         } else if (handleType === 1) {
             $('#editKpi .modal-footer .notView button').css('display', 'inline-block');
             $('#editKpi .modal-title').text('修改指标');
@@ -844,10 +857,22 @@ var kpiGroupModal = {
         $('#kpiGroupAlert .modal-footer button').css('display', 'none');
         $('#kpiGroupAlert .form-control').attr('disabled', false);
         if (handleType == 0) {
-            $('#kpiGroupAlert .modal-footer .notView button').css('display', 'inline-block');
-            $('#kpiGroupAlert .modal-title').text('').text('添加指标组');
-            $('#kpiGroupAlert').attr('handleType', handleType).modal({'show': 'center', "backdrop": "static"});
-            kpiGroupModal.echoGroupData(detail);
+            $.ajax({
+                url: webpath + '/createCheck/check',
+                type: 'GET',
+                data: {'kpiGroupId': detail['kpiGroupId']? detail['kpiGroupId'] : ''},
+                dataType: "json",
+                success: function (data) {
+                    if (data.status === 0) {
+                        $('#kpiGroupAlert .modal-footer .notView button').css('display', 'inline-block');
+                        $('#kpiGroupAlert .modal-title').text('').text('添加指标组');
+                        $('#kpiGroupAlert').attr('handleType', handleType).modal({'show': 'center', "backdrop": "static"});
+                        kpiGroupModal.echoGroupData(detail);
+                    } else {
+                        failedMessager.show(data.msg);
+                    }
+                }
+            });
         } else if (handleType == 1) {
             $.ajax({
                 url: webpath + '/kpi/group/update/checkAuth',

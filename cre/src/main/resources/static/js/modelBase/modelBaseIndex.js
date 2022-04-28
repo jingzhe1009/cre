@@ -268,11 +268,23 @@ var modelBaseModal = {
         $('#modelBaseAlertModal').removeAttr('oldRuleName');
         $('#modelBaseAlertModal').removeAttr('oldModuleName');
         if (handleType === 0) {
-            $('#firstVersion, #cancelModelBase').css('display', 'inline-block');
-            $('.notFirst').addClass('hide');
-            $('#modelBaseAlertModal .modal-title').text('添加模型');
-            $('#modelBaseAlertModal').attr('handleType', handleType).modal({'show': 'center', "backdrop": "static"});
-            $('#modelBaseAlertModal .form-control').removeAttr('disabled');
+            $.ajax({
+                url: webpath + '/createCheck/check',
+                type: 'GET',
+                dataType: "json",
+                data: {"ruleName": detail.ruleName},
+                success: function (data) {
+                    if (data.status === 0) {
+                        $('#firstVersion, #cancelModelBase').css('display', 'inline-block');
+                        $('.notFirst').addClass('hide');
+                        $('#modelBaseAlertModal .modal-title').text('添加模型');
+                        $('#modelBaseAlertModal').attr('handleType', handleType).modal({'show': 'center', "backdrop": "static"});
+                        $('#modelBaseAlertModal .form-control').removeAttr('disabled');
+                    } else {
+                        failedMessager.show(data.msg);
+                    }
+                }
+            });
         } else if (handleType === 1) {
             $.ajax({
                 url: webpath + '/rule/update/checkAuthModelPub',
@@ -674,10 +686,22 @@ var modelGroupModal = {
         $('#modelBaseGroupAlert .modal-footer button').css('display', 'none');
         $('#modelBaseGroupAlert .form-control').attr('disabled', false);
         if (handleType === 0) {
-            $('#modelBaseGroupAlert').attr('handleType', handleType).modal({'show': 'center', "backdrop": "static"});
-            $('#modelBaseGroupAlert .modal-footer .notView button').css('display', 'inline-block');
-            $('#modelBaseGroupAlert .modal-title').text('').text('添加产品');
-            modelGroupModal.channelNameList();
+            $.ajax({
+                url: webpath + '/createCheck/check',
+                type: 'GET',
+                data: {'modelGroupId': detail['modelGroupId']? detail['modelGroupId'] : ''},
+                dataType: "json",
+                success: function (data) {
+                    if (data.status === 0) {
+                        $('#modelBaseGroupAlert').attr('handleType', handleType).modal({'show': 'center', "backdrop": "static"});
+                        $('#modelBaseGroupAlert .modal-footer .notView button').css('display', 'inline-block');
+                        $('#modelBaseGroupAlert .modal-title').text('').text('添加产品');
+                        modelGroupModal.channelNameList();
+                    } else {
+                        failedMessager.show(data.msg);
+                    }
+                }
+            });
         } else if (handleType == 1) {
             $.ajax({
                 url: webpath + '/modelBase/group/update/checkAuth',
