@@ -1197,9 +1197,9 @@
     <select id="getHeaderListResource" parameterType="java.util.Map"
             resultType="com.bonc.frame.entity.auth.resource.PubModelBaseResource">
         SELECT
-        a.RULE_NAME AS "ruleName" ,
-        a.FOLDER_ID AS "folderId" ,
-        a.RULE_DESC AS "ruleDesc" ,
+        a.RULE_NAME as "ruleName" ,
+        a.FOLDER_ID as "folderId" ,
+        a.RULE_DESC as "ruleDesc" ,
         a.RULE_TYPE AS "ruleType" ,
         a.IS_PUBLIC AS "isPublic" ,
         a.IS_HEADER AS "isHeader",

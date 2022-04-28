@@ -3,6 +3,7 @@ package com.bonc.frame.controller.metadata;
 import com.bonc.frame.entity.metadata.MetaDataTable;
 import com.bonc.frame.security.ResourceType;
 import com.bonc.frame.service.auth.AuthorityService;
+import com.bonc.frame.service.auth.RoleService;
 import com.bonc.frame.service.dbresource.DbResourceService;
 import com.bonc.frame.service.metadata.MetaDataMgrService;
 import com.bonc.frame.util.ControllerUtil;
@@ -29,7 +30,8 @@ import java.util.Map;
 @Controller
 @RequestMapping("/batchdata/metadata")
 public class MetaDataController {
-
+	@Autowired
+	private RoleService roleService;
 	@Resource
 	private MetaDataMgrService metaDataMgrService;
 
@@ -74,6 +76,7 @@ public class MetaDataController {
 		table.setTableId(tableId);
 		table.setCreateDate(new Date());
 		final String currentUser = ControllerUtil.getLoginUserId(request);
+//		List<currentUser> rolesByUser = roleService.getRoleByUser(currentUser.toString());
 		table.setCreatePerson(currentUser);
 		ResponseResult result = metaDataMgrService.insertTable(table,relTable);
 

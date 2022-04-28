@@ -799,7 +799,6 @@ var authorityMgrModal = {
     },
     // 授权保存
     saveGrant: function (grantType, roleId, obj, msgAlert) {
-        debugger
         if (roleId) {
             // 当前角色全权状态 & 验证是否全权选中 ---> 是否需要发送取消全权请求
             var roleAllChecked = ($('#allAuthCheck').attr('all-check') == '1') ? true : false;
@@ -1533,7 +1532,7 @@ var menuTitle = [
         "render": function (data, type, row) {
             var resourcesArr = row.resources;
             var checkAllFlag = 0;
-            var htmlStr = '<div class="resourceCheckBoxContai  ner" resourceId=\'' + row.resourceId + '\' resourceUrl=\'' + row.resourceUrl + '\'>';
+            var htmlStr = '<div class="resourceCheckBoxContainer" resourceId=\'' + row.resourceId + '\' resourceUrl=\'' + row.resourceUrl + '\'>';
             for (var i = 0; i < resourcesArr.length; i++) {
                 var checkStr = '';
                 if (resourcesArr[i].choosed) {
@@ -1810,6 +1809,7 @@ var ruleSetTitle = [
             htmlStr += '<div class="checkbox"><label><input urlStr="/pub/ruleSet/update" class="verticalCheckbox" type="checkbox">修改</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/pub/ruleSet/delete" class="verticalCheckbox" type="checkbox">删除</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/pub/ruleSet/version/enable" class="verticalCheckbox" type="checkbox">启用/停用</label></div>';
+            htmlStr += '<div class="checkbox"><label><input urlStr="/pub/ruleSet/version/view" class="verticalCheckbox" type="checkbox">版本查看</label></div>';
             // htmlStr += '<div class="checkbox"><label><input urlStr="/pub/ruleSet" class="verticalCheckbox" type="checkbox">规则库</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="*" class="acrossCheckbox verticalCheckbox" type="checkbox">全选</label></div>';
             htmlStr += '</div>';
@@ -1949,6 +1949,7 @@ var dataSourceTitle = [
             // htmlStr += '<div class="checkbox"><label><input urlStr="/datasource/view" class="verticalCheckbox" type="checkbox">查看</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/datasource/update" class="verticalCheckbox" type="checkbox">修改</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/datasource/delete" class="verticalCheckbox" type="checkbox">删除</label></div>';
+            htmlStr += '<div class="checkbox"><label><input urlStr="/datasource/metadataMgr" class="verticalCheckbox" type="checkbox">元数据管理</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="*" class="acrossCheckbox verticalCheckbox" type="checkbox">全选</label></div>';
             htmlStr += '</div>';
             return htmlStr;

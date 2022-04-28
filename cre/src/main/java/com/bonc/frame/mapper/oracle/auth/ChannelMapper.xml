@@ -118,16 +118,16 @@
     <select id="listByChannelName" resultMap="BaseResultMap2" parameterType="map">
         select
         a.*,
-         b.DEPT_NAME
+        b.DEPT_NAME
         from CRE_AUTH_CHANNEL a
         left join CRE_AUTH_DEPT b on a.DEPT_ID = b.DEPT_ID
         where 1=1
-        <if test="channelName != null and '' != channelName">-->
+        <if test="channelName != null and '' != channelName">
             <bind name="channelNamePattern" value="'%' + _parameter.channelName + '%'"/>
             and a.CHANNEL_NAME like #{channelNamePattern}
         </if>
         <if test="channelId != null">
-            and a.CHANNEL_ID=#{channelId,jdbcType=VARCHAR},
+            and a.CHANNEL_ID=#{channelId,jdbcType=VARCHAR}
         </if>
     </select>
     <!--    <select id="listByChannelName" resultMap="BaseResultMap2" parameterType="map">-->

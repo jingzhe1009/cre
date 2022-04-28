@@ -292,11 +292,14 @@
     <!-- 获取数据源列表 -->
     <select id="getDataSourceList" resultType="map">
   	select 
-  		A.DB_ALIAS as dbAlias,A.DB_ID as dbId,
-  		B.DB_TYPE as dbTypeId,B.DB_NAME as dbTypeName
-    from CRE_DB_CONNECTION A,CRE_DB_CONNECT_STR B
-      where A.DB_TYPE = B.DB_TYPE
-      ORDER BY A.CREATE_DATE DESC
+  		A.DB_ALIAS as dbAlias,
+  		A.DB_ID as dbId,
+  		B.DB_TYPE as dbTypeId,
+  		B.DB_NAME as dbTypeName
+    from CRE_DB_CONNECTION A,
+    CRE_DB_CONNECT_STR B
+    where A.DB_TYPE = B.DB_TYPE
+    ORDER BY A.CREATE_DATE as createDate DESC
   </select>
     <!--<select id="getDataSourceList" resultType="map">
         select

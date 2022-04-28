@@ -35,7 +35,7 @@
     </resultMap>
 
     <select id="getGroupHeaderListResource" parameterType="java.util.Map"
-            resultType="com.bonc.frame.entity.auth.resource.PubModelBaseResource">
+            resultType="com.bonc.frame.entity.auth.resource.PubModelGroupResource">
         select
         MODEL_GROUP_NAME as "modelGroupName",
         MODEL_GROUP_ID as "modelGroupId"
