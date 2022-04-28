@@ -376,7 +376,7 @@ var userModal = {
                 if (key === 'channelList'){ //所属渠道
                     var dataArr2 = data[key];
                     for (var q = 0; q < dataArr2.length; q++) {
-                        $("#addUserAlertModal .chanSelector option[data-id='" + dataArr2[q].channelId + "']").prop('selected', true);
+                        $("#addUserAlertModal .chanSelector").val(dataArr2[q].channelName);
                     }
                     continue;
                 }
