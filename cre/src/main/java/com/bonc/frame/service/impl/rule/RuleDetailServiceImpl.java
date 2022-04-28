@@ -2237,7 +2237,7 @@ public class RuleDetailServiceImpl implements RuleDetailService {
         if (modelList.size() > 0) {
             for (ModelRuleDetail header : modelList) {
                 Map<String, String> map = new HashMap<>();
-                map.put("ruleId", header.getRuleId());
+                map.put("ruleId", header.getRuleVerId());
                 map.put("modelGroupId", modelGroupId);
                 daoHelper.update(_RULE_DETAIL_MAPPER + "groupAddModel", map);
             }

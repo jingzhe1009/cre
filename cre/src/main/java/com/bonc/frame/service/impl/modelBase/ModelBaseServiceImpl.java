@@ -123,8 +123,14 @@ public class ModelBaseServiceImpl implements ModelBaseService {
             // 接口传了选择的渠道，则展示本渠道下的产品
             param.put("channelId", channelId);
         }
-        final Map<String, Object> map = daoHelper.queryForPageList(_MODEL_GROUP_MAPPER +
-                "getByGroupName", param, start, length);
+        final Map<String, Object> map;
+        if (param.get("channelId")==null) {
+            map = daoHelper.queryForPageList(_MODEL_GROUP_MAPPER +
+                    "getByGroupName", param, start, length);
+        } else {
+            map = daoHelper.queryForPageList(_MODEL_GROUP_MAPPER +
+                    "getByGroupName2", param, start, length);
+        }
         List<ModelGroup> data = (List<ModelGroup>) map.get("data");
         List<Map> dataMap = new ArrayList<>();
         for (ModelGroup datum : data) {

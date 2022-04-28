@@ -360,7 +360,6 @@ var userModal = {
     // 回显用户
     echoData: function (userId) {
         if (userId) {
-            debugger;
             var data = JSON.parse($("#user_" + userId).text()); // 用户全部数据
             for (var key in data) {
                 if (key === 'groupList') { // 用户组回显
