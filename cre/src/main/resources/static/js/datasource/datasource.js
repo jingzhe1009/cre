@@ -543,7 +543,7 @@ function initPage() {
     $('#datasourceTable').on('click', '.dsDelSpan', function () {
         var dbId = $(this).attr('data-id');
         $.ajax({
-            url: webpath + '/datasource/delete//checkAuth',
+            url: webpath + '/datasource/delete/checkAuth',
             type: 'GET',
             dataType: "json",
             data: {"dbId": dbId},
@@ -806,7 +806,6 @@ function initDbTable() {
                     // onclick="dataSourceModal.detailDatasource(\'' + data + '\')" type="button">查看</span>';
                     htmlStr += '<span data-id=\'' + data + '\' class="cm-tblB dsEditSpan" onclick="dataSourceModal.editDataSource(\'' + data + '\')" type="button">修改</span>';
                     htmlStr += '<span data-id=\'' + data + '\' class="cm-tblC dsDelSpan" type="button">删除</span>';
-                    htmlStr += '<span data-id=\'' + data + '\' class="cm-tblB detailSpan" onclick="dataSourceModal.metadataMgr(\'' + data + '\')" type="button">元数据管理</span>';
                     return htmlStr;
                 }
             }
@@ -1167,18 +1166,22 @@ var dataSource = {
     // 元数据管理
     handleDataManager: function (dbId) {
         $.ajax({ // 元数据管理校验
-            url: webpath + '/datasource/update/checkAuth',
+            url: webpath + '/datasource/metadataMgr/checkAuth',
             type: 'GET',
             dataType: "json",
             data: {dbId: dbId},
             success: function (data) {
-                dataSourceModal.showMetadata();
-                $('#scanedTablesDiv').removeAttr('dbId').attr('dbId', dbId);
-                initDbScanTable({"dbId": dbId});
-                if (data.status === 0) { // 拥有元数据内修改权限（删除元数据、扫描）
-                    $('#scanedTablesDiv').removeAttr('updateAuth').attr('updateAuth', '1');
+                if (data.status === 0) {
+                    dataSourceModal.showMetadata();
+                    $('#scanedTablesDiv').removeAttr('dbId').attr('dbId', dbId);
+                    initDbScanTable({"dbId": dbId});
+                    if (data.status === 0) { // 拥有元数据内修改权限（删除元数据、扫描）
+                        $('#scanedTablesDiv').removeAttr('updateAuth').attr('updateAuth', '1');
+                    } else {
+                        $('#scanedTablesDiv').removeAttr('updateAuth').attr('updateAuth', '0');
+                    }
                 } else {
-                    $('#scanedTablesDiv').removeAttr('updateAuth').attr('updateAuth', '0');
+                    failedMessager.show(data.msg);
                 }
             }
         });

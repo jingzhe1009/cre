@@ -447,6 +447,7 @@ var paramModule = {
         $('#paramGroupAlertModal form')[0].reset();
         $('#paramGroupAlertModal .modal-footer button').css('display', 'none');
         if (handleType == 0) {
+            $('#paramGroupAlertModal').modal({'show': 'center', "backdrop": "static"});
             $('#paramGroupAlertModal .modal-footer .notView button').css('display', 'inline-block');
             $('#paramGroupAlertModal .modal-title').text('').text('添加参数组');
             $('#paramGroupAlertModal .form-control').removeAttr('disabled');

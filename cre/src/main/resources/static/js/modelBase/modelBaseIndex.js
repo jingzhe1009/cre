@@ -674,6 +674,7 @@ var modelGroupModal = {
         $('#modelBaseGroupAlert .modal-footer button').css('display', 'none');
         $('#modelBaseGroupAlert .form-control').attr('disabled', false);
         if (handleType === 0) {
+            $('#modelBaseGroupAlert').attr('handleType', handleType).modal({'show': 'center', "backdrop": "static"});
             $('#modelBaseGroupAlert .modal-footer .notView button').css('display', 'inline-block');
             $('#modelBaseGroupAlert .modal-title').text('').text('添加产品');
             modelGroupModal.channelNameList();

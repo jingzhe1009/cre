@@ -175,7 +175,7 @@ public class RuleSetBaseController {
         RuleSetReferenceExt ruleSet = ruleSetBaseService.getRuleSetByRuleSetId(ruleSetId);
         return ResponseResult.createSuccessInfo("success", ruleSet);
     }
-
+    @PermissionsRequires(value = "/pub/ruleSet/version/view?ruleSetId", resourceType = ResourceType.DATA_PUB_RULE_SET)
     @RequestMapping("/list")
     @ResponseBody
     public ResponseResult getRuleSetVersionList(String ruleSetHeaderId,
@@ -353,6 +353,13 @@ public class RuleSetBaseController {
     @RequestMapping(value = "/group/delete/checkAuth", method = RequestMethod.GET)
     @ResponseBody
     public ResponseResult checkDeleteGroup(String ruleSetGroupId) {
+        return ResponseResult.createSuccessInfo();
+    }
+
+    @PermissionsRequires(value = "/pub/ruleSet/version/view?ruleSetHeaderId", resourceType = ResourceType.DATA_PUB_RULE_SET)
+    @RequestMapping(value = "/version/view/checkAuth", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseResult checkVersion(String ruleSetHeaderId) {
         return ResponseResult.createSuccessInfo();
     }
 }
