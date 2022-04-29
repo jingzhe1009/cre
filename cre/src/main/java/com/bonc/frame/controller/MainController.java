@@ -1,5 +1,6 @@
 package com.bonc.frame.controller;
 
+import com.bonc.frame.entity.monitor.IndexParam;
 import com.bonc.frame.entity.rulelog.RuleLog;
 import com.bonc.frame.entity.rulelog.RuleLogDetail;
 import com.bonc.frame.entity.user.UserAccountEn;
@@ -37,30 +38,27 @@ public class MainController {
 	@Autowired
 	private WorkbenchService workbenchService;
 	
-	@RequestMapping({"/","/main"})
+	@RequestMapping("/main")
 	public String main(String idx, String childOpen, HttpSession session,Model model) throws Exception {
 		FolderMenuUtil.setFolderMenu(ruleService, session);
 		if(idx==null || idx.isEmpty()){
-			idx = "0";
+			idx = "28";
 		}
+		IndexParam param = new IndexParam();
+		param.setChannelCount(childOpen);
+		param.setCountModel(childOpen);
+		param.setCurrentDayFailTimes(childOpen);
+		param.setCurrentDayResponseTime(childOpen);
+		param.setCurrentDaySucTimes(childOpen);
+		param.setKpiCount(childOpen);
+		param.setProductCount(childOpen);
+		param.setRuleModel(childOpen);
+		param.setRuleSetCount(childOpen);
+		param.setScoreModel(childOpen);
 		model.addAttribute("idx", idx);
 		model.addAttribute("childOpen", childOpen);
-		Date date = new Date();
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(date);
-		int hour = calendar.get(Calendar.HOUR_OF_DAY);
-		String timeMsg = "您好 ,";
-		if (hour < 6) {
-			timeMsg = "凌晨好 ,";
-		} else if (hour < 12) {
-			timeMsg = "上午好 ,";
-		} else if (hour < 18) {
-			timeMsg = "下午好 ,";
-		} else if (hour < 24) {
-			timeMsg = "晚上好 ,";
-        } 
-		model.addAttribute("timeMsg", timeMsg);
-	    return "/main";
+		model.addAttribute("param", param);
+	    return "/pages/monitor/indexView";
 	}
 
 	@RequestMapping("/form")

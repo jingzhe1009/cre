@@ -97,6 +97,13 @@
         </if>
         ORDER BY CREATE_DATE DESC
     </select>
+    
+    
+    <select id="getModelGroupList"  resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"></include>
+        FROM CRE_PUB_MODEL_GROUP
+    </select>
 
     <insert id="insertSelective" parameterType="com.bonc.frame.entity.commonresource.ModelGroup">
         insert into CRE_PUB_MODEL_GROUP

@@ -176,6 +176,15 @@
         CHANNEL_ID,CHANNEL_NAME
         from CRE_AUTH_CHANNEL
     </select>
+    
+    <select id="selectChannelList" resultType="map">
+        select
+        a.CHANNEL_ID as channelId,a.CHANNEL_NAME as channelName
+        from CRE_AUTH_CHANNEL a left join CRE_PUB_MODEL_GROUP_CHANNEL b on a.CHANNEL_ID = b.CHANNEL_ID
+        <if test="modelGroupId != null">
+            and a.MODEL_GROUP_ID = #{modelGroupId,jdbcType=VARCHAR}
+        </if>
+    </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
         delete from CRE_AUTH_CHANNEL

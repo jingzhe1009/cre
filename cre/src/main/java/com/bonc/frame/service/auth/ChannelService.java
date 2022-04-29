@@ -21,6 +21,8 @@ public interface ChannelService {
     ResponseResult update(Channel channel, String loginUserId);
 
     List<Object> nameList();
+    
+    List<Map<String,Object>> getChannelListByGroupId(String groupId);
 
     List<PlaceVo> channelTree();
 

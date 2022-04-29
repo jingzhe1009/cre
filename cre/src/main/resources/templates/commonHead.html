@@ -67,21 +67,21 @@
 				<#else>
 					 <li idx="28" data="${ctx.contextPath}/monitor/indexView?idx=28"><div class="menuImg"><img src="${ctx.contextPath}/static/imgs/mainNew/icon_sy_normal.png"/></div><span>监控管理</span></li>
 				</#if>
-				<#if idx! == "0">
+				<!-- <#if idx! == "0">
 					 <li idx="0" data="${ctx.contextPath}/main?idx=0" class="active"><div class="menuImg"><img class="ck" src="${ctx.contextPath}/static/imgs/mainNew/icon_sy_ckecked.png"/><img class="nck" src="${ctx.contextPath}/static/imgs/mainNew/icon_sy_normal.png"/></div><span>首页</span></li>
 				<#else>
 					 <li idx="0" data="${ctx.contextPath}/main?idx=0"><div class="menuImg"><img src="${ctx.contextPath}/static/imgs/mainNew/icon_sy_normal.png"/></div><span>首页</span></li>
-				</#if>
+				</#if> -->
 				<!--添加场景按钮-->
-				<!-- <#if idx! == "2">
+				<#if idx! == "2">
 					<li class="active" idx="2" data="${ctx.contextPath}/create?idx=2">
 						<div class="menuImg"><img class="ck" src="${ctx.contextPath}/static/imgs/mainNew/icon_cjxd_checked.png"/><img class="nck" src="${ctx.contextPath}/static/imgs/mainNew/icon_cjxd_normal.png"/></div><span>创建向导</span>
 					</li>
-					<#else>
+				<#else>
 					<li class="" idx="2" data="${ctx.contextPath}/create?idx=2">
 						<div class="menuImg"><img src="${ctx.contextPath}/static/imgs/mainNew/icon_cjxd_normal.png"/></div><span>创建向导</span>
 					</li>
-				</#if> -->
+				</#if>
 
 					<!-- <#if idx! == "1">
 						 <li idx="1" data="${ctx.contextPath}/main?idx=1" class="active"><i class="micon monitoringIcon"></i><span>实时监控</span><i class="arr"></i></li>
@@ -121,16 +121,17 @@
 				<#else>
 					<li idx="15" data="${ctx.contextPath}/ruleSet/view?idx=15"><div class="menuImg"><img src="${ctx.contextPath}/static/imgs/mainNew/icon_gzgl_normal.png"/></div><span>规则管理</span></li>
 				</#if>
-				<#if idx! == "21">
-					<li idx="21" data="${ctx.contextPath}/modelBase/view?idx=21" class="active"><div class="menuImg"><img class="ck" src="${ctx.contextPath}/static/imgs/mainNew/icon_mxgl_checked.png"/><img class="nck" src="${ctx.contextPath}/static/imgs/mainNew/icon_gzgl_normal.png"/></div><span>产品管理</span></li>
-				<#else>
-					<li idx="21" data="${ctx.contextPath}/modelBase/view?idx=21"><div class="menuImg"><img  src="${ctx.contextPath}/static/imgs/mainNew/icon_mxgl_normal.png"/></div><span>产品管理</span></li>
-				</#if>
 				<#if idx! == "16">
 					<li idx="16" data="${ctx.contextPath}/modelBase/view?idx=16" class="active"><div class="menuImg"><img class="ck" src="${ctx.contextPath}/static/imgs/mainNew/icon_mxgl_checked.png"/><img class="nck" src="${ctx.contextPath}/static/imgs/mainNew/icon_gzgl_normal.png"/></div><span>模型管理</span></li>
 				<#else>
 					<li idx="16" data="${ctx.contextPath}/modelBase/view?idx=16"><div class="menuImg"><img  src="${ctx.contextPath}/static/imgs/mainNew/icon_mxgl_normal.png"/></div><span>模型管理</span></li>
 				</#if>
+				<#if idx! == "21">
+					<li idx="21" data="${ctx.contextPath}/modelBase/view?idx=21" class="active"><div class="menuImg"><img class="ck" src="${ctx.contextPath}/static/imgs/mainNew/icon_mxgl_checked.png"/><img class="nck" src="${ctx.contextPath}/static/imgs/mainNew/icon_gzgl_normal.png"/></div><span>产品管理</span></li>
+				<#else>
+					<li idx="21" data="${ctx.contextPath}/modelBase/view?idx=21"><div class="menuImg"><img  src="${ctx.contextPath}/static/imgs/mainNew/icon_mxgl_normal.png"/></div><span>产品管理</span></li>
+				</#if>
+				
 
 				<!--场景卡片页-->
 				<!-- <#if idx! == "18">
@@ -159,19 +160,19 @@
 					</#list> -->
 
 				<!--场景目录菜单-->
-				<#if  childOpen! == "o">
+				<!-- <#if  childOpen! == "o">
 					<li idx="13"   class="folderMenuLi active"><div class="menuImg"><img  class="ck" src="${ctx.contextPath}/static/imgs/mainNew/icon_ywcj_checked.png"/><img  class="nck" src="${ctx.contextPath}/static/imgs/mainNew/icon_ywcj_normal.png"/></div><span>业务场景</span></li>
 				<#else>
 					<li idx="13"  class="folderMenuLi "><div class="menuImg"><img class="" src="${ctx.contextPath}/static/imgs/mainNew/icon_ywcj_normal.png"/></div><span>业务场景</span><i class="arr"></i></li>
 				</#if>
-				<!--场景列表-->
-				<div class="${childOpen!}" id="folderMenuWrap"></div>
+				场景列表
+				<div class="${childOpen!}" id="folderMenuWrap"></div> -->
 
-				<!-- <#if idx! == "8">
+				<#if idx! == "8">
 					<li idx="8" data="${ctx.contextPath}/task/view?idx=8" class="active"><div class="menuImg"><img class="ck" src="${ctx.contextPath}/static/imgs/mainNew/icon_lxrwgl_checked.png"/><img class="nck" src="${ctx.contextPath}/static/imgs/mainNew/icon_lxrwgl_normal.png"/></div><span>离线任务管理</span></li>
 				<#else>
 					<li idx="8" data="${ctx.contextPath}/task/view?idx=8"><div class="menuImg"><img src="${ctx.contextPath}/static/imgs/mainNew/icon_lxrwgl_normal.png"/></div></i><span>离线任务管理</span></li>
-				</#if> -->
+				</#if>
 
 				<!-- <#if idx! == "17">
 					<li idx="17" data="${ctx.contextPath}/aBTest/index?idx=17" class="active"><div class="menuImg"><img class="ck" src="${ctx.contextPath}/static/imgs/mainNew/icon_lxrwgl_checked.png"/><img class="nck" src="${ctx.contextPath}/static/imgs/mainNew/icon_lxrwgl_normal.png"/></div><span>AB Test</span></li>

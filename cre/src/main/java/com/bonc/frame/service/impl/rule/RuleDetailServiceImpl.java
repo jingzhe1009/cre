@@ -600,6 +600,15 @@ public class RuleDetailServiceImpl implements RuleDetailService {
         List<Map<String, Object>> list = daoHelper.queryForList(_MYBITSID_PREFIX + "selectRuleNameByFolder", folderId);
         return list;
     }
+    
+    @Override
+    public List<Map<String, Object>> getModelList(String groupId,String channelId) {
+    	 Map<String, Object> param = new HashMap<>();
+         param.put("modelGroupId", groupId);
+         param.put("channelId", channelId);
+        List<Map<String, Object>> list = daoHelper.queryForList(_MYBITSID_PREFIX + "selectModelList", param);
+        return list;
+    }
 
     @Override
     public List<Map<String, Object>> getRuleNameInHeaderList(String folderId) {

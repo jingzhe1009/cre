@@ -1,5 +1,11 @@
 package com.bonc.frame.controller;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -7,9 +13,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,12 +32,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.bonc.frame.entity.commonresource.ModelGroup;
 import com.bonc.frame.entity.monitor.DescResult;
 import com.bonc.frame.entity.monitor.ExcuteResult;
 import com.bonc.frame.entity.monitor.IndexParam;
 import com.bonc.frame.entity.monitor.MonitorParam;
 import com.bonc.frame.service.UserService;
+import com.bonc.frame.service.auth.ChannelService;
+import com.bonc.frame.service.modelBase.ModelBaseService;
+import com.bonc.frame.service.rule.RuleDetailService;
 import com.bonc.frame.service.rule.RuleService;
+import com.bonc.frame.util.ControllerUtil;
 import com.bonc.frame.util.FolderMenuUtil;
 
 @Controller
@@ -35,11 +55,20 @@ public class MonitorController {
 	@Autowired
 	private RuleService ruleService;
 	
-	@RequestMapping({"/indexView"})
+	@Autowired
+    ChannelService channelService;
+	
+	@Autowired
+	ModelBaseService modelGroupService;
+	
+	@Autowired
+    private RuleDetailService ruleDetailService;
+	
+	@RequestMapping({"/","/indexView"})
 	public String main(String idx, String childOpen, HttpSession session,Model model) throws Exception {
 		FolderMenuUtil.setFolderMenu(ruleService, session);
 		if(idx==null || idx.isEmpty()){
-			idx = "0";
+			idx = "28";
 		}
 		IndexParam param = new IndexParam();
 		param.setChannelCount(childOpen);
@@ -171,20 +200,6 @@ public class MonitorController {
 			for(int i=0;i<12;i++) {
 	            if("titleList".equals(method)) {//标题
 	            	resultList.add((i+1)+"月");
-				}else if("allList".equals(method)) {//总执行次数
-					resultList.add((i+10)+"月");
-				}else if("successList".equals(method)) {//成功执行次数
-					resultList.add((i+5)+"月");
-				}else if("failList".equals(method)) {//失败执行次数
-					resultList.add((i+3)+"月");
-				}else if("responseTime".equals(method)) {//响应时间
-					resultList.add((i+7)+"月");
-				}else if("ruleHitSuc".equals(method)) {//规则命中率-通过
-					resultList.add((i+7)+"月");
-				}else if("ruleHitFail".equals(method)) {//规则命中率-拒绝
-					resultList.add((i+7)+"月");
-				}else if("scoreHit".equals(method)) {//评分命中率
-					resultList.add((i+7)+"月");
 				}
 	        }
 			
@@ -192,40 +207,12 @@ public class MonitorController {
 			for(int i=0;i<30;i++) {
 	            if("titleList".equals(method)) {//标题
 	            	resultList.add((i+1)+"日");
-				}else if("allList".equals(method)) {//总执行次数
-					resultList.add((i+10)+"日");
-				}else if("successList".equals(method)) {//成功执行次数
-					resultList.add((i+5)+"日");
-				}else if("failList".equals(method)) {//失败执行次数
-					resultList.add((i+3)+"日");
-				}else if("responseTime".equals(method)) {//响应时间
-					resultList.add((i+7)+"日");
-				}else if("ruleHitSuc".equals(method)) {//规则命中率-通过
-					resultList.add((i+7)+"日");
-				}else if("ruleHitFail".equals(method)) {//规则命中率-拒绝
-					resultList.add((i+7)+"日");
-				}else if("scoreHit".equals(method)) {//评分命中率
-					resultList.add((i+7)+"日");
 				}
 	        }
 		}else if("3".equals(flag)) {//日
 			for(int i=0;i<24;i++) {
 	            if("titleList".equals(method)) {//标题
 	            	resultList.add((i+1)+"时");
-				}else if("allList".equals(method)) {//总执行次数
-					resultList.add((i+10)+"时");
-				}else if("successList".equals(method)) {//成功执行次数
-					resultList.add((i+5)+"时");
-				}else if("failList".equals(method)) {//失败执行次数
-					resultList.add((i+3)+"时");
-				}else if("responseTime".equals(method)) {//响应时间
-					resultList.add((i+7)+"时");
-				}else if("ruleHitSuc".equals(method)) {//规则命中率-通过
-					resultList.add((i+7)+"时");
-				}else if("ruleHitFail".equals(method)) {//规则命中率-拒绝
-					resultList.add((i+7)+"时");
-				}else if("scoreHit".equals(method)) {//评分命中率
-					resultList.add((i+7)+"时");
 				}
 	        }
 		}
@@ -352,5 +339,163 @@ public class MonitorController {
 		resultList.add(data5);
 		return resultList;
 	}
+	
+	@RequestMapping("/channelName")
+    @ResponseBody
+    public List<Map<String, Object>> getChannelNameList(HttpServletRequest request) {
+        String groupId = ControllerUtil.getParam(request, "groupId");
+        List<Map<String, Object>> ruleFolderList = this.channelService.getChannelListByGroupId(groupId);
+        return ruleFolderList;
+    }
+    
+    @RequestMapping("/modelGroupName")
+    @ResponseBody
+    public List<ModelGroup> getModelGroupList(HttpServletRequest request) {
+        List<ModelGroup> ruleFolderList = this.modelGroupService.getModelGroupList();
+        return ruleFolderList;
+    }
+    
+    @RequestMapping("/modelName")
+    @ResponseBody
+    public List<Map<String, Object>> getModelList(HttpServletRequest request) {
+        String groupId = ControllerUtil.getParam(request, "groupId");
+        String channelId = ControllerUtil.getParam(request, "channelId");
+        List<Map<String, Object>> ruleFolderList = this.ruleDetailService.getModelList(groupId, channelId);
+        return ruleFolderList;
+    }
+    /**
+     * 导出excel
+     * @param response
+     * @param request
+     * @return
+     */
+    @RequestMapping(value="/exportExcel")
+	public void exportExcel(HttpServletResponse response,HttpServletRequest request) {
+    	String cycleId = request.getParameter("cycleId");
+    	String tabId = request.getParameter("tabId");
+    	Workbook workbook = new XSSFWorkbook();
+    	Sheet sheet = workbook.createSheet();
+    	Row headRow = sheet.createRow(0);//创建第一行
+    	List<String> titleList = getTitle(cycleId, "titleList");
+    	Cell headCell = headRow.createCell(0);
+    	headCell.setCellValue("数据统计");
+    	for(int i=0;i<titleList.size();i++) {
+    		String tile = titleList.get(i);
+    		Cell tmpCell = headRow.createCell(i+1);//创建第一行的第一个单元格
+    		tmpCell.setCellValue(tile);
+    	}
+    	
+    	List<String> allList = getList(cycleId, "allList");
+        List<String> failList = getList(cycleId, "failList");
+        List<String> successList = getList(cycleId, "successList");
+        List<String> responseTimeList = getList(cycleId, "responseTime");
+        
+        
+    	Row headRow1 = sheet.createRow(1);
+    	Cell headCell1 = headRow1.createCell(0);
+    	headCell1.setCellValue("总执行次数");
+    	for(int i=0;i<allList.size();i++) {
+    		String tile = allList.get(i);
+    		Cell tmpCell = headRow1.createCell(i+1);
+    		tmpCell.setCellValue(tile);
+    	}
+    	
+    	Row headRow2 = sheet.createRow(2);
+    	Cell headCell2 = headRow2.createCell(0);
+    	headCell2.setCellValue("执行成功次数");
+    	for(int i=0;i<successList.size();i++) {
+    		String tile = successList.get(i);
+    		Cell tmpCell = headRow2.createCell(i+1);
+    		tmpCell.setCellValue(tile);
+    	}
+    	
+    	
+    	Row headRow3 = sheet.createRow(3);
+    	Cell headCell3 = headRow3.createCell(0);
+    	headCell3.setCellValue("执行失败次数");
+    	for(int i=0;i<failList.size();i++) {
+    		String tile = failList.get(i);
+    		Cell tmpCell = headRow3.createCell(i+1);
+    		tmpCell.setCellValue(tile);
+    	}
+    	
+    	Row headRow4 = sheet.createRow(4);
+    	Cell headCell4 = headRow4.createCell(0);
+    	headCell4.setCellValue("响应时间");
+    	for(int i=0;i<responseTimeList.size();i++) {
+    		String tile = responseTimeList.get(i);
+    		Cell tmpCell = headRow4.createCell(i+1);
+    		tmpCell.setCellValue(tile);
+    	}
+    	
+    	
+        
+        if(tabId!=null&&"2".equals(tabId)) {
+        	List<String> ruleHitSuc = getList(cycleId, "ruleHitSuc");
+            List<String> ruleHitFail = getList(cycleId, "ruleHitFail");
+            List<String> scoreList = getList(cycleId, "scoreHit");
+        	
+        	
+        	Row headRow5 = sheet.createRow(5);
+        	Cell headCell5 = headRow5.createCell(0);
+        	headCell5.setCellValue("通过次数");
+        	for(int i=0;i<ruleHitSuc.size();i++) {
+        		String tile = ruleHitSuc.get(i);
+        		Cell tmpCell = headRow5.createCell(i+1);
+        		tmpCell.setCellValue(tile);
+        	}
+        	
+        	
+        	Row headRow6 = sheet.createRow(6);
+        	Cell headCell6 = headRow6.createCell(0);
+        	headCell6.setCellValue("拒绝次数");
+        	for(int i=0;i<ruleHitFail.size();i++) {
+        		String tile = ruleHitFail.get(i);
+        		Cell tmpCell = headRow6.createCell(i+1);
+        		tmpCell.setCellValue(tile);
+        	}
+        	
+        	
+        	Row headRow7 = sheet.createRow(7);
+        	Cell headCell7 = headRow7.createCell(0);
+        	headCell7.setCellValue("评分");
+        	for(int i=0;i<scoreList.size();i++) {
+        		String tile = scoreList.get(i);
+        		Cell tmpCell = headRow7.createCell(i+1);
+        		tmpCell.setCellValue(tile);
+        	}
+        }
+    	
+    	
+    	
+	    downLoadExcel(response, workbook);
+	}
+    
+   
+    
+    private void downLoadExcel(HttpServletResponse response, Workbook workbook){
+    	OutputStream outputStream = null;
+		try {
+			outputStream = response.getOutputStream();
+			response.reset();
+			String fileName = "excel"+new SimpleDateFormat("yyyy-MM-dd").format(new Date()) +".xlsx";
+			response.setCharacterEncoding("UTF-8");
+			response.setHeader("content-Type", "application/vnd.ms-excel");
+			response.setHeader("Content-Disposition",
+						"attachment;filename=\"" + URLEncoder.encode(fileName, "UTF-8") + "\"");
+			response.setHeader("Access-Control-Allow-Origin", "*");
+            response.setHeader("Cache-Control", "no-cache");
+			workbook.write(outputStream);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				outputStream.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+    }
 
 }

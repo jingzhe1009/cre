@@ -204,6 +204,7 @@ var authorityMgrModal = {
                     loading.show();
                 },
                 success: function (data) {
+	debugger;
                     if (data.status === 0) {
                         // 拥有权限 各表保存
                         var tableSaveArr = $('#authorityMgrContent .authorityMgrEle_saveButton');
@@ -1414,6 +1415,7 @@ function initAuthorityTable(tableId, container, cols, url, objStr, paging) {
             "type": 'POST',
             dataSrc: function (data) { // 从服务器接收的数据
                 if (data.status === 0) {
+	debugger;
                     // 分页设置
                     if (paging) { // 需要把分页的参数处理为顶级的属性
                         data.recordsTotal = data.data.permits.recordsTotal;
@@ -1441,6 +1443,7 @@ function initAuthorityTable(tableId, container, cols, url, objStr, paging) {
             // $("table:eq(0) th").css("background-color", "#f6f7fb");
 
             var cache = authorityMgrModal.getTableCache(tableId);
+            debugger;
             /** 数据级 **/
             if (isDataLevel) {
                 // 勾选项回显
@@ -1532,7 +1535,7 @@ var menuTitle = [
         "render": function (data, type, row) {
             var resourcesArr = row.resources;
             var checkAllFlag = 0;
-            var htmlStr = '<div class="resourceCheckBoxContai  ner" resourceId=\'' + row.resourceId + '\' resourceUrl=\'' + row.resourceUrl + '\'>';
+            var htmlStr = '<div class="resourceCheckBoxContainer" resourceId=\'' + row.resourceId + '\' resourceUrl=\'' + row.resourceUrl + '\'>';
             for (var i = 0; i < resourcesArr.length; i++) {
                 var checkStr = '';
                 if (resourcesArr[i].choosed) {

@@ -34,6 +34,8 @@ public interface ModelBaseService {
     boolean isGroupUsed(String modelGroupId);
 
     ResponseResult deleteModelGroup(String modelGroupId);
+    
+    List<ModelGroup> getModelGroupList();
 
     /**
      * 产品设置调用渠道

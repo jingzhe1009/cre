@@ -733,3 +733,31 @@ body{
     padding: 8px 15px;
     color: #353535;
 }
+
+
+.monitorSearch .input-group{
+	width: 250px;
+	float: left;
+	margin: 0 0 10px 10px;
+}
+.monitorSearch .dropdown-menu li{
+	cursor: pointer;
+}
+.monitorSearch .dropdown-menu{
+	text-align: center;
+}
+.monitorSearch .input-group-addon{
+    background-color: #fff;
+}
+.monitorSearch{
+	width: 100%;
+	float: left;
+	height: auto;
+	padding-top:14px;
+	margin-top: 10px;
+	background: #fff;
+	border-radius:5px;
+}
+.monitorSearch>div{
+	margin-right: 65px;
+}

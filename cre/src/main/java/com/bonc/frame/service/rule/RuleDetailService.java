@@ -151,6 +151,8 @@ public interface RuleDetailService {
     List<Map<String, Object>> getRuleNameInHeaderList(String folderId);
 
     List<Map<String, Object>> getEnableVersionBaseInfoByRuleName(String ruleName);
+    
+    List<Map<String, Object>> getModelList(String groupId,String channelId);
 
     // ------------------------------------------- AB test ------------------------------------------------
 

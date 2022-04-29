@@ -89,6 +89,13 @@ public class ModelBaseServiceImpl implements ModelBaseService {
         return (ModelGroup) daoHelper.queryOne(_MODEL_GROUP_MAPPER +
                 "getModelGroupByGroupName", param);
     }
+    
+    @Override
+    @Transactional
+    public List<ModelGroup> getModelGroupList() {
+        return daoHelper.queryForList(_MODEL_GROUP_MAPPER +
+                "getModelGroupList");
+    }
 
     @Override
     @Transactional
