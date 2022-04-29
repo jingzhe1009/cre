@@ -54,7 +54,7 @@ public class ChannelController {
         Map<String, Object> result = channelService.list(request,channelName, start, length);
         return result;
     }
-    
+
     @PermissionsRequires(value = "/chan/view", resourceType = ResourceType.BUTTON)
     @RequestMapping(value = "/nameList", method = RequestMethod.GET)
     @ResponseBody
