@@ -44,6 +44,7 @@ public class MainController {
 		if(idx==null || idx.isEmpty()){
 			idx = "28";
 		}
+		childOpen = "c";
 		IndexParam param = new IndexParam();
 		param.setChannelCount(childOpen);
 		param.setCountModel(childOpen);
