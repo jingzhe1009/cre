@@ -34,7 +34,20 @@
         <result column="UPDATE_PERSON" property="updatePerson" jdbcType="VARCHAR"/>
     </resultMap>
 
-
+    <select id="getGroupHeaderListResource" parameterType="java.util.Map"
+            resultType="com.bonc.frame.entity.auth.resource.PubModelGroupResource">
+        select
+        MODEL_GROUP_NAME as "modelGroupName",
+        MODEL_GROUP_ID as "modelGroupId"
+        FROM CRE_PUB_MODEL_GROUP
+        where 1=1
+        <if test="modelGroupId != null">
+            and MODEL_GROUP_ID != #{modelGroupId,jdbcType=VARCHAR}
+        </if>
+        <if test="modelGroupName != null">
+            AND MODEL_GROUP_NAME != #{modelGroupName,jdbcType=VARCHAR},
+        </if>
+    </select>
 
     <sql id="Base_Column_List">
         MODEL_GROUP_ID, MODEL_GROUP_NAME,MODEL_GROUP_CODE,MODEL_GROUP_DESC, CREATE_PERSON, UPDATE_PERSON,
@@ -61,6 +74,30 @@
     </select>
 
     <select id="getByGroupName" parameterType="map" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List2"></include>
+        FROM CRE_PUB_MODEL_GROUP a
+--         left join CRE_PUB_MODEL_GROUP_CHANNEL b on a.MODEL_GROUP_ID = b.MODEL_GROUP_ID
+        WHERE 1=1
+        <if test="modelGroupId != null">
+            and a.MODEL_GROUP_ID = #{modelGroupId,jdbcType=VARCHAR}
+        </if>
+        <if test="modelGroupName != null">
+            AND a.MODEL_GROUP_NAME like CONCAT(CONCAT('%',#{modelGroupName,jdbcType=VARCHAR}),'%')
+        </if>
+        <!--<if test="channelId != null">-->
+            <!--and b.CHANNEL_ID = #{channelId,jdbcType=VARCHAR}-->
+        <!--</if>-->
+        <if test="startDate != null and '' != startDate">
+            and a.CREATE_DATE &gt;= to_date(#{startDate,jdbcType=TIMESTAMP} ,'yyyy-mm-dd hh24:mi:ss')
+        </if>
+        <if test="endDate != null and '' != endDate">
+            and a.CREATE_DATE &lt;= to_date(#{endDate,jdbcType=TIMESTAMP} ,'yyyy-mm-dd hh24:mi:ss')
+        </if>
+        ORDER BY a.CREATE_DATE DESC
+    </select>
+
+    <select id="getByGroupName2" parameterType="map" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List2"></include>
         FROM CRE_PUB_MODEL_GROUP a
@@ -241,12 +278,14 @@
     <select id="getModelListByGroup" parameterType="java.lang.String" resultType="com.bonc.frame.entity.commonresource.ModelRuleDetail">
         select
         RULE_ID as ruleId,
-        RULE_NAME as ruleName,
+        MODULE_NAME as ruleName,
         RULE_DESC as ruleDesc,
-        RULE_TYPE as ruleType
+        RULE_TYPE as ruleType,
+        RULE_NAME as ruleVerId
         from CRE_RULE_DETAIL
         where IS_HEADER = '1'
         and  MODEL_GROUP_ID = #{modelGroupId,jdbcType=VARCHAR}
+        and FOLDER_ID = '0000000000000000000000000000001'
         order by UPDATE_DATE desc
     </select>
 

@@ -26,7 +26,4 @@ public interface DataSourceMapper {
             resourceType = ResourceType.DATA_DATASOURCE, isPageHelper = true)
     List<DataSourceResource> pagedDataSource(Map param);
 
-
-
-
 }

@@ -325,7 +325,7 @@ public class RuleConfigController {
         return ResponseResult.createSuccessInfo();
     }
 
-    @PermissionsRequires(value = "/pub/modelBase/delete?ruleName", resourceType = ResourceType.DATA_PUB_MODEL)
+    @PermissionsRequires(value = "/pub/rule/delete?ruleName", resourceType = ResourceType.DATA_PUB_MODEL)
     @RequestMapping(value = "/pub/delete/checkAuth", method = RequestMethod.GET)
     @ResponseBody
     public ResponseResult checkAuthDeleteForPub(String ruleName) {
@@ -562,7 +562,7 @@ public class RuleConfigController {
 
 
     @ApiOperation("删除模型头信息及其下版本")
-    @PermissionsRequires(value = "/pub/modelBase/delete?ruleName", resourceType = ResourceType.DATA_PUB_MODEL)
+    @PermissionsRequires(value = "/pub/rule/delete?ruleName", resourceType = ResourceType.DATA_PUB_MODEL)
     @RequestMapping(value = "/public/header/delete", method = RequestMethod.POST)
     @ResponseBody
     public ResponseResult deleteHeader(String ruleName, HttpServletRequest request) {

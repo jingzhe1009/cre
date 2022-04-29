@@ -1740,7 +1740,7 @@ var initFlowObj = {
 
         var sendObj;
         sendObj = {
-            "folderId": folderId,
+            "folderId": '0000000000000000000000000000001',
             "ruleId": ruleId,
             "ruleName": ruleName,
             "moduleName": ruleNameInput,
@@ -1749,6 +1749,7 @@ var initFlowObj = {
             'versionDesc': $.trim($('#modelVersionDes').val()),
             "data": data,
             "optMode": optMode,
+            "modelGroupId": folderId,
             "isFirst": 0,
         };
 

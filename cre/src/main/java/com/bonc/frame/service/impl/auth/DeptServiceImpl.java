@@ -90,6 +90,10 @@ public class DeptServiceImpl implements DeptService {
     @Override
     public String getChannelIdByUserId(String userId) {
         ModelGroupChannelVo vo = (ModelGroupChannelVo) daoHelper.queryOne(_DEPT_PREFIX + "getChannelIdByUserId", userId);
+        if (vo == null) {
+            // 如果该用户还没有渠道信息，
+            return "000";
+        }
         if (vo.getChannelName().contains("大数据")) {
             if (vo.getDeptName().contains("总行")) {
                 return null;

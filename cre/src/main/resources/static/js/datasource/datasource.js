@@ -472,34 +472,33 @@ function initPage() {
 
     // 新建数据源
     $('#addDataSourceBtn').click(function () {
-        // // 新建数据源 authCheck（去掉校验了）
-        // $.ajax( {
-        // 	url: webpath + '/datasource/save/checkAuth',
-        // 	type: 'GET',
-        // 	dataType: "json",
-        // 	data: {},
-        // 	success: function ( data ) {
-        // 		if ( data.status === 0 ) {
-        $('#datasourceModalForm')[0].reset(); // 清空表单数据
-        $('#dsAlertModal .form-control').removeAttr('disabled');
-        $('#dsAlertModal .modal-footer .notView button').css('display', 'inline-block');
-        $('#closeViewDs').css('display', 'none');
-        // 复原hive选填项
-        $('#datasourceModalForm').find("input[id='dbUsername']").attr('isMust', '1').parent().siblings('label').find('.mustIcon').css('display', 'inline');
-        $('#datasourceModalForm').find("input[id='dbPassword']").attr('isMust', '1').parent().siblings('label').find('.mustIcon').css('display', 'inline');
-        // 复原hbase隐藏项
-        $('#datasourceModalForm .maxConnectGroup, #datasourceModalForm .maxIdleGroup, #datasourceModalForm .dbUsernameGroup,  #datasourceModalForm .dbPasswordGroup').removeClass('hide');
-        $('#dsAlertTitle').text('新建数据源'); // 修改表单title
-        $('#dsAlertModal').modal('toggle', 'center');
-        $('#dsSaveButton').unbind('click'); // 清除其他由编辑绑定的click事件
-        $('#dsSaveButton').click(function () {
-            dsOperate('insert'); // 保存新建数据源
+        $.ajax({
+            url: webpath + '/createCheck/check',
+            type: 'POST',
+            data: {'dbId': $(this).attr('data-id'), 'status': status},
+            dataType: "json",
+            success: function (data) {
+                if (data.status === 0) {
+                    $('#datasourceModalForm')[0].reset(); // 清空表单数据
+                    $('#dsAlertModal .form-control').removeAttr('disabled');
+                    $('#dsAlertModal .modal-footer .notView button').css('display', 'inline-block');
+                    $('#closeViewDs').css('display', 'none');
+                    // 复原hive选填项
+                    $('#datasourceModalForm').find("input[id='dbUsername']").attr('isMust', '1').parent().siblings('label').find('.mustIcon').css('display', 'inline');
+                    $('#datasourceModalForm').find("input[id='dbPassword']").attr('isMust', '1').parent().siblings('label').find('.mustIcon').css('display', 'inline');
+                    // 复原hbase隐藏项
+                    $('#datasourceModalForm .maxConnectGroup, #datasourceModalForm .maxIdleGroup, #datasourceModalForm .dbUsernameGroup,  #datasourceModalForm .dbPasswordGroup').removeClass('hide');
+                    $('#dsAlertTitle').text('新建数据源'); // 修改表单title
+                    $('#dsAlertModal').modal('toggle', 'center');
+                    $('#dsSaveButton').unbind('click'); // 清除其他由编辑绑定的click事件
+                    $('#dsSaveButton').click(function () {
+                        dsOperate('insert'); // 保存新建数据源
+                    });
+                } else {
+                    failedMessager.show(data.msg);
+                }
+            }
         });
-        // 		} else {
-        // 			failedMessager.show( data.msg );
-        // 		}
-        // 	}
-        // } );
     });
 
     // 测试连接
@@ -543,7 +542,7 @@ function initPage() {
     $('#datasourceTable').on('click', '.dsDelSpan', function () {
         var dbId = $(this).attr('data-id');
         $.ajax({
-            url: webpath + '/datasource/delete//checkAuth',
+            url: webpath + '/datasource/delete/checkAuth',
             type: 'GET',
             dataType: "json",
             data: {"dbId": dbId},
@@ -806,7 +805,6 @@ function initDbTable() {
                     // onclick="dataSourceModal.detailDatasource(\'' + data + '\')" type="button">查看</span>';
                     htmlStr += '<span data-id=\'' + data + '\' class="cm-tblB dsEditSpan" onclick="dataSourceModal.editDataSource(\'' + data + '\')" type="button">修改</span>';
                     htmlStr += '<span data-id=\'' + data + '\' class="cm-tblC dsDelSpan" type="button">删除</span>';
-                    htmlStr += '<span data-id=\'' + data + '\' class="cm-tblB detailSpan" onclick="dataSourceModal.metadataMgr(\'' + data + '\')" type="button">元数据管理</span>';
                     return htmlStr;
                 }
             }
@@ -1167,18 +1165,22 @@ var dataSource = {
     // 元数据管理
     handleDataManager: function (dbId) {
         $.ajax({ // 元数据管理校验
-            url: webpath + '/datasource/update/checkAuth',
+            url: webpath + '/datasource/metadataMgr/checkAuth',
             type: 'GET',
             dataType: "json",
             data: {dbId: dbId},
             success: function (data) {
-                dataSourceModal.showMetadata();
-                $('#scanedTablesDiv').removeAttr('dbId').attr('dbId', dbId);
-                initDbScanTable({"dbId": dbId});
-                if (data.status === 0) { // 拥有元数据内修改权限（删除元数据、扫描）
-                    $('#scanedTablesDiv').removeAttr('updateAuth').attr('updateAuth', '1');
+                if (data.status === 0) {
+                    dataSourceModal.showMetadata();
+                    $('#scanedTablesDiv').removeAttr('dbId').attr('dbId', dbId);
+                    initDbScanTable({"dbId": dbId});
+                    if (data.status === 0) { // 拥有元数据内修改权限（删除元数据、扫描）
+                        $('#scanedTablesDiv').removeAttr('updateAuth').attr('updateAuth', '1');
+                    } else {
+                        $('#scanedTablesDiv').removeAttr('updateAuth').attr('updateAuth', '0');
+                    }
                 } else {
-                    $('#scanedTablesDiv').removeAttr('updateAuth').attr('updateAuth', '0');
+                    failedMessager.show(data.msg);
                 }
             }
         });

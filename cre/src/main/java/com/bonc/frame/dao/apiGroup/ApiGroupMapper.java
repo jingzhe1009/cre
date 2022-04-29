@@ -19,8 +19,8 @@ import java.util.Map;
 @Repository
 public interface ApiGroupMapper {
 
-    @PermissibleData(value = "API_GROUP_ID", requiresPermission = "/pub/apiGroup/view",
-            resourceType = ResourceType.DATA_PUB_API_GROUP, isPageHelper = true)
+//    @PermissibleData(value = "API_GROUP_ID", requiresPermission = "/pub/apiGroup/view",
+//            resourceType = ResourceType.DATA_PUB_API_GROUP, isPageHelper = true)
     List<ApiConfGroup> select(Map map);
 
 }

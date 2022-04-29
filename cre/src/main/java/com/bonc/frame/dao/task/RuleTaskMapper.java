@@ -14,12 +14,12 @@ import java.util.Map;
  */
 public interface RuleTaskMapper {
 
-    @PermissibleData(value = "TASK_ID", requiresPermission = "/task/view",
-            resourceType = ResourceType.DATA_TASK, isPageHelper = true)
+//    @PermissibleData(value = "TASK_ID", requiresPermission = "/task/view",
+//            resourceType = ResourceType.DATA_TASK, isPageHelper = true)
     List<RuleTask> getRuleTaskList(Map param);
-
-    @PermissibleData(value = "\"taskId\"", requiresPermission = "/task/view",
-            resourceType = ResourceType.DATA_TASK, isPageHelper = true)
+//
+//    @PermissibleData(value = "\"taskId\"", requiresPermission = "/task/view",
+//            resourceType = ResourceType.DATA_TASK, isPageHelper = true)
     List<RuleTaskResource> pagedRuleTaskResource(Map param);
 
 

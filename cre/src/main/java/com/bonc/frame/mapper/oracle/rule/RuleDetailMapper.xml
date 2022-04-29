@@ -247,6 +247,7 @@
         FROM
         CRE_RULE_DETAIL
         WHERE 1=1
+        and FOLDER_ID = '0000000000000000000000000000001'
         <if test="folderId != null and '' != folderId">
             AND MODEL_GROUP_ID = #{folderId,jdbcType=VARCHAR}
         </if>
@@ -265,9 +266,9 @@
         <include refid="Version_Column_List_DRAFT"/>
         from CRE_RULE_DETAIL_DRAFT
         WHERE 1=1
-        <!--<if test="folderId != null and '' != folderId">-->
-        <!--AND MODEL_GROUP_ID = #{folderId,jdbcType=VARCHAR}-->
-        <!--</if>-->
+        <if test="folderId != null and '' != folderId">
+        AND MODEL_GROUP_ID = #{folderId,jdbcType=VARCHAR}
+        </if>
         <if test="ruleName != null and '' != ruleName">
             AND RULE_NAME = #{ruleName,jdbcType=VARCHAR}
         </if>
@@ -287,9 +288,9 @@
         FROM
         CRE_RULE_DETAIL_DRAFT
         WHERE 1=1
-        <!--<if test="folderId != null and '' != folderId">-->
-        <!--AND MODEL_GROUP_ID = #{folderId,jdbcType=VARCHAR}-->
-        <!--</if>-->
+        <if test="folderId != null and '' != folderId">
+        AND MODEL_GROUP_ID = #{folderId,jdbcType=VARCHAR}
+        </if>
         <if test="ruleName != null and '' != ruleName">
             AND RULE_NAME = #{ruleName,jdbcType=VARCHAR}
         </if>
@@ -1213,9 +1214,9 @@
     <select id="getHeaderListResource" parameterType="java.util.Map"
             resultType="com.bonc.frame.entity.auth.resource.PubModelBaseResource">
         SELECT
-        a.RULE_NAME AS "ruleName" ,
-        a.FOLDER_ID AS "folderId" ,
-        a.RULE_DESC AS "ruleDesc" ,
+        a.RULE_NAME as "ruleName" ,
+        a.FOLDER_ID as "folderId" ,
+        a.RULE_DESC as "ruleDesc" ,
         a.RULE_TYPE AS "ruleType" ,
         a.IS_PUBLIC AS "isPublic" ,
         a.IS_HEADER AS "isHeader",
@@ -1633,8 +1634,8 @@
 
     <update id="groupAddModel" parameterType="map">
         update CRE_RULE_DETAIL
-        set MODEL_GROUP_ID = #{modelGroupId,jdbcType=VARCHAR}
-        where RULE_ID = #{ruleId,jdbcType=VARCHAR}
+        set MODEL_GROUP_ID = #{modelGroupId,jdbcType=VARCHAR},IS_PUBLIC = '0'
+        where RULE_NAME = #{ruleId,jdbcType=VARCHAR}
     </update>
 
 </mapper>

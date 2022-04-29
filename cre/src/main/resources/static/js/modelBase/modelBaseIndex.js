@@ -268,11 +268,23 @@ var modelBaseModal = {
         $('#modelBaseAlertModal').removeAttr('oldRuleName');
         $('#modelBaseAlertModal').removeAttr('oldModuleName');
         if (handleType === 0) {
-            $('#firstVersion, #cancelModelBase').css('display', 'inline-block');
-            $('.notFirst').addClass('hide');
-            $('#modelBaseAlertModal .modal-title').text('添加模型');
-            $('#modelBaseAlertModal').attr('handleType', handleType).modal({'show': 'center', "backdrop": "static"});
-            $('#modelBaseAlertModal .form-control').removeAttr('disabled');
+            $.ajax({
+                url: webpath + '/createCheck/check',
+                type: 'GET',
+                dataType: "json",
+                data: {"ruleName": detail.ruleName},
+                success: function (data) {
+                    if (data.status === 0) {
+                        $('#firstVersion, #cancelModelBase').css('display', 'inline-block');
+                        $('.notFirst').addClass('hide');
+                        $('#modelBaseAlertModal .modal-title').text('添加模型');
+                        $('#modelBaseAlertModal').attr('handleType', handleType).modal({'show': 'center', "backdrop": "static"});
+                        $('#modelBaseAlertModal .form-control').removeAttr('disabled');
+                    } else {
+                        failedMessager.show(data.msg);
+                    }
+                }
+            });
         } else if (handleType === 1) {
             $.ajax({
                 url: webpath + '/rule/update/checkAuthModelPub',
@@ -674,23 +686,49 @@ var modelGroupModal = {
         $('#modelBaseGroupAlert .modal-footer button').css('display', 'none');
         $('#modelBaseGroupAlert .form-control').attr('disabled', false);
         if (handleType === 0) {
-            $('#modelBaseGroupAlert .modal-footer .notView button').css('display', 'inline-block');
-            $('#modelBaseGroupAlert .modal-title').text('').text('添加产品');
-            modelGroupModal.channelNameList();
+            $.ajax({
+                url: webpath + '/createCheck/check',
+                type: 'GET',
+                data: {'modelGroupId': detail['modelGroupId']? detail['modelGroupId'] : ''},
+                dataType: "json",
+                success: function (data) {
+                    if (data.status === 0) {
+                        $('#modelBaseGroupAlert').attr('handleType', handleType).modal({'show': 'center', "backdrop": "static"});
+                        $('#modelBaseGroupAlert .modal-footer .notView button').css('display', 'inline-block');
+                        $('#modelBaseGroupAlert .modal-title').text('').text('添加产品');
+                        modelGroupModal.channelNameList();
+                    } else {
+                        failedMessager.show(data.msg);
+                    }
+                }
+            });
         } else if (handleType == 1) {
-            $('#modelBaseGroupAlert .modal-footer .notView button').css('display', 'inline-block');
-            $('#modelBaseGroupAlert .modal-title').text('').text('修改产品');
-            $('#modelBaseGroupAlert .form-group:eq(3)').hide();
-            modelGroupModal.echoGroupData(detail);
-            modelGroupModal.channelNameList();
+            $.ajax({
+                url: webpath + '/modelBase/group/update/checkAuth',
+                type: 'GET',
+                data: {'modelGroupId': detail['modelGroupId']? detail['modelGroupId'] : ''},
+                dataType: "json",
+                success: function (data) {
+                    if (data.status === 0) {
+                        $('#modelBaseGroupAlert').attr('handleType', handleType).modal({'show': 'center', "backdrop": "static"});
+                        $('#modelBaseGroupAlert .modal-footer .notView button').css('display', 'inline-block');
+                        $('#modelBaseGroupAlert .modal-title').text('').text('修改产品');
+                        $('#modelBaseGroupAlert .form-group:eq(3)').hide();
+                        modelGroupModal.echoGroupData(detail);
+                        modelGroupModal.channelNameList();
+                    } else {
+                        failedMessager.show(data.msg);
+                    }
+                }
+            });
         } else if (handleType == 2) {
+            $('#modelBaseGroupAlert').attr('handleType', handleType).modal({'show': 'center', "backdrop": "static"});
             $('#modelBaseGroupAlert .modal-footer #closeModelBaseGroup').css('display', 'inline-block');
             $('#modelBaseGroupAlert .modal-title').text('').text('查看产品');
             $('#modelBaseGroupAlert .form-control').attr('disabled', true);
             modelGroupModal.echoGroupData(detail);
             modelGroupModal.channelNameList();
         }
-        $('#modelBaseGroupAlert').attr('handleType', handleType).modal({'show': 'center', "backdrop": "static"});
     },
     // 关闭添加参数组弹框
     hiddenAddGroupAlert: function () {
@@ -728,7 +766,7 @@ var modelGroupModal = {
                 if (data.status === 0) {
                     var htmlStr = '';
                     for (var i = 0; i < data.data.length; i++) {
-                        htmlStr += '<li channelId=\'' + data.data[i].channelId + '\' channelName=\'' + data.data[i].channelName + '\'>' + data.data[i].channelName+'</li>';
+                        htmlStr += '<li channelId=\'' + data.data[i].channelId + '\' channelName=\'' + data.data[i].channelName + '-' + data.data[i].deptName + '\'>' + data.data[i].channelName+ '-' + data.data[i].deptName + '</li>';
                     }
                     $('.channelList').empty().html(htmlStr);
                 } else {
@@ -748,27 +786,39 @@ var modelGroupModal = {
     },
     //弹窗 点击设置调用渠道时出现
     showChannel: function(modelGroupId){
-        $('#channelAlert').modal({'show': 'center', "backdrop": "static"});
-        $('#channelContentWarp').removeAttr('kpiId');
-        $('.channelDefBase form')[0].reset();
-        $('.channelDefBase form').validator('cleanUp');
+        $.ajax({
+            url: webpath + '/modelBase/group/channel/checkAuth',
+            type: 'GET',
+            data: {'modelGroupId':modelGroupId},
+            dataType: "json",
+            success: function (data) {
+                if (data.status === 0) {
+                    $('#channelAlert').modal({'show': 'center', "backdrop": "static"});
+                    $('#channelContentWarp').removeAttr('kpiId');
+                    $('.channelDefBase form')[0].reset();
+                    $('.channelDefBase form').validator('cleanUp');
 
-        var obj ={'modelGroupId':modelGroupId};
-        modelGroupModal.initChannelTable(obj);
+                    var obj ={'modelGroupId':modelGroupId};
+                    modelGroupModal.initChannelTable(obj);
 
-        //点击保存
-        $('#saveChannel').unbind('click').on('click', {'modelGroupId':modelGroupId},function (event) {
-            var channelIds = [];
-            $('#channelTable').find(':checkbox').each(function(){
-                if ($(this).prop("checked")) {
-                    channelIds.push($(this).attr('group-id'));
+                    //点击保存
+                    $('#saveChannel').unbind('click').on('click', {'modelGroupId':modelGroupId},function (event) {
+                        var channelIds = [];
+                        $('#channelTable').find(':checkbox').each(function(){
+                            if ($(this).prop("checked")) {
+                                channelIds.push($(this).attr('group-id'));
+                            }
+                        });
+                        modelGroupModal.saveChannel(event.data.modelGroupId,channelIds);
+                    });
+                    //点击关闭
+                    $('#closeChannel').unbind('click').on('click',function () {
+                        $('#channel li').remove();
+                    });
+                } else {
+                    failedMessager.show(data.msg);
                 }
-            });
-            modelGroupModal.saveChannel(event.data.modelGroupId,channelIds);
-        });
-        //点击关闭
-        $('#closeChannel').unbind('click').on('click',function () {
-            $('#channel li').remove();
+            }
         });
     },
     //初始化  查看调用渠道中的表格
@@ -920,37 +970,62 @@ var modelGroupModal = {
     // 删除模型集组
     deleteGroup: function (groupId) {
         if (groupId) {
-            confirmAlert.show('删除产品后该产品下的模型将移动到其他分组,是否继续？', function () {
-                $.ajax({
-                    url: webpath + '/modelBase/group/delete',
-                    type: 'POST',
-                    dataType: "json",
-                    data: {'modelGroupId': groupId},
-                    success: function (data) {
-                        if (data.status === 0) {
-                            successMessager.show('删除成功');
-                            initModelBaseGroupTable();
-                            // initModelBaseTable();
-                            $('.modelBaseSearch').trigger('click');
-                            initModelBaseGroup(); // 刷新模型组下拉框
-                        } else {
-                            failedMessager.show(data.msg);
-                        }
+            $.ajax({ // 删除权限校验
+                url: webpath + '/modelBase/group/delete/checkAuth',
+                type: 'GET',
+                dataType: "json",
+                data: {'modelGroupId': groupId},
+                success: function (data) {
+                    debugger;
+                    if (data.status === 0) {
+                        confirmAlert.show('删除产品后该产品下的模型将移动到其他分组,是否继续？', function () {
+                            $.ajax({
+                                url: webpath + '/modelBase/group/delete',
+                                type: 'POST',
+                                dataType: "json",
+                                data: {'modelGroupId': groupId},
+                                success: function (data) {
+                                    if (data.status === 0) {
+                                        successMessager.show('删除成功');
+                                        initModelBaseGroupTable();
+                                        // initModelBaseTable();
+                                        $('.modelBaseSearch').trigger('click');
+                                        initModelBaseGroup(); // 刷新模型组下拉框
+                                    } else {
+                                        failedMessager.show(data.msg);
+                                    }
+                                }
+                            });
+                        });
+                    } else {
+                        failedMessager.show(data.msg);
                     }
-                });
+                }
             });
         }
     },
     //查看模型
     showModel: function($this,groupId){
-        var detail = {};
-        if ($this) {
-            var curRow = $this.parentNode.parentNode;
-            detail = $('#modelBaseGroupTable').DataTable().row(curRow).data();
-        }
-        sessionStorage.setItem('detail',JSON.stringify(detail));
-        var url = webpath + "/ruleFolder/rulePackageMgr?folderId=" + groupId+'&childOpen=c';
-        creCommon.loadHtml(url);
+        $.ajax({
+            url: webpath + '/ruleFolder/group/modelView/checkAuth',
+            type: 'GET',
+            data: {'modelGroupId': groupId},
+            dataType: "json",
+            success: function (data) {
+                if (data.status === 0) {
+                    var detail = {};
+                    if ($this) {
+                        var curRow = $this.parentNode.parentNode;
+                        detail = $('#modelBaseGroupTable').DataTable().row(curRow).data();
+                    }
+                    sessionStorage.setItem('detail',JSON.stringify(detail));
+                    var url = webpath + "/ruleFolder/rulePackageMgr?folderId=" + groupId+'&childOpen=c';
+                    creCommon.loadHtml(url);
+                } else {
+                    failedMessager.show(data.msg);
+                }
+            }
+        });
     }
 }
 

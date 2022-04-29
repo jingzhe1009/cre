@@ -130,8 +130,14 @@ public class ModelBaseServiceImpl implements ModelBaseService {
             // 接口传了选择的渠道，则展示本渠道下的产品
             param.put("channelId", channelId);
         }
-        final Map<String, Object> map = daoHelper.queryForPageList(_MODEL_GROUP_MAPPER +
-                "getByGroupName", param, start, length);
+        final Map<String, Object> map;
+        if (param.get("channelId")==null) {
+            map = daoHelper.queryForPageList(_MODEL_GROUP_MAPPER +
+                    "getByGroupName", param, start, length);
+        } else {
+            map = daoHelper.queryForPageList(_MODEL_GROUP_MAPPER +
+                    "getByGroupName2", param, start, length);
+        }
         List<ModelGroup> data = (List<ModelGroup>) map.get("data");
         List<Map> dataMap = new ArrayList<>();
         for (ModelGroup datum : data) {
@@ -319,17 +325,32 @@ public class ModelBaseServiceImpl implements ModelBaseService {
     public List<ModelGroupChannelVo> channelList(String loginUserId, String modelGroupId) {
         List<ModelGroupChannelVo> voList = new ArrayList<>();
         // 校验权限-获取全权数据或者本渠道数据
-        if (loginUserId != null) {
-            // 全权
-            List<Dept> list = daoHelper.queryForList(_DEPT_PREFIX + "list");
-            for(Dept d:list){
-                List<ModelGroupChannelVo> chList = getChannelInfoByDept(d.getDeptId(), modelGroupId);
+        boolean b = roleService.checkAuthorityIsAll(loginUserId);
+        String chanId = deptService.getChannelIdByUserId(loginUserId);
+        if (b || chanId == null) {
+            // 全权或者用户是总行大数据下的开发人员
+            List<ModelGroupChannelVo> chList = daoHelper.queryForList(_DEPT_PREFIX + "getChannelByDept");
+            // 校验该渠道有无被关联，给数据加上标记
+            String isSelected;
+            if (!CollectionUtil.isEmpty(chList)) {
                 for (ModelGroupChannelVo vo : chList) {
-                    voList.add(vo);
+                    // 传了产品id就要判断某个渠道和产品是否已有关联
+                    isSelected = "0";
+                    Map<String,String> map = new HashMap<>();
+                    map.put("modelGroupId", modelGroupId);
+                    map.put("channelId", vo.getChannelId());
+                    List<ModelGroupChannel> conList = daoHelper.queryForList(_MODEL_GROUP_MAPPER + "isConnected", map);
+                    if (conList.size() > 0) {
+                        isSelected = "1";
+                    }
+                    vo.setIsConnected(isSelected);
                 }
             }
+            for (ModelGroupChannelVo vo : chList) {
+                voList.add(vo);
+            }
         } else {
-            // 本机构下的渠道数据
+            // 自己所属的渠道数据
             return voList;
         }
         return voList;

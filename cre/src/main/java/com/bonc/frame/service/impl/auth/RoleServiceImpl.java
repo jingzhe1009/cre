@@ -74,6 +74,26 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    public  ResponseResult getRoleByUser2(String loginUserId) {
+        Map<String, Object> param = new HashMap<>();
+        param.put("userId", loginUserId);
+        List<Role> roles = daoHelper.queryForList(_ROLE_PREFIX + "getRoleByUser2", param);
+        boolean hasPower = false;
+        for(Role role:roles){
+            if (!role.getRoleName().contains("运维人员")&&!role.getRoleName().contains("业务人员")){
+                hasPower = true;
+
+            }
+        }
+        if(!hasPower){
+            return ResponseResult.createFailInfo("没有权限");
+        }
+        return ResponseResult.createSuccessInfo();
+    }
+
+
+
+    @Override
     public List<Role> getRoleByroot() {
         return getRoleByUser("root");
     }

@@ -76,6 +76,17 @@ public class RulePackageMgrController {
         model.addAttribute("childOpen", childOpen);
         return "/pages/rule/rulePackage";
     }
+    /**
+     *
+     * 查看模型权限校验
+     * */
+
+    @PermissionsRequires(value = "/pub/modelGroup/modelView?modelGroupId", resourceType = ResourceType.DATA_PUB_MODEL_GROUP)
+    @RequestMapping(value = "/group/modelView/checkAuth", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseResult checkModelGroup(String modelGroupId) {
+        return ResponseResult.createSuccessInfo();
+    }
 
     @RequestMapping("/foldersIndex")
     public String foldersIndex(String idx, String childOpen, Model model) throws Exception {

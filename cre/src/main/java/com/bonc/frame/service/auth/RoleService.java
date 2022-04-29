@@ -3,6 +3,7 @@ package com.bonc.frame.service.auth;
 import com.bonc.frame.entity.auth.Role;
 import com.bonc.frame.util.ResponseResult;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +13,8 @@ public interface RoleService {
     Map<String, Object> list(String roleName, String start, String size);
 
     List<Role> getRoleByUser(String user);
+
+    ResponseResult getRoleByUser2(String loginUserId);
 
     List<Role> getRoleByroot();
 

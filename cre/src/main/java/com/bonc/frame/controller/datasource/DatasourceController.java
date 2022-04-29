@@ -250,4 +250,11 @@ public class DatasourceController {
         return ResponseResult.createSuccessInfo();
     }
 
+    @PermissionsRequires(value = "/datasource/metadataMgr?dbId", resourceType = ResourceType.DATA_DATASOURCE)
+    @RequestMapping(value = "/metadataMgr/checkAuth", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseResult metadataMgr(String dbId) {
+        return ResponseResult.createSuccessInfo();
+    }
+
 }

@@ -120,10 +120,22 @@ var ruleSetBaseModal = {
         $('#ruleSetBaseAlertModal form').validator('cleanUp'); // 清除表单中的全部验证消息
         $('#ruleSetBaseAlertModal').removeAttr('ruleSetHeaderId'); // 清除ruleSetHeaderId标识
         if (handleType == 0) {
-            $('#ruleSetBaseAlertModal .modal-footer .notView button').css('display', 'inline-block');
-            $('#ruleSetBaseAlertModal .modal-title').text('添加规则集');
-            $('#ruleSetBaseAlertModal').attr('handleType', handleType).modal({'show': 'center', "backdrop": "static"});
-            $('#ruleSetBaseAlertModal .form-control').removeAttr('disabled');
+            $.ajax({
+                url: webpath + '/createCheck/check',
+                type: 'GET',
+                dataType: "json",
+                data: {"ruleSetHeaderId": detail['ruleSetHeaderId'] ? detail['ruleSetHeaderId'] : ''},
+                success: function (data) {
+                    if (data.status === 0) {
+                        $('#ruleSetBaseAlertModal .modal-footer .notView button').css('display', 'inline-block');
+                        $('#ruleSetBaseAlertModal .modal-title').text('添加规则集');
+                        $('#ruleSetBaseAlertModal').attr('handleType', handleType).modal({'show': 'center', "backdrop": "static"});
+                        $('#ruleSetBaseAlertModal .form-control').removeAttr('disabled');
+                    } else {
+                        failedMessager.show(data.msg);
+                    }
+                }
+            });
         } else if (handleType == 1) {
             // 修改权限check
             $.ajax({
@@ -462,13 +474,25 @@ var ruleSetBaseModal = {
 var ruleSetVersionTableModal = {
     // 初始化规则集版本列表页面
     initPage: function (ruleSetHeaderId, ruleSetId, ruleSetName) {
-        $('#versionTable_title').text(ruleSetName || '');
-        $('#ruleSetHeaderName').val(ruleSetName || '');
-        $('#ruleSetVersionTableAlertModal').removeAttr('ruleSetHeaderId').attr('ruleSetHeaderId', ruleSetHeaderId); // 总规则集
-        $('#ruleSetVersionTableAlertModal').removeAttr('ruleSetId').attr('ruleSetId', ruleSetId); // 该版本
-        $('#ruleSetVersionTableAlertModal .selfAdaptionLeft .input-group .form-control').val(''); // 清空搜索栏内容
-        ruleSetVersionTableModal.initTable({"ruleSetHeaderId": ruleSetHeaderId}); // 根据总规则集id初始化列表
-        ruleSetVersionTableModal.show();
+        $.ajax({
+            url: webpath + '/ruleSet/version/view/checkAuth',
+            type: 'GET',
+            dataType: "json",
+            data: {'ruleSetHeaderId':ruleSetHeaderId},
+            success: function (data) {
+                if (data.status === 0) {
+                    $('#versionTable_title').text(ruleSetName || '');
+                    $('#ruleSetHeaderName').val(ruleSetName || '');
+                    $('#ruleSetVersionTableAlertModal').removeAttr('ruleSetHeaderId').attr('ruleSetHeaderId', ruleSetHeaderId); // 总规则集
+                    $('#ruleSetVersionTableAlertModal').removeAttr('ruleSetId').attr('ruleSetId', ruleSetId); // 该版本
+                    $('#ruleSetVersionTableAlertModal .selfAdaptionLeft .input-group .form-control').val(''); // 清空搜索栏内容
+                    ruleSetVersionTableModal.initTable({"ruleSetHeaderId": ruleSetHeaderId}); // 根据总规则集id初始化列表
+                    ruleSetVersionTableModal.show();
+                } else {
+                    failedMessager.show(data.msg);
+                }
+            }
+        });
     },
     // 展开弹框
     show: function () {
@@ -682,21 +706,48 @@ var ruleSetGroupModal = {
         $('#ruleSetGroupAlert form')[0].reset();
         $('#ruleSetGroupAlert .modal-footer button').css('display', 'none');
         if (handleType === 0) {
-            $('#ruleSetGroupAlert .modal-footer .notView button').css('display', 'inline-block');
-            $('#ruleSetGroupAlert .modal-title').text('').text('添加规则集组');
-            $('#ruleSetGroupAlert .form-control').removeAttr('disabled');
+            $.ajax({
+                url: webpath + '/createCheck/check',
+                type: 'GET',
+                data: {'ruleSetGroupId': detail['ruleSetGroupId']? detail['ruleSetGroupId'] : ''},
+                dataType: "json",
+                success: function (data) {
+                    if (data.status === 0) {
+                        $('#ruleSetGroupAlert').attr('handleType', handleType).modal({'show': 'center', "backdrop": "static"});
+                        $('#ruleSetGroupAlert .modal-footer .notView button').css('display', 'inline-block');
+                        $('#ruleSetGroupAlert .modal-title').text('').text('添加规则集组');
+                        $('#ruleSetGroupAlert .form-control').removeAttr('disabled');
+                        ruleSetGroupModal.echoGroupData(detail);
+                    } else {
+                        failedMessager.show(data.msg);
+                    }
+                }
+            });
         } else if (handleType === 1) {
-            $('#ruleSetGroupAlert .modal-footer .notView button').css('display', 'inline-block');
-            $('#ruleSetGroupAlert .modal-title').text('').text('修改规则集组');
-            ruleSetGroupModal.echoGroupData(detail);
-            $('#ruleSetGroupAlert .form-control').removeAttr('disabled');
+            $.ajax({
+                url: webpath + '/ruleSet/group/update/checkAuth',
+                type: 'GET',
+                data: {'ruleSetGroupId': detail['ruleSetGroupId']? detail['ruleSetGroupId'] : ''},
+                dataType: "json",
+                success: function (data) {
+                    if (data.status === 0) {
+                        $('#ruleSetGroupAlert').attr('handleType', handleType).modal({'show': 'center', "backdrop": "static"});
+                        $('#ruleSetGroupAlert .modal-footer .notView button').css('display', 'inline-block');
+                        $('#ruleSetGroupAlert .modal-title').text('').text('修改规则集组');
+                        ruleSetGroupModal.echoGroupData(detail);
+                        $('#ruleSetGroupAlert .form-control').removeAttr('disabled');
+                    } else {
+                        failedMessager.show(data.msg);
+                    }
+                }
+            });
         } else if (handleType === 2) {
+            $('#ruleSetGroupAlert').attr('handleType', handleType).modal({'show': 'center', "backdrop": "static"});
             $('#ruleSetGroupAlert .modal-footer #closeViewRuleSetGroup').css('display', 'inline-block');
             $('#ruleSetGroupAlert .modal-title').text('').text('查看规则集组');
             ruleSetGroupModal.echoGroupData(detail);
             $('#ruleSetGroupAlert .form-control').attr('disabled', true);
         }
-        $('#ruleSetGroupAlert').attr('handleType', handleType).modal({'show': 'center', "backdrop": "static"});
     },
     // 关闭添加参数组弹框
     hiddenAddGroupAlert: function () {
@@ -773,24 +824,36 @@ var ruleSetGroupModal = {
     // 删除规则集组
     deleteGroup: function (groupId) {
         if (groupId) {
-            confirmAlert.show('是否确认删除？', function () {
-                $.ajax({
-                    url: webpath + '/ruleSet/group/delete',
-                    type: 'POST',
-                    dataType: "json",
-                    data: {'ruleSetGroupId': groupId},
-                    success: function (data) {
-                        if (data.status === 0) {
-                            successMessager.show('删除成功');
-                            // initRuleSetTable();
-                            initRuleSetGroupTable();
-                            $('.ruleSetSearch').trigger('click');
-                            initRuleSetGroup(); // 刷新规则集组下拉框
-                        } else {
-                            failedMessager.show(data.msg);
-                        }
+            $.ajax({ // 删除权限校验
+                url: webpath + '/ruleSet/group/delete/checkAuth',
+                type: 'GET',
+                dataType: "json",
+                data: {'ruleSetGroupId': groupId},
+                success: function (data) {
+                    if (data.status === 0) {
+                        confirmAlert.show('是否确认删除？', function () {
+                            $.ajax({
+                                url: webpath + '/ruleSet/group/delete',
+                                type: 'POST',
+                                dataType: "json",
+                                data: {'ruleSetGroupId': groupId},
+                                success: function (data) {
+                                    if (data.status === 0) {
+                                        successMessager.show('删除成功');
+                                        // initRuleSetTable();
+                                        initRuleSetGroupTable();
+                                        $('.ruleSetSearch').trigger('click');
+                                        initRuleSetGroup(); // 刷新规则集组下拉框
+                                    } else {
+                                        failedMessager.show(data.msg);
+                                    }
+                                }
+                            });
+                        });
+                    } else {
+                        failedMessager.show(data.msg);
                     }
-                });
+                }
             });
         }
     }

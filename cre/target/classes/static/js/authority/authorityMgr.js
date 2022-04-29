@@ -204,7 +204,6 @@ var authorityMgrModal = {
                     loading.show();
                 },
                 success: function (data) {
-	debugger;
                     if (data.status === 0) {
                         // 拥有权限 各表保存
                         var tableSaveArr = $('#authorityMgrContent .authorityMgrEle_saveButton');
@@ -1415,7 +1414,6 @@ function initAuthorityTable(tableId, container, cols, url, objStr, paging) {
             "type": 'POST',
             dataSrc: function (data) { // 从服务器接收的数据
                 if (data.status === 0) {
-	debugger;
                     // 分页设置
                     if (paging) { // 需要把分页的参数处理为顶级的属性
                         data.recordsTotal = data.data.permits.recordsTotal;
@@ -1443,7 +1441,6 @@ function initAuthorityTable(tableId, container, cols, url, objStr, paging) {
             // $("table:eq(0) th").css("background-color", "#f6f7fb");
 
             var cache = authorityMgrModal.getTableCache(tableId);
-            debugger;
             /** 数据级 **/
             if (isDataLevel) {
                 // 勾选项回显
@@ -1562,7 +1559,7 @@ var dsTitle = [
     {
         "title": function () {
             var htmlStr = '<div class="resourceCheckBoxContainer checkAllContainer">';
-            htmlStr += '<div class="checkbox"><label><input urlStr="/metaTable/view" class="verticalCheckbox" type="checkbox">查看</label></div>';
+            // htmlStr += '<div class="checkbox"><label><input urlStr="/metaTable/view" class="verticalCheckbox" type="checkbox">查看</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/metaTable/add" class="verticalCheckbox " type="checkbox">添加</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/metaTable/update" class="verticalCheckbox" type="checkbox">修改</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/metaTable/delete" class="verticalCheckbox" type="checkbox">删除</label></div>';
@@ -1606,7 +1603,7 @@ var ruleTitle = [
     {
         "title": function () {
             var htmlStr = '<div class="resourceCheckBoxContainer checkAllContainer">';
-            htmlStr += '<div class="checkbox"><label><input urlStr="/rule/view" class="verticalCheckbox" type="checkbox">查看</label></div>';
+            // htmlStr += '<div class="checkbox"><label><input urlStr="/rule/view" class="verticalCheckbox" type="checkbox">查看</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/rule/update" class="verticalCheckbox" type="checkbox">基础信息修改</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/rule/delete" class="verticalCheckbox" type="checkbox">删除</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/rule/stage" class="verticalCheckbox" type="checkbox">暂存</label></div>';
@@ -1643,9 +1640,9 @@ var modelGroupTitle = [
     {
         "title": function () {
             var htmlStr = '<div class="resourceCheckBoxContainer checkAllContainer">';
-            htmlStr += '<div class="checkbox"><label><input urlStr="/pub/modelGroup/view" class="verticalCheckbox" type="checkbox">查看</label></div>';
+            // htmlStr += '<div class="checkbox"><label><input urlStr="/pub/modelGroup/view" class="verticalCheckbox" type="checkbox">查看</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/pub/modelGroup/update" class="verticalCheckbox" type="checkbox">修改</label></div>';
-            htmlStr += '<div class="checkbox"><label><input urlStr="/pub/modelGroup/export" class="verticalCheckbox" type="checkbox">导出</label></div>';
+            // htmlStr += '<div class="checkbox"><label><input urlStr="/pub/modelGroup/export" class="verticalCheckbox" type="checkbox">导出</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/pub/modelGroup/delete" class="verticalCheckbox" type="checkbox">删除</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/pub/modelGroup/channel" class="verticalCheckbox" type="checkbox">设置调用渠道</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/pub/modelGroup/modelView" class="verticalCheckbox" type="checkbox">查看模型</label></div>';
@@ -1679,7 +1676,7 @@ var paramTitle = [
     {
         "title": function () {
             var htmlStr = '<div class="resourceCheckBoxContainer checkAllContainer">';
-            htmlStr += '<div class="checkbox"><label><input urlStr="/pub/variable/view" class="verticalCheckbox" type="checkbox">查看</label></div>';
+            // htmlStr += '<div class="checkbox"><label><input urlStr="/pub/variable/view" class="verticalCheckbox" type="checkbox">查看</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/pub/variable/update" class="verticalCheckbox" type="checkbox">修改</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/pub/variable/delete" class="verticalCheckbox" type="checkbox">删除</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="*" class="acrossCheckbox verticalCheckbox" type="checkbox">全选</label></div>';
@@ -1712,7 +1709,7 @@ var paramGroupTitle = [
     {
         "title": function () {
             var htmlStr = '<div class="resourceCheckBoxContainer checkAllContainer">';
-            htmlStr += '<div class="checkbox"><label><input urlStr="/pub/variableGroup/view" class="verticalCheckbox" type="checkbox">查看</label></div>';
+            // htmlStr += '<div class="checkbox"><label><input urlStr="/pub/variableGroup/view" class="verticalCheckbox" type="checkbox">查看</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/pub/variableGroup/update" class="verticalCheckbox" type="checkbox">修改</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/pub/variableGroup/delete" class="verticalCheckbox" type="checkbox">删除</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="*" class="acrossCheckbox verticalCheckbox" type="checkbox">全选</label></div>';
@@ -1746,7 +1743,7 @@ var apiTitle = [
     {
         "title": function () {
             var htmlStr = '<div class="resourceCheckBoxContainer checkAllContainer">';
-            htmlStr += '<div class="checkbox"><label><input urlStr="/pub/api/view" class="verticalCheckbox" type="checkbox">查看</label></div>';
+            // htmlStr += '<div class="checkbox"><label><input urlStr="/pub/api/view" class="verticalCheckbox" type="checkbox">查看</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/pub/api/update" class="verticalCheckbox" type="checkbox">修改</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/pub/api/delete" class="verticalCheckbox" type="checkbox">删除</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="*" class="acrossCheckbox verticalCheckbox" type="checkbox">全选</label></div>';
@@ -1776,7 +1773,7 @@ var apiGroupTitle = [
     {
         "title": function () {
             var htmlStr = '<div class="resourceCheckBoxContainer checkAllContainer">';
-            htmlStr += '<div class="checkbox"><label><input urlStr="/pub/apiGroup/view" class="verticalCheckbox" type="checkbox">查看</label></div>';
+            // htmlStr += '<div class="checkbox"><label><input urlStr="/pub/apiGroup/view" class="verticalCheckbox" type="checkbox">查看</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/pub/apiGroup/update" class="verticalCheckbox" type="checkbox">修改</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/pub/apiGroup/delete" class="verticalCheckbox" type="checkbox">删除</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="*" class="acrossCheckbox verticalCheckbox" type="checkbox">全选</label></div>';
@@ -1807,11 +1804,12 @@ var ruleSetTitle = [
     {
         "title": function () {
             var htmlStr = '<div class="resourceCheckBoxContainer checkAllContainer">';
-            htmlStr += '<div class="checkbox"><label><input urlStr="/pub/ruleSet/view" class="verticalCheckbox" type="checkbox">查看</label></div>';
+            // htmlStr += '<div class="checkbox"><label><input urlStr="/pub/ruleSet/view" class="verticalCheckbox" type="checkbox">查看</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/pub/ruleSet/version/add" class="verticalCheckbox" type="checkbox">版本添加</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/pub/ruleSet/update" class="verticalCheckbox" type="checkbox">修改</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/pub/ruleSet/delete" class="verticalCheckbox" type="checkbox">删除</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/pub/ruleSet/version/enable" class="verticalCheckbox" type="checkbox">启用/停用</label></div>';
+            htmlStr += '<div class="checkbox"><label><input urlStr="/pub/ruleSet/version/view" class="verticalCheckbox" type="checkbox">版本查看</label></div>';
             // htmlStr += '<div class="checkbox"><label><input urlStr="/pub/ruleSet" class="verticalCheckbox" type="checkbox">规则库</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="*" class="acrossCheckbox verticalCheckbox" type="checkbox">全选</label></div>';
             htmlStr += '</div>';
@@ -1840,7 +1838,7 @@ var ruleSetGroupTitle = [
     {
         "title": function () {
             var htmlStr = '<div class="resourceCheckBoxContainer checkAllContainer">';
-            htmlStr += '<div class="checkbox"><label><input urlStr="/pub/ruleSetGroup/view" class="verticalCheckbox" type="checkbox">查看</label></div>';
+            // htmlStr += '<div class="checkbox"><label><input urlStr="/pub/ruleSetGroup/view" class="verticalCheckbox" type="checkbox">查看</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/pub/ruleSetGroup/update" class="verticalCheckbox" type="checkbox">修改</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/pub/ruleSetGroup/delete" class="verticalCheckbox" type="checkbox">删除</label></div>';
             // htmlStr += '<div class="checkbox"><label><input urlStr="/pub/ruleSetGroup/version/enable" class="verticalCheckbox" type="checkbox">启用/停用</label></div>';
@@ -1885,7 +1883,7 @@ var modelTitle = [
     {
         "title": function () {
             var htmlStr = '<div class="resourceCheckBoxContainer checkAllContainer">';
-            htmlStr += '<div class="checkbox"><label><input urlStr="/pub/rule/view" class="verticalCheckbox" type="checkbox">查看</label></div>';
+            // htmlStr += '<div class="checkbox"><label><input urlStr="/pub/rule/view" class="verticalCheckbox" type="checkbox">查看</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/pub/modelBase/update" class="verticalCheckbox" type="checkbox">基础信息修改</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/pub/rule/delete" class="verticalCheckbox" type="checkbox">删除</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/pub/rule/stage" class="verticalCheckbox" type="checkbox">暂存</label></div>';
@@ -1951,6 +1949,7 @@ var dataSourceTitle = [
             htmlStr += '<div class="checkbox"><label><input urlStr="/datasource/view" class="verticalCheckbox" type="checkbox">查看</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/datasource/update" class="verticalCheckbox" type="checkbox">修改</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/datasource/delete" class="verticalCheckbox" type="checkbox">删除</label></div>';
+            htmlStr += '<div class="checkbox"><label><input urlStr="/datasource/metadataMgr" class="verticalCheckbox" type="checkbox">元数据管理</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="*" class="acrossCheckbox verticalCheckbox" type="checkbox">全选</label></div>';
             htmlStr += '</div>';
             return htmlStr;
@@ -1981,7 +1980,7 @@ var taskTitle = [
     {
         "title": function () {
             var htmlStr = '<div class="resourceCheckBoxContainer checkAllContainer">';
-            htmlStr += '<div class="checkbox"><label><input urlStr="/task/view" class="verticalCheckbox" type="checkbox">查看</label></div>';
+            // htmlStr += '<div class="checkbox"><label><input urlStr="/task/view" class="verticalCheckbox" type="checkbox">查看</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/task/update" class="verticalCheckbox" type="checkbox">修改</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/task/delete" class="verticalCheckbox" type="checkbox">删除</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="*" class="acrossCheckbox verticalCheckbox" type="checkbox">全选</label></div>';
@@ -2048,7 +2047,7 @@ var kpiTitle = [
     {
         "title": function () {
             var htmlStr = '<div class="resourceCheckBoxContainer checkAllContainer">';
-            htmlStr += '<div class="checkbox"><label><input urlStr="/kpi/view" class="verticalCheckbox" type="checkbox">查看</label></div>';
+            // htmlStr += '<div class="checkbox"><label><input urlStr="/kpi/view" class="verticalCheckbox" type="checkbox">查看</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/kpi/update" class="verticalCheckbox" type="checkbox">修改</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/kpi/delete" class="verticalCheckbox" type="checkbox">删除</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="*" class="acrossCheckbox verticalCheckbox" type="checkbox">全选</label></div>';
@@ -2080,7 +2079,7 @@ var kpiGroupTitle =[
     {
         "title": function () {
             var htmlStr = '<div class="resourceCheckBoxContainer checkAllContainer">';
-            htmlStr += '<div class="checkbox"><label><input urlStr="/kpi/group/view" class="verticalCheckbox" type="checkbox">查看</label></div>';
+            // htmlStr += '<div class="checkbox"><label><input urlStr="/kpi/group/view" class="verticalCheckbox" type="checkbox">查看</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/kpi/group/update" class="verticalCheckbox" type="checkbox">修改</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/kpi/group/delete" class="verticalCheckbox" type="checkbox">删除</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="*" class="acrossCheckbox verticalCheckbox" type="checkbox">全选</label></div>';
@@ -2112,7 +2111,7 @@ var folderTitle = [
     {
         "title": function () {
             var htmlStr = '<div class="resourceCheckBoxContainer checkAllContainer">';
-            htmlStr += '<div class="checkbox"><label><input urlStr="/folder/view" class="verticalCheckbox" type="checkbox">查看</label></div>';
+            // htmlStr += '<div class="checkbox"><label><input urlStr="/folder/view" class="verticalCheckbox" type="checkbox">查看</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/folder/update" class="verticalCheckbox" type="checkbox">修改</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/folder/delete" class="verticalCheckbox" type="checkbox">删除</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="*" class="acrossCheckbox verticalCheckbox" type="checkbox">全选</label></div>';
