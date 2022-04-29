@@ -65,6 +65,9 @@
             <if test="parentId != null">
                 PARENT_ID,
             </if>
+            <if test="userNum != null">
+                USER_NUM,
+            </if>
             <if test="createDate != null">
                 CREATE_DATE,
             </if>
@@ -79,6 +82,9 @@
             </if>
             <if test="deptId != null">
                 DEPT_ID,
+            </if>
+            <if test="userId != null">
+                USER_ID,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -97,6 +103,9 @@
             <if test="parentId != null">
                 #{parentId,jdbcType=VARCHAR},
             </if>
+            <if test="userNum != null">
+                #{userNum,jdbcType=INTEGER},
+            </if>
             <if test="createDate != null">
                 #{createDate,jdbcType=TIMESTAMP},
             </if>
@@ -112,22 +121,25 @@
             <if test="deptId != null">
                 #{deptId,jdbcType=VARCHAR},
             </if>
+            <if test="userId != null">
+                #{userId,jdbcType=VARCHAR},
+            </if>
         </trim>
 
     </insert>
     <select id="listByChannelName" resultMap="BaseResultMap2" parameterType="map">
         select
         a.*,
-        b.DEPT_NAME
+         b.DEPT_NAME
         from CRE_AUTH_CHANNEL a
         left join CRE_AUTH_DEPT b on a.DEPT_ID = b.DEPT_ID
         where 1=1
-        <if test="channelName != null and '' != channelName">
+        <if test="channelName != null and '' != channelName">-->
             <bind name="channelNamePattern" value="'%' + _parameter.channelName + '%'"/>
             and a.CHANNEL_NAME like #{channelNamePattern}
         </if>
         <if test="channelId != null">
-            and a.CHANNEL_ID=#{channelId,jdbcType=VARCHAR}
+            and a.CHANNEL_ID=#{channelId,jdbcType=VARCHAR},
         </if>
     </select>
     <!--    <select id="listByChannelName" resultMap="BaseResultMap2" parameterType="map">-->
@@ -226,5 +238,14 @@
         </set>
         where CHANNEL_ID = #{channelId,jdbcType=VARCHAR}
     </update>
+    
+    <select id="selectChannelList" resultType="map">
+        select
+        a.CHANNEL_ID as channelId,a.CHANNEL_NAME as channelName
+        from CRE_AUTH_CHANNEL a left join CRE_PUB_MODEL_GROUP_CHANNEL b on a.CHANNEL_ID = b.CHANNEL_ID
+        <if test="modelGroupId != null">
+            and a.MODEL_GROUP_ID = #{modelGroupId,jdbcType=VARCHAR}
+        </if>
+    </select>
 
 </mapper>
