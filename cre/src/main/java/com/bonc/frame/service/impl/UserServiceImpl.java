@@ -2,10 +2,12 @@ package com.bonc.frame.service.impl;
 
 import com.bonc.frame.dao.DaoHelper;
 import com.bonc.frame.entity.auth.*;
+import com.bonc.frame.entity.commonresource.ModelGroupChannelVo;
 import com.bonc.frame.entity.user.UserAccountEn;
 import com.bonc.frame.entity.user.UserExt;
 import com.bonc.frame.service.UserService;
 import com.bonc.frame.service.auth.AuthorityService;
+import com.bonc.frame.service.auth.RoleService;
 import com.bonc.frame.service.auth.SubjectService;
 import com.bonc.frame.util.*;
 import org.apache.commons.lang3.ObjectUtils;
@@ -38,6 +40,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private SubjectService subjectService;
+
+    @Autowired
+    private RoleService roleService;
 
     private final String _MYBITSID_PREFIX = "com.bonc.frame.mapper.oracle.user.UserMapper.";
 
@@ -327,7 +332,24 @@ public class UserServiceImpl implements UserService {
         Map<String, Object> param = new HashMap<>();
         param.put("userId", userId);
         param.put("roleName", roleName);
-        Map<String, Object> result = daoHelper.queryForPageList(_MIDDLETABLE_PREFIX + "listRoleForUserNotHad", param, start, length);
+        // 用户是全权或者所属渠道为总行大数据平台，则展示全部角色，否则只展示业务，运维角色
+        ModelGroupChannelVo vo = (ModelGroupChannelVo) daoHelper.queryOne(_DEPT_PREFIX + "getChannelIdByUserId", userId);
+        boolean b = false;
+        if (roleService.checkAuthorityIsAll(userId)) {
+            b = true;
+        }
+        if (vo.getChannelName().contains("大数据平台")) {
+            if (vo.getDeptName().contains("北京银行")) {
+                b = true;
+            }
+        }
+        Map<String, Object> result;
+        if (b) {
+            result = daoHelper.queryForPageList(_MIDDLETABLE_PREFIX + "listRoleForUserNotHad", param, start, length);
+        } else {
+            result = daoHelper.queryForPageList(_MIDDLETABLE_PREFIX + "listRoleForUserNotHad2", param, start, length);
+
+        }
         return result;
     }
 

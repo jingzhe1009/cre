@@ -621,7 +621,6 @@ var main = {
     },
     //日志检索详情  和  模型分析/调用分析的数据导出
     getDesc : function(flag){
-        debugger;
         var url = '/monitor/desc'
         var param ={};
         var cycleId = localStorage.getItem("cycleId");
@@ -776,7 +775,6 @@ var main = {
                         //     })
                         // })
                     }else{//图标
-                        debugger
                         //模型分析需显示
                         if(tabId=='1'){
                             $("#tab1").show();
@@ -892,10 +890,8 @@ var main = {
     },
     //切换标签
     changeTab : function(tabId){
-	debugger;
         if(tabId==undefined)
             return;
-        debugger;
         localStorage.setItem("tabId",tabId);
         var cycleId = localStorage.getItem("cycleId");
         $(".tab-content").hide();
@@ -934,7 +930,6 @@ var main = {
     },
     //切换年月日标签
     changeCycle:function(cycleId){
-		debugger;
 		localStorage.setItem("cycleId",cycleId);
         var tabId = localStorage.getItem("tabId");
         $('.nav-primary li').removeClass('active');
@@ -969,7 +964,6 @@ $( function () {
     });
     $('#tab12 li').click(function () {
 		var cycleId = $(this).attr('cyc-id');
-		debugger;
         main.changeCycle(cycleId);
     });
     // 仅选择日期

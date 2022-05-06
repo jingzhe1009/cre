@@ -142,7 +142,7 @@ public class ChannelServiceImpl implements ChannelService {
     
     @Override
     public List<Map<String,Object>> getChannelListByGroupId(String groupId) {
-        return daoHelper.queryForList(_CHANNEL_PREFIX+"selectChannelList");
+        return daoHelper.queryForList(_CHANNEL_PREFIX+"selectChannelList",groupId);
     }
 
     //渠道树
