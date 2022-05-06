@@ -129,7 +129,6 @@ public class ModelBaseController {
      * @return 操作结果
      */
 
-    @PermissionsRequires(value = "/pub/modelGroup/channel?modelGroupId", resourceType = ResourceType.DATA_PUB_MODEL_GROUP)
     @RequestMapping(value = "/addChannel", method = RequestMethod.POST)
     @ResponseBody
     public ResponseResult groupAddChannel(@RequestBody ModelChanIdDto dto) {

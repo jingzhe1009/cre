@@ -286,6 +286,27 @@
         </if>
     </select>
 
+    <select id="listRoleForUserNotHad2" resultMap="RoleResultMap" parameterType="map">
+        SELECT
+        r.*
+        FROM
+        CRE_AUTH_ROLE r
+        WHERE
+        r.ROLE_ID NOT IN (
+        SELECT DISTINCT
+        (UR.ROLE_ID)
+        FROM
+        CRE_AUTH_USER_ROLE ur
+        WHERE
+        UR.USER_ID = #{userId,jdbcType=VARCHAR}
+        )
+        <if test="roleName != null">
+            <bind name="roleNamePattern" value="'%' + _parameter.roleName + '%'"/>
+            AND r.ROLE_NAME like #{roleNamePattern}
+        </if>
+        and r.ROLE_NAME like '%运维%' or r.ROLE_NAME like '%业务%'
+    </select>
+
     <select id="listUserForRoleNotHad" resultMap="UserMap" parameterType="map">
         SELECT
         r.*

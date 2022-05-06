@@ -87,7 +87,7 @@ public class MonitorController {
 	    return "/pages/monitor/indexView";
 	}
 	
-	//执行情况
+	//调用分析-模型执行情况
 	@RequestMapping("/excuteState")
     @ResponseBody
     public Map<String, Object> excuteState(@RequestBody MonitorParam monitorParam) {
@@ -104,7 +104,7 @@ public class MonitorController {
         return map;
 	}
 	
-	//响应时间
+	//调用分析-响应时间 (模型执行命中率)
 	@RequestMapping("/responseTime")
     @ResponseBody
     public Map<String, Object> responseTime(@RequestBody MonitorParam monitorParam) {
@@ -219,7 +219,7 @@ public class MonitorController {
 		return resultList;
 	}
 	
-	//执行统计
+	//调用分析-执行统计
 	@RequestMapping("/excuteCount")
     @ResponseBody
     public Map<String, Object> excuteCount(@RequestBody MonitorParam monitorParam) {
@@ -240,7 +240,7 @@ public class MonitorController {
         return map;
 	}
 	
-	//执行结果
+	//调用分析-执行结果
 	@RequestMapping(value="/excuteResult",method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> excuteResult(MonitorParam monitorParam) {
@@ -251,7 +251,7 @@ public class MonitorController {
         return map;
 	}
 	
-	//模型规则命中率
+	//调用分析-模型规则命中率
 	@RequestMapping("/ruleHit")
     @ResponseBody
     public Map<String, Object> ruleHit(@RequestBody MonitorParam monitorParam) {
@@ -265,7 +265,7 @@ public class MonitorController {
         return map;
 	}
 	
-	//模型评分命中率
+	//调用分析-模型评分命中率
 	@RequestMapping("/scoreHit")
     @ResponseBody
     public Map<String, Object> scoreHit(@RequestBody MonitorParam monitorParam) {
@@ -277,7 +277,7 @@ public class MonitorController {
         return map;
 	}
 	
-	//数据下载
+	//调用分析-数据下载
 	@RequestMapping("/desc")
     @ResponseBody
     public Map<String, Object> desc(@RequestBody MonitorParam monitorParam) {

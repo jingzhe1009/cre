@@ -597,6 +597,10 @@ var quickEnter = {
             creCommon.loadHtml(quickEnter.url);
         }
     },
+    intoModelGroup: function (){
+        quickEnter.url = webpath + "/modelBase/view?idx=21&childOpen=" + $('#folderMenuWrap').attr('class');
+        quickEnter.jumpPage();
+    },
     // 公共池
     intoCommonResource: function () {
         quickEnter.url = webpath + "/common/resource/view?idx=5&childOpen=" + $('#folderMenuWrap').attr('class');
