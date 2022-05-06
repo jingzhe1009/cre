@@ -238,13 +238,15 @@
         </set>
         where CHANNEL_ID = #{channelId,jdbcType=VARCHAR}
     </update>
-    
-    <select id="selectChannelList" resultType="map">
+
+    <select id="selectChannelList" resultType="map" parameterType="java.lang.String">
         select
         a.CHANNEL_ID as channelId,a.CHANNEL_NAME as channelName
-        from CRE_AUTH_CHANNEL a left join CRE_PUB_MODEL_GROUP_CHANNEL b on a.CHANNEL_ID = b.CHANNEL_ID
-        <if test="modelGroupId != null">
-            and a.MODEL_GROUP_ID = #{modelGroupId,jdbcType=VARCHAR}
+        from CRE_AUTH_CHANNEL a
+        left join CRE_PUB_MODEL_GROUP_CHANNEL b on a.CHANNEL_ID = b.CHANNEL_ID
+        where 1=1
+        <if test="_parameter != null">
+            and b.MODEL_GROUP_ID = #{_parameter,jdbcType=VARCHAR}
         </if>
     </select>
 
