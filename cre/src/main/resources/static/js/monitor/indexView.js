@@ -225,7 +225,7 @@ var main = {
     },
     //调用分析-模型执行命中率echarts
     getNumberOfCallsLeft: function () {
-        var path = '/monitor/responseTime';
+        var path = '/monitor/useTime';
         main.$ajax( path, 'POST', null, function ( data ) {
             main.data.NumberOfCallsLeft.chart = echarts.init( document.getElementById( 'numberOfCallsLeft' ) );
             main.data.NumberOfCallsLeft.chart.setOption( {
@@ -308,7 +308,7 @@ var main = {
                                 borderColor: '#3965ff'
                             }
                         },
-                        data: data.responseData
+                        data: data.useTime
                     }
                 ]
             } );
@@ -420,7 +420,7 @@ var main = {
                 {"title": "执行结果", "data": "excuteResult","render":function(data,type,row){
                         return data;
                     }},
-                {"title": "状态码", "data": "statusCode","render":function(data,type,row){
+                {"title": "状态码", "data": "state","render":function(data,type,row){
                         return data;
                     }},
                 {"title": "执行次数", "data": "excuteTimes","render":function(data,type,row){
@@ -432,9 +432,9 @@ var main = {
             ],
             ajax: {
                 url: webpath + '/monitor/excuteResult',
-                "type": 'GET',
+                "type": 'POST',
                 "data": function (d) { // 查询参数
-                    //debugger;
+
                     return $.extend({}, d, obj);
                 }
             },
@@ -608,7 +608,7 @@ var main = {
             ],
             ajax: {
                 url: webpath + '/monitor/excuteResult',
-                "type": 'GET',
+                "type": 'POST',
                 "data": function (d) { // 查询参数
                     //debugger;
                     return $.extend({}, d, obj);
@@ -663,10 +663,10 @@ var main = {
                         var suc = data.successData;
                         var fail = data.failData;
 
-                        var response = data.responseData;
+                        var useTime = data.useTime;
                         var score = data.scoreData;
-                        var ruleSuc = data.ruleHitSucData;
-                        var ruleFail = data.ruleHitFailData;
+                        var ruleSuc = data.successData;
+                        var ruleFail = data.failData;
 
                         var html ='<table class="table table-striped" align="center"><thead><tr>';
                         html +="<th>数据统计</th>"
@@ -713,16 +713,16 @@ var main = {
 
 
                         html +="</tr><tr><td>响应时间</td>"
-                        for(var i in response){
+                        for(var i in useTime){
                             if(i=="remove"||i=="removeVal")
                                 continue;
-                            var index = response[i];
-                            html +="<td>"+response[i]+"</td>";
+                            var index = useTime[i];
+                            html +="<td>"+useTime[i]+"</td>";
                         }
 
                         //模型分析需显示
                         if(tabId=='2'){
-                            html +="</tr><tr><td>评分通过命中率</td>"
+                            html +="</tr><tr><td>评分命中率</td>"
                             for(var i in score){
                                 if(i=="remove"||i=="removeVal")
                                     continue;
@@ -824,7 +824,7 @@ var main = {
                 var htmlStr = "";
                 if (data.length > 0) {
                     for (var i = 0; i < data.length; i++) {
-                        htmlStr += '<li channelId=\'' + data[i].CHANNELID + '\' onclick="main.initModel(\'' + data[i].modelGroupId + '\', 0)"><a>' + data[i].CHANNELNAME + '</a></li>';
+                        htmlStr += '<li channelId=\'' + data[i].CHANNELID + '\' onclick="main.initModel(\'' + groupId + '\', \'' + data[i].CHANNELID + '\')"><a>' + data[i].CHANNELNAME + '</a></li>';
                     }
                 }
                 $('.channelList').html(htmlStr);
@@ -836,10 +836,10 @@ var main = {
         })
     },
     // 根据产品获取模型
-    initModel: function (foldId) {
+    initModel: function (groupId,channelId) {
         $.ajax({
             url: webpath + "/monitor/modelName",
-            data: {"foldId": foldId},
+            data: {"groupId": groupId},
             dataType: "json",
             success: function (data) {
                 var htmlStr = "";
@@ -911,7 +911,7 @@ var main = {
             //执行统计
             main.getNumberOfCallsRight();
             //执行结果
-            var obj={};
+            var obj={"cycleId":cycleId};
             main.initTable(obj);
         }else if(tabId=='2'){
             $("#tab2").show();

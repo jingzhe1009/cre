@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bonc.frame.mapper.monitorMapper">
+    <resultMap id="BaseResultMap" type="com.bonc.frame.entity.monitor.DescResult">
+        <id column="LOG_ID" property="logId" jdbcType="VARCHAR"/>
+        <result column="DEPT_ID"  property="deptId" jdbcType="VARCHAR"/>
+        <result column="CHANNEL_ID"  property="channelId" jdbcType="VARCHAR"/>
+        <result column="DEPT_NAME"  property="deptName" jdbcType="VARCHAR"/>
+        <result column="CHANNEL_NAME"  property="channelName" jdbcType="VARCHAR"/>
+        <result column="MODEL_ID"  property="modelId" jdbcType="VARCHAR"/>
+        <result column="PRODUCT_ID"  property="productId" jdbcType="VARCHAR"/>
+        <result column="MODEL_NAME"  property="modelName" jdbcType="VARCHAR"/>
+        <result column="PRODUCT_NAME"  property="productName" jdbcType="VARCHAR"/>
+        <result column="TYPE"  property="type" jdbcType="VARCHAR"/>
+        <result column="CONSUMER_SEQ_NO"  property="consumerSeqNo" jdbcType="VARCHAR"/>
+        <result column="MODEL_VERSION"  property="modelVersion" jdbcType="VARCHAR"/>
+        <result column="ACTION_TIME"  property="actionTime" jdbcType="VARCHAR"/>
+        <result column="ACTION_STATUS"  property="actionStatus" jdbcType="VARCHAR"/>
+        <result column="USE_TIME"  property="useTime" jdbcType="VARCHAR"/>
+        <result column="ORACLE_IN"  property="oracleIn" jdbcType="VARCHAR"/>
+        <result column="ORACLE_OUT"  property="oracleOut" jdbcType="VARCHAR"/>
+        <result column="HBASE_IN"  property="hbaseIn" jdbcType="VARCHAR"/>
+        <result column="HBASE_OUT"  property="hbaseOut" jdbcType="VARCHAR"/>
+        <result column="API_NAME"  property="apiName" jdbcType="VARCHAR"/>
+        <result column="API_IN"  property="apiIn" jdbcType="VARCHAR"/>
+        <result column="API_OUT"  property="apiOut" jdbcType="VARCHAR"/>
+        <result column="RETURN_CODE"  property="returnCode" jdbcType="VARCHAR"/>
+        <result column="MODEL_TYPE"  property="modelType" jdbcType="VARCHAR"/>
+        <result column="RETURN_RESULT"  property="returnResult" jdbcType="VARCHAR"/>
+        <result column="RETURN_SCORE"  property="returnScore" jdbcType="VARCHAR"/>
+        <result column="PROJECT_CODE"  property="projectCode" jdbcType="VARCHAR"/>
+        <result column="AVERAGE_USE_TIME"  property="averageUseTime" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="BaseResultMap2" type="com.bonc.frame.entity.monitor.MonitorTime">
+        <id column="LOG_HOUR_ID" property="logHourId" jdbcType="VARCHAR"/>
+        <result column="CONSUMER_ID" property="consumerId" jdbcType="VARCHAR"/>
+        <result column="PROJECT_NO" property="projectNo" jdbcType="VARCHAR"/>
+        <result column="MODEL_FID" property="modelFid" jdbcType="VARCHAR"/>
+        <result column="MODEL_RID" property="modelRid" jdbcType="VARCHAR"/>
+        <result column="METHOD_TYPE" property="modelType" jdbcType="VARCHAR"/>
+        <result column="MODEL_TYPE" property="methodType" jdbcType="VARCHAR"/>
+        <result column="MODEL_SUCCESS_COUNT" property="modelSuccessCount" jdbcType="INTEGER"/>
+        <result column="MODEL_FAIL_COUNT" property="modelFailCount" jdbcType="INTEGER"/>
+        <result column="MODEL_AVERAGE_SCORE" property="modelAverageScore" jdbcType="INTEGER"/>
+        <result column="SUCCESS_CODE_COUNT" property="successCodeCount" jdbcType="INTEGER"/>
+        <result column="HBASE_CODE_COUNT" property="hbaseCodeCount" jdbcType="INTEGER"/>
+        <result column="SYSTEM_CODE_COUNT" property="systemCodeCount" jdbcType="INTEGER"/>
+        <result column="ORACLE_CODE_COUNT" property="oracleCodeCount" jdbcType="INTEGER"/>
+        <result column="RED_INTER_CODE_COUNT" property="redInterCodeCount" jdbcType="INTEGER"/>
+        <result column="AVERAGE_USE_TIME" property="averageUseTime" jdbcType="INTEGER"/>
+        <result column="SIGN_TIME" property="signTime" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="BaseResultMap3" type="com.bonc.frame.entity.monitor.MonitorTime">
+        <id column="LOG_DAY_ID" property="logDayId" jdbcType="VARCHAR"/>
+        <result column="CONSUMER_ID" property="consumerId" jdbcType="VARCHAR"/>
+        <result column="PROJECT_NO" property="projectNo" jdbcType="VARCHAR"/>
+        <result column="MODEL_FID" property="modelFid" jdbcType="VARCHAR"/>
+        <result column="MODEL_RID" property="modelRid" jdbcType="VARCHAR"/>
+        <result column="METHOD_TYPE" property="modelType" jdbcType="VARCHAR"/>
+        <result column="MODEL_TYPE" property="methodType" jdbcType="VARCHAR"/>
+        <result column="MODEL_SUCCESS_COUNT" property="modelSuccessCount" jdbcType="INTEGER"/>
+        <result column="MODEL_FAIL_COUNT" property="modelFailCount" jdbcType="INTEGER"/>
+        <result column="MODEL_AVERAGE_SCORE" property="modelAverageScore" jdbcType="INTEGER"/>
+        <result column="SUCCESS_CODE_COUNT" property="successCodeCount" jdbcType="INTEGER"/>
+        <result column="HBASE_CODE_COUNT" property="hbaseCodeCount" jdbcType="INTEGER"/>
+        <result column="SYSTEM_CODE_COUNT" property="systemCodeCount" jdbcType="INTEGER"/>
+        <result column="ORACLE_CODE_COUNT" property="oracleCodeCount" jdbcType="INTEGER"/>
+        <result column="RED_INTER_CODE_COUNT" property="redInterCodeCount" jdbcType="INTEGER"/>
+        <result column="AVERAGE_USE_TIME" property="averageUseTime" jdbcType="INTEGER"/>
+        <result column="SIGN_TIME" property="signTime" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="BaseResultMap4" type="com.bonc.frame.entity.monitor.MonitorTime">
+        <id column="LOG_MONTH_ID" property="logMonthId" jdbcType="VARCHAR"/>
+        <result column="CONSUMER_ID" property="consumerId" jdbcType="VARCHAR"/>
+        <result column="PROJECT_NO" property="projectNo" jdbcType="VARCHAR"/>
+        <result column="MODEL_FID" property="modelFid" jdbcType="VARCHAR"/>
+        <result column="MODEL_RID" property="modelRid" jdbcType="VARCHAR"/>
+        <result column="METHOD_TYPE" property="modelType" jdbcType="VARCHAR"/>
+        <result column="MODEL_TYPE" property="methodType" jdbcType="VARCHAR"/>
+        <result column="MODEL_SUCCESS_COUNT" property="modelSuccessCount" jdbcType="INTEGER"/>
+        <result column="MODEL_FAIL_COUNT" property="modelFailCount" jdbcType="INTEGER"/>
+        <result column="MODEL_AVERAGE_SCORE" property="modelAverageScore" jdbcType="INTEGER"/>
+        <result column="SUCCESS_CODE_COUNT" property="successCodeCount" jdbcType="INTEGER"/>
+        <result column="HBASE_CODE_COUNT" property="hbaseCodeCount" jdbcType="INTEGER"/>
+        <result column="SYSTEM_CODE_COUNT" property="systemCodeCount" jdbcType="INTEGER"/>
+        <result column="ORACLE_CODE_COUNT" property="oracleCodeCount" jdbcType="INTEGER"/>
+        <result column="RED_INTER_CODE_COUNT" property="redInterCodeCount" jdbcType="INTEGER"/>
+        <result column="AVERAGE_USE_TIME" property="averageUseTime" jdbcType="INTEGER"/>
+        <result column="SIGN_TIME" property="signTime" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="getHourUseTime" parameterType="map" resultType="map">
+       SELECT
+        ROUND(AVG (nvl(AVERAGE_USE_TIME,0)),2) as averageUseTime
+       FROM
+       CRE_RULE_LOG_HOUR
+       where 1=1
+        <if test="modelId!=null">
+            and MODEL_FID = #{modelId,jdbcType=VARCHAR}
+        </if>
+        and SIGN_TIME = #{timePoint,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getDayUseTime" parameterType="map" resultType="map">
+       SELECT
+        ROUND(AVG (nvl(AVERAGE_USE_TIME,0)),2) as averageUseTime
+       FROM
+       CRE_RULE_LOG_DAY
+       where 1=1
+        <if test="modelId!=null">
+            and MODEL_FID = #{modelId,jdbcType=VARCHAR}
+        </if>
+            and SIGN_TIME = #{timePoint,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getYearUseTime" parameterType="map" resultType="map">
+       SELECT
+        ROUND(AVG (nvl(AVERAGE_USE_TIME,0)),2) as averageUseTime
+       FROM
+       CRE_RULE_LOG_MONTH
+       where 1=1
+       <if test="modelId!=null">
+            and MODEL_FID = #{modelId,jdbcType=VARCHAR}
+       </if>
+        and SIGN_TIME = #{timePoint,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getExcuteCount" parameterType="map" resultMap="BaseResultMap">
+       SELECT
+       STATE
+       FROM
+       CRE_RULE_LOG
+    </select>
+
+
+    <select id="getHourResult"  parameterType="map" resultType="map">
+       SELECT
+       sum(SUCCESS_CODE_COUNT) as successCodeCount,
+       sum(HBASE_CODE_COUNT) as hbaseCodeCount,
+       sum(SYSTEM_CODE_COUNT) as systemCodeCount,
+       sum(ORACLE_CODE_COUNT) as oracleCodeCount,
+       sum(RED_INTER_CODE_COUNT) as redInterCodeCount
+       FROM
+       CRE_RULE_LOG_HOUR
+       where 1=1
+        <if test="modelId!=null">
+            and MODEL_FID = #{modelId,jdbcType=VARCHAR}
+        </if>
+        and SIGN_TIME  like CONCAT(#{date,jdbcType=VARCHAR},'%')
+    </select>
+
+    <select id="getDayResult"  parameterType="map" resultType="map">
+       SELECT
+       sum(SUCCESS_CODE_COUNT) as successCodeCount,
+       sum(HBASE_CODE_COUNT) as hbaseCodeCount,
+       sum(SYSTEM_CODE_COUNT) as systemCodeCount,
+       sum(ORACLE_CODE_COUNT) as oracleCodeCount,
+       sum(RED_INTER_CODE_COUNT) as redInterCodeCount
+       FROM
+       CRE_RULE_LOG_DAY
+       where 1=1
+        <if test="modelId!=null">
+            and MODEL_FID = #{modelId,jdbcType=VARCHAR}
+        </if>
+        and SIGN_TIME  like CONCAT(#{date,jdbcType=VARCHAR},'%')
+    </select>
+
+    <select id="getYearResult"  parameterType="map" resultType="map">
+       SELECT
+       sum(SUCCESS_CODE_COUNT) as successCodeCount,
+       sum(HBASE_CODE_COUNT) as hbaseCodeCount,
+       sum(SYSTEM_CODE_COUNT) as systemCodeCount,
+       sum(ORACLE_CODE_COUNT) as oracleCodeCount,
+       sum(RED_INTER_CODE_COUNT) as redInterCodeCount
+       FROM
+       CRE_RULE_LOG_MONTH
+       where 1=1
+        <if test="modelId!=null">
+            and MODEL_FID = #{modelId,jdbcType=VARCHAR}
+        </if>
+        and SIGN_TIME  like CONCAT(#{date,jdbcType=VARCHAR},'%')
+    </select>
+
+
+    <select id="getYearCountData" parameterType="map" resultType="map">
+        select
+        SUM(MODEL_SUCCESS_COUNT) as successCount,
+        SUM(MODEL_FAIL_COUNT) as failCount
+        from CRE_RULE_LOG_MONTH
+        where 1=1
+        <if test="modelId!=null">
+            and MODEL_FID = #{modelId,jdbcType=VARCHAR}
+        </if>
+        and SIGN_TIME = #{timePoint,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getDayCountData" parameterType="map" resultType="map">
+        select
+        SUM(MODEL_SUCCESS_COUNT) as successCount,
+        SUM(MODEL_FAIL_COUNT) as failCount
+        from CRE_RULE_LOG_DAY
+        where 1=1
+        <if test="modelId!=null">
+            and MODEL_FID = #{modelId,jdbcType=VARCHAR}
+        </if>
+        and SIGN_TIME = #{timePoint,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getHourCountData" parameterType="map" resultType="map">
+        select
+        SUM(MODEL_SUCCESS_COUNT) as successCount,
+        SUM(MODEL_FAIL_COUNT) as failCount
+        from CRE_RULE_LOG_HOUR
+        where 1=1
+        <if test="modelId!=null">
+            and MODEL_FID = #{modelId,jdbcType=VARCHAR}
+        </if>
+        and SIGN_TIME = #{timePoint,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getHourHitCountData" parameterType="map" resultType="map">
+        SELECT
+        SUM(MODEL_SUCCESS_COUNT) as successCount,
+        SUM(MODEL_FAIL_COUNT) as failCount
+        from CRE_RULE_LOG_HOUR
+        where 1=1
+        <if test="modelId!=null">
+            and MODEL_FID = #{modelId,jdbcType=VARCHAR}
+        </if>
+        and SIGN_TIME = #{timePoint,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getDayHitCountData" parameterType="map" resultType="map">
+        SELECT
+        SUM(MODEL_SUCCESS_COUNT) as successCount,
+        SUM(MODEL_FAIL_COUNT) as failCount
+        from CRE_RULE_LOG_DAY
+        where 1=1
+        <if test="modelId!=null">
+            and MODEL_FID = #{modelId,jdbcType=VARCHAR}
+        </if>
+        and SIGN_TIME = #{timePoint,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getMonthHitCountData" parameterType="map" resultType="map">
+        SELECT
+        SUM(MODEL_SUCCESS_COUNT) as successCount,
+        SUM(MODEL_FAIL_COUNT) as failCount
+        from CRE_RULE_LOG_MONTH
+        where 1=1
+        <if test="modelId!=null">
+            and MODEL_FID = #{modelId,jdbcType=VARCHAR}
+        </if>
+        and SIGN_TIME = #{timePoint,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getHourScoreHit" parameterType="map" resultType="map">
+        SELECT
+        ROUND(AVG (nvl(MODEL_AVERAGE_SCORE,0)),2) as scoreCount
+        FROM
+        CRE_RULE_LOG_HOUR
+        where 1=1
+        <if test="modelId!=null">
+            and MODEL_FID = #{modelId,jdbcType=VARCHAR}
+        </if>
+        and SIGN_TIME = #{timePoint,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getDayScoreHit" parameterType="map" resultType="map">
+        SELECT
+        ROUND(AVG (nvl(MODEL_AVERAGE_SCORE,0)),2) as scoreCount
+        FROM
+        CRE_RULE_LOG_DAY
+        where 1=1
+        <if test="modelId!=null">
+            and MODEL_FID = #{modelId,jdbcType=VARCHAR}
+        </if>
+        and SIGN_TIME = #{timePoint,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getMonthScoreHit" parameterType="map" resultType="map">
+        SELECT
+        ROUND(AVG (nvl(MODEL_AVERAGE_SCORE,0)),2) as scoreCount
+        FROM
+        CRE_RULE_LOG_MONTH
+        where 1=1
+        <if test="modelId!=null">
+            and MODEL_FID = #{modelId,jdbcType=VARCHAR}
+        </if>
+        and SIGN_TIME = #{timePoint,jdbcType=VARCHAR}
+    </select>
+
+</mapper>

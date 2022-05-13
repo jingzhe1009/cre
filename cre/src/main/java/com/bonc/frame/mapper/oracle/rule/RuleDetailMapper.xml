@@ -384,19 +384,20 @@
     </select>
     
     <select id="selectModelList" parameterType="java.util.Map" resultType="map">
-        SELECT RULE_ID       AS "ruleId",
-               RULE_NAME     AS "ruleName",
-               "MODULE_NAME" AS "moduleName"
-        FROM CRE_RULE_DETAIL a left join CRE_PUB_MODEL_GROUP_CHANNEL b on a.model_group_id = b.model_group_id
-        WHERE FOLDER_ID = '0000000000000000000000000000001'
-          AND IS_DEL = '0'
-          AND IS_HEADER = '1'
+        SELECT a.RULE_ID       AS "ruleId",
+               a.RULE_NAME     AS "ruleName",
+               a.MODULE_NAME  AS "moduleName"
+        FROM CRE_RULE_DETAIL a
+        left join CRE_PUB_MODEL_GROUP_CHANNEL b on a.MODEL_GROUP_ID = b.MODEL_GROUP_ID
+        WHERE a.FOLDER_ID = '0000000000000000000000000000001'
+          AND a.IS_DEL = '0'
+          AND a.IS_HEADER = '1'
          <if test="modelGroupId != null">
-            and MODEL_GROUP_ID = #{modelGroupId,jdbcType=VARCHAR}
+            and a.MODEL_GROUP_ID = #{modelGroupId,jdbcType=VARCHAR}
         </if>
-        <if test="channelId != null">
-            and  CHANNEL_ID=#{channelId,jdbcType=VARCHAR},
-         </if>
+<!--        <if test="channelId != null">-->
+<!--            and  b.CHANNEL_ID=#{channelId,jdbcType=VARCHAR}-->
+<!--         </if>-->
     </select>
 
     <!-- 获取所有的规则名称 多版本改造 -->

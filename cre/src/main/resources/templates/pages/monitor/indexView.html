@@ -25,7 +25,7 @@
                         <p class="infoTitle">当日执行情况</p>
                         <div class="numBox">
                             <div style="display: flex;flex-wrap: wrap;align-items: baseline;flex-grow: 1">
-                                <span class="diaoyongNum">0.5${param.currentDayResponseTime}</span>秒响应时长
+                                <span class="diaoyongNum">0.5${param.currentDayUseTime}</span>秒响应时长
                             </div>
                         </div>
                     </div>
@@ -190,25 +190,44 @@
 				             		<div class="monitorSearch">
 					                  	<div class="input-group modelOperateLog">
 					                        <input data-col="folderId" type="text" class="form-control folderIdInput"
-					                               placeholder="产品名称">
+					                               placeholder="产品">
 					                        <label class="input-control-icon-right" data-toggle="dropdown">
 					                            <i class="icon icon-caret-down"></i></label>
 					                        <ul class="dropdown-menu pull-right ruleFolderList"></ul>
 					                    </div>
 					                    <div class="input-group modelOperateLog">
 					                        <input data-col="channelName" type="text" class="form-control channelIdInput"
-					                               placeholder="渠道名称（请先选择产品）">
+					                               placeholder="调用渠道">
 					                        <label class="input-control-icon-right" data-toggle="dropdown">
 					                            <i class="icon icon-caret-down"></i></label>
 					                        <ul class="dropdown-menu pull-right channelList"></ul>
 					                    </div>
 					                    <div class="input-group modelOperateLog">
 					                        <input data-col="modelName" type="text" class="form-control ruleIdInput"
-					                               placeholder="模型名称（请先选择产品和渠道）">
+					                               placeholder="模型">
 					                        <label class="input-control-icon-right" data-toggle="dropdown">
 					                            <i class="icon icon-caret-down"></i></label>
 					                        <ul class="dropdown-menu pull-right ruleList"></ul>
 					                    </div>
+										<div class="input-group modelOperateLog">
+											<input data-col="methodType" type="text" class="form-control typeInput" id="methodType"
+												   placeholder="调用方式">
+											<label class="input-control-icon-right" data-toggle="dropdown">
+												<i class="icon icon-caret-down"></i></label>
+											<ul class="dropdown-menu pull-right typeList">
+											</ul>
+										</div>
+										<div class="input-group modelOperateLog">
+											<input data-col="statusCode" type="text" class="form-control statusCodeInput"
+												   placeholder="执行状态">
+											<label class="input-control-icon-right" data-toggle="dropdown">
+												<i class="icon icon-caret-down"></i></label>
+											<ul class="dropdown-menu pull-right statusCode"></ul>
+										</div>
+										<div class="input-group modelOperateLog">
+											<input data-col="consumerSeqNo" type="text" class="form-control consumerSeqNoInput"
+												   placeholder="流水号">
+										</div>
 							            <div class="input-group date form-date" data-date="" data-date-format="dd MM yyyy" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
 										  <input class="form-control" size="16" type="text" value="" readonly="" placeholder="开始时间">
 										  <span class="input-group-addon"><span class="icon-remove"></span></span>

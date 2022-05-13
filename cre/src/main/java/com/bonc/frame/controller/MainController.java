@@ -49,7 +49,7 @@ public class MainController {
 		param.setChannelCount(childOpen);
 		param.setCountModel(childOpen);
 		param.setCurrentDayFailTimes(childOpen);
-		param.setCurrentDayResponseTime(childOpen);
+		param.setCurrentDayUseTime(childOpen);
 		param.setCurrentDaySucTimes(childOpen);
 		param.setKpiCount(childOpen);
 		param.setProductCount(childOpen);

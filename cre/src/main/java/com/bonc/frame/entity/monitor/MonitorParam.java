@@ -18,6 +18,14 @@ public class MonitorParam {
 	//年1月2日3
 	private String cycleId;
 
+	public MonitorParam() {
+
+	}
+
+	public MonitorParam(String cycleId) {
+		this.cycleId = cycleId;
+	}
+
 	public String getProductId() {
 		return productId;
 	}

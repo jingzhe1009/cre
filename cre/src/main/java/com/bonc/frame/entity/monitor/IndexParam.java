@@ -6,7 +6,7 @@ public class IndexParam {
 	//当日调用情况 -失败次数
 	private String currentDayFailTimes;
 	//当日执行情况-响应时长
-	private String currentDayResponseTime;
+	private String currentDayUseTime;
 	//产品统计
 	private String productCount;
 	//渠道统计
@@ -33,11 +33,11 @@ public class IndexParam {
 	public void setCurrentDayFailTimes(String currentDayFailTimes) {
 		this.currentDayFailTimes = currentDayFailTimes;
 	}
-	public String getCurrentDayResponseTime() {
-		return currentDayResponseTime;
+	public String getCurrentDayUseTime() {
+		return currentDayUseTime;
 	}
-	public void setCurrentDayResponseTime(String currentDayResponseTime) {
-		this.currentDayResponseTime = currentDayResponseTime;
+	public void setCurrentDayUseTime(String currentDayUseTime) {
+		this.currentDayUseTime =currentDayUseTime;
 	}
 	public String getProductCount() {
 		return productCount;
