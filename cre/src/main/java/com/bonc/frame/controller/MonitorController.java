@@ -1,6 +1,7 @@
 package com.bonc.frame.controller;
 
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -8,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.bonc.frame.entity.monitor.DescResult;
 import com.bonc.frame.entity.monitor.ExcuteResult;
 import com.bonc.frame.service.monitor.MonitorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,6 +106,26 @@ public class MonitorController {
 	public Map<String, Object> excuteResult(MonitorParam monitorParam) {
 		Map<String, Object> excuteResult = monitorService.excuteResult(monitorParam);
 		return excuteResult;
+	}
+
+	@RequestMapping(value="/logPage",method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> logPage(MonitorParam monitorParam,String start,String length) {
+
+		// List<ExcuteResult> resultList = getData();
+		Map<String, Object> map = monitorService.getLogPage(monitorParam,start,length);
+		return map;
+	}
+
+	//日志详情
+	@RequestMapping(value = "/logDesc",method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String, Object> logDesc(String logId) {
+		DescResult desc = monitorService.getRuleLogDesc(logId);
+
+		Map<String, Object> map = new HashMap<>();
+		map.put("desc", desc);
+		return map;
 	}
 
 	//调用分析-模型规则命中率

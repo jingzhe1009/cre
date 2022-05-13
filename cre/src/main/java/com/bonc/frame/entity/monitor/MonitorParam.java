@@ -2,28 +2,62 @@ package com.bonc.frame.entity.monitor;
 
 
 public class MonitorParam {
-	
+
 	//产品id
 	private String productId;
-	
+
 	//渠道id
 	private String channelId;
-	
+
 	//模型id
 	private String modelId;
-	
+
 	//调用方式
 	private String type;
-	
+
 	//年1月2日3
 	private String cycleId;
 
-	public MonitorParam() {
+	// 开始时间
+	private String startDate;
 
+	// 结束时间
+	private String endDate;
+	// 当前页
+	private String start;
+	// 每页数量
+	private String length;
+
+	public String getStart() {
+		return start;
 	}
 
-	public MonitorParam(String cycleId) {
-		this.cycleId = cycleId;
+	public void setStart(String start) {
+		this.start = start;
+	}
+
+	public String getLangth() {
+		return length;
+	}
+
+	public void setLength(String length) {
+		this.length = length;
+	}
+
+	public String getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(String startDate) {
+		this.startDate = startDate;
+	}
+
+	public String getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(String endDate) {
+		this.endDate = endDate;
 	}
 
 	public String getProductId() {
@@ -66,11 +100,10 @@ public class MonitorParam {
 		this.cycleId = cycleId;
 	}
 
-	
-	
-	
-	
-	
-	
+	public MonitorParam(String cycleId) {
+		this.cycleId = cycleId;
+	}
 
+	public MonitorParam() {
+	}
 }

@@ -2,6 +2,7 @@ package com.bonc.frame.service.monitor;
 
 
 
+import com.bonc.frame.entity.monitor.DescResult;
 import com.bonc.frame.entity.monitor.MonitorParam;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -30,4 +31,20 @@ public interface MonitorService {
     void exportExcel(HttpServletResponse response, HttpServletRequest request);
 
     Map<String, Object> desc(@RequestBody MonitorParam monitorParam);
+
+    /**
+     * 监控-日志检索-分页展示日志数据
+     * @param monitorParam 筛选参数
+     * @param start 分页参数-页码
+     * @param length 分页参数-每页数量
+     * @return 日志数据
+     */
+    Map<String, Object> getLogPage(MonitorParam monitorParam,String start,String length);
+
+    /**
+     * 获取日志详情
+     * @param logId 日志id
+     * @return 详情信息
+     */
+    DescResult getRuleLogDesc(String logId);
 }

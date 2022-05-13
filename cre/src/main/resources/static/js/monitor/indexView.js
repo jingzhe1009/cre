@@ -556,7 +556,7 @@ var main = {
     logTable: function(obj){
         $('#logTable').width('100%').dataTable({
             //默认搜索组件
-            "searching": false,
+            "searching": true,
             //排序功能
             "ordering": false,
             "destroy": true,
@@ -572,42 +572,42 @@ var main = {
             //控制总数显示
             "info": true,
             //列表的过滤,搜索和排序信息会传递到Server端进行处理
-            "serverSide": false,
-            "pageLength": 100,
+            "serverSide": true,
+            "pageLength": 10,
             "columns": [
-                {"title": "分行", "data": "excuteResult","render":function(data,type,row){
+                {"title": "分行", "data": "deptName","render":function(data,type,row){
                         return data;
                     }},
-                {"title": "渠道", "data": "statusCode","render":function(data,type,row){
+                {"title": "渠道", "data": "channelName","render":function(data,type,row){
                         return data;
                     }},
-                {"title": "项目", "data": "excuteTimes","render":function(data,type,row){
+                {"title": "项目", "data": "groupName","render":function(data,type,row){
                         return data;
                     }},
-                {"title": "模型", "data": "excuteTimes","render":function(data,type,row){
+                {"title": "模型", "data": "modelName","render":function(data,type,row){
                         return data;
                     }},
-                {"title": "调用方式", "data": "excuteTimes","render":function(data,type,row){
+                {"title": "调用方式", "data": "methodType","render":function(data,type,row){
                         return data;
                     }},
-                {"title": "流水号", "data": "excuteTimes","render":function(data,type,row){
+                {"title": "流水号", "data": "consumerSeqNo","render":function(data,type,row){
                         return data;
                     }},
-                {"title": "执行状态", "data": "excuteTimes","render":function(data,type,row){
+                {"title": "执行状态", "data": "returnCode","render":function(data,type,row){
                         return data;
                     }},
-                {"title": "执行时间", "data": "excuteTimes","render":function(data,type,row){
+                {"title": "执行时间", "data": "startTime","render":function(data,type,row){
                         return data;
                     }},
-                {"title": "响应时间", "data": "excuteTimes","render":function(data,type,row){
+                {"title": "响应时间", "data": "endTime","render":function(data,type,row){
                         return data;
                     }},
-                {"title": "详情", "data": "","render":function(data,type,row){
-                        return '<button class="btn btn-primary" onclick="main.getDesc()">详情</button>';
+                {"title": "详情", "data": "logId","render":function(data,type,row){
+                        return '<button class="btn btn-primary" onclick="main.getLogDesc(\'' + row.logId + '\')">详情</button>';
                     }}
             ],
             ajax: {
-                url: webpath + '/monitor/excuteResult',
+                url: webpath + '/monitor/logPage',
                 "type": 'POST',
                 "data": function (d) { // 查询参数
                     //debugger;
@@ -616,6 +616,178 @@ var main = {
             },
             "fnDrawCallback": function (oSettings, json) {
 
+            }
+        });
+    },
+
+    getLogDesc : function(logId){
+        // debugger;
+        var url = '/monitor/getLogDesc?logId='+logId
+        $.ajax( {
+            url: webpath + url,
+            type: 'get',
+            contentType:"application/json;charset=UTF-8",
+            //dataType: dataType,
+            success: function ( data ) {
+                var tabId = localStorage.getItem("tabId");
+                if(tabId=='3'){
+                    var desc = data.desc;
+                    var html ='<table class="table table-striped"  style="width:60%" align="center">';
+                    html +='<thead><tr><th colspan=4 >模型执行情况</th></tr>';
+                    html +='<tbody><tr><td>归属行ID</td><td>'+desc.deptId+'</td><td>调用渠道ID</td><td>'+desc.channelId+'</td></tr>';
+                    html +='<tr><td>归属行名称</td><td>'+desc.deptName+'</td><td>调用渠道名称</td><td>'+desc.channelName+'</td></tr>';
+                    html +='<tr><td>模型id</td><td>'+desc.modelId+'</td><td>产品id</td><td>'+desc.groupId+'</td></tr>';
+                    html +='<tr><td>模型名称</td><td>'+desc.modelName+'</td><td>产品名称</td><td>'+desc.groupName+'</td></tr>';
+                    html +='<tr><td>调用方式</td><td>'+desc.methodType+'</td><td>交易流水号</td><td>'+desc.consumerSeqNo+'</td></tr>';
+                    html +='<tr><td>模型版本号</td><td>'+desc.modelVersion+'</td><td>执行时间</td><td>'+desc.startTime+'</td></tr>';
+                    html +='<tr><td>执行状态</td><td>'+desc.returnCode+'</td><td>响应时间</td><td>'+desc.endTime+'</td></tr></tbody>';
+                    html +='<thead><tr><th colspan=4 >外部数据库执行情况执行情况</th></tr>';
+                    html +='<tbody><tr><td>oracle入参</td><td>'+desc.oracleIn+'</td><td>oracle出参</td><td>'+desc.oracleOut+'</td></tr>';
+                    html +='<tr><td>hbase入参</td><td>'+desc.hbaseIn+'</td><td>hbase出参</td><td>'+desc.hbaseOut+'</td></tr></tbody>';
+                    html +='<thead><tr><th colspan=4 >红色执行情况</th></tr>';
+                    html +='<tbody><tr><td>红色接口名称</td><td>'+desc.apiName+'</td><td></td><td></td></tr>';
+                    html +='<tr><td>接口入参</td><td>'+desc.apiIn+'</td><td>接口出参</td><td>'+desc.apiOut+'</td></tr></tbody></table>';
+                    html += "<input class='btn btn-primary' type='button' value='返回' onclick='main.back()'/>"
+                    $("#desc").html(html);
+                    $(".tab-content").hide();
+                    $("#desc").attr("style","display:block");
+                }else{
+                    if($("#exportButton").val()=="数据导出"){
+                        console.log(data);
+                        var title = data.titleData;
+                        var all = data.allData;
+                        var suc = data.successData;
+                        var fail = data.failData;
+
+                        var response = data.responseData;
+                        var score = data.scoreData;
+                        var ruleSuc = data.ruleHitSucData;
+                        var ruleFail = data.ruleHitFailData;
+
+                        var html ='<table class="table table-striped" align="center"><thead><tr>';
+                        html +="<th>数据统计</th>"
+                        for(var i in title){
+                            if(i=="remove"||i=="removeVal")
+                                continue;
+                            var index = title[i];
+                            html +="<th>"+title[i]+"</th>";
+                        }
+                        html +="</tr></thead>";
+
+                        html +="<tbody><tr><td>总执行次数</td>"
+                        for(var i in all){
+                            if(i=="remove"||i=="removeVal")
+                                continue;
+                            var index = all[i];
+                            //if(index.substring(0,1)=="f"){
+                            //	continue;
+                            //}
+                            html +="<td>"+all[i]+"</td>";
+                        }
+
+                        html +="</tr><tr><td>执行成功次数</td>"
+                        for(var i in suc){
+                            if(i=="remove"||i=="removeVal")
+                                continue;
+                            var index = suc[i];
+                            //if(index.substring(0,1)=="f"){
+                            //	continue;
+                            //}
+                            html +="<td>"+suc[i]+"</td>";
+                        }
+
+                        html +="</tr><tr><td>执行失败次数</td>"
+                        for(var i in fail){
+                            if(i=="remove"||i=="removeVal")
+                                continue;
+                            var index = fail[i];
+                            //if(index.substring(0,1)=="f"){
+                            //	continue;
+                            //}
+                            html +="<td>"+fail[i]+"</td>";
+                        }
+
+
+                        html +="</tr><tr><td>响应时间</td>"
+                        for(var i in response){
+                            if(i=="remove"||i=="removeVal")
+                                continue;
+                            var index = response[i];
+                            html +="<td>"+response[i]+"</td>";
+                        }
+
+                        //模型分析需显示
+                        if(tabId=='2'){
+                            html +="</tr><tr><td>评分通过命中率</td>"
+                            for(var i in score){
+                                if(i=="remove"||i=="removeVal")
+                                    continue;
+                                var index = score[i];
+                                html +="<td>"+score[i]+"</td>";
+                            }
+
+
+                            html +="</tr><tr><td>规则通过命中率</td>"
+                            for(var i in ruleSuc){
+                                if(i=="remove"||i=="removeVal")
+                                    continue;
+                                var index = ruleSuc[i];
+                                html +="<td>"+ruleSuc[i]+"</td>";
+                            }
+
+
+                            html +="</tr><tr><td>规则失败命中率</td>"
+                            for(var i in ruleFail){
+                                if(i=="remove"||i=="removeVal")
+                                    continue;
+                                var index = ruleFail[i];
+                                html +="<td>"+ruleFail[i]+"</td>";
+                            }
+                        }
+                        html +="</tr></tbody></table>";
+                        html += '<a class="btn btn-primary" href="'+webpath+'/monitor/exportExcel?cycleId='+cycleId+'&tabId='+tabId+'" >下载</a>';
+                        $("#desc").html(html);
+
+                        $(".tab-content").hide();
+                        $("#exportButton").val("图表展示");
+                        $("#desc").attr("style","display:block");
+                        // $('.download').unbind('click').on('click',function{
+                        //     $.ajax({
+                        //         url: webpath + '/modelBase/group/list',
+                        //         type: 'POST',
+                        //         dataType: "json",
+                        //         success: function (data) {
+                        //             var reader = new FileReader();
+                        //             reader.readAsDataURL(data.data);
+                        //             reader.onload = function (ev) {
+                        //                 var a = $().append('a');
+                        //                 a.download = '图表展示.xlsx'
+                        //                 a.href = ev.target.result;
+                        //                 $().appendChild(a);
+                        //                 a.click();
+                        //                 $().removeChild(a);
+                        //             }
+                        //         }
+                        //     })
+                        // })
+                    }else{//图标
+                        //debugger
+                        //模型分析需显示
+                        if(tabId=='1'){
+                            $("#tab1").show();
+
+                        }else if(tabId=='2'){
+                            $("#tab2").show();
+                        }
+                        $("#monitorTab").show();
+                        $("#exportButton").val("数据导出");
+                        $("#desc").attr("style","display:none");
+                    }
+                }
+
+            },
+            error: function ( XMLHttpRequest, textStatus, errorThrown ) {
+                console.log( errorThrown );
             }
         });
     },

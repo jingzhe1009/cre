@@ -16,27 +16,26 @@ public class DescResult {
 	//模型id
 	private String modelId;
 	//产品id
-	private String productId;
+	private String groupId;
 	//模型名称
 	private String modelName;
 	//产品名称
-	private String productName;
+	private String groupName;
 	//调用方式
-	private String type;
+	private String methodType;
 	//交易流水号
 	private String consumerSeqNo;
 	//模型版本号
 	private String modelVersion;
 	//执行时间
-	private String actionTime;
+	private String startTime;
 	//执行状态
-	private String actionStatus;
+	private String returnCode;
 	//响应时间
-	private String  useTime;
+	private String endTime;
 	/**
 	 * 外部数据库执行情况执行情况
 	 */
-	private String logId;
 	//oracle入参
 	private String oracleIn;
 	//hbase入参
@@ -54,32 +53,6 @@ public class DescResult {
 	private String apiIn;
 	//接口出参
 	private String apiOut;
-
-	/**
-	 * 新增内容
-	 *
-	 * */
-	//响应码
-	private String returnCode;
-	//模型类型
-	private String modelType;
-    //规则模型结果
-	private String returnResult;
-	//评分模型评分
-	private String returnScore;
-	//产品标示
-	private String projectCode;
-	//平均调用时间
-	private String averageUseTime;
-
-
-	public String getLogId() {
-		return logId;
-	}
-
-	public void setLogId(String logId) {
-		this.logId = logId;
-	}
 
 	public String getDeptId() {
 		return deptId;
@@ -121,12 +94,12 @@ public class DescResult {
 		this.modelId = modelId;
 	}
 
-	public String getProductId() {
-		return productId;
+	public String getGroupId() {
+		return groupId;
 	}
 
-	public void setProductId(String productId) {
-		this.productId = productId;
+	public void setGroupId(String groupId) {
+		this.groupId = groupId;
 	}
 
 	public String getModelName() {
@@ -137,20 +110,20 @@ public class DescResult {
 		this.modelName = modelName;
 	}
 
-	public String getProductName() {
-		return productName;
+	public String getGroupName() {
+		return groupName;
 	}
 
-	public void setProductName(String productName) {
-		this.productName = productName;
+	public void setGroupName(String groupName) {
+		this.groupName = groupName;
 	}
 
-	public String getType() {
-		return type;
+	public String getMethodType() {
+		return methodType;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public void setMethodType(String methodType) {
+		this.methodType = methodType;
 	}
 
 	public String getConsumerSeqNo() {
@@ -169,28 +142,28 @@ public class DescResult {
 		this.modelVersion = modelVersion;
 	}
 
-	public String getActionTime() {
-		return actionTime;
+	public String getStartTime() {
+		return startTime;
 	}
 
-	public void setActionTime(String actionTime) {
-		this.actionTime = actionTime;
+	public void setStartTime(String startTime) {
+		this.startTime = startTime;
 	}
 
-	public String getActionStatus() {
-		return actionStatus;
+	public String getReturnCode() {
+		return returnCode;
 	}
 
-	public void setActionStatus(String actionStatus) {
-		this.actionStatus = actionStatus;
+	public void setReturnCode(String returnCode) {
+		this.returnCode = returnCode;
 	}
 
-	public String getUseTime() {
-		return useTime;
+	public String getEndTime() {
+		return endTime;
 	}
 
-	public void setUseTime(String useTime) {
-		this.useTime = useTime;
+	public void setEndTime(String endTime) {
+		this.endTime = endTime;
 	}
 
 	public String getOracleIn() {
@@ -249,75 +222,22 @@ public class DescResult {
 		this.apiOut = apiOut;
 	}
 
-	public String getReturnCode() {
-		return returnCode;
-	}
+	public DescResult(String deptId, String channelId, String deptName, String channelName, String modelId, String groupId, String modelName, String groupName, String methodType, String consumerSeqNo, String modelVersion, String startTime, String returnCode, String endTime, String oracleIn, String hbaseIn, String oracleOut, String hbaseOut, String apiName, String apiIn, String apiOut) {
 
-	public void setReturnCode(String returnCode) {
-		this.returnCode = returnCode;
-	}
-
-	public String getModelType() {
-		return modelType;
-	}
-
-	public void setModelType(String modelType) {
-		this.modelType = modelType;
-	}
-
-	public String getReturnResult() {
-		return returnResult;
-	}
-
-	public void setReturnResult(String returnResult) {
-		this.returnResult = returnResult;
-	}
-
-	public String getReturnScore() {
-		return returnScore;
-	}
-
-	public void setReturnScore(String returnScore) {
-		this.returnScore = returnScore;
-	}
-
-	public String getProjectCode() {
-		return projectCode;
-	}
-
-	public void setProjectCode(String projectCode) {
-		this.projectCode = projectCode;
-	}
-
-	public String getAverageUseTime() {
-		return averageUseTime;
-	}
-
-	public void setAverageUseTime(String averageUseTime) {
-		this.averageUseTime = averageUseTime;
-	}
-
-	public DescResult(String logId, String deptId, String channelId, String deptName, String channelName, String modelId,
-					  String productId, String modelName, String productName, String type, String consumerSeqNo, String modelVersion,
-					  String actionTime, String actionStatus, String useTime, String oracleIn, String hbaseIn,
-					  String oracleOut, String hbaseOut, String apiName, String apiIn, String apiOut, String returnCode, String modelType,
-					  String returnResult, String returnScore, String projectCode, String averageUseTime) {
-		super();
-		this.logId = logId;
 		this.deptId = deptId;
 		this.channelId = channelId;
 		this.deptName = deptName;
 		this.channelName = channelName;
 		this.modelId = modelId;
-		this.productId = productId;
+		this.groupId = groupId;
 		this.modelName = modelName;
-		this.productName = productName;
-		this.type = type;
+		this.groupName = groupName;
+		this.methodType = methodType;
 		this.consumerSeqNo = consumerSeqNo;
 		this.modelVersion = modelVersion;
-		this.actionTime = actionTime;
-		this.actionStatus = actionStatus;
-		this.useTime = useTime;
+		this.startTime = startTime;
+		this.returnCode = returnCode;
+		this.endTime = endTime;
 		this.oracleIn = oracleIn;
 		this.hbaseIn = hbaseIn;
 		this.oracleOut = oracleOut;
@@ -325,14 +245,9 @@ public class DescResult {
 		this.apiName = apiName;
 		this.apiIn = apiIn;
 		this.apiOut = apiOut;
-		this.returnCode = returnCode;
-		this.returnResult = returnResult;
-		this.returnScore = returnScore;
-		this.projectCode = projectCode;
-		this.modelType = modelType;
-		this.averageUseTime = averageUseTime;
 	}
 
 	public DescResult() {
+
 	}
 }

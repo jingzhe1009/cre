@@ -34,6 +34,33 @@ public class MonitorServiceImpl implements MonitorService {
     private final String _MONITOR_MANAGE = "com.bonc.frame.mapper.monitorMapper.";
 
 
+
+    /**
+     * 监控-日志检索-分页展示日志数据
+     * @param param 筛选参数
+     * @return 日志数据
+     */
+    @Override
+    public Map<String, Object> getLogPage(MonitorParam param,String start,String length) {
+        Map<String, Object> map = daoHelper.queryForPageList(_MONITOR_MANAGE + "getLogPage",
+                param, start, length);
+        // Object data = map.get("data");
+        return map;
+    }
+
+    /**
+     * 获取日志详情
+     * @param logId 日志id
+     * @return 详情信息
+     */
+    @Override
+    public DescResult getRuleLogDesc(String logId) {
+        List<DescResult> list = daoHelper.queryForList(_MONITOR_MANAGE + "getRuleLogDesc", logId);
+        if (list.size() == 1) {
+            return list.get(0);
+        }
+        return null;
+    }
     //调用分析-响应时间
     @Override
     public Map<String, Object> getUseTime(@RequestBody MonitorParam monitorParam) {
