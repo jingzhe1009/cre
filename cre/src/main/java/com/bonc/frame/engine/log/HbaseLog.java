@@ -4,6 +4,8 @@ import com.bonc.framework.rule.log.IRuleLog;
 import com.bonc.framework.rule.log.entity.RuleLog;
 import com.bonc.framework.rule.log.entity.RuleLogDetail;
 
+import java.util.Map;
+
 /**
  *
  *@author LiG
@@ -18,6 +20,11 @@ public class HbaseLog implements IRuleLog{
 
 	@Override
 	public void recordRuleDetailLog(RuleLogDetail ruleLogDetail, boolean isLog) {
+
+	}
+
+	@Override
+	public void saveModelLog(Map<String, String> map, RuleLog ruleLog) {
 
 	}
 

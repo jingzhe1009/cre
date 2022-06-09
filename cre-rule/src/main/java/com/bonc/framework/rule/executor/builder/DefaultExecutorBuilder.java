@@ -1,6 +1,7 @@
 package com.bonc.framework.rule.executor.builder;
 
 import com.bonc.framework.rule.constant.RuleEngineConstant;
+import com.bonc.framework.rule.exception.ExecuteException;
 import com.bonc.framework.rule.executor.IExecutor;
 import com.bonc.framework.rule.executor.worker.ITraversal;
 import com.bonc.framework.rule.resources.RuleResource;

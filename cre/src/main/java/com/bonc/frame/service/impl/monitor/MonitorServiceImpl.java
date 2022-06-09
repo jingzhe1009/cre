@@ -4,9 +4,11 @@ import com.bonc.frame.dao.DaoHelper;
 import com.bonc.frame.entity.monitor.DescResult;
 import com.bonc.frame.entity.monitor.ExcuteResult;
 import com.bonc.frame.entity.monitor.MonitorParam;
+import com.bonc.frame.entity.monitor.RuleLog;
 import com.bonc.frame.service.monitor.MonitorService;
 
 import com.bonc.frame.util.*;
+import com.bonc.framework.rule.log.entity.RuleLogDetail;
 import com.bonc.framework.util.DateUtil;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -34,6 +36,27 @@ public class MonitorServiceImpl implements MonitorService {
     private final String _MONITOR_MANAGE = "com.bonc.frame.mapper.monitorMapper.";
 
 
+    /**
+     * 保存日志
+     * @param log 日志详情
+     */
+    @Override
+    public void saveModelLog(RuleLog log) {
+        daoHelper.insert(_MONITOR_MANAGE + "insertLog" + log);
+    }
+
+    @Override
+    public void saveEndTimeAndMsg(String ruleLogId, Date start, String msg, StringBuffer excep) {
+        Date end = new Date();
+        int useTime = end.compareTo(start);
+        Map<String, Object> map = new HashMap<>();
+        map.put("logId", ruleLogId);
+        map.put("outputData", msg);
+        map.put("exceptipn", excep.toString());
+        map.put("useTime", useTime);
+        map.put("endTime", end);
+        daoHelper.update(_MONITOR_MANAGE + "saveMsg", map);
+    }
 
     /**
      * 监控-日志检索-分页展示日志数据
@@ -672,6 +695,21 @@ public class MonitorServiceImpl implements MonitorService {
         map.put("scoreData", scoreList.toArray());
         map.put("useTime", useTimeList.toArray());
         return map;
+    }
+
+    @Override
+    public void recordRuleLog(com.bonc.framework.rule.log.entity.RuleLog ruleLog, boolean isLog) {
+
+    }
+
+    @Override
+    public void recordRuleDetailLog(RuleLogDetail ruleLogDetail, boolean isLog) {
+
+    }
+
+    @Override
+    public void saveModelLog(Map<String, String> map, com.bonc.framework.rule.log.entity.RuleLog ruleLog) {
+
     }
 
     @Override

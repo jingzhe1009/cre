@@ -15,6 +15,7 @@ import com.bonc.frame.util.CollectionUtil;
 import com.bonc.frame.util.ResponseResult;
 import com.bonc.framework.api.log.entity.ConsumerInfo;
 import com.bonc.framework.entity.format.VariableFormat;
+import com.bonc.framework.rule.exception.ExecuteException;
 import com.bonc.framework.rule.executor.context.impl.ExecutorRequest;
 import com.bonc.framework.rule.executor.context.impl.ModelExecutorType;
 import com.bonc.framework.rule.kpi.KpiResult;
@@ -55,7 +56,7 @@ public class DBFetchServiceImpl extends AbstractFetchServiceImpl {
     }
 
     @Override
-    public KpiResult getKpiValue(KpiDefinition kpiDefinition, Map<String, Object> params, ExecutorRequest executorRequest) {
+    public KpiResult getKpiValue(KpiDefinition kpiDefinition, Map<String, Object> params, ExecutorRequest executorRequest) throws ExecuteException {
         // 从历史日志中获取指标值
         if (ModelExecutorType.ABTEST == executorRequest.getModelExecutionType()) {
             KpiResult kpiResultFromSourceKpiLog = getKpiResultFromSourceKpiLog(kpiDefinition, executorRequest);
@@ -94,8 +95,8 @@ public class DBFetchServiceImpl extends AbstractFetchServiceImpl {
                 String rowKey = getHbaseRowKey(kpiDefinition, params); // 获取行键值
 
                 if (rowKey == null) {
-                    throw new FetchException("指标[" + kpiDefinition.getKpiId() + "]获取指标[" + kpiDefinition.getKpiCode() + "]值失败," +
-                            "从hbase中获取参数值失败: 行键值为空");
+                    throw new ExecuteException("指标[" + kpiDefinition.getKpiId() + "]获取指标[" + kpiDefinition.getKpiCode() + "]值失败," +
+                            "从hbase中获取参数值失败: 行键值为空","9998");
                 }
 
                 HbaseOperator hbaseOperator = new HbaseOperator(kpiDefinition.getDbId());
@@ -109,7 +110,7 @@ public class DBFetchServiceImpl extends AbstractFetchServiceImpl {
         } catch (Exception e) {
             log.warn("指标[" + kpiDefinition.getKpiId() + "]执行sql异常,指标名称：" + kpiDefinition.getKpiCode(), e);
 //            return kpiDefaultValue;
-            throw new FetchException("指标[" + kpiDefinition.getKpiId() + "]执行sql异常,指标名称：" + kpiDefinition.getKpiCode(), e);
+            throw new ExecuteException("指标[" + kpiDefinition.getKpiId() + "]执行sql异常,指标名称：" + kpiDefinition.getKpiCode(), e.getCause(),"9998");
         }
         // 处理结果
         List<Map<String, Object>> resultMapList = (List<Map<String, Object>>) responseResult.getData();

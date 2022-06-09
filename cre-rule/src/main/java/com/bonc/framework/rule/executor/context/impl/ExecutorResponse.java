@@ -1,6 +1,7 @@
 package com.bonc.framework.rule.executor.context.impl;
 
 
+import com.bonc.framework.rule.log.entity.RuleLog;
 import com.bonc.framework.rule.log.entity.TraceModelLogDetail;
 
 import java.util.Map;

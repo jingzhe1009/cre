@@ -1639,4 +1639,12 @@
         where RULE_NAME = #{ruleId,jdbcType=VARCHAR}
     </update>
 
+    <!--日志存储获取模型的类型和版本号-->
+    <select id="getModelForLog" parameterType="java.lang.String" resultType="map">
+        select RULE_TYPE,VERSION
+        from CRE_RULE_DETAIL
+        where RULE_ID = #{ruleId,jdbcType=VARCHAR}
+        and IS_HEADER = '1' and IS_DEL = '0' and IS_PUBLIC = '1'
+    </select>
+
 </mapper>

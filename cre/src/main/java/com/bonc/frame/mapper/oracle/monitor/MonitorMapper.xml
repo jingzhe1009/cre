@@ -92,6 +92,164 @@
         <result column="SIGN_TIME" property="signTime" jdbcType="VARCHAR"/>
     </resultMap>
 
+    <resultMap id="LogBaseMap" type="com.bonc.frame.entity.monitor.RuleLog">
+        <id column="LOG_ID" property="logId" jdbcType="VARCHAR"/>
+        <result column="Rule_ID" property="ruleId" jdbcType="VARCHAR"/>
+        <result column="FOLDER_ID" property="folderId" jdbcType="VARCHAR"/>
+        <result column="STATE" property="state" jdbcType="VARCHAR"/>
+        <result column="HIT_RULE_NUM" property="hitRuleNum" jdbcType="VARCHAR"/>
+        <result column="START_TIME" property="startTime" jdbcType="TIMESTAMP"/>
+        <result column="END_TIME" property="endTime" jdbcType="TIMESTAMP"/>
+        <result column="INPUT_DATA" property="intputData" jdbcType="VARCHAR"/>
+        <result column="OUTPUT_DATA" property="outputData" jdbcType="VARCHAR"/>
+        <result column="EXCEPTION" property="exception" jdbcType="VARCHAR"/>
+        <result column="CONSUMER_ID" property="consumerId" jdbcType="VARCHAR"/>
+        <result column="CONSUMER_SEQ_NO" property="consumerSeqNo" jdbcType="VARCHAR"/>
+        <result column="USE_TIME" property="useTime" jdbcType="INTEGER"/>
+        <result column="RETURN_CODE" property="returnCode" jdbcType="VARCHAR"/>
+        <result column="MODEL_VERSION" property="modelVersion" jdbcType="VARCHAR"/>
+        <result column="MODEL_TYPE" property="modelType" jdbcType="VARCHAR"/>
+        <result column="METHOD_TYPE" property="methodType" jdbcType="VARCHAR"/>
+        <result column="RETURN_RESULT" property="returnResult" jdbcType="VARCHAR"/>
+        <result column="RETURN_SCORE" property="returnScore" jdbcType="VARCHAR"/>
+        <result column="PROJECT_NO" property="projectNo" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <update id="saveMsg" parameterType="map">
+        update CRE_RULE_LOG
+        set
+        OUTPUT_DATA = #{outputData,jdbcType=VARCHAR},
+        EXCEPTION = #{exception,jdbcType=VARCHAR},
+        USE_TIME = #{useTime,jdbcType=VARCHAR},
+        END_TIME = #{endTime,jdbcType=VARCHAR}
+        where LOG_ID = #{logId,jdbcType=VARCHAR}
+    </update>
+    
+    <insert id="insertLog" parameterType="com.bonc.frame.entity.monitor.RuleLog">
+        insert into CRE_RULE_LOG
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="logId != null">
+                LOG_ID,
+            </if>
+            <if test="ruleId != null">
+                Rule_ID,
+            </if>
+            <if test="folderId != null">
+                FOLDER_ID,
+            </if>
+            <if test="state != null">
+                STATE,
+            </if>
+            <if test="hitRuleNum != null">
+                HIT_RULE_NUM,
+            </if>
+            <if test="startTime != null">
+                START_TIME,
+            </if>
+            <if test="endTime != null">
+                END_TIME,
+            </if>
+            <if test="intputData != null">
+                INPUT_DATA,
+            </if>
+            <if test="outputData != null">
+                OUTPUT_DATA,
+            </if>
+            <if test="exception != null">
+                EXCEPTION,
+            </if>
+            <if test="consumerId != null">
+                CONSUMER_ID,
+            </if>
+            <if test="consumerSeqNo != null">
+                CONSUMER_SEQ_NO,
+            </if>
+            <if test="useTime != null">
+                USE_TIME,
+            </if>
+            <if test="returnCode != null">
+                RETURN_CODE,
+            </if>
+            <if test="modelVersion != null">
+                MODEL_VERSION,
+            </if>
+            <if test="modelType != null">
+                MODEL_TYPE,
+            </if>
+            <if test="returnResult != null">
+                RETURN_RESULT,
+            </if>
+            <if test="returnScore != null">
+                RETURN_SCORE,
+            </if>
+            <if test="projectNo != null">
+                PROJECT_NO,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="logId != null">
+                #{logId,jdbcType=VARCHAR},
+            </if>
+            <if test="ruleId != null">
+                #{ruleId,jdbcType=VARCHAR},
+            </if>
+            <if test="folderId != null">
+                #{folderId,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null">
+                #{state,jdbcType=VARCHAR},
+            </if>
+            <if test="hitRuleNumber != null">
+                #{hitRuleNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="startTime != null">
+                #{startTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endTime != null">
+                #{endTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="inputData != null">
+                #{inputData,jdbcType=VARCHAR},
+            </if>
+            <if test="outputData != null">
+                #{outputData,jdbcType=VARCHAR},
+            </if>
+            <if test="exception != null">
+                #{exception,jdbcType=VARCHAR},
+            </if>
+            <if test="consumerId != null">
+                #{consumerId,jdbcType=VARCHAR},
+            </if>
+            <if test="consumerSeqNo != null">
+                #{consumerSeqNo,jdbcType=VARCHAR},
+            </if>
+            <if test="useTime != null">
+                #{useTime,jdbcType=INTEGER},
+            </if>
+            <if test="returnCode != null">
+                #{returnCode,jdbcType=VARCHAR},
+            </if>
+            <if test="modelVersion != null">
+                #{modelVersion,jdbcType=VARCHAR},
+            </if>
+            <if test="modelType != null">
+                #{modelType,jdbcType=VARCHAR},
+            </if>
+            <if test="methodType != null">
+                #{methodType,jdbcType=VARCHAR},
+            </if>
+            <if test="returnResult != null">
+                #{returnResult,jdbcType=VARCHAR},
+            </if>
+            <if test="returnScore != null">
+                #{returnScore,jdbcType=VARCHAR},
+            </if>
+            <if test="projectNo != null">
+                #{projectNo,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
     <select id="getHourUseTime" parameterType="map" resultType="map">
        SELECT
         ROUND(AVG (nvl(AVERAGE_USE_TIME,0)),2) as averageUseTime

@@ -24,6 +24,7 @@ import com.bonc.frame.service.kpi.KpiService;
 import com.bonc.frame.service.metadata.DBMetaDataMgrService;
 import com.bonc.frame.service.reference.RuleReferenceService;
 import com.bonc.frame.util.*;
+import com.bonc.framework.rule.exception.ExecuteException;
 import com.bonc.framework.rule.executor.context.impl.ExecutorRequest;
 import com.bonc.framework.rule.kpi.KpiResult;
 import com.google.common.collect.Lists;
@@ -71,7 +72,7 @@ public class KpiServiceImpl implements KpiService {
     }
 
     @Override
-    public KpiResult getKpiValue(KpiDefinition kpiDefinition, Map<String, Object> params, ExecutorRequest executorRequest) {
+    public KpiResult getKpiValue(KpiDefinition kpiDefinition, Map<String, Object> params, ExecutorRequest executorRequest) throws ExecuteException {
         FetchService fetchService = fetchServiceMap.get(kpiDefinition.getFetchType());
         return fetchService.getKpiValue(kpiDefinition, params, executorRequest);
     }

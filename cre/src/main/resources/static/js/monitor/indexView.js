@@ -1047,7 +1047,6 @@ var main = {
     $ajax: function ( url, method, params, body, callback, dataType ) {
         if ( dataType === void 0 ) dataType = 'json';
         var param ={};
-        console.log(params)
         param.cycleId=localStorage.getItem("cycleId");
         var json = JSON.stringify(param);
         $.ajax( {

@@ -12,6 +12,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.*;
 
 /**
@@ -85,7 +86,12 @@ public class CreRuleLog implements IRuleLog {
 		}
 
 	}
-	
+
+	@Override
+	public void saveModelLog(Map<String, String> map,RuleLog ruleLog) {
+
+	}
+
 	private class RulelogThread implements Runnable {
 
 		@Override

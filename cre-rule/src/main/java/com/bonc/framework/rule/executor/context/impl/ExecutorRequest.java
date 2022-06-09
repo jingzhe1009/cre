@@ -34,6 +34,7 @@ public class ExecutorRequest implements Cloneable {
      *  外部调用
      */
 
+    private String modelLogId;
     /**
      * 编译后的模型
      */
@@ -360,5 +361,13 @@ public class ExecutorRequest implements Cloneable {
             result.put(entry.getKey(), entry.getValue());
         }
         return result;
+    }
+
+    public String getModelLogId() {
+        return modelLogId;
+    }
+
+    public void setModelLogId(String modelLogId) {
+        this.modelLogId = modelLogId;
     }
 }

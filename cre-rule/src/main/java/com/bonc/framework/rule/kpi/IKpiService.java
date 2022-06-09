@@ -1,5 +1,6 @@
 package com.bonc.framework.rule.kpi;
 
+import com.bonc.framework.rule.exception.ExecuteException;
 import com.bonc.framework.rule.executor.context.impl.ExecutorRequest;
 import com.bonc.framework.rule.executor.entity.kpi.KpiDefinition;
 
@@ -12,7 +13,7 @@ import java.util.Map;
  */
 public interface IKpiService {
 
-    Object getKpiValue(KpiDefinition kpiDefinition, Map<String, Object> params, ExecutorRequest executorRequest);
+    Object getKpiValue(KpiDefinition kpiDefinition, Map<String, Object> params, ExecutorRequest executorRequest) throws ExecuteException;
 
 //    /**
 //     * 批量获取KPI的值

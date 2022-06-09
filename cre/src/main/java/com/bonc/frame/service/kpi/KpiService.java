@@ -6,6 +6,7 @@ import com.bonc.frame.entity.kpi.KpiDefinition;
 import com.bonc.frame.entity.kpi.KpiGroup;
 import com.bonc.frame.entity.metadata.MetaDataTable;
 import com.bonc.frame.util.ResponseResult;
+import com.bonc.framework.rule.exception.ExecuteException;
 import com.bonc.framework.rule.executor.context.impl.ExecutorRequest;
 import com.bonc.framework.rule.kpi.KpiResult;
 
@@ -19,7 +20,7 @@ import java.util.Map;
  */
 public interface KpiService {
 
-    Object getKpiValue(KpiDefinition kpiDefinition, Map<String, Object> params, ExecutorRequest executorRequest);
+    Object getKpiValue(KpiDefinition kpiDefinition, Map<String, Object> params, ExecutorRequest executorRequest) throws ExecuteException;
 
     /**
      * 批量获取KPI的值

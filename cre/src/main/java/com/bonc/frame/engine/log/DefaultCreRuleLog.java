@@ -9,6 +9,8 @@ import com.bonc.framework.rule.log.IRuleLog;
 import com.bonc.framework.rule.log.entity.RuleLog;
 import com.bonc.framework.rule.log.entity.RuleLogDetail;
 
+import java.util.Map;
+
 /** 
  * @author 作者: jxw 
  * @date 创建时间: 2018年9月27日 上午11:07:31 
@@ -34,6 +36,11 @@ public class DefaultCreRuleLog implements IRuleLog{
 	@Override
 	public void recordRuleDetailLog(RuleLogDetail ruleLogDetail, boolean isLog) {
 		log.info(JsonUtils.toJSONNoFeatures(ruleLogDetail));
+	}
+
+	@Override
+	public void saveModelLog(Map<String, String> map, RuleLog ruleLog) {
+
 	}
 
 }

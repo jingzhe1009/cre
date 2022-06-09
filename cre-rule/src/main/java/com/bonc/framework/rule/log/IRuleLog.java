@@ -3,6 +3,8 @@ package com.bonc.framework.rule.log;
 import com.bonc.framework.rule.log.entity.RuleLog;
 import com.bonc.framework.rule.log.entity.RuleLogDetail;
 
+import java.util.Map;
+
 /**
  * 规则执行日志接口
  *
@@ -25,5 +27,7 @@ public interface IRuleLog {
      * @param ruleLogDetail
      */
     void recordRuleDetailLog(RuleLogDetail ruleLogDetail, boolean isLog);
+
+    void saveModelLog(Map<String, String> map,RuleLog ruleLog);
 
 }

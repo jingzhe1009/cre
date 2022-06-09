@@ -5,6 +5,8 @@ import com.bonc.framework.rule.log.entity.RuleLogDetail;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import java.util.Map;
+
 /**
  * 规则日志记录接口默认实现
  *
@@ -29,6 +31,11 @@ public class DefaultRuleLog implements IRuleLog {
         if (isLog) {
             log.info(ruleLogDetail);
         }
+    }
+
+    @Override
+    public void saveModelLog(Map<String, String> map, RuleLog ruleLog) {
+
     }
 
 

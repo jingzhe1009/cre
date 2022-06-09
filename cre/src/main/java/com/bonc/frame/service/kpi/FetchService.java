@@ -1,6 +1,7 @@
 package com.bonc.frame.service.kpi;
 
 import com.bonc.frame.entity.kpi.KpiDefinition;
+import com.bonc.framework.rule.exception.ExecuteException;
 import com.bonc.framework.rule.executor.context.impl.ExecutorRequest;
 import com.bonc.framework.rule.kpi.KpiResult;
 
@@ -25,7 +26,7 @@ public interface FetchService {
      * @param <T>
      * @return 指标值
      */
-    KpiResult getKpiValue(KpiDefinition kpiDefinition, Map<String, Object> params, ExecutorRequest executorRequest);
+    KpiResult getKpiValue(KpiDefinition kpiDefinition, Map<String, Object> params, ExecutorRequest executorRequest) throws ExecuteException;
 
     /**
      * 批量获取指标值
