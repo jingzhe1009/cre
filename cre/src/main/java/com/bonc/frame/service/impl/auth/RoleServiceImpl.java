@@ -154,6 +154,9 @@ public class RoleServiceImpl implements RoleService {
     public boolean checkAuthorityIsAll(String loginUserId) {
         // 首先获取用户的角色，
         String roleId = (String) daoHelper.queryOne(_ROLE_PREFIX + "getRoleIdByUserId", loginUserId);
+        if (null == roleId) {
+            return false;
+        }
         return authorityService.isRoleHasAllPermits(roleId);
     }
 

@@ -78,13 +78,16 @@
             <bind name="userNamePattern" value="'%' + userName + '%'"/>
             AND A.USER_NAME like #{userNamePattern}
         </if>
-        <if test="userId != null and '' != userId">
-            <bind name="userIdPattern" value="'%' + userId + '%'"/>
-            AND A.USER_ID like #{userIdPattern}
-        </if>
+<!--        <if test="userId != null and '' != userId">-->
+<!--            <bind name="userIdPattern" value="'%' + userId + '%'"/>-->
+<!--            AND A.USER_ID like #{userIdPattern}-->
+<!--        </if>-->
         <if test="jobNumber != null and '' != jobNumber">
             <bind name="jobNumberPattern" value="'%' + jobNumber + '%'"/>
             AND A.JOB_NUMBER like #{jobNumberPattern}
+        </if>
+        <if test="channelId != null and '' != channelId">
+            AND H.CHANNEL_ID = #{channelId,jdbcType=VARCHAR}
         </if>
     </select>
 

@@ -3,10 +3,7 @@ package com.bonc.frame.service.impl.auth;
 import com.bonc.frame.dao.DaoHelper;
 import com.bonc.frame.entity.auth.*;
 import com.bonc.frame.entity.commonresource.ModelGroupChannelVo;
-import com.bonc.frame.service.auth.ChannelPathService;
-import com.bonc.frame.service.auth.ChannelService;
-import com.bonc.frame.service.auth.DeptService;
-import com.bonc.frame.service.auth.RoleService;
+import com.bonc.frame.service.auth.*;
 import com.bonc.frame.util.CollectionUtil;
 import com.bonc.frame.util.ControllerUtil;
 import com.bonc.frame.util.IdUtil;
@@ -49,11 +46,14 @@ public class ChannelServiceImpl implements ChannelService {
         if (oldChannel !=null){
             return ResponseResult.createFailInfo("渠道已存在");
         }
+        //机构非空判断
+        if (channel.getDeptId().isEmpty()) {
+            return ResponseResult.createFailInfo("未选择所属机构");
+        }
         //新增渠道信息，入库保存
         final String channelId = IdUtil.createId();
         channel.setChannelId(channelId);
         //channel.setParentId();
-        channel.setUserNum(0);
         channel.setCreateDate(new Date());
         channel.setCreatePerson(loginUserId);
         daoHelper.insert(_CHANNEL_PREFIX+"insert",channel);
@@ -74,9 +74,14 @@ public class ChannelServiceImpl implements ChannelService {
         boolean b = roleService.checkAuthorityIsAll(loginUserId);
         Map<Object, Object> param = new HashMap<>();
         param.put("channelName",channelName);
+        String channelId = deptService.getChannelIdByUserId(loginUserId);
         if (!b) {
             // 不是全权
-            String channelId = deptService.getChannelIdByUserId(loginUserId);
+            param.put("channelId", channelId);
+        }
+        // 管理员都是全权-验证渠道是否为总行大数据平台
+        if (channelId != null) {
+            // 返回null时表示用户所属渠道为总行大数据平台，否则应返回账号所属渠道
             param.put("channelId", channelId);
         }
         //根据渠道名称查找相关信息
@@ -123,7 +128,6 @@ public class ChannelServiceImpl implements ChannelService {
         }
         return ResponseResult.createSuccessInfo();
     }
-
     public boolean isExists(Channel channel){
        final Channel resultChannel=selectByPrimaryKey(channel.getChannelId());
        return resultChannel == null ? false :true;

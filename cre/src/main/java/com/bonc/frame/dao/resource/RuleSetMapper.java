@@ -20,12 +20,12 @@ import java.util.Map;
 @Repository
 public interface RuleSetMapper {
 
-//    @PermissibleData(value = "RULE_SET_HEADER_ID", requiresPermission = "/pub/ruleSet/view",
-//            resourceType = ResourceType.DATA_PUB_RULE_SET, isPageHelper = true)
+    @PermissibleData(value = "RULE_SET_HEADER_ID", requiresPermission = "/pub/ruleSet/view",
+            resourceType = ResourceType.DATA_PUB_RULE_SET, isPageHelper = true)
     List<RuleSetHeaderGroupExt> getHeaderList(Map map);
-//
-//    @PermissibleData(value = "\"ruleSetHeaderId\"", requiresPermission = "/pub/ruleSet/view",
-//            resourceType = ResourceType.DATA_PUB_RULE_SET, isPageHelper = true)
+
+    @PermissibleData(value = "\"ruleSetHeaderId\"", requiresPermission = "/pub/ruleSet/view",
+            resourceType = ResourceType.DATA_PUB_RULE_SET, isPageHelper = true)
     List<PubApiResource> getHeaderListResource(Map map);
 
 }

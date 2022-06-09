@@ -293,6 +293,45 @@
         and SIGN_TIME = #{timePoint,jdbcType=VARCHAR}
     </select>
 
+    <select id="getState" parameterType="map" resultType="com.bonc.frame.entity.monitor.ExcuteResult">
+        select a.LOG_ID as logId,
+        f.DEPT_NAME as deptName,
+        e.CHANNEL_NAME as channelName,
+        c.MODEL_GROUP_NAME as groupName,
+        b.MODULE_NAME as modelName,
+        a.METHOD_TYPE as methodType,
+        a.CONSUMER_SEQ_NO as consumerSeqNo,
+        a.RETURN_CODE as returnCode,
+        a.START_TIME as startTime,
+        a.END_TIME as endTime
+        from CRE_RULE_LOG a
+        left join CRE_RULE_DETAIL b on a.RULE_ID = b.RULE_ID
+        left join CRE_PUB_MODEL_GROUP c on a.FOLDER_ID = c.MODEL_GROUP_ID
+        left join CRE_PUB_MODEL_GROUP_CHANNEL d on c.MODEL_GROUP_ID = d.MODEL_GROUP_ID
+        left join CRE_AUTH_CHANNEL e on e.CHANNEL_ID = d.CHANNEL_ID
+        left join CRE_AUTH_DEPT f on e.DEPT_ID = f.DEPT_ID
+        where 1=1
+        <if test="productId != null">
+            AND a.FOLDER_ID = #{productId,jdbcType=VARCHAR}
+        </if>
+        <if test="channelId != null">
+            AND d.CHANNEL_ID = #{channelId,jdbcType=VARCHAR}
+        </if>
+        <if test="modelId != null">
+            AND a.RULE_ID = #{modelId,jdbcType=VARCHAR}
+        </if>
+        <if test="returnCode != null">
+            AND a.RETURN_CODE = #{returnCode,jdbcType=VARCHAR}
+        </if>
+        <if test="startDate != null and '' != startDate">
+            and a.START_TIME &gt;= to_date(#{startDate,jdbcType=TIMESTAMP} ,'yyyy-mm-dd hh24:mi:ss')
+        </if>
+        <if test="endDate != null and '' != endDate">
+            and a.START_TIME &lt;= to_date(#{endDate,jdbcType=TIMESTAMP} ,'yyyy-mm-dd hh24:mi:ss')
+        </if>
+        order by a.START_TIME desc
+    </select>
+
     <select id="getLogPage" parameterType="map" resultType="com.bonc.frame.entity.monitor.ExcuteResult">
         select a.LOG_ID as logId,
         f.DEPT_NAME as deptName,

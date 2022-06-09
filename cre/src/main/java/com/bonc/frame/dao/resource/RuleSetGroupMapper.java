@@ -1,6 +1,7 @@
 package com.bonc.frame.dao.resource;
 
-import com.bonc.frame.entity.auth.resource.PubApiResource;
+
+import com.bonc.frame.entity.commonresource.ModelGroup;
 import com.bonc.frame.entity.commonresource.RuleSetHeaderGroupExt;
 import com.bonc.frame.security.ResourceType;
 import com.bonc.frame.security.aop.PermissibleData;
@@ -18,7 +19,7 @@ import java.util.Map;
 @Repository
 public interface RuleSetGroupMapper {
 
-//    @PermissibleData(value = "RULE_SET_GROUP_ID", requiresPermission = "/pub/ruleSetGroup/view",
-//            resourceType = ResourceType.DATA_PUB_RULE_SET_GROUP, isPageHelper = true)
-    List<RuleSetHeaderGroupExt> getByGroupName(Map map);
+    @PermissibleData(value = "RULE_SET_GROUP_ID", requiresPermission = "/pub/ruleSetGroup/view",
+            resourceType = ResourceType.DATA_PUB_RULE_SET_GROUP, isPageHelper = true)
+    List<ModelGroup> getByGroupName(Map map);
 }

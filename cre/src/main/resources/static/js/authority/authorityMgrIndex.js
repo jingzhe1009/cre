@@ -845,6 +845,7 @@ var orgModal = {
                 success: function (data) {
                     if (data.status === 0) {
                         $('#orgAlertModal .modal-title').text('添加机构');
+                        orgModal.initOrgList();
                         $('#orgAlertModal').attr('handleType', handleType).modal({
                             'show': 'center',
                             "backdrop": "static"
@@ -1071,6 +1072,7 @@ var chanModal = {
                     success: function (data) {
                         if (data.status === 0) {
                             $('#chanAlertModal .modal-title').text('添加渠道');
+                            orgModal.initOrgList();
                             $('#chanAlertModal').attr('handleType', handleType).modal({
                                 'show': 'center',
                                 "backdrop": "static"
@@ -1355,7 +1357,7 @@ function initTabContent(tabId) {
             $('.special .orgMgr').css('display', 'block');
             orgModal.initOrgList();
             $('#firstTableIcon').text(' 机构列表');
-            $('#authorityAddButton').text('添加组织').unbind('click').bind('click', function () {
+            $('#authorityAddButton').text('添加机构').unbind('click').bind('click', function () {
                 orgModal.show(0);
             });
         }else if (tabId == '4') { // 渠道

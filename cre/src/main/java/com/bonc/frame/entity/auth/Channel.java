@@ -15,8 +15,6 @@ public class Channel extends UserMiddle{
     private String parentId;
     //上级渠道
     private String parentName;
-    //用户数
-    private Integer userNum;
     //创建日期
     private Date createDate;
     //创建人
@@ -80,14 +78,6 @@ public class Channel extends UserMiddle{
         this.parentName = parentName;
     }
 
-    public Integer getUserNum() {
-        return userNum;
-    }
-
-    public void setUserNum(Integer userNum) {
-        this.userNum = userNum;
-    }
-
     public Date getCreateDate() {
         return createDate;
     }
@@ -147,7 +137,6 @@ public class Channel extends UserMiddle{
                 ", channelDesc='" + channelDesc + '\'' +
                 ", parentId='" + parentId + '\'' +
                 ", parentName='" + parentName + '\'' +
-                ", userNum=" + userNum +
                 ", createDate=" + createDate +
                 ", createPerson='" + createPerson + '\'' +
                 ", updateDate=" + updateDate +

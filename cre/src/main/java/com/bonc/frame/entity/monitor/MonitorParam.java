@@ -18,6 +18,9 @@ public class MonitorParam {
 	//年1月2日3
 	private String cycleId;
 
+	// 状态码
+	private String statusCode;
+
 	// 开始时间
 	private String startDate;
 
@@ -27,6 +30,18 @@ public class MonitorParam {
 	private String start;
 	// 每页数量
 	private String length;
+
+	public String getStatusCode() {
+		return statusCode;
+	}
+
+	public void setStatusCode(String statusCode) {
+		this.statusCode = statusCode;
+	}
+
+	public String getLength() {
+		return length;
+	}
 
 	public String getStart() {
 		return start;

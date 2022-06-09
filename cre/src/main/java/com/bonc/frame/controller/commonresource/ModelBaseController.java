@@ -54,7 +54,6 @@ public class ModelBaseController {
     }
 
     // ------------------------ 模型组管理 ------------------------
-
     @RequestMapping("/group/list")
     @ResponseBody
     public ResponseResult getModelGroups(String modelGroupName, HttpServletRequest request) {

@@ -326,7 +326,7 @@
                             <input id="orgAlert_code" col-name="deptCode" type="text" class="form-control must" data-rule="机构编码:required;">
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" style="display:none">
                         <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3">上级机构</label>
                         <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
                             <select id="orgAlertOrgSelector" col-name="parentId" class="form-control orgSelector"></select>
@@ -383,7 +383,7 @@
                     <div class="form-group">
                         <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3"><i class="mustIcon">*</i>所属机构</label>
                         <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
-                            <select id="chanAlertChanSelector" col-name="deptName" class="form-control orgSelector"></select>
+                            <select id="chanAlertChanSelector" col-name="deptName" class="form-control orgSelector"  data-rule="所属机构:required;"></select>
                         </div>
                     </div>
                 </form>

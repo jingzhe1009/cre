@@ -19,7 +19,6 @@ public interface ChannelService {
     ResponseResult delete(String channelId);
 
     ResponseResult update(Channel channel, String loginUserId);
-
     List<Object> nameList();
     
     List<Map<String,Object>> getChannelListByGroupId(String groupId);

@@ -673,4 +673,55 @@ public class MonitorServiceImpl implements MonitorService {
         map.put("useTime", useTimeList.toArray());
         return map;
     }
+
+    @Override
+    public Map<String, Object> search(MonitorParam monitorParam,String start,String length) {
+        Map<String, Object> map =getSearch(monitorParam.getCycleId(),monitorParam.getModelId(),
+                                           monitorParam.getStatusCode(), monitorParam.getProductId(),
+                                           monitorParam.getChannelId());
+        return map;
+    }
+
+
+    private  Map<String, Object> getSearch(String flag,String modelId,String statusCode,
+                                           String productId,String channelId){
+        String path;
+        String date; // 当前时间
+        String endDate;
+        if ("年".equals(flag)) { // 按年查询-月时间点暂定格式为：2022-01
+            SimpleDateFormat sd = new SimpleDateFormat("yyyy");
+            Date da = new Date();
+            date = sd.format(da) + "-01-01 00:00:00";
+            endDate = sd.format(da) + "-12-31 00:00:00";
+            path = "getState";   //查看各月的执行结果的数据情况
+        } else if ("月".equals(flag)) { // 按月查询-日时间点暂定格式为：2022-01-01
+            SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM");
+            Date da = new Date();
+            date = sd.format(da) + "01 00:00:00";
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(new Date());
+            calendar.set(Calendar.DAY_OF_MONTH,1);
+            calendar.add(Calendar.MONTH,1);
+            endDate = sd.format(calendar.getTime())+"01 00:00:00";
+            path = "getState";
+        } else {// 按日查询-小时时间点格式为：2022-01-01 00:00
+            Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT+8"));
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
+            calendar.set(Calendar.MINUTE, 0);
+            calendar.set(Calendar.SECOND, 0);
+            SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd");
+            date = sd.format(new Date(calendar.getTimeInMillis()))+" 00:00:00";
+            endDate = sd.format(new Date(calendar.getTimeInMillis()))+" 23:59:59";
+            path = "getState";
+        }
+        Map<String, Object> param = new HashMap<>();
+        param.put("startDate", date);
+        param.put("endDate", endDate);
+        param.put("productId",productId);
+        param.put("channelName",channelId);
+        param.put("modelName", modelId);
+        param.put("returnCode",statusCode);
+        Map<String, Object> result = daoHelper.queryForPageList(_MONITOR_MANAGE + path, param);
+        return result;
+    }
 }

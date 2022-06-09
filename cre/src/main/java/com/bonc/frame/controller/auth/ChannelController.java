@@ -2,6 +2,7 @@ package com.bonc.frame.controller.auth;
 
 
 import com.bonc.frame.entity.auth.Channel;
+import com.bonc.frame.entity.auth.Dept;
 import com.bonc.frame.security.ResourceType;
 import com.bonc.frame.security.aop.PermissionsRequires;
 import com.bonc.frame.service.auth.ChannelService;
@@ -51,7 +52,7 @@ public class ChannelController {
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     @ResponseBody
     public Map<String, Object> list(HttpServletRequest request,String channelName, String start, String length) {
-        Map<String, Object> result = channelService.list(request,channelName, start, length);
+        Map<String, Object> result = channelService.list(request,channelName,start, length);
         return result;
     }
 
@@ -77,7 +78,6 @@ public class ChannelController {
         final String loginUserId = ControllerUtil.getLoginUserId(request);
         return channelService.update(channel, loginUserId);
     }
-
     // ------------------------------- 权限校验 -------------------------------
     //增加渠道权限
     @PermissionsRequires(value = "/chan/add", resourceType = ResourceType.BUTTON)

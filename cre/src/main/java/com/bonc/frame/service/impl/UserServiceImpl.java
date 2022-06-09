@@ -7,6 +7,7 @@ import com.bonc.frame.entity.user.UserAccountEn;
 import com.bonc.frame.entity.user.UserExt;
 import com.bonc.frame.service.UserService;
 import com.bonc.frame.service.auth.AuthorityService;
+import com.bonc.frame.service.auth.DeptService;
 import com.bonc.frame.service.auth.RoleService;
 import com.bonc.frame.service.auth.SubjectService;
 import com.bonc.frame.util.*;
@@ -43,6 +44,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private RoleService roleService;
+
+    @Autowired
+    private DeptService deptService;
 
     private final String _MYBITSID_PREFIX = "com.bonc.frame.mapper.oracle.user.UserMapper.";
 
@@ -301,19 +305,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Map<String, Object> list(String userId, String userName, String jobNumber, String start, String size) {
-        Map<String, Object> params = new HashMap<>();
-        params.put("userId", userId);
-        params.put("userName", userName);
-        params.put("jobNumber", jobNumber);
-        // 除超级管理员外，只显示当前角色下的用户
-        if (authorityService.isCurrentUserHasAllPermits()) {
-            Map<String, Object> map = daoHelper.queryForPageList(_MYBITSID_PREFIX + "selectUser", params, start, size);
-            return map;
-        }
-        String currentUser = ControllerUtil.getCurrentUser();
-        params.put("currentUser", currentUser);
-        Map<String, Object> map = daoHelper.queryForPageList(_MYBITSID_PREFIX + "selectUser", params, start, size);
-        return map;
+        Map<String, Object> param = new HashMap<>();
+        param.put("userId", userId);
+        param.put("userName", userName);
+        param.put("jobNumber", jobNumber);
+        //检验用户权限 是否是全权
+        boolean b = roleService.checkAuthorityIsAll(userId);
+        //查看渠道是否为大数据平台
+        String channelId = deptService.getChannelIdByUserId(userId);
+        param.put("channelId", channelId);
+        Map<String, Object> result = daoHelper.queryForPageList(_MYBITSID_PREFIX + "selectUser", param, start, size);
+        return result;
     }
 
     @Override
@@ -328,20 +330,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public Map<String, Object> userRole(String userId, String roleName, String start, String length) {
+    public Map<String, Object> userRole(String loginUserId,String userId, String roleName, String start, String length) {
         Map<String, Object> param = new HashMap<>();
         param.put("userId", userId);
         param.put("roleName", roleName);
-        // 用户是全权或者所属渠道为总行大数据平台，则展示全部角色，否则只展示业务，运维角色
-        ModelGroupChannelVo vo = (ModelGroupChannelVo) daoHelper.queryOne(_DEPT_PREFIX + "getChannelIdByUserId", userId);
+        // 用户是全权并且所属渠道为总行大数据平台，则展示全部角色，否则只展示业务，运维角色
+        ModelGroupChannelVo vo = (ModelGroupChannelVo) daoHelper.queryOne(_DEPT_PREFIX + "getChannelIdByUserId",userId);
         boolean b = false;
         if (roleService.checkAuthorityIsAll(userId)) {
             b = true;
         }
-        if (vo.getChannelName().contains("大数据平台")) {
-            if (vo.getDeptName().contains("北京银行")) {
-                b = true;
-            }
+        if (vo.getChannelCode().contains("BDP001")) {
+//            if (vo.getDeptName().contains("北京银行")) {
+//                b = true;
+//            }
+            b = true;
         }
         Map<String, Object> result;
         if (b) {

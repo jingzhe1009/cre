@@ -19,8 +19,8 @@ import java.util.Map;
 @Repository
 public interface RuleDetailMapper {
 
-//    @PermissibleData(value = "RULE_NAME", requiresPermission = "/rule/view",
-//            resourceType = ResourceType.DATA_MODEL, isPageHelper = true)
+    @PermissibleData(value = "RULE_NAME", requiresPermission = "/rule/view",
+            resourceType = ResourceType.DATA_MODEL, isPageHelper = true)
     List<RuleDetail> selectRuleDetailByFolderIdOrRuleName(Map<String, Object> param);
 
     /**
@@ -28,29 +28,29 @@ public interface RuleDetailMapper {
      * @param param  needDraft 如果不传,则不会查   可以传 folderId , ruleName , isPublic ,
      * @return
      */
-//    @PermissibleData(value = "RULE_NAME", requiresPermission = "/rule/view",
-//            resourceType = ResourceType.DATA_MODEL, isPageHelper = true)
+    @PermissibleData(value = "RULE_NAME", requiresPermission = "/rule/view",
+            resourceType = ResourceType.DATA_MODEL, isPageHelper = true)
     List<RuleDetail> selectAllVersionRuleDetailByFolderIdOrRuleName(Map<String, Object> param);
 
-//    @PermissibleData(value = "\"ruleName\"", requiresPermission = "/rule/view",
-//            resourceType = ResourceType.DATA_MODEL, isPageHelper = true)
+    @PermissibleData(value = "\"ruleName\"", requiresPermission = "/rule/view",
+            resourceType = ResourceType.DATA_MODEL, isPageHelper = true)
     List<Map<String, Object>> selectRuleNameInHeaderByFolder(String folderId);
 
-//    @PermissibleData(value = "\"ruleName\"", requiresPermission = "/rule/view",
-//            resourceType = ResourceType.DATA_MODEL, isPageHelper = true)
+    @PermissibleData(value = "\"ruleName\"", requiresPermission = "/rule/view",
+            resourceType = ResourceType.DATA_MODEL, isPageHelper = true)
     List<RuleResource> pagedByRuleNameFolderNameRuleType(Map map);
 
-//    @PermissibleData(value = "RULE_NAME", requiresPermission = "/pub/rule/view",
-//            resourceType = ResourceType.DATA_PUB_MODEL, isPageHelper = true)
+    @PermissibleData(value = "RULE_NAME", requiresPermission = "/pub/rule/view",
+            resourceType = ResourceType.DATA_PUB_MODEL, isPageHelper = true)
     List<RuleDetail> getHeaderList(Map map);
 
-//    @PermissibleData(value = "\"ruleName\"", requiresPermission = "/pub/rule/view",
-//            resourceType = ResourceType.DATA_PUB_MODEL, isPageHelper = true)
+    @PermissibleData(value = "\"ruleName\"", requiresPermission = "/pub/rule/view",
+            resourceType = ResourceType.DATA_PUB_MODEL, isPageHelper = true)
     List<PubModelBaseResource> getHeaderListResource(Map map);
 
-    /*@PermissibleData(value = "RULE_NAME", requiresPermission = "/rule/view",
+    @PermissibleData(value = "RULE_NAME", requiresPermission = "/rule/view",
             resourceType = ResourceType.DATA_MODEL, isPageHelper = true)
-    Map getEnableVersionBaseInfoByRuleName(String ruleName);*/
+    Map getEnableVersionBaseInfoByRuleName(String ruleName);
 
 
 }

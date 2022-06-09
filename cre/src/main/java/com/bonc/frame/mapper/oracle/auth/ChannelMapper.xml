@@ -65,9 +65,6 @@
             <if test="parentId != null">
                 PARENT_ID,
             </if>
-            <if test="userNum != null">
-                USER_NUM,
-            </if>
             <if test="createDate != null">
                 CREATE_DATE,
             </if>
@@ -103,9 +100,6 @@
             <if test="parentId != null">
                 #{parentId,jdbcType=VARCHAR},
             </if>
-            <if test="userNum != null">
-                #{userNum,jdbcType=INTEGER},
-            </if>
             <if test="createDate != null">
                 #{createDate,jdbcType=TIMESTAMP},
             </if>
@@ -139,7 +133,7 @@
             and a.CHANNEL_NAME like #{channelNamePattern}
         </if>
         <if test="channelId != null">
-            and a.CHANNEL_ID=#{channelId,jdbcType=VARCHAR},
+            and a.CHANNEL_ID=#{channelId,jdbcType=VARCHAR}
         </if>
     </select>
     <!--    <select id="listByChannelName" resultMap="BaseResultMap2" parameterType="map">-->

@@ -100,8 +100,8 @@ var main = {
     getMechanism: function () {},
 
     //调用分析-模型执行情况echarts
-    getRuleExecution: function () {
-        main.$ajax('/monitor/excuteState', 'POST', null, function ( data ) {
+    getRuleExecution: function (obj) {
+        main.$ajax('/monitor/excuteState', 'POST', obj, null, function ( data ) {
             //console.log(data);
             main.data.RuleExecution.chart = echarts.init( document.getElementById( 'ruleExecution' ) );
             main.data.RuleExecution.chart.setOption( {
@@ -224,9 +224,9 @@ var main = {
         } );
     },
     //调用分析-模型执行命中率echarts
-    getNumberOfCallsLeft: function () {
+    getNumberOfCallsLeft: function (obj) {
         var path = '/monitor/useTime';
-        main.$ajax( path, 'POST', null, function ( data ) {
+        main.$ajax( path, 'POST', obj, null, function ( data ) {
             main.data.NumberOfCallsLeft.chart = echarts.init( document.getElementById( 'numberOfCallsLeft' ) );
             main.data.NumberOfCallsLeft.chart.setOption( {
                 title: {
@@ -315,9 +315,9 @@ var main = {
         } );
     },
     //调用分析-执行统计echarts
-    getNumberOfCallsRight: function () {
+    getNumberOfCallsRight: function (obj) {
         var path = '/monitor/excuteCount';
-        main.$ajax( path, 'POST', null, function ( data ) {
+        main.$ajax( path, 'POST', obj, null, function ( data ) {
             //debugger;
             var chrNumber =[];
             var chrnum=[];
@@ -396,6 +396,31 @@ var main = {
     selectChange: function ( space, name, value, index ) {},
 
     resize: function () {},
+    toLog: function (statusCode){
+        $("#desc").attr("style","display:none");
+        $('#monitorTab li').removeClass('active');
+        $(".nav-tabs li[tab-id='3']").addClass('active');
+        $("#tab3").show();
+        $("#tab12").hide();
+        var cycId = $('#yearMonthDay').attr('cyc-id') || 3;
+        var date = '';
+        if (cycId == 1) {
+            date = '年'
+        } else if(cycId == 2) {
+            date = '月'
+        } else if(cycId == 3) {
+            date = "日"
+        }
+        var obj = {
+            modelGroupId: $('#folderId').attr('folderid') || '',
+            channelId: $('#channelId').attr('channelid') || '' ,
+            modelId: $('#modelId').attr('ruleid') || '',
+            methodType: $('#methodType').attr('typeid') == 1 ? '实时' : '离线',
+            cycleId: date,
+            statusCode: statusCode,
+        }
+        main.logTable(obj)
+    },
     //调用分析-执行结果datatable
     initTable: function(obj){
         $('#monitorTable').width('100%').dataTable({
@@ -420,14 +445,14 @@ var main = {
                 {"title": "执行结果", "data": "excuteResult","render":function(data,type,row){
                         return data;
                     }},
-                {"title": "状态码", "data": "state","render":function(data,type,row){
+                {"title": "状态码", "data": "statusCode","render":function(data,type,row){
                         return data;
                     }},
                 {"title": "执行次数", "data": "excuteTimes","render":function(data,type,row){
                         return data;
                     }},
                 {"title": "查询", "data": "","render":function(data,type,row){
-                        return '<button class="btn btn-primary">查询</button>';
+                        return '<button class="btn btn-primary" onclick="main.toLog(\'' + row.statusCode+ '\')">查询</button>';
                     }}
             ],
             ajax: {
@@ -444,8 +469,8 @@ var main = {
         });
     },
     //模型分析-规则类模型命中率echarts
-    getRuleHit : function(){
-        main.$ajax('/monitor/ruleHit', 'POST', null, function ( data ) {
+    getRuleHit : function(obj){
+        main.$ajax('/monitor/ruleHit', 'POST', obj, null, function ( data ) {
             main.data.RuleHit.chart = echarts.init( document.getElementById( 'ruleHit' ) );
             main.data.RuleHit.chart.setOption( {
                 title: {
@@ -505,8 +530,8 @@ var main = {
         } );
     },
     //模型分析-评分类模型命中率echarts
-    getScoreHit : function(){
-        main.$ajax('/monitor/scoreHit', 'POST', null, function ( data ) {
+    getScoreHit : function(obj) {
+        main.$ajax('/monitor/scoreHit', 'POST', obj, null, function ( data ) {
             main.data.ScoreHit.chart = echarts.init( document.getElementById( 'scoreHit' ) );
             main.data.ScoreHit.chart.setOption( {
                 title: {
@@ -593,7 +618,7 @@ var main = {
                 {"title": "流水号", "data": "consumerSeqNo","render":function(data,type,row){
                         return data;
                     }},
-                {"title": "执行状态", "data": "returnCode","render":function(data,type,row){
+                {"title": "状态", "data": "returnCode","render":function(data,type,row){
                         return data;
                     }},
                 {"title": "执行时间", "data": "startTime","render":function(data,type,row){
@@ -607,7 +632,7 @@ var main = {
                     }}
             ],
             ajax: {
-                url: webpath + '/monitor/logPage',
+                url: obj.cycleId ? webpath + '/monitor/search' : webpath + '/monitor/logPage',
                 "type": 'POST',
                 "data": function (d) { // 查询参数
                     //debugger;
@@ -927,25 +952,6 @@ var main = {
                         $(".tab-content").hide();
                         $("#exportButton").val("图表展示");
                         $("#desc").attr("style","display:block");
-                        // $('.download').unbind('click').on('click',function{
-                        //     $.ajax({
-                        //         url: webpath + '/modelBase/group/list',
-                        //         type: 'POST',
-                        //         dataType: "json",
-                        //         success: function (data) {
-                        //             var reader = new FileReader();
-                        //             reader.readAsDataURL(data.data);
-                        //             reader.onload = function (ev) {
-                        //                 var a = $().append('a');
-                        //                 a.download = '图表展示.xlsx'
-                        //                 a.href = ev.target.result;
-                        //                 $().appendChild(a);
-                        //                 a.click();
-                        //                 $().removeChild(a);
-                        //             }
-                        //         }
-                        //     })
-                        // })
                     }else{//图标
                         //模型分析需显示
                         if(tabId=='1'){
@@ -1002,7 +1008,7 @@ var main = {
                 $('.channelList').html(htmlStr);
                 // 为li绑定点击事件同步选项到input
                 $('.channelList li').click(function () {
-                    $(this).parent().siblings('input').val($(this).text());
+                    $(this).parent().siblings('input').val($(this).text()).attr('channelId', $(this).attr('channelId'));;
                 });
             }
         })
@@ -1023,7 +1029,7 @@ var main = {
                 $('.ruleList').html(htmlStr);
                 // 为li绑定点击事件同步选项到input
                 $('.ruleList li').click(function () {
-                    $(this).parent().siblings('input').val($(this).text());
+                    $(this).parent().siblings('input').val($(this).text()).attr('modelId', $(this).attr('modelId'));
                 });
             }
         })
@@ -1035,18 +1041,19 @@ var main = {
         $('.typeList').html(htmlStr);
         // 为li绑定点击事件同步选项到input并设置folderId属性
         $('.typeList li').click(function () {
-            $(this).parent().siblings('input').val($(this).text());
+            $(this).parent().siblings('input').val($(this).text()).attr('typeId', $(this).attr('typeId'));
         });
     },
-    $ajax: function ( url, method, body, callback, dataType ) {
+    $ajax: function ( url, method, params, body, callback, dataType ) {
         if ( dataType === void 0 ) dataType = 'json';
         var param ={};
+        console.log(params)
         param.cycleId=localStorage.getItem("cycleId");
         var json = JSON.stringify(param);
         $.ajax( {
             url: webpath + url,
             type: method,
-            data:json,
+            data: params == undefined ? json : JSON.stringify(params),
             contentType:"application/json;charset=UTF-8",
             //dataType: dataType,
             success: function ( data ) {
@@ -1105,6 +1112,7 @@ var main = {
 		localStorage.setItem("cycleId",cycleId);
         var tabId = localStorage.getItem("tabId");
         $('.nav-primary li').removeClass('active');
+        $('#yearMonthDay').attr('cyc-id', cycleId);
         $(".nav-primary  li[cyc-id='" + cycleId + "']").addClass('active');
         main.changeTab(tabId);
     },
@@ -1112,10 +1120,31 @@ var main = {
 		$("#desc").attr("style","display:none");
 		$("#tab3").show();
 	},
-	search:function(){
-		var tabId = localStorage.getItem("tabId");
-		main.changeTab(tabId);
-	}
+    search:function(){
+        if($('.ruleIdInput').attr('modelId')) {
+            var tabId = localStorage.getItem("tabId");
+            var obj = {
+                productId: $('.folderIdInput').attr('folderid'),
+                channelId: $('.channelIdInput').attr('channelId'),
+                modelId: $('.ruleIdInput').attr('modelId'),
+                type: $('#methodType').attr('typeId') == 1 ? '实时' : '离线',
+            }
+            if(tabId == 1) {
+                main.getRuleExecution(obj)
+                main.getNumberOfCallsLeft(obj)
+                main.getNumberOfCallsRight(obj)
+                main.initTable(obj)
+            } else if(tabId == 2) {
+                main.getRuleHit(obj)
+                main.getScoreHit(obj)
+            } else if(tabId == 3) {
+                main.logTable(obj)
+            }
+        } else {
+            failedMessager.show('需要选择模型才能进行搜索');
+        }
+    },
+
 };
 
 $( function () {
@@ -1125,11 +1154,11 @@ $( function () {
     localStorage.setItem("tabId",tabId);
     localStorage.setItem("cycleId",cycleId);
     main.changeCycle(cycleId);
-   /* main.getProSelector();
-    main.getChannelSelector();*/
+    main.getProSelector();
+    main.getChannelSelector();
     main.initRuleFolder();
     main.initType();
-    //main.initModel();
+    main.initModel();
     $('#monitorTab li').click(function () {
         var tabId = $(this).attr('tab-id');
         main.changeTab(tabId);

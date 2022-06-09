@@ -47,8 +47,9 @@ public class UserController {
     @PermissionsRequires(value = "/user/view", resourceType = ResourceType.BUTTON)
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> list(String userId, String userName, String jobNumber, String start, String length) {
-        Map<String, Object> result = userService.list(userId, userName, jobNumber, start, length);
+    public Map<String, Object> list(String userId, String userName, String jobNumber, String start, String length,HttpServletRequest request) {
+        final String loginUserId = ControllerUtil.getLoginUserId(request);
+        Map<String, Object> result = userService.list(loginUserId, userName, jobNumber, start, length);
         return result;
     }
 

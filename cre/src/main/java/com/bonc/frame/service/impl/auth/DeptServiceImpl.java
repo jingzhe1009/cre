@@ -94,10 +94,11 @@ public class DeptServiceImpl implements DeptService {
             // 如果该用户还没有渠道信息，
             return "000";
         }
-        if (vo.getChannelName().contains("大数据")) {
-            if (vo.getDeptName().contains("总行")) {
-                return null;
-            }
+        if (vo.getChannelCode().contains("BDP001")) {
+//            if (vo.getDeptName().contains("北京银行")) {
+//                return null;
+//            }
+            return null;
         }
         return vo.getChannelId();
     }

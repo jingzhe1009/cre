@@ -47,4 +47,11 @@ public interface MonitorService {
      * @return 详情信息
      */
     DescResult getRuleLogDesc(String logId);
+
+    /**
+     * 查询跳转日志检索
+     * @param
+     * @return 详情信息
+     */
+    Map<String, Object> search(MonitorParam monitorParam,String start,String length);
 }

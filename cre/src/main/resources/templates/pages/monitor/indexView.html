@@ -144,7 +144,7 @@
 						                        </ul>
 						                    </div>
 						                    <div class="input-group modelOperateLog">
-						              			<input id="searchBtn" type="button" class="btn btn-primary" value="搜索"></input>
+												<button class="btn btn-primary search" onclick="main.search()" type="button" tableType="0">搜索</button>
 						              		</div>
 						                    <div class="input-group modelOperateLog">
 						                    	<input type="button" class="btn btn-primary" onclick="main.getDesc()"  id="exportButton" value="数据导出" readonly = 'readonly'/>
@@ -218,11 +218,11 @@
 											</ul>
 										</div>
 										<div class="input-group modelOperateLog">
-											<input data-col="statusCode" type="text" class="form-control statusCodeInput"
+											<input data-col="returnCode" type="text" class="form-control returnCodeInput"
 												   placeholder="执行状态">
 											<label class="input-control-icon-right" data-toggle="dropdown">
 												<i class="icon icon-caret-down"></i></label>
-											<ul class="dropdown-menu pull-right statusCode"></ul>
+											<ul class="dropdown-menu pull-right returnCode"></ul>
 										</div>
 										<div class="input-group modelOperateLog">
 											<input data-col="consumerSeqNo" type="text" class="form-control consumerSeqNoInput"
@@ -239,7 +239,7 @@
 										  <span class="input-group-addon"><span class="icon-calendar"></span></span>
 										</div>
 			                            <div class="input-group modelOperateLog">
-					              			<input id="searchBtn" type="button" class="btn btn-primary" value="搜索"></input>
+					              			<input id="searchBtn" type="button" onclick="main.search()" class="btn btn-primary" value="搜索"></input>
 					              		</div>
 						           </div>
 				                   <div class="chart1 ruleExecution col-xs-4 col-sm-4 col-md-4 col-lg-4">

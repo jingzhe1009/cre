@@ -62,7 +62,7 @@ public interface UserService {
 
     Map<String, Object> user2Role(String userId, String roleName, String start, String length);
 
-    Map<String, Object> userRole(String userId, String roleName, String start, String length);
+    Map<String, Object> userRole(String loginUserId,String userId, String roleName, String start, String length);
 
     ResponseResult userAddRole(List<String> roleIds, String userId);
 

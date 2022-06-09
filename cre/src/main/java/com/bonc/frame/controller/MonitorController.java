@@ -112,13 +112,12 @@ public class MonitorController {
 	@ResponseBody
 	public Map<String, Object> logPage(MonitorParam monitorParam,String start,String length) {
 
-		// List<ExcuteResult> resultList = getData();
 		Map<String, Object> map = monitorService.getLogPage(monitorParam,start,length);
 		return map;
 	}
 
 	//日志详情
-	@RequestMapping(value = "/logDesc",method = RequestMethod.GET)
+	@RequestMapping(value = "/getLogDesc",method = RequestMethod.GET)
 	@ResponseBody
 	public Map<String, Object> logDesc(String logId) {
 		DescResult desc = monitorService.getRuleLogDesc(logId);
@@ -175,6 +174,13 @@ public class MonitorController {
         List<Map<String, Object>> ruleFolderList = this.ruleDetailService.getModelList(groupId, channelId);
         return ruleFolderList;
     }
+
+    @RequestMapping(value ="/search", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> search(MonitorParam monitorParam,String start,String length){
+		Map<String, Object> map = monitorService.search(monitorParam,start,length);
+		return map;
+	}
 
 	@RequestMapping(value="/exportExcel")
 	public void exportExcel(HttpServletResponse response, HttpServletRequest request) {

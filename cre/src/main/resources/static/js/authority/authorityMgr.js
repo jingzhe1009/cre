@@ -1804,7 +1804,7 @@ var ruleSetTitle = [
     {
         "title": function () {
             var htmlStr = '<div class="resourceCheckBoxContainer checkAllContainer">';
-            // htmlStr += '<div class="checkbox"><label><input urlStr="/pub/ruleSet/view" class="verticalCheckbox" type="checkbox">查看</label></div>';
+            htmlStr += '<div class="checkbox"><label><input urlStr="/pub/ruleSet/view" class="verticalCheckbox" type="checkbox">查看</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/pub/ruleSet/version/add" class="verticalCheckbox" type="checkbox">版本添加</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/pub/ruleSet/update" class="verticalCheckbox" type="checkbox">修改</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/pub/ruleSet/delete" class="verticalCheckbox" type="checkbox">删除</label></div>';
@@ -1838,7 +1838,7 @@ var ruleSetGroupTitle = [
     {
         "title": function () {
             var htmlStr = '<div class="resourceCheckBoxContainer checkAllContainer">';
-            // htmlStr += '<div class="checkbox"><label><input urlStr="/pub/ruleSetGroup/view" class="verticalCheckbox" type="checkbox">查看</label></div>';
+            htmlStr += '<div class="checkbox"><label><input urlStr="/pub/ruleSetGroup/view" class="verticalCheckbox" type="checkbox">查看</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/pub/ruleSetGroup/update" class="verticalCheckbox" type="checkbox">修改</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/pub/ruleSetGroup/delete" class="verticalCheckbox" type="checkbox">删除</label></div>';
             // htmlStr += '<div class="checkbox"><label><input urlStr="/pub/ruleSetGroup/version/enable" class="verticalCheckbox" type="checkbox">启用/停用</label></div>';
@@ -1883,7 +1883,7 @@ var modelTitle = [
     {
         "title": function () {
             var htmlStr = '<div class="resourceCheckBoxContainer checkAllContainer">';
-            // htmlStr += '<div class="checkbox"><label><input urlStr="/pub/rule/view" class="verticalCheckbox" type="checkbox">查看</label></div>';
+            htmlStr += '<div class="checkbox"><label><input urlStr="/pub/rule/view" class="verticalCheckbox" type="checkbox">查看</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/pub/modelBase/update" class="verticalCheckbox" type="checkbox">基础信息修改</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/pub/rule/delete" class="verticalCheckbox" type="checkbox">删除</label></div>';
             htmlStr += '<div class="checkbox"><label><input urlStr="/pub/rule/stage" class="verticalCheckbox" type="checkbox">暂存</label></div>';

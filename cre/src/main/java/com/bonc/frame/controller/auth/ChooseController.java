@@ -59,8 +59,9 @@ public class ChooseController {
      */
     @RequestMapping(value = "/userRole", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> userRole(String userId, String roleName, String start, String length) {
-        Map<String, Object> result = userService.userRole(userId, roleName, start, length);
+    public Map<String, Object> userRole(String userId, String roleName, String start, String length,HttpServletRequest request) {
+        final String loginUserId = ControllerUtil.getLoginUserId(request);
+        Map<String, Object> result = userService.userRole(loginUserId,userId, roleName, start, length);
         return result;
     }
 

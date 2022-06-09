@@ -42,7 +42,7 @@ public class ModelBaseServiceImpl implements ModelBaseService {
 
     // ------------------------ 模型组管理 ------------------------
 
-    // 获取参数组列表
+    // 获取模型组列表
     @Override
     @Transactional
     public ResponseResult getModelGroups(String modelGroupName,String loginUserId) {
@@ -56,7 +56,11 @@ public class ModelBaseServiceImpl implements ModelBaseService {
             // 非全权只能看自己渠道关联的产品列表
             channelId = deptService.getChannelIdByUserId(loginUserId);
         }
-        deptService.getChannelIdByUserId(loginUserId);
+        // 验证是否有角色，没有角色不返回数据
+        String roleId = (String) daoHelper.queryOne("com.bonc.frame.mapper.auth.RoleMapper.getRoleIdByUserId", loginUserId);
+        if (null == roleId) {
+            return ResponseResult.createSuccessInfo("success", null);
+        }
         Map<String, Object> param = new HashMap<>();
         param.put("modelGroupName", modelGroupName);
         param.put("channelId", channelId);
@@ -119,6 +123,14 @@ public class ModelBaseServiceImpl implements ModelBaseService {
             // 非全权只能看自己渠道关联的产品列表
             chanId = deptService.getChannelIdByUserId(loginUserId);
         }
+        final Map<String, Object> map;
+        // 验证是否有角色，没有角色不返回数据
+        String roleId = (String) daoHelper.queryOne("com.bonc.frame.mapper.auth.RoleMapper.getRoleIdByUserId", loginUserId);
+        if (null == roleId) {
+            map = new HashMap<>();
+            map.put("data", null);
+            return map;
+        }
         Map<String, Object> param = new HashMap<>();
         param.put("modelGroupName", modelGroupName);
         param.put("startDate", startDate);
@@ -130,7 +142,6 @@ public class ModelBaseServiceImpl implements ModelBaseService {
             // 接口传了选择的渠道，则展示本渠道下的产品
             param.put("channelId", channelId);
         }
-        final Map<String, Object> map;
         if (param.get("channelId")==null) {
             map = daoHelper.queryForPageList(_MODEL_GROUP_MAPPER +
                     "getByGroupName", param, start, length);

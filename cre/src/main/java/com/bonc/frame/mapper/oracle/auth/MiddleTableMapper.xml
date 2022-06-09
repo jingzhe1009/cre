@@ -304,7 +304,7 @@
             <bind name="roleNamePattern" value="'%' + _parameter.roleName + '%'"/>
             AND r.ROLE_NAME like #{roleNamePattern}
         </if>
-        and r.ROLE_NAME like '%运维%' or r.ROLE_NAME like '%业务%'
+        and r.ROLE_NAME like '%运维人员%' or r.ROLE_NAME like '%业务人员%'
     </select>
 
     <select id="listUserForRoleNotHad" resultMap="UserMap" parameterType="map">
