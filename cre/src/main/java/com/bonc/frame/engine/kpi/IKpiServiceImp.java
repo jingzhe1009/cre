@@ -3,6 +3,7 @@ package com.bonc.frame.engine.kpi;
 import com.bonc.frame.service.kpi.KpiService;
 import com.bonc.frame.util.CollectionUtil;
 import com.bonc.frame.util.SpringUtils;
+import com.bonc.framework.rule.exception.ExecuteException;
 import com.bonc.framework.rule.executor.context.impl.ExecutorRequest;
 import com.bonc.framework.rule.executor.entity.kpi.KpiDefinition;
 import com.bonc.framework.rule.kpi.IKpiService;
@@ -27,7 +28,7 @@ public class IKpiServiceImp implements IKpiService {
     }
 
     @Override
-    public Object getKpiValue(KpiDefinition kpiDefinition, Map<String, Object> params, ExecutorRequest executorRequest) {
+    public Object getKpiValue(KpiDefinition kpiDefinition, Map<String, Object> params, ExecutorRequest executorRequest) throws ExecuteException {
         return kpiService.getKpiValue(copyProperties(kpiDefinition), params, executorRequest);
     }
 

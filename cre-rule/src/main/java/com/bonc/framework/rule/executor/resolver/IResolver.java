@@ -1,6 +1,7 @@
 package com.bonc.framework.rule.executor.resolver;
 
 import com.bonc.framework.api.log.entity.ConsumerInfo;
+import com.bonc.framework.rule.exception.ExecuteException;
 import com.bonc.framework.rule.exception.ExecuteModelException;
 import com.bonc.framework.rule.executor.context.impl.ExecutorRequest;
 import com.bonc.framework.rule.log.entity.RuleLogDetail;
@@ -19,7 +20,7 @@ public interface IResolver {
     @Deprecated
     Object resolver(FlowNode node, Map<String, Object> param, ConsumerInfo... consumerInfo) throws ExecuteModelException;
 
-    Object resolver(FlowNode node, ExecutorRequest executorRequest, RuleLogDetail ruleLogDetail) throws ExecuteModelException;
+    Object resolver(FlowNode node, ExecutorRequest executorRequest, RuleLogDetail ruleLogDetail) throws ExecuteException;
 
 }
 

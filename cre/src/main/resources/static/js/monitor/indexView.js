@@ -420,7 +420,7 @@ var main = {
                 {"title": "执行结果", "data": "excuteResult","render":function(data,type,row){
                         return data;
                     }},
-                {"title": "状态码", "data": "state","render":function(data,type,row){
+                {"title": "状态码", "data": "statusCode","render":function(data,type,row){
                         return data;
                     }},
                 {"title": "执行次数", "data": "excuteTimes","render":function(data,type,row){

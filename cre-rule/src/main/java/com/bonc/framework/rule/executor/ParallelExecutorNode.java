@@ -2,6 +2,7 @@ package com.bonc.framework.rule.executor;
 
 import com.bonc.framework.api.log.entity.ConsumerInfo;
 import com.bonc.framework.rule.constant.RuleEngineConstant;
+import com.bonc.framework.rule.exception.ExecuteException;
 import com.bonc.framework.rule.exception.ExecuteModelException;
 import com.bonc.framework.rule.executor.builder.AbstractExecutorBuilder;
 import com.bonc.framework.rule.executor.context.impl.ExecutorRequest;

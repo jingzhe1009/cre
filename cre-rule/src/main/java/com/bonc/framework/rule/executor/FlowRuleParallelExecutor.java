@@ -2,6 +2,7 @@ package com.bonc.framework.rule.executor;
 
 import com.bonc.framework.api.log.entity.ConsumerInfo;
 import com.bonc.framework.rule.constant.Config;
+import com.bonc.framework.rule.exception.ExecuteException;
 import com.bonc.framework.rule.exception.ExecuteModelException;
 import com.bonc.framework.rule.executor.builder.AbstractExecutorBuilder;
 import com.bonc.framework.rule.executor.context.impl.ExecutorRequest;
@@ -29,6 +30,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -193,10 +195,12 @@ public class FlowRuleParallelExecutor extends AbstractExecutor {
         long start = System.currentTimeMillis();
 
         //规则执行日志
+        String returnCode = "0000"; // 模型调用日志的返回码
         RuleLog ruleLogEntity = new RuleLog();
         String logId = IdUtil.getUUID();
         ruleLogEntity.setLogId(logId);
         executorRequest.setRuleLogId(logId);
+        executorRequest.setModelLogId(IdUtil.createId());
 
         ruleLogEntity.setRuleId(ruleResource.getRuleId());
         ruleLogEntity.setFolderId(ruleResource.getFolderId());
@@ -289,6 +293,8 @@ public class FlowRuleParallelExecutor extends AbstractExecutor {
             ruleLogEntity.setState(LogState.STATE_EXCEPTION);
             String exception = ExceptionUtil.getStackTrace(e);
             ruleLogEntity.setException(exception);
+            // 异常返回码
+            // returnCode = e.getCode();
             return ExecutorResponse.newFailedExecutorResponse("执行模型失败。模型执行异常" + e.getMessage());
         } finally {
             //  日志入库
@@ -306,7 +312,10 @@ public class FlowRuleParallelExecutor extends AbstractExecutor {
                 }
             }
             // 释放ThreadLocal
-//            flowNode.removeAllThreadLocal();
+            Map<String, String> mapLog = new HashMap<>();
+            mapLog.put("returnCode", returnCode);
+            mapLog.put("modelLogId", executorRequest.getModelLogId());
+            ruleLog.saveModelLog(mapLog,ruleLogEntity);
         }
     }
 

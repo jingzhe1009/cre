@@ -6,10 +6,12 @@ import com.bonc.frame.config.Config;
 import com.bonc.frame.dao.DaoHelper;
 import com.bonc.frame.engine.builder.AbstractEngineBuilder;
 import com.bonc.frame.entity.function.RuleFunction;
+import com.bonc.frame.entity.monitor.RuleLog;
 import com.bonc.frame.ext.MyClassLoader;
 import com.bonc.frame.service.aBTest.ABTestService;
 import com.bonc.frame.service.kpi.KpiService;
 import com.bonc.frame.service.variable.VariableService;
+import com.bonc.frame.util.IdUtil;
 import com.bonc.frame.util.MapBeanUtil;
 import com.bonc.frame.util.SpringUtils;
 import com.bonc.frame.util.StringUtil;
@@ -314,8 +316,31 @@ public class EngineManager {
         return this.executeRule(executorRequest);
     }
 
+//    private void saveModelLog(ExecutorRequest exe,StringBuffer excep,Map<String, String> map) {
+//        // 监控管理模型调用日志的相关信息
+//        RuleLog modelLog = new RuleLog();
+//        if (exe.getModelLogId() != null && !exe.getModelLogId().isEmpty()) {
+//            // 已有日志信息就在基础上update
+//            modelLog.setLogId(exe.getModelLogId());
+//        } else {
+//            // 其他地方调用模型，新建日志信息并insert
+//            modelLog.setLogId(IdUtil.createId());
+//        }
+//        modelLog.setConsumerId(exe.getConsumerInfos()[0].getConsumerId());
+//        modelLog.setConsumerSeqNo(exe.getConsumerInfos()[0].getConsumerSeqNo());
+//        modelLog.setFolderId(exe.getFolderId());
+//        modelLog.setRuleId(exe.getRuleId());
+//        modelLog.setMethodType(exe.getModelExecutionType().getCode());
+//        modelLog.setException(excep.toString());
+//
+//    }
 
     public ExecutorResponse executeRule(ExecutorRequest executorRequest) throws Exception {
+        // 记录异常信息
+//        StringBuffer exexp = new StringBuffer();
+//        // 用于记录模型相关的信息
+//        Map<String, String> map = new HashMap<>();
+
         String folderId = executorRequest.getFolderId();
         String ruleId = executorRequest.getRuleId();
         boolean isTest = executorRequest.isTest();
@@ -357,6 +382,9 @@ public class EngineManager {
 
         } catch (Exception e) {
             log.error("编译模型异常。" + e.getMessage(), e);
+//            exexp.append("模型编译异常：" + e.getMessage());
+//            map.put("returnCode","9999");
+//            saveModelLog(executorRequest, exexp, map);
             return ExecutorResponse.newFailedExecutorResponse("编译模型异常:" + e.getMessage());
         }
         try {

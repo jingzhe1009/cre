@@ -1,5 +1,10 @@
 package com.bonc.frame.entity.monitor;
 
+import java.util.Date;
+
+/**
+ * 模型执行日志表实例
+ */
 public class RuleLog {
     // 日志唯一标识
     private String logId;
@@ -12,9 +17,9 @@ public class RuleLog {
     // 命中的规则个数
     private String hitRuleNumber;
     // 执行开始时间
-    private String startTime;
+    private Date startTime;
     // 执行结束时间
-    private String endTime;
+    private Date endTime;
     // 输入数据
     private String inputData;
     // 输出数据
@@ -33,7 +38,7 @@ public class RuleLog {
     private String modelVersion;
     // 模型类型 1规则模型，2评分模型
     private String modelType;
-    // 调用方式
+    // 调用方式 1:测试  2:试算  3:A/B测试  4:离线任务  5:外部服务调用(ws接口)
     private String methodType;
     // 规则模型结果-0通过，1拒绝
     private String returnResult;
@@ -82,19 +87,19 @@ public class RuleLog {
         this.hitRuleNumber = hitRuleNumber;
     }
 
-    public String getStartTime() {
+    public Date getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(String startTime) {
+    public void setStartTime(Date startTime) {
         this.startTime = startTime;
     }
 
-    public String getEndTime() {
+    public Date getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(String endTime) {
+    public void setEndTime(Date endTime) {
         this.endTime = endTime;
     }
 
@@ -202,7 +207,7 @@ public class RuleLog {
         this.projectNo = projectNo;
     }
 
-    public RuleLog(String logId, String ruleId, String folderId, String state, String hitRuleNumber, String startTime, String endTime, String inputData, String outputData, String exception, String consumerId, String consumerSeqNo, int useTime, String returnCode, String modelVersion, String modelType, String methodType, String returnResult, String returnScore, String projectNo) {
+    public RuleLog(String logId, String ruleId, String folderId, String state, String hitRuleNumber, Date startTime, Date endTime, String inputData, String outputData, String exception, String consumerId, String consumerSeqNo, int useTime, String returnCode, String modelVersion, String modelType, String methodType, String returnResult, String returnScore, String projectNo) {
         this.logId = logId;
         this.ruleId = ruleId;
         this.folderId = folderId;

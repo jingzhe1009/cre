@@ -4,15 +4,18 @@ package com.bonc.frame.service.monitor;
 
 import com.bonc.frame.entity.monitor.DescResult;
 import com.bonc.frame.entity.monitor.MonitorParam;
+import com.bonc.frame.entity.monitor.RuleLog;
+import com.bonc.framework.rule.log.IRuleLog;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 
-public interface MonitorService {
+public interface MonitorService extends IRuleLog {
 
     Map<String, Object>getUseTime(@RequestBody MonitorParam monitorParam);
 
@@ -47,4 +50,19 @@ public interface MonitorService {
      * @return 详情信息
      */
     DescResult getRuleLogDesc(String logId);
+
+    /**
+     * 日志初步存储
+     * @param log 日志详情
+     */
+    void saveModelLog (RuleLog log);
+
+    /**
+     * 更新模型调用日志
+     * @param ruleLogId id
+     * @param start 开始时间
+     * @param msg 返回数据
+     * @param excep 异常数据
+     */
+    void saveEndTimeAndMsg(String ruleLogId,Date start, String msg, StringBuffer excep);
 }

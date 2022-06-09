@@ -118,7 +118,7 @@ public class MonitorController {
 	}
 
 	//日志详情
-	@RequestMapping(value = "/logDesc",method = RequestMethod.GET)
+	@RequestMapping(value = "/getLogDesc",method = RequestMethod.GET)
 	@ResponseBody
 	public Map<String, Object> logDesc(String logId) {
 		DescResult desc = monitorService.getRuleLogDesc(logId);
