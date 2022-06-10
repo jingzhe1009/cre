@@ -1695,7 +1695,6 @@ public class RuleDetailServiceImpl implements RuleDetailService {
             } else {
                 newRuleDetailWithBLOBs.setFolderId(ruleDetail.getFolderId());
             }
-
             Date currentDate = new Date();
             newRuleDetailWithBLOBs.setCreateDate(currentDate);
             newRuleDetailWithBLOBs.setCreatePerson(loginUserId);
