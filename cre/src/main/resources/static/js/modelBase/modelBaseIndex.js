@@ -201,6 +201,9 @@ var pageJumpObj = {
                     };
                     // 传递参数，合并对象
                     ruleClone.data = Object.assign({}, ruleClone.data, param);
+                    $('#ruleClone .modelGroupId label').text('').text('产品');
+                    $('#ruleClone #folderId').text('模型库');
+                    $('#ruleClone .folderId').hide();
                     // 打开弹出框
                     ruleClone.handleModelToggle(true);
                 } else {
