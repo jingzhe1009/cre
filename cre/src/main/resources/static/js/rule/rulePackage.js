@@ -283,6 +283,7 @@ function editRule ( ruleId, ruleName, folderId, isEdit ) {
     if ( folderId == null || folderId == '' ) {
         return;
     }
+    folderId = window.location.href.split('=')[1].split('&')[0]
     if ( isEdit === 1 ) { // 查看操作
         // 查看权限 authCheck
         $.ajax( {
@@ -411,6 +412,7 @@ function addRule () {
             success: function (data) {
                 if (data.status === 0) {
                     successMessager.show('保存成功');
+                    setTimeout( resetPage, 500 );
                 } else {
                     failedMessager.show(data.msg);
                 }
@@ -461,6 +463,13 @@ function initModelTable(){
             $("#modelTable td").css("text-align", "center");
         },
     });
+}
+// 返回按钮
+function goBack() {
+    var proUrl = $('#menusWrap li :contains("产品管理")').parent().attr('data')
+    var finalUrl = proUrl.substr(4)
+    var url = webpath + finalUrl + "&childOpen=c"
+    creCommon.loadHtml(url);
 }
 
 //接口 产品相关信息

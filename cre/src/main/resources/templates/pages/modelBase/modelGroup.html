@@ -26,10 +26,17 @@
                                 <!--<ul class="dropdown-menu pull-right channelNameList"></ul>-->
                                 <input data-col="channelId" type="text" class="form-control"
                                        placeholder="渠道名称">
-                                <label class="input-control-icon-right" data-toggle="dropdown">
+                                <label class="input-control-icon-right" onclick="modelGroupModal.showChannelList()">
                                     <i class="icon icon-caret-down "></i>
                                 </label>
-                                <ul class="dropdown-menu pull-right channelList"></ul>
+
+                                <div class="dropdown-menu pull-right channelDropDown">
+                                    <div class="input-group channelSelect">
+                                        <input type="text" class="form-control channelSearch" onkeydown="modelGroupModal.onKeyDown(event)"/>
+                                        <span class="input-group-addon" onclick="modelGroupModal.onKeyDown(event)"><i class="icon icon-search"></i></span>
+                                    </div >
+                                    <ul class="channelList"></ul>
+                                </div>
                             </div>
                             <div class="input-group date form-datetime" data-date=""
                                  data-date-format="dd MM yyyy - HH:ii:ss p" data-link-field="dtp_input1">
@@ -279,21 +286,21 @@
                     <div class="form-group">
                         <label class="col-xs-4 col-sm-4 col-md-4 col-lg-4"><i class="mustIcon">*</i>产品名称</label>
                         <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                            <input col-name="modelGroupName" type="text" class="form-control must"
+                            <input  id="modelGroupNameInput"  col-name="modelGroupName" type="text" class="form-control must"
                                    data-rule="产品名称:required;">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-xs-4 col-sm-4 col-md-4 col-lg-4"><i class="mustIcon">*</i>产品编码</label>
                         <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                            <input col-name="modelGroupCode" type="text" class="form-control must"
+                            <input  id="modelGroupCodeInput" col-name="modelGroupCode" type="text" class="form-control must"
                                    data-rule="产品编码:required;">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-xs-4 col-sm-4 col-md-4 col-lg-4">产品描述</label>
                         <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                            <textarea  col-name="modelGroupDesc" type="text" class="form-control"></textarea>
+                            <textarea id="modelGroupDescInput"  col-name="modelGroupDesc" class="form-control"></textarea>
                         </div>
                     </div>
                     <!--<div class="form-group">-->

@@ -685,6 +685,9 @@ var modelGroupModal = {
         $('#modelBaseGroupAlert form')[0].reset();
         $('#modelBaseGroupAlert .modal-footer button').css('display', 'none');
         $('#modelBaseGroupAlert .form-control').attr('disabled', false);
+        $('#modelGroupNameInput').attr('disabled', false);
+        $('#modelGroupCodeInput').attr('disabled', false);
+        $('#modelGroupDescInput').attr('disabled', false);
         if (handleType === 0) {
             $.ajax({
                 url: webpath + '/createCheck/check',
@@ -756,7 +759,7 @@ var modelGroupModal = {
         }
     },
     //接口 获取渠道下拉框选项
-    channelNameList: function () {
+    channelNameList: function (search) {
         $.ajax({
             url: webpath + '/choose/channelNameList',
             type: 'GET',
@@ -766,7 +769,11 @@ var modelGroupModal = {
                 if (data.status === 0) {
                     var htmlStr = '';
                     for (var i = 0; i < data.data.length; i++) {
-                        htmlStr += '<li channelId=\'' + data.data[i].channelId + '\' channelName=\'' + data.data[i].channelName + '-' + data.data[i].deptName + '\'>' + data.data[i].channelName+ '-' + data.data[i].deptName + '</li>';
+                        if(search && data.data[i].channelName.indexOf(search) >= 0) {
+                            htmlStr += '<li channelId=\'' + data.data[i].channelId + '\' channelName=\'' + data.data[i].channelName + '-' + data.data[i].deptName + '\'>' + data.data[i].channelName+ '-' + data.data[i].deptName + '</li>';
+                        } else if(search === undefined || search === '') {
+                            htmlStr += '<li channelId=\'' + data.data[i].channelId + '\' channelName=\'' + data.data[i].channelName + '-' + data.data[i].deptName + '\'>' + data.data[i].channelName+ '-' + data.data[i].deptName + '</li>';
+                        }
                     }
                     $('.channelList').empty().html(htmlStr);
                 } else {
@@ -776,13 +783,39 @@ var modelGroupModal = {
             complete: function () {
                 // 绑定事件
                 $('#modelBasePageContent .channelList>li').unbind('click').on('click', function () {
-                    $(this).parent().siblings('.form-control').val($(this).first().text());
+                    $(this).parent().parent().siblings('.form-control').val($(this).first().text());
+                    $('.channelDropDown').css("display", 'none')
                 });
             },
             error: function (data) {
                 failedMessager.show(data.msg);
             },
         });
+    },
+    // 渠道名称下拉框查询
+    onKeyDown: function (event) {
+        if(event.keyCode == '13' || event.type == 'click') {
+            var search = $('.channelSearch').val()
+            var data = []
+            $(".channelList li").each(function(){
+                data.push($(this).attr('channelName'))
+            })
+            modelGroupModal.channelNameList(search)
+            // data.filter(function (item) {
+            //     if(item.indexOf(search) >= 0) {
+            //         $(".channelList li[channelName=item]").remove()
+            //     }
+            // })
+        }
+    },
+    // 是否显示渠道下拉框
+    showChannelList:function() {
+        var isShow = $('.channelDropDown').css("display")
+        if(isShow == 'flex') {
+            $('.channelDropDown').css("display", 'none')
+        } else {
+            $('.channelDropDown').css("display", 'flex')
+        }
     },
     //弹窗 点击设置调用渠道时出现
     showChannel: function(modelGroupId){
@@ -810,6 +843,7 @@ var modelGroupModal = {
                             }
                         });
                         modelGroupModal.saveChannel(event.data.modelGroupId,channelIds);
+                        initModelBaseGroupTable();
                     });
                     //点击关闭
                     $('#closeChannel').unbind('click').on('click',function () {
@@ -918,9 +952,9 @@ var modelGroupModal = {
     // 保存组数据
     saveRuleSetGourp: function () {
         // 表单验证
-        if (!$('#modelBaseGroupAlert form').isValid()) {
-            return;
-        }
+        // if ($('#modelBaseGroupAlert form').isValid()) {
+        //     return;
+        // }
         var handleType = $('#modelBaseGroupAlert').attr('handleType'); // 0新增 1修改
         var urlStr = '';
         if (handleType == 0) {

@@ -1756,7 +1756,7 @@ var initFlowObj = {
         // insert[0场景下新建模型 1模型库模型第一版本 2模型库新增版本(无)]
         // update[3场景下 4模型库]
         // view[5场景下 6模型库]
-        if (pageType === '0' || pageType === '3' || pageType === '5') {
+        if (pageType === '0'  || pageType === '5') {
             sendObj['isPublic'] = '0';
             if (pageType === '0') {
                 sendObj["deptId"] = $.trim($('#deptId').val());
@@ -1769,7 +1769,7 @@ var initFlowObj = {
                 sendObj["systemName"] = $.trim($('#systemName').val());
                 sendObj["isFirst"] = '1';
             }
-        } else if (pageType === '1' || pageType === '2' || pageType === '4' || pageType === '6') {
+        } else if (pageType === '1' || pageType === '2'|| pageType === '3' || pageType === '4' || pageType === '6') {
             sendObj['isPublic'] = '1';
             if (pageType === '1') { // 模型库下第一版本携带组基本信息及其他头部信息
                 sendObj['modelGroupId'] = $('#modelGroupSel').attr('value'); // 模型库进入带groupId
@@ -1787,7 +1787,7 @@ var initFlowObj = {
                     failedMessager.show('模型组无效！');
                     return;
                 }
-            }else if(pageType === '4') {
+            }else if(pageType === '3'|| pageType === '4') {
                 var isCommit = '1';
                 var htmlStr = '<p class="saveAskTxt">是否生成为新的版本？</p>';
                 htmlStr += '<div class="modal-footer">';

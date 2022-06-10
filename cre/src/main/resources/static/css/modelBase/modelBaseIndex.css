@@ -89,7 +89,6 @@
     position: absolute;
 }
 
-/*2022/04/18 陈芳新增 设置调用渠道弹窗中表格的样式*/
 #channelTable_wrapper .dataTables_scrollHeadInner{
     width: 100% !important;
 }
@@ -118,4 +117,16 @@
 }
 .channelList li:hover{
     background-color: #02babc;
+}
+.dropdown-menu {
+    display: none;
+    flex-direction: column;
+}
+.dropdown-menu .channelSelect {
+    width: 95% !important;
+    margin-right: auto !important;
+    margin-left: auto !important;
+}
+.channelList {
+    overflow: scroll;
 }
