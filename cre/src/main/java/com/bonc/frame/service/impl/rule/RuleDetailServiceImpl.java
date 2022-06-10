@@ -1689,6 +1689,13 @@ public class RuleDetailServiceImpl implements RuleDetailService {
             newRuleDetailWithBLOBs.setVersion("1.0");//克隆模型版本
             newRuleDetailWithBLOBs.setIsHeader("0");
 
+            if (ruleDetail.getFolderId() == null || ruleDetail.getFolderId().equals("")) {
+                // 默认folderId-对应模型组场景
+                newRuleDetailWithBLOBs.setFolderId("0000000000000000000000000000001");
+            } else {
+                newRuleDetailWithBLOBs.setFolderId(ruleDetail.getFolderId());
+            }
+
             Date currentDate = new Date();
             newRuleDetailWithBLOBs.setCreateDate(currentDate);
             newRuleDetailWithBLOBs.setCreatePerson(loginUserId);

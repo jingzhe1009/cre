@@ -154,9 +154,9 @@ public class MonitorServiceImpl implements MonitorService {
                     continue;
                 }
                 Object succ = result.get(0).get("AVERAGEUSETIME");
-                int use = Integer.parseInt(succ.toString());
+                double use = Double.parseDouble(succ.toString());
                 // 统计到集合中
-                useTimeList.add(Integer.toString(use));
+                useTimeList.add(Double.toString(use));
             }
             map.put("useTime",useTimeList.toArray());
             return map;
@@ -285,14 +285,14 @@ public class MonitorServiceImpl implements MonitorService {
                 continue;
             }
             Object succ = result.get(0).get("SUCCESSCOUNT");
-            int su = Integer.parseInt(succ.toString());
+            double su = Double.parseDouble(succ.toString());
             Object fail = result.get(0).get("FAILCOUNT");
-            int fa = Integer.parseInt(fail.toString());
-            int total= su+fa;
+            double fa = Double.parseDouble(fail.toString());
+            double total= su+fa;
             // 统计到集合中
-            allList.add(Integer.toString(total));
-            successList.add(Integer.toString(su));
-            failList.add(Integer.toString(fa));
+            allList.add(Double.toString(total));
+            successList.add(Double.toString(su));
+            failList.add(Double.toString(fa));
         }
         map.put("allData", allList.toArray());
         map.put("failData", failList.toArray());
@@ -440,12 +440,12 @@ public class MonitorServiceImpl implements MonitorService {
                 continue;
             }
             Object succ = result.get(0).get("SUCCESSCOUNT");
-            int su = Integer.parseInt(succ.toString());
+            double su = Double.parseDouble(succ.toString());
             Object fail = result.get(0).get("FAILCOUNT");
-            int fa = Integer.parseInt(fail.toString());
+            double fa = Double.parseDouble(fail.toString());
             // 统计到集合中
-            successList.add(Integer.toString(su));
-            failList.add(Integer.toString(fa));
+            successList.add(Double.toString(su));
+            failList.add(Double.toString(fa));
         }
         map.put("failData", failList.toArray());
         map.put("successData", successList.toArray());
@@ -516,9 +516,9 @@ public class MonitorServiceImpl implements MonitorService {
                 continue;
             }
             Object succ = result.get(0).get("SCORECOUNT");
-            int su = Integer.parseInt(succ.toString());
+            double su = Double.parseDouble(succ.toString());
             // 统计到集合中
-            scoreHitList.add(Integer.toString(su));
+            scoreHitList.add(Double.toString(su));
         }
         map.put("scoreData", scoreHitList.toArray());
         return map;
