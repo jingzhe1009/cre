@@ -385,6 +385,7 @@
         SUM(MODEL_FAIL_COUNT) as failCount
         from CRE_RULE_LOG_HOUR
         where 1=1
+        and MODEL_TYPE = '1'
         <if test="modelId!=null">
             and MODEL_FID = #{modelId,jdbcType=VARCHAR}
         </if>
@@ -397,6 +398,7 @@
         SUM(MODEL_FAIL_COUNT) as failCount
         from CRE_RULE_LOG_DAY
         where 1=1
+        and MODEL_TYPE = '1'
         <if test="modelId!=null">
             and MODEL_FID = #{modelId,jdbcType=VARCHAR}
         </if>
@@ -409,6 +411,7 @@
         SUM(MODEL_FAIL_COUNT) as failCount
         from CRE_RULE_LOG_MONTH
         where 1=1
+        and MODEL_TYPE = '1'
         <if test="modelId!=null">
             and MODEL_FID = #{modelId,jdbcType=VARCHAR}
         </if>
@@ -421,6 +424,7 @@
         FROM
         CRE_RULE_LOG_HOUR
         where 1=1
+        and MODEL_TYPE = '0'
         <if test="modelId!=null">
             and MODEL_FID = #{modelId,jdbcType=VARCHAR}
         </if>
@@ -433,6 +437,7 @@
         FROM
         CRE_RULE_LOG_DAY
         where 1=1
+        and MODEL_TYPE = '0'
         <if test="modelId!=null">
             and MODEL_FID = #{modelId,jdbcType=VARCHAR}
         </if>
@@ -445,6 +450,7 @@
         FROM
         CRE_RULE_LOG_MONTH
         where 1=1
+        and MODEL_TYPE = '0'
         <if test="modelId!=null">
             and MODEL_FID = #{modelId,jdbcType=VARCHAR}
         </if>

@@ -93,7 +93,7 @@ public class ModelBaseController {
         return modelBaseService.createModelGroup(modelGroup, loginUserId);
     }
 
-    @PermissionsRequires(value = "/pub/modelGroup/update?modelGroupId", resourceType = ResourceType.DATA_PUB_MODEL_GROUP)
+    // @PermissionsRequires(value = "/pub/modelGroup/update", resourceType = ResourceType.DATA_PUB_MODEL_GROUP)
     @RequestMapping("/group/update")
     @ResponseBody
     public ResponseResult updateModelGroup(ModelGroupDto modelGroup, HttpServletRequest request) {
@@ -101,7 +101,7 @@ public class ModelBaseController {
         return modelBaseService.updateModelGroup(modelGroup, loginUserId);
     }
 
-    @PermissionsRequires(value = "/pub/modelGroup/delete?modelGroupId", resourceType = ResourceType.DATA_PUB_MODEL_GROUP)
+    //@PermissionsRequires(value = "/pub/modelGroup/delete?modelGroupId", resourceType = ResourceType.DATA_PUB_MODEL_GROUP)
     @RequestMapping("/group/delete")
     @ResponseBody
     public ResponseResult deleteRuleSetGroup(String modelGroupId) {

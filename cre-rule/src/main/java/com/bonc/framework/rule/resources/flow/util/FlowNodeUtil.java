@@ -85,28 +85,31 @@ public class FlowNodeUtil {
                         // not reach
                         throw new UnsupportedOperationException("路径的节点不能为空");
                     }
-                    // 复合节点
-                    CompoundFlowNode compoundFlowNode = new CompoundFlowNode();
-                    compoundFlowNode.setHead(grandSon);
-                    while (true) {
-                        List<FlowNode> grandSonChildFlowNodes = grandSon.getChildFlowNodes();
-                        if (CollectionUtils.isEmpty(grandSonChildFlowNodes)) {
-                            break;
+                    if (!(grandSon instanceof ConvergeFlowNode) &&
+                            !(grandSon instanceof DivergeFlowNode)) {
+                        // 复合节点
+                        CompoundFlowNode compoundFlowNode = new CompoundFlowNode();
+                        compoundFlowNode.setHead(grandSon);
+                        while (true) {
+                            List<FlowNode> grandSonChildFlowNodes = grandSon.getChildFlowNodes();
+                            if (CollectionUtils.isEmpty(grandSonChildFlowNodes)) {
+                                break;
+                            }
+                            // 如果下一个节点是分支或聚合节点
+                            FlowNode nextNode = grandSonChildFlowNodes.get(0);
+                            if (nextNode instanceof ConvergeFlowNode ||
+                                    nextNode instanceof DivergeFlowNode) {
+                                break;
+                            }
+                            grandSon = nextNode;
                         }
-                        // 如果下一个节点是分支或聚合节点
-                        FlowNode nextNode = grandSonChildFlowNodes.get(0);
-                        if (nextNode instanceof ConvergeFlowNode ||
-                                nextNode instanceof DivergeFlowNode) {
-                            break;
+                        compoundFlowNode.setTail(grandSon);
+                        if (compoundFlowNode.isEmpty()) {
+                            // not reach
+                            throw new UnsupportedOperationException("分支后的节点不能为空");
                         }
-                        grandSon = nextNode;
+                        childNode.setChildFlowNodes(ImmutableList.<FlowNode>of(compoundFlowNode));
                     }
-                    compoundFlowNode.setTail(grandSon);
-                    if (compoundFlowNode.isEmpty()) {
-                        // not reach
-                        throw new UnsupportedOperationException("分支后的节点不能为空");
-                    }
-                    childNode.setChildFlowNodes(ImmutableList.<FlowNode>of(compoundFlowNode));
                 } // end for
             }
 

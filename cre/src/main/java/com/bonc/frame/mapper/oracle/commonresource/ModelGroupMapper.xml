@@ -70,7 +70,7 @@
     <!-- 检查当前组是否被使用 -->
     <select id="countGroupUsed" parameterType="java.lang.String" resultType="int">
         SELECT COUNT(1) FROM CRE_RULE_DETAIL
-        WHERE MODEL_GROUP_ID = #{modelGroupId,jdbcType=VARCHAR} AND IS_DEL = '0'
+        WHERE MODEL_GROUP_ID = #{modelGroupId,jdbcType=VARCHAR} AND RULE_STATUS = '1'
     </select>
 
     <select id="getByGroupName" parameterType="map" resultMap="BaseResultMap">
@@ -236,6 +236,10 @@
         delete from CRE_PUB_MODEL_GROUP_CHANNEL
         where MODEL_GROUP_ID = #{modelGroupId,jdbcType=VARCHAR}
     </delete>
+    <select id="getConnectChannelID" parameterType="java.lang.String" resultType="java.lang.String">
+        select CHANNEL_ID from CRE.CRE_PUB_MODEL_GROUP_CHANNEL
+        where MODEL_GROUP_ID = #{modelGroupId,jdbcType=VARCHAR}
+    </select>
 
     <select id="isConnected" parameterType="map" resultMap="GroupChannelMap">
         select ID, MODEL_GROUP_ID, CHANNEL_ID
