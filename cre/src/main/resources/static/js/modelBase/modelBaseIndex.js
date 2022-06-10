@@ -952,9 +952,9 @@ var modelGroupModal = {
     // 保存组数据
     saveRuleSetGourp: function () {
         // 表单验证
-        // if ($('#modelBaseGroupAlert form').isValid()) {
-        //     return;
-        // }
+        if (!$('#modelBaseGroupAlert form').isValid()) {
+            return;
+        }
         var handleType = $('#modelBaseGroupAlert').attr('handleType'); // 0新增 1修改
         var urlStr = '';
         if (handleType == 0) {

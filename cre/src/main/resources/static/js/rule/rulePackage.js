@@ -263,6 +263,9 @@ function cloneRule ( ruleId, ruleName, ruleDesc, ruleType, isPublic, modelGroupI
                 };
                 // 传递参数，合并对象
                 ruleClone.data = Object.assign( {}, ruleClone.data, param );
+                $('#ruleClone .modelGroupId label').text('').text('产品组');
+                $('#ruleClone #folderId').text('模型库');
+                $('#ruleClone .folderId').hide();
                 // 打开弹出框
                 ruleClone.handleModelToggle( true );
             } else {
@@ -701,10 +704,10 @@ $( function () {
     } );
 
     // 模型克隆初始化
-    var param = {
-        folderId: folderId
-    };
-    ruleClone.init( param );
+    // var param = {
+    //     folderId: folderId
+    // };
+    ruleClone.init();
     // 克隆模态框事件绑定
     ruleClone.event.onSuccess = function () {
         window.location.reload();
