@@ -124,7 +124,7 @@ public class ModelOperateLogServiceImpl implements ModelOperateLogService {
             RuleFolder newFolder = ruleFolderService.getRuleFolderDetail(newfolderId, null);
 
             modelOperate.setNewFolderId(newfolderId);
-            modelOperate.setNewFolderName(newFolder.getFolderName());
+//            modelOperate.setNewFolderName(newFolder.getFolderName());
             modelOperate.setNewRuleName(newRuleDetailWithBLOBs.getRuleName());
             modelOperate.setNewModelName(newRuleDetailWithBLOBs.getModuleName());
             modelOperate.setNewModelId(newRuleDetailWithBLOBs.getRuleId());

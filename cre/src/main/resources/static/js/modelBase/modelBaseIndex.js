@@ -1010,7 +1010,7 @@ var modelGroupModal = {
                 dataType: "json",
                 data: {'modelGroupId': groupId},
                 success: function (data) {
-                    debugger;
+                    //debugger;
                     if (data.status === 0) {
                         confirmAlert.show('删除产品后该产品下的模型将移动到其他分组,是否继续？', function () {
                             $.ajax({

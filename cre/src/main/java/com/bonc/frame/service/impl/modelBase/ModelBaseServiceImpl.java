@@ -268,7 +268,7 @@ public class ModelBaseServiceImpl implements ModelBaseService {
         }
 
         if (isGroupUsed(modelGroupId)) {
-            return ResponseResult.createFailInfo("当前模型组正在使用中，不能删除");
+            return ResponseResult.createFailInfo("当前产品有模型正在使用中，不能删除");
         }
         // 将被删除的产品所关联的模型的对应产品换成默认产品：其他
         daoHelper.update(_MODEL_GROUP_MAPPER + "deleteByUpdate", modelGroupId);
@@ -284,9 +284,16 @@ public class ModelBaseServiceImpl implements ModelBaseService {
      */
     @Override
     public ResponseResult groupAddChannel(String modelGroupId, ModelChanIdDto dto) {
+        // 关联渠道id没有传进来，重新获取一次
+        List<String> idList;
+        if (null == dto||CollectionUtil.isEmpty(dto.getIdList())) {
+            idList = daoHelper.queryForList(_MODEL_GROUP_MAPPER + "getConnectChannelID",modelGroupId);
+        } else {
+            idList = dto.getIdList();
+        }
         // 先清除原来此产品关联的，再保存新的
         daoHelper.delete(_MODEL_GROUP_MAPPER + "connectDelete", modelGroupId);
-        for (String chanId : dto.getIdList()) {
+        for (String chanId : idList) {
             String id = IdUtil.createId();
             ModelGroupChannel mo = new ModelGroupChannel(id, chanId, modelGroupId);
             daoHelper.insert(_MODEL_GROUP_MAPPER + "groupConnectChannel", mo);
