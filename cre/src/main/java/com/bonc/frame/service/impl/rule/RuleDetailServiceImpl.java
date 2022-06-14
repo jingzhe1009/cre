@@ -24,6 +24,8 @@ import com.bonc.frame.security.ResourceType;
 import com.bonc.frame.service.aBTest.ABTestService;
 import com.bonc.frame.service.api.ApiService;
 import com.bonc.frame.service.auth.AuthorityService;
+import com.bonc.frame.service.auth.DeptService;
+import com.bonc.frame.service.auth.RoleService;
 import com.bonc.frame.service.kpi.KpiService;
 import com.bonc.frame.service.reference.RuleReferenceService;
 import com.bonc.frame.service.rule.ModelOperateLogService;
@@ -114,6 +116,12 @@ public class RuleDetailServiceImpl implements RuleDetailService {
 
     @Autowired
     private ABTestService abTestService;
+
+    @Autowired
+    private RoleService roleService;
+
+    @Autowired
+    private DeptService deptService;
 
     private final String _MYBITSID_PREFIX = "com.bonc.frame.dao.rule.RuleDetailMapper.";
     private final String _MYBITSID_MODEL_GROUP = "com.bonc.frame.mapper.resource.ModelGroupMapper.";
@@ -1093,7 +1101,30 @@ public class RuleDetailServiceImpl implements RuleDetailService {
                                              @Nullable String platformUpdateUserJobNumber,
                                              @Nullable String startDate,
                                              @Nullable String endDate,
-                                             String start, String length) {
+                                             String start, String length,String logUserId) {
+        // 验证登录账号的角色与渠道权限
+        // 验证是否全权
+        boolean b = roleService.checkAuthorityIsAll(logUserId);
+        String channelId;
+        if (b) {
+            // 全权
+            channelId = null;
+        } else {
+            // 非全权只能看自己渠道关联的产品列表
+            channelId = deptService.getChannelIdByUserId(logUserId);
+        }
+        // 验证是否有角色，没有角色不返回数据
+        String roleId = (String) daoHelper.queryOne
+                ("com.bonc.frame.mapper.auth.RoleMapper.getRoleIdByUserId", logUserId);
+        if (null == roleId) {
+            HashMap<String, Object> re = new HashMap<String, Object>();
+            re.put("data", null);
+            re.put("recordsFiltered", 0);
+            re.put("recordsTotal", 0);
+            re.put("total", 0);
+            return re;
+        }
+
         Map<String, String> param = new HashMap<>(5);
         param.put("ruleName", ruleName);
         param.put("moduleName", moduleName);
@@ -1114,6 +1145,7 @@ public class RuleDetailServiceImpl implements RuleDetailService {
         param.put("systemName", systemName);
         param.put("platformCreateUserJobNumber", platformCreateUserJobNumber);
         param.put("platformUpdateUserJobNumber", platformUpdateUserJobNumber);
+        param.put("channelId", channelId);
         return daoHelper.queryForPageList(_MYBITSID_PREFIX +
                 "getHeaderList", param, start, length);
     }
@@ -1174,7 +1206,13 @@ public class RuleDetailServiceImpl implements RuleDetailService {
 
         RuleDetailWithBLOBs ruleDetailHeader = new RuleDetailWithBLOBs();//用来存模型的头信息
         final String uuid = IdUtil.createId();
-        ruleDetailHeader.setFolderId(ruleDetailWithBLOBs.getFolderId());
+        if (ruleDetailWithBLOBs.getFolderId() == null || ruleDetailWithBLOBs.getFolderId().equals("")) {
+            // 默认folderId-对应模型组场景-新建模型可在模型管理展示
+            ruleDetailHeader.setFolderId("0000000000000000000000000000001");
+
+        } else {
+            ruleDetailHeader.setFolderId(ruleDetailWithBLOBs.getFolderId());
+        }
         ruleDetailWithBLOBs.setRuleName(uuid);
         ruleDetailHeader.setRuleName(uuid);
         ruleDetailHeader.setVersionDesc(ruleDetailWithBLOBs.getVersionDesc());
@@ -1191,7 +1229,8 @@ public class RuleDetailServiceImpl implements RuleDetailService {
         ruleDetailHeader.setProductName(ruleDetailWithBLOBs.getProductName());
         ruleDetailHeader.setSystemCode(ruleDetailWithBLOBs.getSystemCode());
         ruleDetailHeader.setSystemName(ruleDetailWithBLOBs.getSystemName());
-        ruleDetailHeader.setIsPublic(ruleDetailWithBLOBs.getIsPublic());//chang
+//        ruleDetailHeader.setIsPublic(ruleDetailWithBLOBs.getIsPublic());//chang
+        ruleDetailHeader.setIsPublic("1");
         ruleDetailHeader.setPlatformCreateUserJobNumber(ControllerUtil.getRealUserAccount());
 
         Date currentDate = new Date();
@@ -1668,6 +1707,8 @@ public class RuleDetailServiceImpl implements RuleDetailService {
         RuleDetailWithBLOBs ruleDetailWithBLOBs = new RuleDetailWithBLOBs();//用来存模型的头信息
         RuleDetailWithBLOBs newRuleDetailWithBLOBs = null;
         RuleDetailWithBLOBs oldRule = null;
+        // 克隆的模型要出现在模型管理中
+        ruleDetail.setIsPublic("1");
         if (!checkModuleNameIsExist(ruleDetail.getModuleName(), null)) {
             try {
                 org.springframework.beans.BeanUtils.copyProperties(ruleDetail, ruleDetailWithBLOBs);
@@ -1688,6 +1729,8 @@ public class RuleDetailServiceImpl implements RuleDetailService {
             newRuleDetailWithBLOBs.setIsDel(ConstantUtil.IS_DEL_NDEL);
             newRuleDetailWithBLOBs.setVersion("1.0");//克隆模型版本
             newRuleDetailWithBLOBs.setIsHeader("0");
+//            // 克隆出来的要放到模型管理中
+            newRuleDetailWithBLOBs.setIsPublic("1");
 
             if (ruleDetail.getFolderId() == null || ruleDetail.getFolderId().equals("")) {
                 // 默认folderId-对应模型组场景
@@ -1747,13 +1790,22 @@ public class RuleDetailServiceImpl implements RuleDetailService {
                                             String isCommit) throws Exception {
         String oldRuleId = ruleDetail.getRuleId();
         RuleDetailWithBLOBs ruleDetailWithBLOBs = mergeHeaderInfo(ruleDetail);
+        // 新增模型展示到模型管理中
+//        ruleDetailWithBLOBs.setIsPublic("1");
         ruleDetailWithBLOBs.setUpdatePerson(userId);
-        String version = generateVersion(ruleDetailWithBLOBs.getRuleName(), true, false);
+        String version;
         if (isCommit.equals("1")) {
             // 修改当前版本
-            initDetailAndAuth(ruleDetailWithBLOBs, userId, data, version, "updateByPrimaryKeyForPublish", ConstantUtil.RULE_STATUS_READY);
+            version = ruleDetail.getVersion();
+            RuleDetailWithBLOBs updateBlob = new RuleDetailWithBLOBs();
+            org.springframework.beans.BeanUtils.copyProperties(ruleDetail,updateBlob);
+            updateBlob.setRuleContent(data);
+            updateBlob.setUpdatePerson(userId);
+            updateBlob.setUpdateDate(new Date());
+            daoHelper.update(_RULE_DETAIL_MAPPER + "updateByPrimaryKeySelective", updateBlob);
         } else {
             // 提交生成新版本
+            version = generateVersion(ruleDetailWithBLOBs.getRuleName(), true, false);
             initDetailAndAuth(ruleDetailWithBLOBs, userId, data, version, "insertSelective", ConstantUtil.RULE_STATUS_READY);
         }
         Map result = afterLock(oldRuleId, data, version, ruleDetailWithBLOBs, ModelOperateLog.COMMIT_MODEL_TYPE, false);

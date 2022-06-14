@@ -27,6 +27,8 @@ public class ModelGroupDto extends ModelGroup {
         }
         if (dto.getModelGroupDesc() != null && !dto.getModelGroupDesc().isEmpty()) {
             mg.setModelGroupDesc(dto.getModelGroupDesc());
+        }else{
+            mg.setModelGroupDesc("");
         }
         if (dto.getCreatePerson() != null) {
             mg.setCreatePerson(dto.getCreatePerson());

@@ -1290,7 +1290,13 @@ public class AuthorityServiceImpl implements AuthorityService {
         final List<String> needDelAuthorities = grantAuthRequest.getNeedDelAuthorities();
         final List<Authority> needInsertAuthorities = grantAuthRequest.getNeedInsertAuthorities();
         final List<Authority> needUpdateAuthorities = grantAuthRequest.getNeedUpdateAuthorities();
-        return grant(needDelAuthorities, needInsertAuthorities, needUpdateAuthorities, currentUser, roleId, resourceTypeId, isAllAuth);
+        List<String> needDelAllAuths = grantAuthRequest.getNeedDelAllAuths();
+        List<String> needUpdateAllAuths = grantAuthRequest.getNeedUpdateAllAuths();
+        return grant(needDelAuthorities, needInsertAuthorities,
+                needUpdateAuthorities, currentUser, roleId,
+                resourceTypeId, isAllAuth,
+                needDelAllAuths,needUpdateAllAuths
+        );
     }
 
 
@@ -1348,7 +1354,9 @@ public class AuthorityServiceImpl implements AuthorityService {
                                 List<Authority> needUpdateAuthorities,
                                 String currentUser,
                                 String roleId,
-                                String resourceTypeId, String isAllAuth) {
+                                String resourceTypeId, String isAllAuth,
+                                List<String> needDelAllAuth,
+                                List<String> needUpdateAllAuths) {
         final String subjectId = subjectService.selectByRoleId(roleId);
         if (StringUtils.isBlank(subjectId)) {
             log.warn("授权失败，角色的主体id不存在");
@@ -1376,6 +1384,11 @@ public class AuthorityServiceImpl implements AuthorityService {
         if (!CollectionUtil.isEmpty(needUpdateAuthorities)) {
             upsertBatch(needUpdateAuthorities, currentUser, subjectId, resourceTypeId);
         }
+
+        // 模块全量数据权限设置
+        // 获取参数为选择的和没选择的，将该类型的全部资源遍历出来，
+        // 结合对应按钮，保存相应权限，没选择的同理删除权限即可
+
         return ResponseResult.createSuccessInfo();
     }
 
