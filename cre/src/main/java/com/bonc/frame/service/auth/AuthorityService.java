@@ -239,7 +239,9 @@ public interface AuthorityService {
                          List<Authority> needUpdateAuthorities,
                          String currentUser,
                          String roleId,
-                         String resourceTypeId , String isAllAuth);
+                         String resourceTypeId , String isAllAuth,
+                         List<String> needDelAllAuth,
+                         List<String> needUpdateAllAuths);
 
     ResponseResult grantMenuAndButton(List<Authority> authorities, String currentUser,
                                       String roleId , String isAllAuth);

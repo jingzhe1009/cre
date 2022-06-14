@@ -122,7 +122,7 @@ var kpiModal = {
     },
     // 展开指标内容
     showKpi: function (handleType, kpiId, kpiGroupId) {
-        //$('#editKpi').modal({'show': 'center', "backdrop": "static"});
+        $('#editKpi').modal({'show': 'center', "backdrop": "static"});
         // handleType: 0新增 1修改 2查看
         kpiModal.data.handleType = handleType;
         $('#kpiDefContentWarp').removeAttr('kpiId').attr('handleType', handleType);

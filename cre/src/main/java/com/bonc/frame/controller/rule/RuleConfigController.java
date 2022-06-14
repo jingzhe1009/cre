@@ -481,9 +481,13 @@ public class RuleConfigController {
                                              @Nullable String platformUpdateUserJobNumber,
                                              @Nullable String startDate,
                                              @Nullable String endDate,
-                                             String start, String length) {
-        return ruleDetailService.getHeaderList(ruleName, moduleName, ruleType, "1", null, null, modelGroupName,
-                deptId, deptName, partnerId, partnerName, productCode, productName, systemCode, systemName, platformCreateUserJobNumber, platformUpdateUserJobNumber, startDate, endDate, start, length);
+                                             String start, String length,HttpServletRequest request) {
+        String logUserId = ControllerUtil.getLoginUserId(request);
+        return ruleDetailService.getHeaderList(ruleName, moduleName, ruleType, "1",
+                null, null, modelGroupName,
+                deptId, deptName, partnerId, partnerName, productCode,
+                productName, systemCode, systemName, platformCreateUserJobNumber,
+                platformUpdateUserJobNumber, startDate, endDate, start, length,logUserId);
     }
 
     @ApiOperation("创建模型头信息及新版本")

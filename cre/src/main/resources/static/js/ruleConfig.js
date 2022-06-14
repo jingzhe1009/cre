@@ -1751,6 +1751,7 @@ var initFlowObj = {
             "optMode": optMode,
             "modelGroupId": folderId,
             "isFirst": 0,
+            "version": version,
         };
 
         // insert[0场景下新建模型 1模型库模型第一版本 2模型库新增版本(无)]
@@ -1826,6 +1827,7 @@ var initFlowObj = {
                 $('.oldVersion').unbind('click').on('click',{'sendObj':sendObj},function(e){
                     var sendObj = e.data.sendObj;
                     sendObj.isCommit = '1';
+                    // sendObj.verson = version;
                     $('#triggerModal').modal('hide');
                     $.ajax({
                         url: webpath + '/rule/version/commit',
@@ -1837,7 +1839,7 @@ var initFlowObj = {
                             if (data.status === 0) {
                                 initFlowObj.saveRuleSuccess = true;
                                 initFlowObj.jumpFlag = true;
-                                var message = '成功修改了版本';
+                                var message = '成功修改了当前版本';
                                 successMessager.show(message);
                                 $('#editRuleName').modal('hide');
                                 var url = webpath + "/rule/updateRule?ruleId=" + data.data.ruleId + "&folderId=" + folderId + "&childOpen=" + flagName + "&pageType=" + newPageType;

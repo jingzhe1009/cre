@@ -27,6 +27,17 @@ public class GrantAuthRequest {
 
     private List<String> needDelEntityAuths;
 
+    // 设置全量数据的权限（已勾选的）
+    private List<String> needUpdateAllAuths;
+
+    // 设置全量数据的权限（未勾选的）
+    private List<String> needDelAllAuths;
+
+    private String resourceType;
+
+    public GrantAuthRequest() {
+    }
+
     public String getRoleId() {
         return roleId;
     }
@@ -91,18 +102,35 @@ public class GrantAuthRequest {
         this.needDelEntityAuths = needDelEntityAuths;
     }
 
+    public List<String> getNeedUpdateAllAuths() {
+        return needUpdateAllAuths;
+    }
+
+    public void setNeedUpdateAllAuths(List<String> needUpdateAllAuths) {
+        this.needUpdateAllAuths = needUpdateAllAuths;
+    }
+
+    public List<String> getNeedDelAllAuths() {
+        return needDelAllAuths;
+    }
+
+    public void setNeedDelAllAuths(List<String> needDelAllAuths) {
+        this.needDelAllAuths = needDelAllAuths;
+    }
+
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("GrantAuthRequest{");
-        sb.append("roleId='").append(roleId).append('\'');
-        sb.append(", isAllAuth='").append(isAllAuth).append('\'');
-        sb.append(", needInsertAuthorities=").append(needInsertAuthorities);
-        sb.append(", needUpdateAuthorities=").append(needUpdateAuthorities);
-        sb.append(", needDelAuthorities=").append(needDelAuthorities);
-        sb.append(", needInsertEntityAuths=").append(needInsertEntityAuths);
-        sb.append(", needUpdateEntityAuths=").append(needUpdateEntityAuths);
-        sb.append(", needDelEntityAuths=").append(needDelEntityAuths);
-        sb.append('}');
-        return sb.toString();
+        return "GrantAuthRequest{" +
+                "roleId='" + roleId + '\'' +
+                ", isAllAuth='" + isAllAuth + '\'' +
+                ", needInsertAuthorities=" + needInsertAuthorities +
+                ", needUpdateAuthorities=" + needUpdateAuthorities +
+                ", needDelAuthorities=" + needDelAuthorities +
+                ", needInsertEntityAuths=" + needInsertEntityAuths +
+                ", needUpdateEntityAuths=" + needUpdateEntityAuths +
+                ", needDelEntityAuths=" + needDelEntityAuths +
+                ", needUpdateAllAuths=" + needUpdateAllAuths +
+                ", needDelAllAuths=" + needDelAllAuths +
+                '}';
     }
 }

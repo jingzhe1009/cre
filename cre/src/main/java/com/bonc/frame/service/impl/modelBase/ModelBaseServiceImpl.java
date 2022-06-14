@@ -244,7 +244,7 @@ public class ModelBaseServiceImpl implements ModelBaseService {
         modelGroup.setUpdatePerson(userId);
         daoHelper.update(_MODEL_GROUP_MAPPER + "updateByPrimaryKeySelective", modelGroup);
         // 更新关联渠道数据
-        this.groupAddChannel(modelGroup.getModelGroupId(), dto.getChannelList());
+//        this.groupAddChannel(modelGroup.getModelGroupId(), dto.getChannelList());
         return ResponseResult.createSuccessInfo();
     }
 
@@ -287,7 +287,10 @@ public class ModelBaseServiceImpl implements ModelBaseService {
         // 关联渠道id没有传进来，重新获取一次
         List<String> idList;
         if (null == dto||CollectionUtil.isEmpty(dto.getIdList())) {
-            idList = daoHelper.queryForList(_MODEL_GROUP_MAPPER + "getConnectChannelID",modelGroupId);
+//            idList = daoHelper.queryForList(_MODEL_GROUP_MAPPER + "getConnectChannelID",modelGroupId);
+            // 如果是清空管理渠道，直接清除关联数据
+            daoHelper.delete(_MODEL_GROUP_MAPPER + "connectDelete", modelGroupId);
+            return ResponseResult.createSuccessInfo("success");
         } else {
             idList = dto.getIdList();
         }

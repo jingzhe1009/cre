@@ -258,7 +258,7 @@ public interface RuleDetailService {
                                       @Nullable String platformUpdateUserJobNumber,
                                       @Nullable String startDate,
                                       @Nullable String endDate,
-                                      String start, String length);
+                                      String start, String length,String logUserId);
 
     List<RuleDetailHeader> getHeaderListByModelGroupId(String modelGroupId);
 

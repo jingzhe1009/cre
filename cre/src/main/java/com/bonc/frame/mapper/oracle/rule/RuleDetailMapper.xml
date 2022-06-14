@@ -1178,7 +1178,12 @@
         WHERE 1=1
         <if test="modelGroupName != null">
             <bind name="pattern2" value="'%' + _parameter.modelGroupName + '%'"/>
-            AND MODEL_GROUP_NAME like #{pattern2}
+            AND b.MODEL_GROUP_NAME like #{pattern2}
+        </if>
+        <if test="channelId != null and '' != channelId">
+            AND a.MODEL_GROUP_ID in
+            (select MODEL_GROUP_ID from CRE.CRE_PUB_MODEL_GROUP_CHANNEL
+            where CHANNEL_ID = #{channelId,jdbcType=VARCHAR} )
         </if>
         ORDER BY a.CREATE_DATE DESC
     </select>
@@ -1307,7 +1312,7 @@
             <if test="moduleName != null and '' != moduleName">
                 MODULE_NAME = #{moduleName,jdbcType=VARCHAR},
             </if>
-            <if test="ruleDesc != null and '' != ruleDesc">
+            <if test="ruleDesc != null">
                 RULE_DESC = #{ruleDesc,jdbcType=VARCHAR},
             </if>
             <if test="ruleType != null and '' != ruleType">
