@@ -161,7 +161,6 @@ var kpiModal = {
                 data: {'kpiId': kpiId},
                 dataType: "json",
                 success: function (data) {
-                    debugger;
                     if (data.status === 0) {
                         // $('#detailTitle').text('>指标定义');
                         $('#editKpi .modal-footer .notView button').css('display', 'inline-block');

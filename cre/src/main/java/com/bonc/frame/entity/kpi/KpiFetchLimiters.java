@@ -31,7 +31,7 @@ public class KpiFetchLimiters implements Serializable, Cloneable {
     private String variableTypeId;
 
     /**
-     * 取数类型：0，数据源；1，接口
+     * 取数类型：0，数据源；1，接口 2.输入参数
      */
     private String fetchType;
 
