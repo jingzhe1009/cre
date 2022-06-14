@@ -49,7 +49,7 @@ public class KpiDefinition extends BaseEntity {
     private String kpiGroupName;
 
     /**
-     * 取数类型：0，数据源；1，接口
+     * 取数类型：0，数据源；1，接口； 2. 输入指标
      */
     private String fetchType;
     /**

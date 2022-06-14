@@ -377,6 +377,7 @@ public class KpiServiceImpl implements KpiService {
     public ResponseResult createKpiDefinition(KpiDefinition kpiDefinition, String userId) {
         String kpiName = kpiDefinition.getKpiName();
         String kpiCode = kpiDefinition.getKpiCode();
+        String fetchType= kpiDefinition.getFetchType();
         if (StringUtils.isBlank(kpiName)) {
             return ResponseResult.createFailInfo("请求参数[指标名称]不能为空");
         }
@@ -557,7 +558,7 @@ public class KpiServiceImpl implements KpiService {
 
         if ("0".equals(kpiDefinition.getFetchType())) {
             // 数据源类型
-            // 置空接口相关属性
+            // 置空数据源相关属性
 //            kpiDefinition.setDbId("");
 //            kpiDefinition.setDbAlias("");
 //            kpiDefinition.setDbType("");
@@ -572,11 +573,12 @@ public class KpiServiceImpl implements KpiService {
             convertKpiSql(kpiDefinition, metaDataTable, dataSource);
         } else if ("1".equals(kpiDefinition.getFetchType())) {
             // 接口类型
-            // 置空数据源相关属性
+            // 置空接口相关属性
 //            kpiDefinition.setApiId("");
 //            kpiDefinition.setApiName("");
         } else if ("2".equals(kpiDefinition.getFetchType())) {
-
+            // 输入指标类型
+            // 置空相关属性
         }
 
         daoHelper.update(_KPI_DEFINITION + "updateKpiDefinition", kpiDefinition);
