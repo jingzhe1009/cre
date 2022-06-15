@@ -109,7 +109,7 @@ var exportModal = {
                 url: webpath + '/ruleFolder/ruleName/inHeader',
                 type: 'GET',
                 dataType: "json",
-                data: {"foldId": folderData['folderId']},
+                data: {"folderId": folderData['folderId']},
                 success: function (data) {
                     if (data.length > 0) {
                         for (var i = 0; i < data.length; i++) {
