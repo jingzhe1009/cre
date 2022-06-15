@@ -63,8 +63,8 @@ var rulePackageObj = {
             '<div class="card_subtitle">' +
             '<div class="versionSel">' +
             '<span id="versionSelSpan_' + obj.ruleId + '" class="versionSpan">' + obj.version + '</span>' +
-            '<label for="versionSelSpan_' + obj.ruleId + '" class="input-control-icon-right versionSelLabel" data-toggle="dropdown" onclick="rulePackageObj.searchModelVersion(\'' + obj.ruleName + '\', $(this))">' +
-            '<i class="icon icon-caret-down"></i>' +
+            '<label for="versionSelSpan_' + obj.ruleId + '" class="input-control-icon-right versionSelLabel" onclick="modelVersionTableModal.initPage(\'' + obj.ruleName + '\', \'' + obj.ruleType + '\', \'' + obj.moduleName + '\')">' +
+            '<a">版本</a>' +
             '</label>' +
             '<ul class="dropdown-menu versionSelMenu"></ul>' +
             '</div>' +
@@ -268,6 +268,9 @@ function cloneRule ( ruleId, ruleName, ruleDesc, ruleType, isPublic, modelGroupI
                 $('#ruleClone .folderId').hide();
                 // 打开弹出框
                 ruleClone.handleModelToggle( true );
+                $('#ruleClone .closebtn').unbind('click').on('click',function() {
+                    ruleClone.handleModelToggle( false, 0);
+                });
             } else {
                 failedMessager.show( data.msg );
             }
@@ -497,9 +500,9 @@ function setCommon ( ruleId, folderId ) {
 function editModelBase ( ruleName ) {
     // 清空表单
     $( '#editModelBaseDiv form' )[ 0 ].reset();
-    $( '#editModelBaseDiv form' ).validator( 'cleanUp' );
+    $( '#editModelBaseDiv/rule/update form' ).validator( 'cleanUp' );
     $.ajax( {
-        url: webpath + '/rule/update/checkAuthModel',
+        url: webpath + '/checkAuthModel',
         type: 'GET',
         dataType: "json",
         data: { "ruleName": ruleName },

@@ -206,6 +206,9 @@ var pageJumpObj = {
                     $('#ruleClone .folderId').hide();
                     // 打开弹出框
                     ruleClone.handleModelToggle(true);
+                    $('#ruleClone .closebtn').unbind('click').on('click',function() {
+                        ruleClone.handleModelToggle( false, 1 );
+                    });
                 } else {
                     failedMessager.show(data.msg);
                 }
@@ -772,7 +775,7 @@ var modelGroupModal = {
                 if (data.status === 0) {
                     var htmlStr = '';
                     for (var i = 0; i < data.data.length; i++) {
-                        if(search && data.data[i].channelName.indexOf(search) >= 0) {
+                        if(search && (data.data[i].channelName.indexOf(search) >= 0 || data.data[i].deptName.indexOf(search) >= 0)) {
                             htmlStr += '<li channelId=\'' + data.data[i].channelId + '\' channelName=\'' + data.data[i].channelName + '-' + data.data[i].deptName + '\'>' + data.data[i].channelName+ '-' + data.data[i].deptName + '</li>';
                         } else if(search === undefined || search === '') {
                             htmlStr += '<li channelId=\'' + data.data[i].channelId + '\' channelName=\'' + data.data[i].channelName + '-' + data.data[i].deptName + '\'>' + data.data[i].channelName+ '-' + data.data[i].deptName + '</li>';
@@ -830,10 +833,8 @@ var modelGroupModal = {
             success: function (data) {
                 if (data.status === 0) {
                     $('#channelAlert').modal({'show': 'center', "backdrop": "static"});
-                    $('#channelContentWarp').removeAttr('kpiId');
-                    $('.channelDefBase form')[0].reset();
-                    $('.channelDefBase form').validator('cleanUp');
 
+                    $('.channelDefBase #channel').empty();
                     var obj ={'modelGroupId':modelGroupId};
                     modelGroupModal.initChannelTable(obj);
 
@@ -1056,7 +1057,7 @@ var modelGroupModal = {
                         detail = $('#modelBaseGroupTable').DataTable().row(curRow).data();
                     }
                     sessionStorage.setItem('detail',JSON.stringify(detail));
-                    var url = webpath + "/ruleFolder/rulePackageMgr?folderId=" + groupId+'&childOpen=c';
+                    var url = webpath + "/ruleFolder/rulePackageMgr?folderId=" + groupId +'&childOpen=c';
                     creCommon.loadHtml(url);
                 } else {
                     failedMessager.show(data.msg);
@@ -1319,19 +1320,19 @@ $(function () {
     initModelBaseTable(); // 初始化模型table
     initModelBaseGroup(); // 初始化模型组下拉框
     initModelBaseGroupTable(); // 初始化组table
-    if (jumpRuleName != '') { // 跳转至此页面并展示模型名为jumpRuleName的版本列表弹框
-        $.ajax({
-            url: webpath + '/rule/public/header/info',
-            type: 'GET',
-            dataType: "json",
-            data: {"ruleName": jumpRuleName},
-            success: function (data) {
-                if (data.status === 0) {
-                    modelVersionTableModal.initPage(jumpRuleName, data.data.ruleType, data.data.moduleName);
-                }
-            }
-        });
-    }
+    // if (jumpRuleName != '') { // 跳转至此页面并展示模型名为jumpRuleName的版本列表弹框
+    //     $.ajax({
+    //         url: webpath + '/rule/public/header/info',
+    //         type: 'GET',
+    //         dataType: "json",
+    //         data: {"ruleName": jumpRuleName},
+    //         success: function (data) {
+    //             if (data.status === 0) {
+    //                 modelVersionTableModal.initPage(jumpRuleName, data.data.ruleType, data.data.moduleName);
+    //             }
+    //         }
+    //     });
+    // }
     // 初始化模型克隆
     ruleClone.init();
     // 克隆模态框关闭事件绑定

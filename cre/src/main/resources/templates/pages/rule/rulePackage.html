@@ -1,4 +1,5 @@
 <#include "/commonHead.html">
+<link href="${ctx.contextPath}/static/css/modelBase/modelBaseIndex.css" rel="stylesheet"/>
 <link href="${ctx.contextPath}/static/css/rule/rulePackage.css" rel="stylesheet" />
 <div id="page">
 	<div id="pageHeader">
@@ -36,9 +37,9 @@
 							<div class="card_subtitle">
 								<div class="versionSel">
 									<span id="versionSelSpan_${rule.ruleId!}" class="versionSpan">${rule.version!}</span>
-									<label for="versionSelSpan_${rule.ruleId!}" class="input-control-icon-right versionSelLabel" data-toggle="dropdown"
-										   onclick="rulePackageObj.searchModelVersion('${rule.ruleName}', $(this))">
-										<i class="icon icon-caret-down"></i>
+									<label for="versionSelSpan_${rule.ruleId!}" class="input-control-icon-right versionSelLabel"
+										   onclick="modelVersionTableModal.initPage('${rule.ruleName}', '${rule.ruleType}', '${rule.moduleName}')">
+										<a>版本</a>
 									</label>
 									<ul class="dropdown-menu versionSelMenu"></ul>
 								</div>
@@ -382,6 +383,62 @@
 </div>
 <!-- 添加模型弹框end -->
 
+<div class="modal fade" id="modelVersionTableAlertModal">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<!--弹框标题-->
+			<div class="modal-header">
+				<h4 class="modal-title"><span id="versionTable_title"></span>版本列表</h4>
+			</div>
+			<!--模型版本列表-->
+			<div class="modal-body">
+				<div class="selfAdaptionLeft">
+					<div>
+						<div class="input-group">
+							<input id="enableInput" data-col="ruleStatus" type="text" class="form-control"
+								   placeholder="启用状态（请选择）">
+							<label class="input-control-icon-right" data-toggle="dropdown">
+								<i class="icon icon-caret-down "></i>
+							</label>
+							<ul class="dropdown-menu pull-right enableList">
+								<li isEnable="1"><a>已启用</a></li>
+								<li isEnable="0"><a>未启用</a></li>
+							</ul>
+						</div>
+						<div class="input-group date form-datetime" data-date=""
+							 data-date-format="dd MM yyyy - HH:ii:ss p"
+							 data-link-field="dtp_input1">
+							<input data-col="startDate" class="form-control" size="16" type="text" value=""
+								   placeholder="开始时间">
+							<span class="input-group-addon"><span class="icon-remove"></span></span>
+							<span class="input-group-addon"><span class="icon-calendar"></span></span>
+						</div>
+						<div class="input-group date form-datetime" data-date=""
+							 data-date-format="dd MM yyyy - HH:ii:ss p"
+							 data-link-field="dtp_input2">
+							<input data-col="endDate" class="form-control" size="16" type="text" value=""
+								   placeholder="结束时间">
+							<span class="input-group-addon"><span class="icon-remove"></span></span>
+							<span class="input-group-addon"><span class="icon-calendar"></span></span>
+						</div>
+					</div>
+				</div>
+				<div class="selfAdaptionRight">
+					<button tableType="2" class="btn btn-primary modelBaseSearch" type="button">搜索</button>
+					<!--                    <button id="addModelVersion" type="button" class="btn btn-primary">添加新版本</button>-->
+				</div>
+				<div style="clear: both"></div>
+				<div>
+					<table id="modelVersionTable"></table>
+				</div>
+			</div>
+			<!--操作按钮-->
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+			</div>
+		</div>
+	</div>
+</div>
 <!-- 模型克隆模态框-->
 <#include "/pages/modelBase/ruleClone.html">
 
@@ -396,6 +453,7 @@
     var folderName = '${folderName!}';
     creCommon.setCookie('folderName',folderName,1);//设置cookie
 </script>
+<script src="${ctx.contextPath}/static/js/modelBase/modelBaseIndex.js"></script>
 <script src="${ctx.contextPath}/static/js/rule/rulePackage.js"></script>
 <script src="${ctx.contextPath}/static/js/modelBase/publishModel.js"></script>
 <script src="${ctx.contextPath}/static/js/migration/export.js"></script>
