@@ -1603,6 +1603,7 @@ public class RuleDetailServiceImpl implements RuleDetailService {
         ruleDetailWithBLOBs.setRuleContent(data);
         ruleDetailWithBLOBs.setVersion(version);
         ruleDetailWithBLOBs.setVersionDesc(ruleDetailWithBLOBs.getVersionDesc());
+        ruleDetailWithBLOBs.setIsPublic("1");
 
         Date currentDate = new Date();
         ruleDetailWithBLOBs.setCreateDate(currentDate);
@@ -1794,6 +1795,7 @@ public class RuleDetailServiceImpl implements RuleDetailService {
 //        ruleDetailWithBLOBs.setIsPublic("1");
         ruleDetailWithBLOBs.setUpdatePerson(userId);
         String version;
+        Map result;
         if (isCommit.equals("1")) {
             // 修改当前版本
             version = ruleDetail.getVersion();
@@ -1803,12 +1805,16 @@ public class RuleDetailServiceImpl implements RuleDetailService {
             updateBlob.setUpdatePerson(userId);
             updateBlob.setUpdateDate(new Date());
             daoHelper.update(_RULE_DETAIL_MAPPER + "updateByPrimaryKeySelective", updateBlob);
+            result = new HashMap();
+            result.put("ruleId", updateBlob.getRuleId());
+            result.put("version", version);
         } else {
             // 提交生成新版本
             version = generateVersion(ruleDetailWithBLOBs.getRuleName(), true, false);
             initDetailAndAuth(ruleDetailWithBLOBs, userId, data, version, "insertSelective", ConstantUtil.RULE_STATUS_READY);
+            result = afterLock(oldRuleId, data, version, ruleDetailWithBLOBs, ModelOperateLog.COMMIT_MODEL_TYPE, false);
         }
-        Map result = afterLock(oldRuleId, data, version, ruleDetailWithBLOBs, ModelOperateLog.COMMIT_MODEL_TYPE, false);
+        // Map result = afterLock(oldRuleId, data, version, ruleDetailWithBLOBs, ModelOperateLog.COMMIT_MODEL_TYPE, false);
         return ResponseResult.createSuccessInfo("提交成功", result);
     }
 

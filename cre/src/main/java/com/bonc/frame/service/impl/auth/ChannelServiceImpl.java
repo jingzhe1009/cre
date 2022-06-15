@@ -50,6 +50,10 @@ public class ChannelServiceImpl implements ChannelService {
         if (channel.getDeptId().isEmpty()) {
             return ResponseResult.createFailInfo("未选择所属机构");
         }
+        // 渠道编码长度限制
+        if (channel.getChannelCode() != null && channel.getChannelCode().length() > 6) {
+            return ResponseResult.createFailInfo("渠道编码应小于6位");
+        }
         //新增渠道信息，入库保存
         final String channelId = IdUtil.createId();
         channel.setChannelId(channelId);

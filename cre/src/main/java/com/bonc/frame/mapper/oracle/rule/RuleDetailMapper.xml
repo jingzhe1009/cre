@@ -405,7 +405,8 @@
         SELECT MODULE_NAME AS "moduleName",
                RULE_NAME   AS "ruleName"
         FROM CRE_RULE_DETAIL
-        WHERE FOLDER_ID = #{folderId,jdbcType=VARCHAR}
+        WHERE MODEL_GROUP_ID = #{folderId,jdbcType=VARCHAR}
+          and FOLDER_ID = '0000000000000000000000000000001'
           AND IS_DEL = '0'
           AND IS_HEADER = '1'
     </select>

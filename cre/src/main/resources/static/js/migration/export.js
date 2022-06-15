@@ -102,7 +102,7 @@ var exportModal = {
         // rootLevel 1某场景 2某模型
         if (rootLevel === 1) {
             var folderData = params['folderObj'];
-            var folderTreeObj = exportModal.createFolderNode(folderData['folderId'], folderData['folderName'], true, 1, 0);
+            var folderTreeObj = exportModal.createFolderNode('0000000000000000000000000000001', folderData['folderName'], true, 1, 0);
             var folderTreeObj_children = [];
             // 获取当前场景下全部模型
             $.ajax({
