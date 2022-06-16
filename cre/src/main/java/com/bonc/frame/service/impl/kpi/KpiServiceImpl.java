@@ -430,6 +430,10 @@ public class KpiServiceImpl implements KpiService {
             String currentUser = ControllerUtil.getCurrentUser();
             kpiDefinition.setCreateDate(new Date());
             kpiDefinition.setCreatePerson(currentUser);
+            if (kpiDefinition.getFetchType().equals("2")) {
+                kpiDefinition.setKpiValueSourceName(" ");
+                kpiDefinition.setKpiValueSourceCode(" ");
+            }
             daoHelper.insert(_KPI_DEFINITION + "insertKpiDefinition", kpiDefinition);
             final List<KpiFetchLimiters> kpiFetchLimitersList = kpiDefinition.getKpiFetchLimitersList();
             if (!CollectionUtil.isEmpty(kpiFetchLimitersList)) {
